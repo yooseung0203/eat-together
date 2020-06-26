@@ -31,12 +31,13 @@ public class MemberController {
 		return "member/loginview";
 	}
 
-	//회원가입 페이지로 이동
+	//회원가입 페이지 중 약관동의로 이동
 	@RequestMapping("signup_check")
 	public String getSignupCheckView() {
 		return "member/signup_check";
 	}
 	
+	//회원가입, 약관동의 후 정보입력 페이지로 이동
 	@RequestMapping("signup_info")
 	public String getSignupInfoView() {
 		return "member/signup_info";

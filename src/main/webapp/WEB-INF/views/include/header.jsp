@@ -3,7 +3,6 @@
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-
 <!-- header -->
 <div class="container-fluid ">
 
@@ -48,7 +47,7 @@
 			<c:if test="${sessionScope.id != null}">
 				<div class="col-sm-1">
 					<span class="main-login"> ${sessionScope.id}님, 환영합니다. </a> /
-						<a href="/member/signup_check">마이페이지</a></span>
+						<a href="/member/mypage">마이페이지</a></span>
 				</div>
 			</c:if>
 		</div>
