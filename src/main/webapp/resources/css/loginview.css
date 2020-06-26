@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+  *{
+      box-sizing: border-box;
+}
+
+.login-container{
+    margin: auto;
+    width: 30%;
+    height: 70%;
+}

@@ -32,9 +32,9 @@ public class MemberController {
 	}
 
 	//회원가입 페이지로 이동
-	@RequestMapping("signin_check")
+	@RequestMapping("signup_check")
 	public String getSigninView() {
-		return "member/signin_check";
+		return "member/signup_check";
 	}
 	
 	
