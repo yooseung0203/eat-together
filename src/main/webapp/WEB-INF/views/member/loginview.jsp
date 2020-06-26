@@ -16,9 +16,13 @@
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500;900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
         <!-- google font end-->
+        <!-- header,footer용 css  -->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/index-css.css">
+<!-- header,footer용 css  -->
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="/css/loginview.css">
+<title>로그인</title>
+<link rel="stylesheet" type="text/css" href="/resources/css/loginview.css">
 </head>
 
 <body>
@@ -28,13 +32,14 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 	<div id=container class=login-container>
+	<h1 class="login_text">로그인</h1>
 		<form action="/" method=post>
-			<div class="form-group">
-				<label for="id">아이디</label> <input type="text" class="form-control"
+			<div  class="login_text">
+				<label for="id" class="login_text">아이디</label> <input type="text" class="form-control"
 					id="id" name="id">
 			</div>
-			<div class="form-group">
-				<label for="password">Password</label> <input type="password"
+			<div  class="login_text">
+				<label for="password" class="login_text">Password</label> <input type="password"
 					class="form-control" id="pw" name="pw">
 			</div>
 			<button type="submit" id="loginBtn" class="btn btn-warning">Submit</button>
@@ -42,7 +47,7 @@
 		<!-- 카카오톡 아이디로 로그인 버튼 노출 영역 -->
 		<a
 			href="https://kauth.kakao.com/oauth/authorize?client_id=39543f4353dc8ce2c9268fc23c6d67e4&redirect_uri=http://localhost/member/login&response_type=code">
-			<img src="/img/kakao_login_medium_narrow.png" id="kakaoLoginBtn">
+			<img src="/resources/img/kakao_login_medium_narrow.png" id="kakaoLoginBtn">
 		</a>
 		<!-- 카카오톡 아이디로 로그인 버튼 노출 영역 -->
 	</div>
