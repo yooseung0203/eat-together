@@ -20,9 +20,13 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
+<!-- loginview css -->
+<link rel="stylesheet" type="text/css" href="/resources/css/loginview.css">
+<!-- loginview css -->
+
 <meta charset="UTF-8">
 <title>로그인</title>
-<link rel="stylesheet" type="text/css" href="/resources/css/loginview.css">
+
 </head>
 
 <body>

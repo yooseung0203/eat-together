@@ -33,10 +33,14 @@ public class MemberController {
 
 	//회원가입 페이지로 이동
 	@RequestMapping("signup_check")
-	public String getSigninView() {
+	public String getSignupCheckView() {
 		return "member/signup_check";
 	}
 	
+	@RequestMapping("signup_info")
+	public String getSignupInfoView() {
+		return "member/signup_info";
+	}
 	
 //	
 //	@RequestMapping("/kakaologin")

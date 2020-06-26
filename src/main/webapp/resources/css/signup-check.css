@@ -17,9 +17,33 @@
 }
 
 #privateAgree{
+    padding: 10px;
+    border: 1px solid black;
     width: 100%;
     height: 300px;
     overflow-y: scroll;
 }
 
-#
+#checkbox_text{
+    line-height: 30px;
+    float: left;
+    position: relative;
+}
+
+#checkbox{
+    float: left;
+    position: relative;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#checkbox_area{
+    width: 100%;
+    height:30%;
+}
+
+#loginBtn{
+    position: relative;
+    margin: 30px;
+    
+}
