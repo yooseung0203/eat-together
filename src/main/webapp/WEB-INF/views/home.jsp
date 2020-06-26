@@ -63,7 +63,7 @@
                                 <img src="/resources/img/slide01.jpg" class="d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h1>마음의 허기를 달래줄<br>
-                                        <span class="index-copyright">밥칭구</span>를 찾습니다</h1>
+                                        <span class="index-copyright">밥친구</span>를 찾습니다</h1>
                                     <p>맛집 동행 찾기 서비스 - 맛집갔다갈래</p>
                                 </div>
                             </div>
