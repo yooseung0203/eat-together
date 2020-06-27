@@ -54,6 +54,20 @@
 		</a>
 		<!-- 카카오톡 아이디로 로그인 버튼 노출 영역 -->
 	</div>
+	
+		<script>
+	$("#loginBtn").on("click", function(){
+		if($("#id").val()==""){
+			alert("아이디를 입력해주세요.");
+			return false;
+		}else if($("#pw").val()==""){
+			alert("비밀번호를 입력해주세요.");
+			return false;
+		}
+	})
+	</script>
+	
+	
 	<!-- ******************* -->
 	<!-- footer  -->
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />

@@ -25,6 +25,7 @@
 	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
 	rel="stylesheet">
 <!-- google font end-->
+
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
@@ -94,7 +95,7 @@
 	</form>
 
 	<script>
-	
+	// form submit 전 체크하는 사항
 	$("#btn").on("click",function() {
 		if ($("#id_text").html() == "사용가능한 id입니다.") {
 			if ($("#pw_text").html() == "비밀번호가 일치합니다."){
@@ -113,7 +114,8 @@
 			return false;
 		})
 		
-		$("#reset").onclick(function(){
+		//다시작성 버튼
+		$("#reset").on("click", function(){
 			$("#id").val("");
 			$("#id_text").html("");
 			$("#pw").val("");
@@ -123,6 +125,7 @@
 			$("#birth").val("");
 		})
 	
+		//id regex
 		$("#id").focusout(function() {
 			var id = $("#id").val();
 			var idregex = /^[a-z][a-zA-Z0-9]{4,10}$/;
@@ -134,12 +137,14 @@
 			}
 		})
 
+		//id 중복체크 후 수정 시 중복체크 다시 하도록 설정
 		$("#id").keydown(function() {
 			if ($("#id_text").html() != "") {
 				$("#id_text").html("");
 			}
 		})
 
+		//pw regex
 		$("#pw").focusout(function() {
 			var pw = $("#pw").val();
 			var pwregex = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{6,12}$/;
@@ -151,6 +156,7 @@
 			}
 		})
 
+		//pw 재확인
 		$("#pwCorrection").focusin(function() {
 			if ($("#pw").val() == "") {
 				alert("비밀번호를 먼저 입력해주세요.");
@@ -172,6 +178,7 @@
 			}
 		})
 
+		//nickname regex
 		$("#nickname").focusout(function() {
 			var nickname = $("#nickname").val();
 			var nicknameregex = /^[가-힣]{2,6}$/;
@@ -184,6 +191,7 @@
 			}
 		})
 
+		//account_email regex
 		$("#account_email")
 				.focusout(
 						function() {
@@ -198,6 +206,7 @@
 							}
 						})
 
+		//birth regex
 		$("#birth")
 				.focusout(
 						function() {
@@ -218,6 +227,7 @@
 							}
 						})
 
+		//아이디 중복체크 수정 필요
 		$("#duplcheck").on("click", function() {
 			if ($("#id").val() != "") {
 				$.ajax({
@@ -243,6 +253,7 @@
 			}
 		})
 
+		//메일 인증 수정 필요
 		$("#mail").on("click", function() {
 			if ($("#account_email").val() == "") {
 				alert("이메일을 입력해주십시오.");
