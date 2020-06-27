@@ -5,7 +5,6 @@
 
 <!-- header -->
 <div class="container-fluid ">
-
 	<div class="header-wrap  mt-3 px-0 mx-0">
 		<div class="row">
 			<div class="col-sm-1 logo-image ">
