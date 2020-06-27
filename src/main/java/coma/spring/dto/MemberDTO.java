@@ -68,7 +68,5 @@ public class MemberDTO {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
+
 }
