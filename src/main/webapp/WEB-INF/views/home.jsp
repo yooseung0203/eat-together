@@ -28,14 +28,14 @@
 <!-- header,footer용 css  -->
 <!-- ******************* -->
 
-
+<!-- 
 <script>
 	$(function(){
 		$("#toMap").on("click",function(){
 			location.href = "/map/toMap";
 		})
 	})
-</script>
+</script> -->
 </head>
 <body>
 <!-- ******************* -->
