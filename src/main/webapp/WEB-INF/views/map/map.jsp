@@ -217,6 +217,7 @@
 </style>
 <script>
 	$(function(){
+		
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = { 
 	        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
@@ -313,6 +314,8 @@
 			$(".modal-body .road_address").html(selectedRoad);
 			$(".modal-body .address").html(selectedAddress);
 		})
+		
+        var positions = [];
 		$(".food").on("click",function(){
         	$.ajax({
         		url:"/map/food",
@@ -323,14 +326,23 @@
         		dataType:"JSON"
         	}).done(function(resp){
         		console.log(resp);
-        		var positions = [];
         		for(var i = 0;i < resp.documents.length;i++){
-            		console.log(resp.documents[i].place_name);
-            		console.log(resp.documents[i].x + " : " + resp.documents[i].y);
-            		console.log(resp.documents[i].place_url);
+            		//console.log(resp.documents[i].place_name);
+            		//console.log(resp.documents[i].x + " : " + resp.documents[i].y);
+            		//console.log(resp.documents[i].place_url);
             		// 마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다 
             		positions.push({
-            		        content: '<div style="padding:5px;"><div id="place_name">'+resp.documents[i].place_name+'</div><button type="button" class="detail" data-toggle="modal" data-target="#detailInfo">상세정보</button></div>', 
+            		        content: '<form action="/map/insert" method="get" id="inputForm"><div style="padding:5px;">'
+            		        			+'<div><input type=text readonly name="name" value="'+resp.documents[i].place_name+'"></div>'
+            		        			+'<div><input type=text readonly name="address" value="'+resp.documents[i].address_name+'"></div>'
+            		        			+'<div><input type=text readonly name="road_address" value="'+resp.documents[i].road_address_name+'"></div>'
+            		        			+'<div><input type=text readonly name="category" value="'+resp.documents[i].category_group_name+'"></div>'
+            		        			+'<div><input type=text readonly name="lat" value="'+resp.documents[i].y+'"></div>'
+            		        			+'<div><input type=text readonly name="lng" value="'+resp.documents[i].x+'"></div>'
+            		        			+'<div><input type=text readonly name="phone" value="'+resp.documents[i].phone+'"></div>'
+            		        			+'<div><input type=text readonly name="place_url" value="'+resp.documents[i].place_url+'"></div>'
+            		        			+'<div><input type=text readonly name="detail_category" value="'+resp.documents[i].category_name+'"></div>'
+            		        			+'<button type="submit" id="detail">맛집 등록</button></div></form>', 
             		        latlng: new kakao.maps.LatLng(resp.documents[i].y, resp.documents[i].x)
             		});
         		}
@@ -358,9 +370,7 @@
         		    return function() {
         		        infowindow.open(map, marker);
         		    };
-        		    // place_name 불러와서 https://ojava.tistory.com/124
         		}
-
         		// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
         		function makeOutListener(infowindow) {
         		    return function() {
@@ -546,60 +556,6 @@
 		<div class="food text-center"><i class="fas fa-hamburger"></i></div>
 		<div class="cafe text-center"><i class="fas fa-coffee"></i></div>
 		<div class="map_add text-center" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i></div>
-		
-		<!-- 마커의 상세 정보 버튼 클릭했을 때 Modal 창-->
-		<div class="modal fade" id="detailInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog modal-dialog-centered" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel">일반 맛집 추가하기</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		        	<table class="table">
-						  <thead>
-						    <tr>
-						      <th scope="col">#</th>
-						      <th scope="col">선택한 맛집 정보</th>
-						    </tr>
-						  </thead>
-						  <tbody>
-						    <tr>
-						      <th scope="row">가게명</th>
-						      <td class="marker_name"></td>
-						    </tr>
-						    <tr>
-						      <th scope="row">카테고리</th>
-						      <td class="marker_category"></td>
-						    </tr>
-						    <tr>
-						      <th scope="row">도로명 주소</th>
-						      <td class="marker_road"></td>
-						    </tr>
-						    <tr>
-						      <th scope="row">지번 주소</th>
-						      <td class="marker_address"></td>
-						    </tr>
-						    <tr>
-						      <th scope="row">위도</th>
-						      <td class="marker_lat"></td>
-						    </tr>
-						    <tr>
-						      <th scope="row">경도</th>
-						      <td class="marker_lng"></td>
-						    </tr>
-						  </tbody>
-					</table>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		        <button type="button" class="btn btn-primary">등록</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
 		
 		<!-- Modal -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
