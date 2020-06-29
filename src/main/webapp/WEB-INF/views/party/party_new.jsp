@@ -159,7 +159,8 @@ $(function(){
 				<div class="col-sm-2">위치</div>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="parent_address"
-						id="parent_addresse" readonly>
+						id="parent_address" readonly>
+					<input type="hidden" name="place_id" id="place_id">
 				</div>
 			</div>
 			<div class="row mb-1">
