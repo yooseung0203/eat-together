@@ -8,7 +8,7 @@
 	<div class="header-wrap  mt-3 px-0 mx-0">
 		<div class="row">
 			<div class="col-sm-1 logo-image ">
-				<img src="/resources/img/dummylogo.png">
+				<a href="/"><img src="/resources/img/dummylogo.png"></a>
 			</div>
 			<div class="col-sm-10 mb-3">
 				<div class="row navibar h5 text-center">
@@ -16,11 +16,13 @@
 						<div class="navi-menu">사이트소개</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">모임모집</div>
+						<div class="navi-menu">
+						<a href="/party/toParty_New" id="toPartyNew">모임모집</a>
+						</div>
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">
-							<span id="toMap">맛집검색</span>
+							<a href="/map/toMap" id="toMap">맛집검색</a>
 						</div>
 					</div>
 					<div class="col-sm-1">
@@ -52,3 +54,4 @@
 		</div>
 	</div>
 </div>
+
