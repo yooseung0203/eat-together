@@ -47,10 +47,10 @@
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
 			<c:choose>
-				<c:when test="${loginInfo.id == 'admin'}">
+				<c:when test="${loginInfo.id == 'administrator'}">
 					<div class="col-sm-1">
-					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> /
-						<a href="/member/mypage">마이페이지</a></span>
+					<span class="main-login"> 관리자님, 환영합니다. </a> /
+						<a href="/admin/toAdmin">관리자페이지</a></span>
 					</div>
 				</c:when>
 				<c:otherwise>
