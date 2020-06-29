@@ -1,0 +1,15 @@
+@charset "UTF-8";
+
+  *{
+      box-sizing: border-box;
+}
+
+.login-container{
+    padding-top: 20px;
+    margin: auto;
+    width: 30%;
+    height: 70%;
+}
+.login_text{
+    font-family: 'Noto Sans KR', sans-serif;
+} 

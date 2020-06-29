@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -25,17 +26,27 @@ public class MemberController {
 	@Autowired
 	private MemberService mservice;
 	
+	@Autowired
+	private HttpSession session;
+	
 	//로그인 페이지로 이동하기
 	@RequestMapping("loginview")
 	public String getLoginView() {
 		return "member/loginview";
 	}
 
-	//회원가입 페이지로 이동
-	@RequestMapping("signin_check")
-	public String getSigninView() {
-		return "member/signin_check";
+	//회원가입 페이지 중 약관동의로 이동
+	@RequestMapping("signup_check")
+	public String getSignupCheckView() {
+		return "member/signup_check";
 	}
+	
+	//회원가입, 약관동의 후 정보입력 페이지로 이동
+	@RequestMapping("signup_info")
+	public String getSignupInfoView() {
+		return "member/signup_info";
+	}
+	
 	
 	
 //	
