@@ -53,6 +53,11 @@ public class MemberController {
 	public String getSignupInfoView() {
 		return "member/signup_info";
 	}
+	//마이페이지로 이동하기
+	@RequestMapping("mypage")
+	public String getMypageView() {
+		return "member/mypage";
+	}
 
 	//회원가입하기
 	@RequestMapping("signupProc")
@@ -68,7 +73,6 @@ public class MemberController {
 	//로그인하기
 	@RequestMapping("login")
 	public String login(String id, String pw)throws Exception {
-		boolean loginResult = true;
 
 		System.out.println("id : " + id);
 		String protectedpw = mservice.getSha512(pw);
@@ -82,9 +86,9 @@ public class MemberController {
 		
 		boolean result = mservice.logIn(param);
 		
-		System.out.println("loginResult 결과 : "+ loginResult);
+		System.out.println("loginResult 결과 : "+ result);
 
-		if(loginResult==true) {
+		if(result==true) {
 			MemberDTO mdto = mservice.selectMyInfo(id);
 			session.setAttribute("loginInfo", mdto);
 			System.out.println("로그인 성공");
@@ -97,6 +101,7 @@ public class MemberController {
 		}
 
 	}
+	
 	
 
 

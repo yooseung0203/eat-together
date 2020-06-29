@@ -50,6 +50,12 @@ public class MemberService {
 		return mdto;
 	}
 	
+	//회원가입시 이메일 중복검사
+	public boolean isEmailAvailable(String account_email)throws Exception{
+		boolean result = mdao.isEmailAvailable(account_email);
+		return result;
+	}
+	
 //	//카카오톡 로그인을 위한 어세스토큰 가져오기
 //	public String getAccessToken (String code) {
 //        String access_Token = "";
