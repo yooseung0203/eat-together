@@ -46,10 +46,20 @@
 				</div>
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
-				<div class="col-sm-1">
+			<c:choose>
+				<c:when test="${loginInfo.id == 'admin'}">
+					<div class="col-sm-1">
 					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> /
 						<a href="/member/mypage">마이페이지</a></span>
-				</div>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="col-sm-1">
+					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> /
+						<a href="/member/mypage">마이페이지</a></span>
+					</div>
+				</c:otherwise>
+			</c:choose>	
 			</c:if>
 		</div>
 	</div>
