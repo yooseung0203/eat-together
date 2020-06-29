@@ -10,6 +10,7 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	<!-- src/main/resources : classpath -->
 	<bean id="dataSource"
 		class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName"
@@ -24,8 +25,7 @@
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<property name="mapperLocations"
-			value="classpath:/mappers/*-mapper.xml" />
+		<property name="mapperLocations" value="classpath:/mappers/*-mapper.xml" />
 	</bean>
 
 	<bean id="sqlSession"
