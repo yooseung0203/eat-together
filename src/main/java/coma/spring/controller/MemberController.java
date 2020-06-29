@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -64,6 +65,38 @@ public class MemberController {
 		return "home";
 	}
 	
+	//로그인하기
+	@RequestMapping("login")
+	public String login(String id, String pw)throws Exception {
+		boolean loginResult = true;
+
+		System.out.println("id : " + id);
+		String protectedpw = mservice.getSha512(pw);
+		System.out.println("pw : " + protectedpw);
+
+		Map<String, String> param = new HashMap<>();
+		param.put("targetColumn1", "id");
+		param.put("targetValue1", id);
+		param.put("targetColumn2", "pw");
+		param.put("targetValue2", protectedpw);
+		
+		boolean result = mservice.logIn(param);
+		
+		System.out.println("loginResult 결과 : "+ loginResult);
+
+		if(loginResult==true) {
+			MemberDTO mdto = mservice.selectMyInfo(id);
+			session.setAttribute("loginInfo", mdto);
+			System.out.println("로그인 성공");
+			return "home";
+		}else {
+			System.out.println("id : " + id);
+			System.out.println("pw : " + protectedpw);
+			System.out.println("로그인 실패");
+			return "home";
+		}
+
+	}
 	
 
 

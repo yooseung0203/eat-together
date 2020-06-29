@@ -5,4 +5,16 @@
 		insert into member
 		values(#{id},#{pw},#{nickname},#{birth},#{account_email},0,sysdate)
 	</insert>
+
+	<select id="logIn" resultType="int">
+		select count(*) from member where
+		${targetColumn1}=#{targetValue1} and
+		${targetColumn2}=#{targetValue2}
+	</select>
+
+	<select id="selectMyInfo" resultType="coma.spring.dto.MemberDTO">
+		select * from member where
+		id=#{value}
+	</select>
+
 </mapper>

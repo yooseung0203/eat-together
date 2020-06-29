@@ -36,7 +36,7 @@
 	<!-- ******************* -->
 	<div id=container class=login-container>
 	<h1 class="login_text">로그인</h1>
-		<form action="/" method=post>
+		<form action="/member/login" method=post>
 			<div  class="login_text">
 				<label for="id" class="login_text">아이디</label> <input type="text" class="form-control"
 					id="id" name="id">
