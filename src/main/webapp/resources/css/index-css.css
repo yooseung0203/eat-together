@@ -17,6 +17,18 @@
             .slide-area img{
                 /*height:600px;*/
             }
+            
+            .navi-menu > a{
+            color:#212529;
+            }
+            
+            .navi-menu > a:hover{
+            	text-decoration: none;
+            	color : #212529;
+            }
+            .navi-menu > a:visited{
+            	color : #212529;
+            }
 
             .footer{
                 height:200px;
@@ -54,7 +66,7 @@
                 color:#ff7761;
             }
             
-            .logo-image > img{
+            .logo-image > a > img{
                 width:100%;
             }
 
