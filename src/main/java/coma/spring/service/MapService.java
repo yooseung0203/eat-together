@@ -21,4 +21,7 @@ public class MapService {
 	public List<MapDTO> selectAll() throws Exception{
 		return mdao.selectAll();
 	}
+	public List<MapDTO> searchByKeyword(int place_id) throws Exception{
+		return mdao.searchByKeyword(place_id);
+	}
 }
