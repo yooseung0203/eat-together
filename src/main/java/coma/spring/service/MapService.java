@@ -1,5 +1,7 @@
 package coma.spring.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,8 +12,13 @@ import coma.spring.dto.MapDTO;
 public class MapService {
 	@Autowired
 	private MapDAO mdao;
-	
 	public int insert(MapDTO mdto) throws Exception{
 		return mdao.insert(mdto);
+	}
+	public boolean insertPossible(String place_url) throws Exception{
+		return mdao.insertPossible(place_url);
+	}
+	public List<MapDTO> selectAll() throws Exception{
+		return mdao.selectAll();
 	}
 }

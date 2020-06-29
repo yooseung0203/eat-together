@@ -1,7 +1,12 @@
 package coma.spring.controller;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -16,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
+
 import coma.spring.dto.MapDTO;
 import coma.spring.service.MapService;
 
@@ -29,24 +36,40 @@ public class MapController {
 	private MapService mservice;
 
 	@RequestMapping("toMap")
-	public String map() {
+	public String map(HttpServletRequest request) throws Exception{
+		// 등록된 맛집 뿌려주기
+		List<MapDTO> list = mservice.selectAll();
+		Gson gson = new Gson();
+		String object = gson.toJson(list);
+		request.setAttribute("json", object);
+		String fileName = "D:\\Spring\\workspace\\eat-together-1\\src\\main\\webapp\\resources\\json\\mapData.json";
+		
+		File file = new File(fileName);
+		FileWriter fw = new FileWriter(file, false);
+		
+		fw.write(object);
+		fw.flush();
+		fw.close();
 		return "/map/map";
 	}
-
-
 	@RequestMapping("insert")
 	public String insert(MapDTO mdto, String detail_category) throws Exception {
-		System.out.println(mdto.getName() + " : " + 
-				mdto.getAddress() + " : " + 
-				mdto.getRoad_address() + " : " +
-				mdto.getCategory() + " : " + 
-				mdto.getLat() + " : " + 
-				mdto.getLng() + " : " +
-				mdto.getRating_avg() + " : " +
-				mdto.getPhone() + " : " + 
-				mdto.getPlace_url());
-		mservice.insert(mdto);
-		return "/map/map";
+		// 판단
+		if(!mservice.insertPossible(mdto.getPlace_url())) {
+			return "/map/insertFail";
+		}else {
+			System.out.println(mdto.getName() + " : " + 
+					mdto.getAddress() + " : " + 
+					mdto.getRoad_address() + " : " +
+					mdto.getCategory() + " : " + 
+					mdto.getLat() + " : " + 
+					mdto.getLng() + " : " +
+					mdto.getRating_avg() + " : " +
+					mdto.getPhone() + " : " + 
+					mdto.getPlace_url());
+			mservice.insert(mdto);
+			return "redirect:/map/toMap";
+		}
 	}
 
 	@ResponseBody

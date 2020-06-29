@@ -4,4 +4,10 @@
 	<insert id="insert">
 		insert into map values(map_seq.nextval,#{name},#{address},#{road_address},#{category},#{lat},#{lng},default,#{phone},#{place_url})
 	</insert>
+	<select id="insertPossible" resultType="int">
+		select count(*) from map where place_url=#{place_url}
+	</select>
+	<select id="selectAll" resultType="coma.spring.dto.MapDTO">
+		select * from map
+	</select>
 </mapper>
