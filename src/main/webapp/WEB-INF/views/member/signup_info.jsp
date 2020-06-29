@@ -45,7 +45,7 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<form action="/" method="post">
+	<form action="/member/signupProc" method="post">
 		<div class="article container">
 			<div class="signup_text">
 				<label for="id" class="signup_text">아이디</label> <input type="text"
@@ -95,24 +95,7 @@
 	</form>
 
 	<script>
-	// form submit 전 체크하는 사항
-	$("#btn").on("click",function() {
-		if ($("#id_text").html() == "사용가능한 id입니다.") {
-			if ($("#pw_text").html() == "비밀번호가 일치합니다."){
-					if($("#nickname").val() != ""){
-						if ($("#mail_text").val() != "") {
-							if ($("#birth").val() != "") {
 
-								return true;
-								
-							}else {alert("생년월일을 입력해주세요.");}
-						} else {alert("이메일 인증을 해주세요.");}
-					} else {alert("닉네임을 입력해주세요");}
-				}else { alert("비밀번호를 확인해주세요.");}
-			} else {alert("아이디 중복체크를 진행해주세요.");}
-		
-			return false;
-		})
 		
 		//다시작성 버튼
 		$("#reset").on("click", function(){

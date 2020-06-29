@@ -4,10 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!-- header -->
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 6af148c2b64ea1e8949381e3a42a270416846ddf
 <div class="container-fluid ">
 	<div class="header-wrap  mt-3 px-0 mx-0">
 		<div class="row">
