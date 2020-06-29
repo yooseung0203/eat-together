@@ -5,8 +5,10 @@
 
 <!-- header -->
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6af148c2b64ea1e8949381e3a42a270416846ddf
 <div class="container-fluid ">
-
 	<div class="header-wrap  mt-3 px-0 mx-0">
 		<div class="row">
 			<div class="col-sm-1 logo-image ">
@@ -53,5 +55,9 @@
 			</c:if>
 		</div>
 	</div>
+<<<<<<< HEAD
 </div>
 
+=======
+</div>
+>>>>>>> 6af148c2b64ea1e8949381e3a42a270416846ddf

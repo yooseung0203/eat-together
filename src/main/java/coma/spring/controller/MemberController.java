@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class MemberController {
 	@Autowired
 	private MemberService mservice;
 	
+	@Autowired
+	private HttpSession session;
+	
 	//로그인 페이지로 이동하기
 	@RequestMapping("loginview")
 	public String getLoginView() {
@@ -42,6 +46,8 @@ public class MemberController {
 	public String getSignupInfoView() {
 		return "member/signup_info";
 	}
+	
+	
 	
 //	
 //	@RequestMapping("/kakaologin")
