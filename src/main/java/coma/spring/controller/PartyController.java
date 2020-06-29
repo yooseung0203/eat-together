@@ -40,12 +40,15 @@ public class PartyController {
 //		String parent_name = dto.getParent_name();
 //		String parent_address = dto.getParent_address();
 //		String title = dto.getTitle();
+		
 		String date = dto.getDate();
 		String time = dto.getTime();
 		String dateAndtime = date + " "+time+":00.0";
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
+		dto.setWriter("test");
+		dto.setStatus("1");
 //
 //		int count = dto.getCount();
 //		
@@ -55,7 +58,7 @@ public class PartyController {
 //		String drinking = dto.getDrinking();
 //		String content = dto.getContent();
 //		
-		
+		pservice.partyInsert(dto);
 				
 
 		return "/party/party_content";
