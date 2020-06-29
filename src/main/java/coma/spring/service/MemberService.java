@@ -3,6 +3,8 @@ package coma.spring.service;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.Base64;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +38,23 @@ public class MemberService {
 		return mdao.signUp(mdto);
 	}
 	
+	//로그인하기
+	public boolean logIn(Map<String, String> param)throws Exception{
+		boolean result = mdao.logIn(param);
+		return result;
+	}
+	
+	//내 정보 보기
+	public MemberDTO selectMyInfo(String id)throws Exception{
+		MemberDTO mdto = mdao.selectMyInfo(id);
+		return mdto;
+	}
+	
+	//회원가입시 이메일 중복검사
+	public boolean isEmailAvailable(String account_email)throws Exception{
+		boolean result = mdao.isEmailAvailable(account_email);
+		return result;
+	}
 	
 //	//카카오톡 로그인을 위한 어세스토큰 가져오기
 //	public String getAccessToken (String code) {

@@ -277,11 +277,12 @@
 					data : {
 						account_email : $("#account_email").val()
 					}
-				}).done(function(dice) {
+				}).done(function(resp) {
+					if (resp != "") {
 						alert("인증메일이 발송되었습니다.");
 						$("#mail_div").css("display", "block");
 						$("#mail_accept").on("click", function() {
-							if ($("#mail_text").val() == dice) {
+							if ($("#mail_text").val() == resp) {
 								$("#mail_text").attr("readonly", true);
 								$("#mail_text").css("color", "blue");
 								$("#mail_text").val("인증에 성공하였습니다.");
@@ -291,6 +292,12 @@
 								$("#mail_text").focus();
 							}
 						})
+					} else {
+						alert("이미 사용중인 이메일입니다.");
+						$("#mail_text").val("");
+						$("#mail_text").focus();
+					}
+
 				})
 			}
 		})
