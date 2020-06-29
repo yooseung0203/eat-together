@@ -95,6 +95,16 @@ public class MemberController {
 		System.out.println("회원가입 성공");
 		return "home";
 	}
+	//회원가입시 아이디 중복체크
+	@RequestMapping("isIdAvailable")
+	@ResponseBody
+	public String isIdAvailable(String id)throws Exception {
+		boolean result=true;
+
+		result = mservice.isIdAvailable(id);
+		System.out.println("아이디 중복체크 결과 : " + result);
+		return String.valueOf(result);
+	}
 
 	//로그인하기
 	@RequestMapping("login")

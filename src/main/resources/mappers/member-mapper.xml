@@ -21,4 +21,7 @@
 	select count(*) from member where account_email=#{value}
 	</select>
 
+	<select id="isIdAvailable" resultType="int">
+	select count(*) from member where id=#{value}
+	</select>
 </mapper>

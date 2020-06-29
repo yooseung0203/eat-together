@@ -43,4 +43,11 @@ public class MemberDAO {
 		if(result>0) return false;
 		else return true;
 	}
+	//회원가입 시 아이디 중복 검사
+	public boolean isIdAvailable(String id) throws Exception{
+		int result = mybatis.selectOne("Member.isIdAvailable", id);
+
+		if(result>0) return false;
+		else return true;
+	}
 }
