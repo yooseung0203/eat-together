@@ -20,7 +20,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
         
         <!-- google font end-->
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
 <!-- ******************* -->
 <!-- header,footer용 css  -->
