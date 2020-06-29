@@ -39,15 +39,15 @@
 					</div>
 				</div>
 			</div>
-			<c:if test="${sessionScope.id == null}">
+			<c:if test="${loginInfo.id == null}">
 				<div class="col-sm-1">
 					<span class="main-login"> <a href="/member/loginview">로그인 </a> / 
 						<a href="/member/signup_check">회원가입</a></span>
 				</div>
 			</c:if>
-			<c:if test="${sessionScope.id != null}">
+			<c:if test="${loginInfo.id != null}">
 				<div class="col-sm-1">
-					<span class="main-login"> ${sessionScope.id}님, 환영합니다. </a> /
+					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> /
 						<a href="/member/mypage">마이페이지</a></span>
 				</div>
 			</c:if>
