@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import coma.spring.dao.PartyDAO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.service.PartyService;
 
 @Controller
 @RequestMapping("/party/")
