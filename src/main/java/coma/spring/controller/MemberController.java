@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import coma.spring.dto.MemberDTO;
 import coma.spring.service.MemberService;
 
@@ -60,6 +63,8 @@ public class MemberController {
 		System.out.println("회원가입 성공");
 		return "home";
 	}
+	
+	
 
 
 	//	
