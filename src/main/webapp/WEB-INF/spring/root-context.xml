@@ -20,15 +20,27 @@
 		<property name="password" value="eat_together" />
 		<property name="initialSize" value="30" />
 	</bean>
+
 	<bean id="sqlSessionFactory"
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="mapperLocations"
 			value="classpath:/mappers/*-mapper.xml" />
 	</bean>
+
 	<bean id="sqlSession"
 		class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg name="sqlSessionFactory"
 			ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+
+	<!-- JDBC Template -->
+	<bean id="jdbcTemplate"
+		class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 </beans>
