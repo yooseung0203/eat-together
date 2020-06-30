@@ -23,4 +23,8 @@ public class MapDAO {
 	public List<MapDTO> selectAll() throws Exception{
 		return mybatis.selectList("Map.selectAll");
 	}
+	
+	public List<MapDTO> searchByKeyword(int place_id) throws Exception{
+		return mybatis.selectList("Map.searchByKeyword", place_id);
+	}
 }

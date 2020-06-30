@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -53,6 +54,37 @@ public class MemberController {
 		return "member/signup_info";
 	}
 
+	//마이페이지에서 내정보view로 이동
+	@RequestMapping("mypage_myinfo")
+	public String getMyInfoView() {
+		return "member/mypage_myinfo";
+	}
+
+	//마이페이지에서 쪽지함으로 이동
+	@RequestMapping("mypage_msglist")
+	public String getMyMsgView() {
+		return "member/mypage_msglist";
+	}
+
+	//마이페이지에서 내모임리스트로 이동
+	@RequestMapping("mypage_chatlist")
+	public String getChatlistView() {
+		return "member/mypage_chatlist";
+	}
+
+	//마이페이지에서 내리뷰리스트로 이동
+	@RequestMapping("mypage_reviewlist")
+	public String getReviewlistView() {
+		return "member/mypage_reviewlist";
+	}
+	
+	//로그아웃하기
+	@RequestMapping("logoutProc")
+	public String logoutProc() {
+		session.invalidate();
+		return "home";
+	}
+
 	//회원가입하기
 	@RequestMapping("signupProc")
 	public String signUp(MemberDTO mdto)throws Exception {
@@ -63,8 +95,50 @@ public class MemberController {
 		System.out.println("회원가입 성공");
 		return "home";
 	}
-	
-	
+	//회원가입시 아이디 중복체크
+	@RequestMapping("isIdAvailable")
+	@ResponseBody
+	public String isIdAvailable(String id)throws Exception {
+		boolean result=true;
+
+		result = mservice.isIdAvailable(id);
+		System.out.println("아이디 중복체크 결과 : " + result);
+		return String.valueOf(result);
+	}
+
+	//로그인하기
+	@RequestMapping("login")
+	public String login(String id, String pw)throws Exception {
+
+		System.out.println("id : " + id);
+		String protectedpw = mservice.getSha512(pw);
+		System.out.println("pw : " + protectedpw);
+
+		Map<String, String> param = new HashMap<>();
+		param.put("targetColumn1", "id");
+		param.put("targetValue1", id);
+		param.put("targetColumn2", "pw");
+		param.put("targetValue2", protectedpw);
+
+		boolean result = mservice.logIn(param);
+
+		System.out.println("loginResult 결과 : "+ result);
+
+		if(result==true) {
+			MemberDTO mdto = mservice.selectMyInfo(id);
+			session.setAttribute("loginInfo", mdto);
+			System.out.println("로그인 성공");
+			return "home";
+		}else {
+			System.out.println("id : " + id);
+			System.out.println("pw : " + protectedpw);
+			System.out.println("로그인 실패");
+			return "home";
+		}
+
+	}
+
+
 
 
 	//	

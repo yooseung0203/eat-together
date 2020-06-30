@@ -240,29 +240,32 @@
 						})
 
 		//아이디 중복체크 수정 필요
-		$("#duplcheck").on("click", function() {
+		$("#dublCheck").on("click", function() {
 			if ($("#id").val() != "") {
 				$.ajax({
-					url : "../duplcheck.mem", //바꿔야 한다.
-					dataType : "json",
+					url : "/member/isIdAvailable",
 					type : "post",
 					data : {
 						id : $("#id").val()
 					}
 				}).done(function(resp) {
 					$("#id_text").css("display", "block");
-					$("#id_text").css("color", "blue");
-					$("#id_text").html("사용가능한 id입니다.");
-				}).fail(function(error) {
-					console.log(error);
-					$("#id_text").css("display", "block");
-					$("#id_text").css("color", "red");
-					$("#id_text").html("사용 불가능한 아이디입니다.");
-					$("#id").val("");
+					if (resp == "true") {
+						$("#id_text").css("color", "blue");
+						$("#id_text").html("사용가능한 id입니다.");
+					} else if (resp == "false") {
+						$("#id_text").css("color", "red");
+						$("#id_text").html("사용 불가능한 id입니다.");
+						$("#id").val("");
+					}
+				}).fail(function(error1, error2) {
+					console.log(error1);
+					console.log(error2);
 				})
 			} else {
 				alert("아이디를 입력해주세요.");
 			}
+
 		})
 
 		//메일 인증 수정 필요
@@ -273,15 +276,16 @@
 			} else {
 				$.ajax({
 					url : "/mail/mailSending", //바꿔야 한다
-					type : "get",
+					type : "post",
 					data : {
 						account_email : $("#account_email").val()
 					}
-				}).done(function(dice) {
+				}).done(function(resp) {
+					if (resp != "") {
 						alert("인증메일이 발송되었습니다.");
 						$("#mail_div").css("display", "block");
 						$("#mail_accept").on("click", function() {
-							if ($("#mail_text").val() == dice) {
+							if ($("#mail_text").val() == resp) {
 								$("#mail_text").attr("readonly", true);
 								$("#mail_text").css("color", "blue");
 								$("#mail_text").val("인증에 성공하였습니다.");
@@ -291,6 +295,12 @@
 								$("#mail_text").focus();
 							}
 						})
+					} else {
+						alert("이미 사용중인 이메일입니다.");
+						$("#mail_text").val("");
+						$("#mail_text").focus();
+					}
+
 				})
 			}
 		})

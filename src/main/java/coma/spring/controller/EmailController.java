@@ -15,6 +15,7 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import coma.spring.service.MemberService;
+
 @Controller
 @RequestMapping("/mail/")
 public class EmailController {
@@ -30,6 +33,8 @@ public class EmailController {
 	@Inject
 	JavaMailSender mailSender; 
 
+	@Autowired
+	private MemberService mservice;
 
 	//mailSending 랜덤 문자열 생성하기
 	public String getRandomString(){
@@ -47,48 +52,58 @@ public class EmailController {
 	//회원가입시 인증 메일 보내기
 	@RequestMapping("mailSending")
 	@ResponseBody
-	public String mailSender(@RequestParam String account_email) throws AddressException, MessagingException { 
-		String username = "jieun1092";
-		String password = "ji1jin0eat3";
+	public String mailSender(@RequestParam String account_email) throws Exception{ 
+		String username = "eat-together";
+		String password = "aktwlqrkTekrkffo?";
+		String resp;
 
-		String dice = this.getRandomString();
-		System.out.println("랜덤문자열 : " + dice);
+		boolean result = mservice.isEmailAvailable(account_email);
+		System.out.println("이메일 사용가능한가? :" + false);
+		if(result==false) {
+			resp = "";
+			return resp;
+		}else {
 
-		String recipient = account_email;
-		String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
-		String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
+			String dice = this.getRandomString();
+			System.out.println("랜덤문자열 : " + dice);
 
-		Properties props = new Properties();
-		props.put("mail.smtp.host", "smtp.daum.net");
-		props.put("mail.smtp.socketFactory.port", "465");
-		props.put("mail.smtp.socketFactory.class",
-				"javax.net.ssl.SSLSocketFactory");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.port", "465");
+			String recipient = account_email;
+			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
+			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
 
-		Session session = Session.getDefaultInstance(props,
-				new javax.mail.Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username,password);
+			Properties props = new Properties();
+			props.put("mail.smtp.host", "smtp.daum.net");
+			props.put("mail.smtp.socketFactory.port", "465");
+			props.put("mail.smtp.socketFactory.class",
+					"javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.port", "465");
+
+			Session session = Session.getDefaultInstance(props,
+					new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(username,password);
+				}
+			});
+
+			try {
+
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("no-reply@eat-together.net"));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse(account_email));
+				message.setSubject(subject);
+				message.setText(body);
+				Transport.send(message);
+				resp = dice;
+
+				System.out.println("OK");
+			} catch (MessagingException e) {
+				throw new RuntimeException(e);
 			}
-		});
 
-		try {
-
-			Message message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("no-reply@eat-together.net"));
-			message.setRecipients(Message.RecipientType.TO,
-					InternetAddress.parse(account_email));
-			message.setSubject(subject);
-			message.setText(body);
-			Transport.send(message);
-
-			System.out.println("OK");
-		} catch (MessagingException e) {
-			throw new RuntimeException(e);
+			return resp;
 		}
-
-		return dice;
 	}
 
 }
