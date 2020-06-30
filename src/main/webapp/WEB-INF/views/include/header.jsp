@@ -17,7 +17,7 @@
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">
-						<a href="/party/toParty_New" id="toPartyNew">모임모집</a>
+							<a href="/party/toParty_New" id="toPartyNew">모임모집</a>
 						</div>
 					</div>
 					<div class="col-sm-1">
@@ -35,22 +35,32 @@
 						<div class="navi-menu">공지사항</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">마이페이지</div>
+
+						<div class="navi-menu">
+							<a href="/member/mypage_myinfo">마이페이지</a>
+						</div>
 					</div>
 				</div>
 			</div>
-			<c:if test="${sessionScope.id == null}">
+			<c:if test="${loginInfo.id == null}">
 				<div class="col-sm-1">
-					<span class="main-login"> <a href="/member/loginview">로그인 </a> / 
-						<a href="/member/signup_check">회원가입</a></span>
+					<span class="main-login"> <a href="/member/loginview">로그인
+					</a> / <a href="/member/signup_check">회원가입</a></span>
 				</div>
 			</c:if>
-			<c:if test="${sessionScope.id != null}">
+			<c:if test="${loginInfo.id != null}">
 				<div class="col-sm-1">
-					<span class="main-login"> ${sessionScope.id}님, 환영합니다. </a> /
-						<a href="/member/mypage">마이페이지</a></span>
+					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> / <a
+						href="/member/logoutProc" id="logout">로그아웃</a></span>
 				</div>
 			</c:if>
 		</div>
 	</div>
 </div>
+
+<script>
+	$("#logout").on("click", function() {
+		alert("로그아웃되었습니다.");
+	})
+</script>
+
