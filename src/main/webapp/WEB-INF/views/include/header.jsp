@@ -50,7 +50,7 @@
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
 				<div class="col-sm-1">
-					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> / <a
+					<span class="main-login"> ${loginInfo.id}님, 환영합니다. / <a
 						href="/member/logoutProc" id="logout">로그아웃</a></span>
 				</div>
 			</c:if>

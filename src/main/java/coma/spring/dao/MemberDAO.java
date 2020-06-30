@@ -54,4 +54,8 @@ public class MemberDAO {
 	public int deleteMember(Map<String, String> param) throws Exception{
 		return mybatis.delete("Member.deleteMember", param);
 	}
+	//회원정보수정
+	public int editMyInfo(Map<String, String> param)throws Exception{
+		return mybatis.update("Member.editMyInfo", param);
+	}
 }

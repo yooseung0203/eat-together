@@ -83,6 +83,18 @@ public class MemberController {
 		return "member/withdraw";
 	}
 
+	//비밀번호 수정하기 팝업 열기
+	@RequestMapping("editPw")
+	public String openEditPwView() {
+		return "member/editpw";
+	}
+
+	//내정보 수정 페이지로 이동하기
+	@RequestMapping("editMyInfo")
+	public String getEditMyInfoView() {
+		return "member/editmyinfo";
+	}
+
 	//로그아웃하기
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
@@ -165,7 +177,7 @@ public class MemberController {
 			int result = mservice.deleteMember(param);
 			System.out.println("회원 탈퇴 성공 : " + result);
 
-			
+
 			if(result>0) {
 				System.out.println("회원 탈퇴 완료");
 				session.invalidate();
@@ -180,6 +192,33 @@ public class MemberController {
 		}
 	}
 
+	//비밀번호 수정하기
+
+	//내정보 수정하기
+	@RequestMapping("editMyInfoProc")
+	public String editMyInfoProc(String nickname, String account_email) throws Exception {
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		System.out.println("수정할 아이디 : " + id);
+		System.out.println("수정할 닉네임 : " + nickname);
+		System.out.println("수정할 이메일 : " + account_email);
+
+		Map<String, String> param = new HashMap<>();
+		param.put("targetColumn1", "nickname");
+		param.put("targetValue1", nickname);
+		param.put("targetColumn2", "account_email");
+		param.put("targetValue2", account_email);
+		param.put("targetColumn3", "id");
+		param.put("targetValue3", id);
+
+		int result = mservice.editMyInfo(param);
+		
+		mdto.setNickname(nickname);
+		mdto.setAccount_email(account_email);
+
+		System.out.println("회원정보수정 성공" + result);
+		return "redirect:/member/mypage_myinfo";
+	}
 
 
 	//	

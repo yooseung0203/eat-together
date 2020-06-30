@@ -66,6 +66,11 @@ public class MemberService {
 		int result = mdao.deleteMember(param);
 		return result;
 	}
+	//내정보수정하기
+	public int editMyInfo(Map<String, String> param) throws Exception{
+		int result = mdao.editMyInfo(param);
+		return result;
+	}
 
 	//	//카카오톡 로그인을 위한 어세스토큰 가져오기
 	//	public String getAccessToken (String code) {

@@ -36,7 +36,7 @@
 	href="/resources/css/withdraw.css">
 <!-- ************* -->
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>회원탈퇴</title>
 </head>
 <body>
 	<!-- ******************* -->
@@ -68,6 +68,7 @@
 			<div id="pw_text" style="display: none;"></div>
 		</div>
 		<button type=submit class="btn btn-light" id="withdraw">탈퇴하기</button>
+		<button type="button" class="btn btn-warning" id="back">되돌아가기</button>
 	</form>
 
 	<script>
@@ -85,6 +86,9 @@
 				alert("탈퇴가 완료되었습니다.\n#See_you_again!");
 				return true;
 			}
+		})
+		$("#back").on("click", function(){
+			location.replace("/member/mypage_myinfo");
 		})
 	</script>
 
