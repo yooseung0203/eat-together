@@ -40,7 +40,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
 <!-- ******************* -->
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>내 정보</title>
 </head>
 <body>
 	<!-- ******************* -->
@@ -65,11 +65,6 @@
 						<td>${loginInfo.id}</td>
 					</tr>
 					<tr>
-						<th scope="row">PASSWORD</th>
-						<td><button type=button class="btn btn-light" id="pwEdit">비밀번호
-								수정하기</button></td>
-					</tr>
-					<tr>
 						<th scope="row">NICKNAME</th>
 						<td>${loginInfo.nickname}</td>
 					</tr>
@@ -81,10 +76,27 @@
 						<th scope="row">EMAIL</th>
 						<td>${loginInfo.account_email}</td>
 					</tr>
+					<tr>
+						<th scope="row"></th>
+						<td>
+							<button type="button" class="btn btn-warning" id="editMyInfo">내정보
+								수정</button>
+							<button type=button class="btn btn-light" id="withdraw">회원탈퇴</button>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+	<script>
+		$("#withdraw").on("click", function() {
+			alert("정말로 회원탈퇴를 진행하시겠습니까?");
+			location.replace('/member/withdrawView');
+		})
+		$("#editMyInfo").on("click", function() {
+			location.replace('/member/editMyInfo');
+		})
+	</script>
 
 	<!-- ******************* -->
 	<!-- footer  -->

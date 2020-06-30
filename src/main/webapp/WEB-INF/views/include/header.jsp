@@ -37,7 +37,7 @@
 					<div class="col-sm-1">
 
 						<div class="navi-menu">
-							<a href="/member/mypage_myinfo">마이페이지</a>
+							<a id="goToMyPage">마이페이지</a>
 						</div>
 					</div>
 				</div>
@@ -50,7 +50,7 @@
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
 				<div class="col-sm-1">
-					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> / <a
+					<span class="main-login"> ${loginInfo.id}님, 환영합니다. / <a
 						href="/member/logoutProc" id="logout">로그아웃</a></span>
 				</div>
 			</c:if>
@@ -61,6 +61,14 @@
 <script>
 	$("#logout").on("click", function() {
 		alert("로그아웃되었습니다.");
+	})
+	$("#goToMyPage").on("click", function() {
+		if ("${loginInfo.id}" == "") {
+			alert("로그인 후 이용해주세요");
+			location.replace('/');
+		}else{
+			location.replace('/member/mypage_myinfo');
+		}
 	})
 </script>
 
