@@ -239,7 +239,7 @@
 							}
 						})
 
-		//아이디 중복체크 수정 필요
+		//아이디 중복체크
 		$("#dublCheck").on("click", function() {
 			if ($("#id").val() != "") {
 				$.ajax({
@@ -268,14 +268,14 @@
 
 		})
 
-		//메일 인증 수정 필요
+		//메일 인증 
 		$("#mail").on("click", function() {
 			if ($("#account_email").val() == "") {
 				alert("이메일을 입력해주십시오.");
 				$("#account_email").focus();
 			} else {
 				$.ajax({
-					url : "/mail/mailSending", //바꿔야 한다
+					url : "/mail/mailSending",
 					type : "post",
 					data : {
 						account_email : $("#account_email").val()
