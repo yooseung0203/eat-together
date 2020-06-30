@@ -8,7 +8,7 @@
 	<div class="header-wrap  mt-3 px-0 mx-0">
 		<div class="row">
 			<div class="col-sm-1 logo-image ">
-				<a href="/"><img src="/resources/img/dummylogo.png"></a>
+				<a href="/"><img src="/resources/img/logo.png"></a>
 			</div>
 			<div class="col-sm-10 mb-3">
 				<div class="row navibar h5 text-center">

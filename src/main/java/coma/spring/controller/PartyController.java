@@ -3,9 +3,11 @@ package coma.spring.controller;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -17,52 +19,67 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.service.PartyService;
 
 @Controller
 @RequestMapping("/party/")
 public class PartyController {
+	
+
+	@Autowired
+	private PartyService pservice;
+	@Autowired
+	private HttpSession session;
+	
 	@RequestMapping("toParty_New")
 	public String toPartyNew() {
+		
 		return "/party/party_new";
 	}
 
 	@RequestMapping(value = "party_New_Proc", method = RequestMethod.POST)
 	/*public String partyNewProc(HttpServletRequest request) {*/
-	public String partyNewProc(PartyDTO dto) {
+	public String partyNewProc(PartyDTO dto, HttpServletRequest request) throws Exception {
 		
-		String title = dto.getTitle();
-		String age = dto.getAge();
-		String gender = dto.getGender();
-		int count = dto.getCount();
-		String drinking = dto.getDrinking();
-		String content = dto.getContent();
+//		String parent_name = dto.getParent_name();
+//		String parent_address = dto.getParent_address();
+//		String title = dto.getTitle();
+		
 		String date = dto.getDate();
 		String time = dto.getTime();
-		
 		String dateAndtime = date + " "+time+":00.0";
-		
+
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
-
-		/*
-		 * String title = (String) request.getAttribute("title");
-		 * 
-		 * Date meetdate = (Date) request.getAttribute("meetdate");
-		 * request.getAttribute("time");
-		 * 
-		 * String count = (String) request.getAttribute("count"); String gender =
-		 * (String) request.getAttribute("gender"); String age = (String)
-		 * request.getAttribute("age"); String drinking = (String)
-		 * request.getAttribute("drinking"); String content = (String)
-		 * request.getAttribute("content");
-		 * 
-		 * System.out.println(title); System.out.println(count);
-		 * System.out.println(gender); System.out.println(age);
-		 * System.out.println(drinking); System.out.println(content);
-		 */
-
+		dto.setMeetdate(meetdate);
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String id= account.getId();
+		dto.setWriter(id);
+		dto.setStatus("1");
+//
+//		int count = dto.getCount();
+//		
+//		String age = dto.getAge();
+//		String gender = dto.getGender();
+//		
+//		String drinking = dto.getDrinking();
+//		String content = dto.getContent();
+//		
+		int myseq = pservice.partyInsert(dto); 
+		// 모임 등록 작업 수행
+		System.out.println(myseq);
+		//모임 등록 후 등록된 페이지로 이동 
+		PartyDTO content=pservice.selectBySeq(myseq);
+		
+		System.out.println(content.getTime());
+		request.setAttribute("con",content);
+		
+		
 		return "/party/party_content";
 	}
+	
+	
 	
 	
 	
@@ -73,7 +90,7 @@ public class PartyController {
 	
 	@ResponseBody
 	@RequestMapping(value="searchStoreProc", method=RequestMethod.GET, produces="application/json;charset=utf8")
-	public Map<String, String> searchStoreProc(String keyword) throws Exception {
+	public String searchStoreProc(String keyword, String category, String page) throws Exception {
 		String HOST = "https://dapi.kakao.com";
 		String APIKEY = "KakaoAK 80c29b1bba14c9c568e4ae4f89fc9368";
 		System.out.println(keyword);
@@ -88,24 +105,28 @@ public class PartyController {
 	    String  query = URLEncoder.encode(keyword,"UTF-8");
 
 		HttpEntity entity = new HttpEntity("parameters", headers); 
-		URI foodurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=FD6"); 
-		URI cafeurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=CE7");
+		URI foodurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=FD6&page="+page); 
+		URI cafeurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=CE7&page="+page);
+		
+		String resp;
+		
 		RequestEntity<String> rq = new RequestEntity<>(headers, HttpMethod.GET, foodurl);
-		//ResponseEntity<String> response= restTemplate.exchange(rq, String.class);
-		
 		RequestEntity<String> rq1 = new RequestEntity<>(headers, HttpMethod.GET, cafeurl);
-		//ResponseEntity<String> response1= restTemplate.exchange(rq, String.class);
+		if(category.contentEquals("f")) {
+		resp = restTemplate.postForObject(foodurl, rq, String.class);
+		System.out.println("f");
+		}else {
+		resp = restTemplate.postForObject(cafeurl, rq1, String.class);
+		System.out.println("c");
+		}
+		/*
+		 * Map<String,String> respBody = new HashMap<String, String>();
+		 * respBody.put("food",resp); respBody.put("cafe",resp2);
+		 */
+		System.out.println(page);
 		
-		
-		String resp= restTemplate.postForObject(foodurl, rq, String.class);
-		String resp2 = restTemplate.postForObject(cafeurl, rq, String.class);
-		
-		Map<String,String> respBody = new HashMap<String, String>();	
-		respBody.put("food",resp);
-		respBody.put("cafe",resp2);
-		
-        System.out.println(respBody);
-		return respBody;
+        System.out.println(resp);
+		return resp;
 
 	}
 }
