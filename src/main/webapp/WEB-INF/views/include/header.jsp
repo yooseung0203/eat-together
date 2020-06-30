@@ -50,7 +50,7 @@
 				<c:when test="${loginInfo.id == 'administrator'}">
 					<div class="col-sm-1">
 					<span class="main-login"> 관리자님, 환영합니다. </a> /
-						<a href="/admin/toAdmin">관리자페이지</a></span>
+						<a href="#" onclick="window.open('/admin/toAdmin', 'Admin','width=1300, height=800, location=no'); return false">관리자페이지</a></span>
 					</div>
 				</c:when>
 				<c:otherwise>
