@@ -12,7 +12,10 @@ public class PartyService {
 	private PartyDAO pdao;
 	
 	public int partyInsert(PartyDTO dto) {
-		return pdao.insert(dto);
+		int seq = pdao.getNextVal();
+		dto.setSeq(seq);
+		pdao.insert(dto);
+		return seq;
 	}
 	
 }

@@ -12,6 +12,10 @@ public class PartyDAO {
 	@Autowired
 	private SqlSessionTemplate mybatis;
 	
+	public int getNextVal() {
+		return mybatis.selectOne("Party.getNextval");
+	}
+	
 	public int insert(PartyDTO dto) {
 		return mybatis.insert("Party.insert",dto);
 	}

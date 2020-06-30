@@ -4,6 +4,8 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -35,7 +37,7 @@ public class PartyController {
 
 	@RequestMapping(value = "party_New_Proc", method = RequestMethod.POST)
 	/*public String partyNewProc(HttpServletRequest request) {*/
-	public String partyNewProc(PartyDTO dto) {
+	public String partyNewProc(PartyDTO dto, HttpServletRequest request) {
 		
 //		String parent_name = dto.getParent_name();
 //		String parent_address = dto.getParent_address();
@@ -58,10 +60,11 @@ public class PartyController {
 //		String drinking = dto.getDrinking();
 //		String content = dto.getContent();
 //		
-		pservice.partyInsert(dto);
-				
+		int myseq = pservice.partyInsert(dto);
+		request.setAttribute("myseq", myseq);
+		
 
-		return "/party/party_content";
+		return "/party/toparty_content";
 	}
 	
 	
