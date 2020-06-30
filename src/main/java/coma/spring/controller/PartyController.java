@@ -83,7 +83,6 @@ public class PartyController {
 	@RequestMapping(value="party_content")
 	public String party_content(String seq, HttpServletRequest request) throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
-		System.out.println(content.getTime());
 		request.setAttribute("con",content);
 		return "/party/party_content";
 	}
@@ -137,8 +136,19 @@ public class PartyController {
 	}
 	
 	@RequestMapping("partymodify")
-	public String partymodify(PartyDTO dto)  throws Exception {
+	public String partymodify(String seq, HttpServletRequest request)  throws Exception {
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		request.setAttribute("con",content);
+		
+		return "/party/party_modify";
+	}
 	
+	@RequestMapping("party_modifyProc")
+	public String partymodifyProc(PartyDTO dto, HttpServletRequest request) throws Exception{
+		
+		
+		
+		request.setAttribute("seq", dto.getSeq());
 		return "/party/party_content";
 	}
 	

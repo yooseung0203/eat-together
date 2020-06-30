@@ -136,6 +136,15 @@ $(function(){
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
+	
+	<c:if test="${con.writer ne sessionScope.loginInfo.id}">
+	<script>
+	alert("작성자만 수정 가능합니다.");
+	location.href("/party/party_content?seq=${con.seq}");
+	</script>
+	</c:if>
+	
+	<c:if test="${con.writer eq sessionScope.loginInfo.id}">
 	<form id="form" name="form" method="post" action="/party/party_New_Proc">
 		<div class="container formdiv">
 			<div class="row mb-3">
@@ -282,6 +291,7 @@ $(function(){
 
 		</div>
 	</form>
+	</c:if>
 
 
 
