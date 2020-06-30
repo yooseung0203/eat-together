@@ -18,4 +18,10 @@ public class PartyService {
 		return seq;
 	}
 	
+	
+	public PartyDTO selectBySeq(int seq) throws Exception {
+		PartyDTO dto = pdao.selectBySeq(seq); // 읽어오기
+		return dto;
+	}
+	
 }

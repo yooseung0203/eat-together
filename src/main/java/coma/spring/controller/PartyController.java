@@ -37,7 +37,7 @@ public class PartyController {
 
 	@RequestMapping(value = "party_New_Proc", method = RequestMethod.POST)
 	/*public String partyNewProc(HttpServletRequest request) {*/
-	public String partyNewProc(PartyDTO dto, HttpServletRequest request) {
+	public String partyNewProc(PartyDTO dto, HttpServletRequest request) throws Exception {
 		
 //		String parent_name = dto.getParent_name();
 //		String parent_address = dto.getParent_address();
@@ -60,12 +60,20 @@ public class PartyController {
 //		String drinking = dto.getDrinking();
 //		String content = dto.getContent();
 //		
-		int myseq = pservice.partyInsert(dto);
-		request.setAttribute("myseq", myseq);
+		int myseq = pservice.partyInsert(dto); 
+		// 모임 등록 작업 수행
+		System.out.println(myseq);
+		//모임 등록 후 등록된 페이지로 이동 
+		PartyDTO content=pservice.selectBySeq(myseq);
 		
-
-		return "/party/toparty_content";
+		System.out.println(content.getTime());
+		request.setAttribute("con",content);
+		
+		
+		return "/party/party_content";
 	}
+	
+	
 	
 	
 	

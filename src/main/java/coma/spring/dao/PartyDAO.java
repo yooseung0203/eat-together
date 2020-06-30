@@ -20,4 +20,8 @@ public class PartyDAO {
 		return mybatis.insert("Party.insert",dto);
 	}
 	
+	public PartyDTO selectBySeq(int seq) throws Exception{
+		return mybatis.selectOne("Party.selectBySeq",seq);
+	} 
+	
 }
