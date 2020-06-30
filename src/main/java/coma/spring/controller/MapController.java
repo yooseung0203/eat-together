@@ -131,36 +131,36 @@ public class MapController {
 
 	@RequestMapping(value="search",method=RequestMethod.GET)
 	public String searchByKeyword(String keyword, HttpServletRequest req) throws Exception{
-		RestTemplate restTemplate = new RestTemplate();
-		List<MapDTO> search_list = new ArrayList<>();
-
-		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
-		params.add("query", keyword);
-		params.add("page", 1);
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
-		headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");		
-
-		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
-		String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/keyword.json"), request, String.class);
-
-		Gson gson = new Gson();
-		JsonObject obj = gson.fromJson(respBody, JsonObject.class);
-		JsonArray docs = (JsonArray)obj.get("documents");
-
-		for(JsonElement doc : docs) {
-			JsonObject docobj = doc.getAsJsonObject(); 
-			int place_id = docobj.get("id").getAsInt();
-			List<MapDTO> list = mservice.searchByKeyword(place_id);
-			if(list != null) {
-				for(MapDTO search_result : list) {
-					search_list.add(search_result);
-					System.out.println(search_result.getName());
-				}
-			}
-		}
-		req.setAttribute("search_list", search_list);
+//		RestTemplate restTemplate = new RestTemplate();
+//		List<MapDTO> search_list = new ArrayList<>();
+//
+//		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
+//		params.add("query", keyword);
+//		params.add("page", 1);
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
+//		headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
+//		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");		
+//
+//		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+//		String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/keyword.json"), request, String.class);
+//
+//		Gson gson = new Gson();
+//		JsonObject obj = gson.fromJson(respBody, JsonObject.class);
+//		JsonArray docs = (JsonArray)obj.get("documents");
+//
+//		for(JsonElement doc : docs) {
+//			JsonObject docobj = doc.getAsJsonObject(); 
+//			int place_id = docobj.get("id").getAsInt();
+//			List<MapDTO> list = mservice.searchByKeyword(place_id);
+//			if(list != null) {
+//				for(MapDTO search_result : list) {
+//					search_list.add(search_result);
+//					System.out.println(search_result.getName());
+//				}
+//			}
+//		}
+//		req.setAttribute("search_list", search_list);
 		return "redirect:/map/toMap";
 	}
 
