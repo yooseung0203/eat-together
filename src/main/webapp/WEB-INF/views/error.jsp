@@ -13,7 +13,6 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- BootStrap4 End-->
-
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -24,24 +23,22 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
 	rel="stylesheet">
-
 <!-- google font end-->
-
-<!-- ******************* -->
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
-<!-- ******************* -->
-<!-- mypage용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/mypage.css">
-<!-- ******************* -->
-<!-- menubar용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
-<!-- ******************* -->
+
 <meta charset="UTF-8">
-<title>내 모임</title>
+<title>로그인</title>
+<script>
+	$(function() {
+		alert("문제가 발생하였습니다. 다시 한번 시도해주세요.");
+		location.replace('/');
+	});
+</script>
 </head>
+
 <body>
 	<!-- ******************* -->
 	<!-- header  -->
@@ -50,20 +47,12 @@
 	<!-- ******************* -->
 
 
-	<div id=mypage-container>
-		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
-		<div id=contents>
-		<!-- 컨텐츠 들어가는 공간 -->
-		</div>
-	</div>
 
 
 
 	<!-- ******************* -->
 	<!-- footer  -->
-	<div id=footer-container>
-		<jsp:include page="/WEB-INF/views/include/footer.jsp" />
-	</div>
+	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 	<!-- footer  -->
 	<!-- ******************* -->
 </body>
