@@ -72,6 +72,8 @@
 			</c:choose>	
 			</c:if>
 		</div>
+		
+		
 	</div>
 </div>
 
