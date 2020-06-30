@@ -100,11 +100,11 @@ $(function(){
 			</div> --%>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">모임날짜</div>
-			<div class="col-lg-2">${con.meetdate }</div>
+			<div class="col-lg-2">${con.sDate }</div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">시간</div>
-			<div class="col-lg-2">${con.meetdate }</div>
+			<div class="col-lg-2">${con.sTime }</div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">인원</div>

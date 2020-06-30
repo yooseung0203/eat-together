@@ -145,22 +145,22 @@ $(function(){
 	</c:if>
 	
 	<c:if test="${con.writer eq sessionScope.loginInfo.id}">
-	<form id="form" name="form" method="post" action="/party/party_New_Proc">
+	<form id="form" name="form" method="post" action="/party/party_modifyProc">
 		<div class="container formdiv">
 			<div class="row mb-3">
 				<div class="col-sm-12">
 					<h2 class="party_headline">모임 수정하기</h2>
 				</div>
-				<input type="hidden" name="writer">
+				<input type="hidden" name="writer" value="${con.writer}">
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">상호명</div>
 				<div class="col-sm-3">
 					<input type="text" class="form-control" name="parent_name"
-						id="parent_name" readonly>
+						id="parent_name" value="${con.parent_name}" readonly>
 				</div>
 				<div class="col-sm-3">
-					<button id="search_parent_name" class="btn btn-primary" type=button>상호
+					<button id="search_parent_name"class="btn btn-primary" type=button>상호
 						찾기</button>
 				</div>
 			</div>
@@ -168,35 +168,35 @@ $(function(){
 				<div class="col-sm-2">위치</div>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="parent_address"
-						id="parent_address" readonly>
-					<input type="hidden" name="place_id" id="place_id">
+						id="parent_address"  value="${con.parent_address}"  readonly>
+					<input type="hidden" name="place_id" id="place_id" value="${con.place_id}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">제목</div>
 				<div class="col-sm-10">
 					<input class="form-control" type="text" name="title"
-						id="party_title">
+						id="party_title" value="${con.title}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">모임날짜</div>
 				<div class="col-lg-2">
 					<input class="form-control" type="date" name="date"
-						id="party_date">
+						id="party_date" value="${con.sDate}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">시간</div>
 				<div class="col-lg-2">
-					<input class="form-control" type="time" name="time" id="party_time">
+					<input class="form-control" type="time" name="time" id="party_time" value="${con.sTime}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">인원</div>
 				<div class="col-sm-2">
 					<input class="form-control" type="number" name="count" min=2 max=4
-						id="party_count" aria-describedby="countHelpInline">
+						id="party_count" aria-describedby="countHelpInline" value="${con.count}">
 				</div>
 				<div class="col-sm-5">
 					<small id="countHelpInline" class="text-muted"> 인원수는 2~4명

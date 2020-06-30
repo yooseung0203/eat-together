@@ -146,10 +146,8 @@ public class PartyController {
 	@RequestMapping("party_modifyProc")
 	public String partymodifyProc(PartyDTO dto, HttpServletRequest request) throws Exception{
 		
-		
-		
-		request.setAttribute("seq", dto.getSeq());
-		return "/party/party_content";
+		pservice.update(dto);
+		return "redirect:/party/party_content?seq="+dto.getSeq();
 	}
 	
 	@RequestMapping("partydelete")
