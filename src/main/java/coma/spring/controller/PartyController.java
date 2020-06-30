@@ -79,7 +79,14 @@ public class PartyController {
 		return "/party/party_content";
 	}
 	
-	
+	//모임 글보기
+	@RequestMapping(value="party_content")
+	public String party_content(String seq, HttpServletRequest request) throws Exception {
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		System.out.println(content.getTime());
+		request.setAttribute("con",content);
+		return "/party/party_content";
+	}
 	
 	
 	
@@ -127,6 +134,18 @@ public class PartyController {
 		
         System.out.println(resp);
 		return resp;
-
 	}
+	
+	@RequestMapping("partymodify")
+	public String partymodify(PartyDTO dto)  throws Exception {
+	
+		return "/party/party_content";
+	}
+	
+	@RequestMapping("partydelete")
+	public String partydelete(String seq)  throws Exception {
+		pservice.delete(seq);
+		return "redirect:/map/toMap";
+	}
+	
 }

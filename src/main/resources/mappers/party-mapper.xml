@@ -12,4 +12,7 @@ select party_seq.nextval from dual
 	select * from party where seq = #{value} order by seq desc
 </select>
 
+<delete id="delete">
+	delete from party where seq = #{value}
+</delete>
 </mapper>
