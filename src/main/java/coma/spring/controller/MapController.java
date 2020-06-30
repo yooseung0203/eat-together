@@ -22,6 +22,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import coma.spring.dto.MapDTO;
 import coma.spring.service.MapService;
@@ -43,10 +46,10 @@ public class MapController {
 		String object = gson.toJson(list);
 		request.setAttribute("json", object);
 		String fileName = "D:\\Spring\\workspace\\eat-together-1\\src\\main\\webapp\\resources\\json\\mapData.json";
-		
+
 		File file = new File(fileName);
 		FileWriter fw = new FileWriter(file, false);
-		
+
 		fw.write(object);
 		fw.flush();
 		fw.close();
@@ -116,4 +119,41 @@ public class MapController {
 		System.out.println(respBody);
 		return respBody;
 	}
+
+	@RequestMapping(value="search",method=RequestMethod.GET)
+	public String searchByKeyword(String keyword, HttpServletRequest req) throws Exception{
+		RestTemplate restTemplate = new RestTemplate();
+
+		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
+		params.add("query", keyword);
+		params.add("page", 3);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
+		headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
+		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");		
+
+		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+		String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/keyword.json"), request, String.class);
+//		System.out.println("respBody : " + respBody);
+
+		Gson gson = new Gson();
+		JsonObject obj = gson.fromJson(respBody, JsonObject.class);
+		JsonArray docs = (JsonArray)obj.get("documents");
+//		System.out.println("object : " + obj);
+//		System.out.println("documents : " + docs);
+		
+		//request로 정보 보내주기
+		// 페이지별 값 어케 받아와?????????????????????????????????
+		for(JsonElement doc : docs) {
+//			System.out.println("doc : " + doc);
+			JsonObject docobj = doc.getAsJsonObject(); 
+			System.out.println("장소명 : " + docobj.get("place_name"));
+			System.out.println("장소ID : " + docobj.get("id"));
+		}
+		int place_id = 1; // 장소id 값 불러오기
+		//List<MapDTO> list = mservice.searchByKeyword(place_id);
+		//req.setAttribute("search_list", list);
+		return "redirect:/map/toMap";
+	}
+
 }

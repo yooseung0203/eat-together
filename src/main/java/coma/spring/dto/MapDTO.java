@@ -11,8 +11,9 @@ public class MapDTO {
 	private double rating_avg;
 	private String phone;
 	private String place_url;
+	private int place_id;
 	public MapDTO(int seq, String name, String address, String road_address, String category, double lat, double lng,
-			double rating_avg, String phone, String place_url) {
+			double rating_avg, String phone, String place_url, int place_id) {
 		this.seq = seq;
 		this.name = name;
 		this.address = address;
@@ -23,6 +24,7 @@ public class MapDTO {
 		this.rating_avg = rating_avg;
 		this.phone = phone;
 		this.place_url = place_url;
+		this.place_id = place_id;
 	}
 	public MapDTO() {
 	}
@@ -85,6 +87,12 @@ public class MapDTO {
 	}
 	public void setPlace_url(String place_url) {
 		this.place_url = place_url;
+	}
+	public int getPlace_id() {
+		return place_id;
+	}
+	public void setPlace_id(int place_id) {
+		this.place_id = place_id;
 	}
 	
 }

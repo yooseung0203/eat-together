@@ -235,7 +235,7 @@
 			var positions = [];
 
 			// 일반 맛집 이미지
-			var baseImageSrc = 'https://i.imgur.com/rzDIRIP.png', // 마커이미지의 주소입니다    
+			var baseImageSrc = 'https://i.imgur.com/AvfFIoM.png', // 마커이미지의 주소입니다    
 		    baseImageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
 		    baseImageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 		    var baseMarkerImage = new kakao.maps.MarkerImage(baseImageSrc, baseImageSize, baseImageOption);
@@ -263,7 +263,7 @@
 			    });
 			    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
 			}
-		})
+		});
 		
 		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = { 
@@ -390,6 +390,7 @@
             		        			+'<div><input type=text readonly name="phone" value="'+resp.documents[i].phone+'"></div>'
             		        			+'<div><input type=text readonly name="place_url" value="'+resp.documents[i].place_url+'"></div>'
             		        			+'<div><input type=text readonly name="detail_category" value="'+resp.documents[i].category_name+'"></div>'
+            		        			+'<div><input type=text readonly name="place_id" value="'+resp.documents[i].id+'"></div>'
             		        			+'<button type="submit" id="detail">맛집 등록</button></div></form>', 
             		        latlng: new kakao.maps.LatLng(resp.documents[i].y, resp.documents[i].x)
             		});
@@ -509,10 +510,12 @@
 		<div id="header"><jsp:include page="/WEB-INF/views/include/header.jsp" /></div>
 		<div id="sideBar">
 			<div class="search_area">
-				<div class="searchbar mx-auto">
-		          <input type="text" class="search_input" name="keyword" placeholder="맛집 키워드 검색">
-		          <button type="button" class="search_icon"><i class="fas fa-search"></i></button>
-		        </div>
+				<form action="search" method="get">
+					<div class="searchbar mx-auto">
+			          <input type="text" class="search_input" name="keyword" placeholder="맛집 키워드 검색">
+			          <button type="submit" class="search_icon"><i class="fas fa-search"></i></button>
+			        </div>
+				</form>
 			</div>
 	        <div class="choose_info">
 	        	<div class="store_info mx-auto">
