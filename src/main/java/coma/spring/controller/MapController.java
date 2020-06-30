@@ -1,11 +1,15 @@
 package coma.spring.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +41,10 @@ public class MapController {
 
 	@Autowired
 	private MapService mservice;
-
+	
+	@Autowired
+	private ServletContext sc;
+	
 	@RequestMapping("toMap")
 	public String map(HttpServletRequest request) throws Exception{
 		// 등록된 맛집 뿌려주기
@@ -45,9 +52,9 @@ public class MapController {
 		Gson gson = new Gson();
 		String object = gson.toJson(list);
 		request.setAttribute("json", object);
-		String fileName = "D:\\Spring\\workspace\\eat-together-1\\src\\main\\webapp\\resources\\json\\mapData.json";
-
-		File file = new File(fileName);
+		String jsonPath = sc.getRealPath("resources/json/mapData.json");
+//		InputStream jsonStream = new FileInputStream(jsonPath);
+		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
 
 		fw.write(object);
@@ -123,36 +130,41 @@ public class MapController {
 	@RequestMapping(value="search",method=RequestMethod.GET)
 	public String searchByKeyword(String keyword, HttpServletRequest req) throws Exception{
 		RestTemplate restTemplate = new RestTemplate();
+		List<MapDTO> search_list = new ArrayList<>();
 
-		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
-		params.add("query", keyword);
-		params.add("page", 3);
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
-		headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");		
-
-		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
-		String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/keyword.json"), request, String.class);
-//		System.out.println("respBody : " + respBody);
-
-		Gson gson = new Gson();
-		JsonObject obj = gson.fromJson(respBody, JsonObject.class);
-		JsonArray docs = (JsonArray)obj.get("documents");
-//		System.out.println("object : " + obj);
-//		System.out.println("documents : " + docs);
-		
-		//request로 정보 보내주기
-		// 페이지별 값 어케 받아와?????????????????????????????????
-		for(JsonElement doc : docs) {
-//			System.out.println("doc : " + doc);
-			JsonObject docobj = doc.getAsJsonObject(); 
-			System.out.println("장소명 : " + docobj.get("place_name"));
-			System.out.println("장소ID : " + docobj.get("id"));
+		loop:
+		for(int page = 1; page < 45; page++) {
+			MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
+			params.add("query", keyword);
+			params.add("page", page);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
+			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
+			headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");		
+			
+			HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
+			String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/keyword.json"), request, String.class);
+			
+			Gson gson = new Gson();
+			JsonObject obj = gson.fromJson(respBody, JsonObject.class);
+			JsonArray docs = (JsonArray)obj.get("documents");
+			
+			for(JsonElement doc : docs) {
+				if(doc == null) {
+					break loop;
+				}
+				JsonObject docobj = doc.getAsJsonObject(); 
+				int place_id = docobj.get("id").getAsInt();
+				List<MapDTO> list = mservice.searchByKeyword(place_id);
+				if(list != null) {
+					for(MapDTO search_result : list) {
+						search_list.add(search_result);
+						System.out.println(search_result.getName());
+					}
+				}
+			}
 		}
-		int place_id = 1; // 장소id 값 불러오기
-		//List<MapDTO> list = mservice.searchByKeyword(place_id);
-		//req.setAttribute("search_list", list);
+		req.setAttribute("search_list", search_list);
 		return "redirect:/map/toMap";
 	}
 
