@@ -26,7 +26,7 @@
 						</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">내주변모임</div>
+						<div class="navi-menu">모임검색</div>
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">FAQ</div>

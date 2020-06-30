@@ -24,4 +24,14 @@ public class PartyService {
 		return dto;
 	}
 	
+
+	public int delete(String seq) throws Exception{
+		int result=pdao.delete(seq);
+		return result;
+	}
+	
+	public int update(PartyDTO dto) throws Exception{
+		int result= pdao.update(dto);
+		return result;
+	}
 }

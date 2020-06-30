@@ -1,7 +1,7 @@
 package coma.spring.dto;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class PartyDTO {
 
@@ -19,6 +19,17 @@ public class PartyDTO {
 	private String drinking;
 	private String content;
 	private String status;
+	private int place_id;
+	private String sDate;
+	private String sTime;
+	
+	
+	public int getPlace_id() {
+		return place_id;
+	}
+	public void setPlace_id(int place_id) {
+		this.place_id = place_id;
+	}
 	public int getSeq() {
 		return seq;
 	}
@@ -103,9 +114,35 @@ public class PartyDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+	
+	
+	
+	
+	public String getsDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	    String date = sdf.format(meetdate);
+	    System.out.println(date);
+		return date;
+	}
+	
+	public void setsDate(String sDate) {
+		this.sDate = sDate;
+	}
+	
+	
+	
+	
+	public String getsTime() {
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+	    String date = sdf.format(meetdate);
+		return date;
+	}
+	public void setsTime(String sTime) {
+		this.sTime = sTime;
+	}
 	public PartyDTO(int seq, String parent_name, String parent_address, String title, String writer, String date,
 			String time, Timestamp meetdate, int count, String gender, String age, String drinking, String content,
-			String status) {
+			String status, int place_id, String sDate, String sTime) {
 		super();
 		this.seq = seq;
 		this.parent_name = parent_name;
@@ -121,6 +158,9 @@ public class PartyDTO {
 		this.drinking = drinking;
 		this.content = content;
 		this.status = status;
+		this.place_id = place_id;
+		this.sDate =  new SimpleDateFormat("yyyy-MM-dd").format(meetdate);
+		this.sTime =  new SimpleDateFormat("yyyy-MM-dd").format(meetdate);
 	}
 	
 	public PartyDTO() {
