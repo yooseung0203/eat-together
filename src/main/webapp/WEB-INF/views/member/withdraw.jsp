@@ -26,19 +26,15 @@
 	rel="stylesheet">
 
 <!-- google font end-->
-
-<!-- ******************* -->
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
-<!-- mypage용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/mypage.css">
-<!-- ******************* -->
-<!-- menubar용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
-<!-- ******************* -->
+<!-- withdraw용 css -->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/withdraw.css">
+<!-- ************* -->
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -50,51 +46,48 @@
 	<!-- ******************* -->
 
 
-	<div id=mypage-container>
-		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
-		<div id=contents>
-			<table class="table">
-				<thead class="thead-dark">
-					<tr>
-						<th scope="col" colspan=12>My Information</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th scope="row">ID</th>
-						<td>${loginInfo.id}</td>
-					</tr>
-					<tr>
-						<th scope="row">PASSWORD</th>
-						<td><button type=button class="btn btn-light" id="pwEdit">비밀번호
-								수정하기</button></td>
-					</tr>
-					<tr>
-						<th scope="row">NICKNAME</th>
-						<td>${loginInfo.nickname}</td>
-					</tr>
-					<tr>
-						<th scope="row">BIRTH</th>
-						<td>${loginInfo.birth}</td>
-					</tr>
-					<tr>
-						<th scope="row">EMAIL</th>
-						<td>${loginInfo.account_email}</td>
-					</tr>
-					<tr>
-						<th scope="row"></th>
-						<td><button type=button class="btn btn-light" id="withdraw">회원탈퇴</button></td>
-					</tr>
-				</tbody>
-			</table>
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container" id="withdraw-container">
+			<h1 class="display-4">${loginInfo.id}
+				님이 참여한 모임 00개로<br>00명의 새로운 맛집 친구를 만났습니다.
+			</h1>
+			<br>
+			<p class="lead">
+				앞으로 더 많은 맛집 친구들이 기다리고 있습니다.<br>정말로 탈퇴하시겠습니까?
+			</p>
 		</div>
 	</div>
+	<form action="/member/withdrawProc" method="post" class="withdraw_text">
+		<div class="withdraw_text">
+			<label for="pw" class="withdraw_text">비밀번호</label> <input
+				type="password" class="form-control" id="pw" name="pw">
+		</div>
+		<div class="withdraw_text">
+			<label for="pw" class="withdraw_text">비밀번호 확인</label> <input
+				type="password" class="form-control" id="pwCorrection">
+			<div id="pw_text" style="display: none;"></div>
+		</div>
+		<button type=submit class="btn btn-light" id="withdraw">탈퇴하기</button>
+	</form>
+
 	<script>
 		$("#withdraw").on("click", function() {
-			alert("정말로 회원탈퇴를 진행하시겠습니까?");
-			location.replace('/member/withdrawView');
+			if ($("#pw").val() == "") {
+				alert("비밀번호를 먼저 입력해주세요.");
+				return false;
+			} else if ($("#pwCorrection").val() == "") {
+				alert("비밀번호를 한번 더 입력해주세요.");
+				return false;
+			} else if ($("#pw").val() != $("#pwCorrection").val()) {
+				alert("비밀번호가 일치하지 않습니다.");
+				return false;
+			} else {
+				alert("탈퇴가 완료되었습니다.\n#See_you_again!");
+				return true;
+			}
 		})
 	</script>
+
 
 	<!-- ******************* -->
 	<!-- footer  -->
@@ -103,5 +96,6 @@
 	</div>
 	<!-- footer  -->
 	<!-- ******************* -->
+
 </body>
 </html>

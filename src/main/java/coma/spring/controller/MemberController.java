@@ -77,7 +77,12 @@ public class MemberController {
 	public String getReviewlistView() {
 		return "member/mypage_reviewlist";
 	}
-	
+	//회원탈퇴 페이지로 이동하기
+	@RequestMapping("withdrawView")
+	public String getWithdrawView() {
+		return "member/withdraw";
+	}
+
 	//로그아웃하기
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
@@ -138,6 +143,42 @@ public class MemberController {
 
 	}
 
+	//회원탈퇴하기
+	@RequestMapping("withdrawProc")
+	public String withdrawProc(String pw) throws Exception{
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		String protectedpw = mdto.getPw();
+		String inputpw = mservice.getSha512(pw);
+
+		System.out.println("회원탈퇴하는 id : " + id);
+		System.out.println("회원탈퇴하는 pw : " + protectedpw);
+		System.out.println("입력한 pw : " + inputpw);
+
+		if(protectedpw.contentEquals(inputpw)) {
+			Map<String, String> param = new HashMap<>();
+			param.put("targetColumn1", "id");
+			param.put("targetValue1", id);
+			param.put("targetColumn2", "pw");
+			param.put("targetValue2", protectedpw);
+
+			int result = mservice.deleteMember(param);
+			System.out.println("회원 탈퇴 성공 : " + result);
+
+			
+			if(result>0) {
+				System.out.println("회원 탈퇴 완료");
+				session.invalidate();
+				return "home";
+			}else {
+				System.out.println("회원 탈퇴 실패, 관리자에게 문의하세요.");
+				return "error";
+			}
+		}else {
+			System.out.println("비밀번호 불일치");
+			return "error";	
+		}
+	}
 
 
 
@@ -166,6 +207,7 @@ public class MemberController {
 	//	    session.removeAttribute("id");
 	//	    return "index";
 	//	}
+
 
 
 }

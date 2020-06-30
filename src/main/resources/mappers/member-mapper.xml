@@ -16,12 +16,17 @@
 		select * from member where
 		id=#{value}
 	</select>
-	
+
 	<select id="isEmailAvailable" resultType="int">
-	select count(*) from member where account_email=#{value}
+		select count(*) from member where account_email=#{value}
 	</select>
 
 	<select id="isIdAvailable" resultType="int">
-	select count(*) from member where id=#{value}
+		select count(*) from member where id=#{value}
 	</select>
+
+	<delete id="deleteMember">
+		delete from member where
+		${targetColumn1}=#{targetValue1} and ${targetColumn2}=#{targetValue2}
+	</delete>
 </mapper>

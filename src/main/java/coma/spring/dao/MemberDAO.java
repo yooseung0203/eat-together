@@ -50,4 +50,8 @@ public class MemberDAO {
 		if(result>0) return false;
 		else return true;
 	}
+	//회원탈퇴
+	public int deleteMember(Map<String, String> param) throws Exception{
+		return mybatis.delete("Member.deleteMember", param);
+	}
 }
