@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+}
+
+#contents {
+	display: inline-block;
+	float: left;
+	width: 80%;
+	height: 100%;
+}
+
+

@@ -17,7 +17,7 @@
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">
-						<a href="/party/toParty_New" id="toPartyNew">모임모집</a>
+							<a href="/party/toParty_New" id="toPartyNew">모임모집</a>
 						</div>
 					</div>
 					<div class="col-sm-1">
@@ -35,33 +35,49 @@
 						<div class="navi-menu">공지사항</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">마이페이지</div>
+						<div class="navi-menu">
+						<c:choose>
+							<c:when test="${loginInfo.id == 'administrator'}">	
+								<a href="#" onclick="window.open('/admin/toAdmin', 'Admin','width=1300, height=800, location=no'); return false">관리자페이지</a></span>
+							</c:when>
+							<c:otherwise>
+								<a href="/member/mypage_myinfo">마이페이지</a>
+							</c:otherwise>
+						</c:choose>
+						</div>
 					</div>
 				</div>
 			</div>
 			<c:if test="${loginInfo.id == null}">
 				<div class="col-sm-1">
-					<span class="main-login"> <a href="/member/loginview">로그인 </a> / 
-						<a href="/member/signup_check">회원가입</a></span>
+					<span class="main-login"> <a href="/member/loginview">로그인
+					</a> / <a href="/member/signup_check">회원가입</a></span>
 				</div>
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
 			<c:choose>
 				<c:when test="${loginInfo.id == 'administrator'}">
 					<div class="col-sm-1">
-					<span class="main-login"> 관리자님, 환영합니다. </a> /
-						<a href="#" onclick="window.open('/admin/toAdmin', 'Admin','width=1300, height=800, location=no'); return false">관리자페이지</a></span>
+					<span class="main-login"> 관리자님, 환영합니다. </a> / <a
+						href="/member/logoutProc" id="logout">로그아웃</a></span>
+						
 					</div>
 				</c:when>
 				<c:otherwise>
 					<div class="col-sm-1">
-					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> /
-						<a href="/member/mypage">마이페이지</a></span>
-					</div>
+					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> / <a
+						href="/member/logoutProc" id="logout">로그아웃</a></span>
+				</div>
 				</c:otherwise>
 			</c:choose>	
 			</c:if>
 		</div>
 	</div>
 </div>
+
+<script>
+	$("#logout").on("click", function() {
+		alert("로그아웃되었습니다.");
+	})
+</script>
 
