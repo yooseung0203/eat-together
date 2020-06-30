@@ -55,6 +55,11 @@ public class MemberService {
 		boolean result = mdao.isEmailAvailable(account_email);
 		return result;
 	}
+	//회원가입시 아이디 중복검사
+	public boolean isIdAvailable(String id)throws Exception{
+		boolean result = mdao.isIdAvailable(id);
+		return result;
+	}
 	
 //	//카카오톡 로그인을 위한 어세스토큰 가져오기
 //	public String getAccessToken (String code) {

@@ -53,10 +53,36 @@ public class MemberController {
 	public String getSignupInfoView() {
 		return "member/signup_info";
 	}
-	//마이페이지로 이동하기
-	@RequestMapping("mypage")
-	public String getMypageView() {
-		return "member/mypage";
+
+	//마이페이지에서 내정보view로 이동
+	@RequestMapping("mypage_myinfo")
+	public String getMyInfoView() {
+		return "member/mypage_myinfo";
+	}
+
+	//마이페이지에서 쪽지함으로 이동
+	@RequestMapping("mypage_msglist")
+	public String getMyMsgView() {
+		return "member/mypage_msglist";
+	}
+
+	//마이페이지에서 내모임리스트로 이동
+	@RequestMapping("mypage_chatlist")
+	public String getChatlistView() {
+		return "member/mypage_chatlist";
+	}
+
+	//마이페이지에서 내리뷰리스트로 이동
+	@RequestMapping("mypage_reviewlist")
+	public String getReviewlistView() {
+		return "member/mypage_reviewlist";
+	}
+	
+	//로그아웃하기
+	@RequestMapping("logoutProc")
+	public String logoutProc() {
+		session.invalidate();
+		return "home";
 	}
 
 	//회원가입하기
@@ -69,7 +95,17 @@ public class MemberController {
 		System.out.println("회원가입 성공");
 		return "home";
 	}
-	
+	//회원가입시 아이디 중복체크
+	@RequestMapping("isIdAvailable")
+	@ResponseBody
+	public String isIdAvailable(String id)throws Exception {
+		boolean result=true;
+
+		result = mservice.isIdAvailable(id);
+		System.out.println("아이디 중복체크 결과 : " + result);
+		return String.valueOf(result);
+	}
+
 	//로그인하기
 	@RequestMapping("login")
 	public String login(String id, String pw)throws Exception {
@@ -83,9 +119,9 @@ public class MemberController {
 		param.put("targetValue1", id);
 		param.put("targetColumn2", "pw");
 		param.put("targetValue2", protectedpw);
-		
+
 		boolean result = mservice.logIn(param);
-		
+
 		System.out.println("loginResult 결과 : "+ result);
 
 		if(result==true) {
@@ -101,8 +137,8 @@ public class MemberController {
 		}
 
 	}
-	
-	
+
+
 
 
 	//	
