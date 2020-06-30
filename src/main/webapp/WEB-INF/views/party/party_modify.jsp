@@ -52,6 +52,31 @@ $(function(){
 	});
  }); 
  //유효성 - 미성년자 음주불가 끝
+ 
+ $(document).ready(function(){
+	 var gender=$("#gender_val").val();
+	 
+	 if(gender=="m"){
+		 $("#gender1").prop("checked",true);
+	 }else(gender=="f"){
+		 $("#gender2").prop("checked",true);
+	 }else(gender=="a"){
+		 $("#gender3").prop("checked",true);
+	 };
+	 
+	 var drinking = $("#drinking_val").val();
+	 
+	 if(drinking==1){
+		 $("#drinking1").attr('disabled',true);	
+		 $("#drinking1").prop("checked",false);
+		 $("#drinking2").prop("checked",true);
+	 }else{
+		 $("#drinking1").attr('disabled',false);	
+		 $("#drinking1").prop("checked",true);
+		 $("#drinking2").prop("checked",false);
+	 };
+ 	
+ };
 
 $(function(){
 	
@@ -195,6 +220,7 @@ $(function(){
 			<div class="row mb-1">
 				<div class="col-sm-2">인원</div>
 				<div class="col-sm-2">
+					
 					<input class="form-control" type="number" name="count" min=2 max=4
 						id="party_count" aria-describedby="countHelpInline" value="${con.count}">
 				</div>
@@ -208,6 +234,7 @@ $(function(){
 				<div class="col-sm-2">멤버구성</div>
 				<div class="col-sm-10">
 					<div class="form-check form-check-inline">
+					<input type=hidden id="gender_val" value="${con.gender}">
 						<input class="form-check-input" type="radio" name="gender"
 							value="m" id="gender1"> <label class="form-check-label"
 							for="gender1">남자만</label>
@@ -231,6 +258,7 @@ $(function(){
 				<div class="col-sm-2">연령대</div>
 				<div class="col-sm-10">
 					<div class="form-check form-check-inline">
+						<input type=hidden id=age_val value="${con.age}">
 						<input class="form-check-input" type="checkbox" name="age"
 							value="10" id="age1"> <label class="form-check-label"
 							for="age1">10대</label>
@@ -262,6 +290,7 @@ $(function(){
 				<div class="col-sm-2">음주</div>
 				<div class="col-sm-10">
 					<div class="form-check form-check-inline">
+						<input type=hidden id=drinking_val value="${con.drinking}">
 						<input class="form-check-input" type="radio" name="drinking"
 							value="1" id="drinking1"> <label class="form-check-label"
 							for="drinking1">OK</label>
@@ -278,13 +307,13 @@ $(function(){
 				<div class="col-2">소개</div>
 				<div class="col-10">
 					<textarea class="form-control " id="content" name="content"
-						placeholder="소개를 입력해주세요" rows="10"></textarea>
+						placeholder="소개를 입력해주세요" rows="10" value=${con.content}></textarea>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col-12">
 					<button type=button id="submitBtn"
-						class="btn btn-primary btn-lg btn-block">모임 등록하기</button>
+						class="btn btn-warning btn-lg btn-block">모임 수정하기</button>
 				</div>
 
 			</div>
