@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.sql.Timestamp;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
+import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.service.PartyService;
 
@@ -28,10 +30,12 @@ public class PartyController {
 
 	@Autowired
 	private PartyService pservice;
-	
+	@Autowired
+	private HttpSession session;
 	
 	@RequestMapping("toParty_New")
 	public String toPartyNew() {
+		
 		return "/party/party_new";
 	}
 
@@ -49,7 +53,9 @@ public class PartyController {
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
-		dto.setWriter("test");
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String id= account.getId();
+		dto.setWriter(id);
 		dto.setStatus("1");
 //
 //		int count = dto.getCount();

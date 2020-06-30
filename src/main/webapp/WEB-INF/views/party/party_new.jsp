@@ -136,6 +136,13 @@ $(function(){
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
+	
+	
+	
+	<c:if test="${empty sessionScope.loginInfo }">
+	<h3 class="text-center my-5"> 로그인 후 이용해주세요.</h3>
+	</c:if>
+	<c:if test="${!empty sessionScope.loginInfo }">
 	<form id="form" name="form" method="post" action="/party/party_New_Proc">
 		<div class="container formdiv">
 			<div class="row mb-3">
@@ -282,7 +289,7 @@ $(function(){
 
 		</div>
 	</form>
-
+</c:if>
 
 
 	<!-- ******************* -->
