@@ -1,5 +1,8 @@
 package coma.spring.dao;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -20,8 +23,16 @@ public class PartyDAO {
 		return mybatis.insert("Party.insert",dto);
 	}
 	
+	public int delete(String seq) throws Exception{
+		return mybatis.delete("Party.delete",seq);
+	}
+	
 	public PartyDTO selectBySeq(int seq) throws Exception{
 		return mybatis.selectOne("Party.selectBySeq",seq);
 	} 
+	
+	public int update(PartyDTO dto) throws Exception{
+  		return mybatis.update("Party.update",dto);
+	}
 	
 }
