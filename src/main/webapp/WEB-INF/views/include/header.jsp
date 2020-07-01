@@ -32,7 +32,7 @@
 						<div class="navi-menu">FAQ</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">공지사항</div>
+						<div class="navi-menu"><a href="/notice/list">공지사항</a></div>
 					</div>
 					<div class="col-sm-1">
 
