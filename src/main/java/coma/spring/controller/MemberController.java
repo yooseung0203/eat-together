@@ -193,7 +193,12 @@ public class MemberController {
 	}
 
 	//비밀번호 수정하기
-
+	@RequestMapping("editPwProc")
+	public String editPwProc(String pw) {
+		return "";
+	}
+	
+	
 	//내정보 수정하기
 	@RequestMapping("editMyInfoProc")
 	public String editMyInfoProc(String nickname, String account_email) throws Exception {
@@ -216,7 +221,7 @@ public class MemberController {
 		mdto.setNickname(nickname);
 		mdto.setAccount_email(account_email);
 
-		System.out.println("회원정보수정 성공" + result);
+		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
 		return "redirect:/member/mypage_myinfo";
 	}
 
