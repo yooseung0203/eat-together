@@ -69,7 +69,7 @@
 		$("#sido").change(function(){
 			var areaindex = $('option:selected',$(this)).index();
 			$("option",$("#gugun")).remove();
-			if(idx==0){
+			if(areaindex==0){
 				$("#gugun").append("<option value=''>구/군 선택</option>");
 			}
 			else{
