@@ -26,7 +26,9 @@
 						</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">모임검색</div>
+						<div class="navi-menu">
+							<a href="/party/partylist" id="toPartyList">모임검색</a>
+						</div>
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">FAQ</div>

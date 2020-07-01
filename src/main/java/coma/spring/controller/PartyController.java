@@ -156,4 +156,8 @@ public class PartyController {
 		return "redirect:/map/toMap";
 	}
 	
+	@RequestMapping("partylist")
+	public String partyList() throws Exception {
+		return "/party/party_list";
+	}
 }
