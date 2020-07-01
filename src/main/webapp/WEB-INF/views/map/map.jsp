@@ -207,6 +207,8 @@
     .review_comment i:hover{color:black;}
     .review_comment input[type=submit]{position:absolute;right:10px;bottom:30px;float:left;}
     .map_add{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:10px;right:10px;color:#ff9900;line-height:50px;}
+    .foodInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:190px;right:10px;color:#ff9900;line-height:50px;}
+    .cafeInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:250px;right:10px;color:#ff9900;line-height:50px;}
     .food{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:70px;right:10px;color:#ff9900;line-height:50px;}
     .cafe{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:130px;right:10px;color:#ff9900;line-height:50px;}
     .map_wrap {position:relative;width:100%;height:350px;}
@@ -456,6 +458,7 @@
         		        			+'<div><input type=text readonly name="phone" value="'+resp.documents[i].phone+'"></div>'
         		        			+'<div><input type=text readonly name="place_url" value="'+resp.documents[i].place_url+'"></div>'
         		        			+'<div><input type=text readonly name="detail_category" value="'+resp.documents[i].category_name+'"></div>'
+        		        			+'<div><input type=text readonly name="place_id" value="'+resp.documents[i].id+'"></div>'
         		        			+'<button type="submit" id="detail">맛집 등록</button></div></form>', 
         		        latlng: new kakao.maps.LatLng(resp.documents[i].y, resp.documents[i].x)
         			});
@@ -491,6 +494,38 @@
         		        infowindow.close();
         		    };
         		}
+        	}).fail(function(error1,error2){
+        		console.log(error1);
+        		console.log(error2);
+        	})
+		})
+		$(".foodInsert").on("click",function(){
+        	$.ajax({
+        		url:"/map/foodInsert",
+        		type:"get",
+        		data:{
+        			lat:$("#centerLat").text(),
+        			lng:$("#centerLng").text()},
+        		dataType:"JSON"
+        	}).done(function(resp){
+        		console.log(resp);
+        		alert("입력 완료");
+        	}).fail(function(error1,error2){
+        		console.log(error1);
+        		console.log(error2);
+        	})
+		})
+		$(".cafeInsert").on("click",function(){
+        	$.ajax({
+        		url:"/map/cafeInsert",
+        		type:"get",
+        		data:{
+        			lat:$("#centerLat").text(),
+        			lng:$("#centerLng").text()},
+        		dataType:"JSON"
+        	}).done(function(resp){
+        		console.log(resp);
+        		alert("입력 완료");
         	}).fail(function(error1,error2){
         		console.log(error1);
         		console.log(error2);
@@ -621,22 +656,8 @@
 			</div>
 		</div>
 		<div id="map"></div>
-		<%-- <div id="maplist" style="display:none;">
-			<c:forEach var="i" items="${maplist}">
-				<div class="row">
-			        <div>${i.seq}</div>
-			        <div>${i.name}</div>
-			        <div>${i.address}</div>
-			        <div>${i.road_address}</div>
-			        <div>${i.category}</div>
-			        <div>${i.lat}</div>
-			        <div>${i.lng}</div>
-			        <div>${i.rating_avg}</div>
-			        <div>${i.phone}</div>
-			        <div>${i.place_url}</div>
-				</div>
-			</c:forEach>
-		</div> --%>
+		<div class="foodInsert text-center">FD6</div>
+		<div class="cafeInsert text-center">CE7</div>
 		<div class="food text-center"><i class="fas fa-hamburger"></i></div>
 		<div class="cafe text-center"><i class="fas fa-coffee"></i></div>
 		<div class="map_add text-center" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i></div>
