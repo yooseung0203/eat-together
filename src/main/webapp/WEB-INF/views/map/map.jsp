@@ -391,6 +391,8 @@
 	    }
 	    
 		$.getJSON("/resources/json/cafe.json",function(data){
+			
+			console.log(data);
 			var positions = [];
 			
 			$.each(data, function(i, item) {
@@ -409,6 +411,7 @@
 		
 
   		$.getJSON("/resources/json/food.json",function(data){
+  			console.log(data);
 			var positions = [];
 
 			$.each(data, function(i, item) {
@@ -667,6 +670,11 @@
         		console.log(resp);
         		alert("입력 완료");
         	}).fail(function(error1,error2){
+        		var iCHK = 1;
+        		for(var i = 0;i<iCHK;i++)
+        		{
+        		document.location.reload();
+        		}
         		console.log(error1);
         		console.log(error2);
         	})
@@ -680,6 +688,11 @@
         			lng:$("#centerLng").text()},
         		dataType:"JSON"
         	}).done(function(resp){
+        		var iCHK = 1;
+        		for(var i = 0;i<iCHK;i++)
+        		{
+        		document.location.reload();
+        		}
         		console.log(resp);
         		alert("입력 완료");
         	}).fail(function(error1,error2){
