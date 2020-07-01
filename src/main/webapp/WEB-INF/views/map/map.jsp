@@ -234,36 +234,141 @@
 		
 		$.getJSON("/resources/json/mapData.json",function(data){
 			var html = [];
-			var positions = [];
+			var cafePositions = [];
+			var foodPositions = [];
 
 			// 일반 맛집 이미지
-			var baseImageSrc = 'https://i.imgur.com/AvfFIoM.png', // 마커이미지의 주소입니다    
+			var normalCafeImageSrc = 'https://i.imgur.com/WSYwwXl.png', 
+			normalFoodImageSrc = 'https://i.imgur.com/AvfFIoM.png',   
 		    baseImageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
 		    baseImageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-		    var baseMarkerImage = new kakao.maps.MarkerImage(baseImageSrc, baseImageSize, baseImageOption);
+		    var normalCafeImage = new kakao.maps.MarkerImage(normalCafeImageSrc, baseImageSize, baseImageOption);
+		    var normalFoodImage = new kakao.maps.MarkerImage(normalFoodImageSrc, baseImageSize, baseImageOption);
 			
 			$.each(data, function(i, item) { 
-				positions.push({
+				console.log(item.category);
+				if(item.category == '카페'){
+					cafePositions.push({
 		    	        content: '<div>'+ item.name +'</div>', 
 		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng)
-		    	});
+		    		});
+				}else if(item.category == '음식점'){
+					foodPositions.push({
+		    	        content: '<div>'+ item.name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng)
+		    		});
+				}else if(item.partyOn > 0){
+					
+				}
 			});
 			// $('#target').html(html.join(''));
-			
 			// 배열 DB에서 불러오기 
 
-		    for (var i = 0; i < positions.length; i ++) {
+		    for (var i = 0; i < cafePositions.length; i ++) {
 			    var marker = new kakao.maps.Marker({
 			        map: map, 
-			        position: positions[i].latlng,
-			        image: baseMarkerImage
+			        position: cafePositions[i].latlng,
+			        image: normalCafeImage
 			    });
 			    var iwRemoveable = true;
 			    var infowindow = new kakao.maps.InfoWindow({
-			        content: positions[i].content, 
+			        content: cafePositions[i].content, 
 			        removable : iwRemoveable
 			    });
 			    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
+			}
+			
+		    for (var i = 0; i < foodPositions.length; i ++) {
+			    var marker = new kakao.maps.Marker({
+			        map: map, 
+			        position: foodPositions[i].latlng,
+			        image: normalFoodImage
+			    });
+			    var iwRemoveable = true;
+			    var infowindow = new kakao.maps.InfoWindow({
+			        content: foodPositions[i].content, 
+			        removable : iwRemoveable
+			    });
+			    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
+			}
+		});
+		
+		// MakrerImage 객체를 생성하여 반환하는 함수입니다
+		function createMarkerImage(markerSize, offset, markerImageSrc) {
+		    var markerImage = new kakao.maps.MarkerImage(
+		    	markerImageSrc, // 마커 이미지 URL
+		        markerSize, // 마커의 크기
+		        {
+		            offset: offset, // 마커 이미지에서의 기준 좌표
+		        }
+		    );
+		    return markerImage;
+		}
+
+	    
+	    function addMarker(po) {
+			var markerSize = new kakao.maps.Size(10, 10),
+				markerOffset = new kakao.maps.Point(0, 0);
+			var normalImageSrc = 'https://i.imgur.com/xZ0vFqM.png';
+			var hoverImageSrc = 'https://i.imgur.com/whVKb3a.png';
+			
+	        var normalImage = createMarkerImage(markerSize, markerOffset, normalImageSrc),
+	        	hoverImage = createMarkerImage(markerSize, markerOffset, hoverImageSrc);
+	        var marker = new kakao.maps.Marker({
+	            map: map,
+	            position: po,
+	            image: normalImage
+	        });
+
+		    /* var iwRemoveable = true;
+		    var infowindow = new kakao.maps.InfoWindow({
+		        content: po.content, 
+		        removable : iwRemoveable
+		    }); */
+	        marker.normalImage = normalImage;
+	        kakao.maps.event.addListener(marker, 'mouseover', function() {
+	                marker.setImage(hoverImage);
+	        });
+	        kakao.maps.event.addListener(marker, 'mouseout', function() {
+	                marker.setImage(normalImage);
+	        });
+	    }
+	    
+		$.getJSON("/resources/json/cafe.json",function(data){
+			console.log("카페 정보를 불러옵니다.");
+			console.log(data);
+			var positions = [];
+			
+			$.each(data, function(i, item) {
+				for(var a = 0;a < data.cafe_list.length; a++){
+					positions.push({
+		    	        content: '<div>'+ data.cafe_list[a].cafe.place_name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(data.cafe_list[a].cafe.y, data.cafe_list[a].cafe.x)
+					});
+				}
+			});
+		    for (var i = 0; i < positions.length; i ++) {
+			    addMarker(positions[i].latlng);
+			}
+			
+		});
+		
+
+  		$.getJSON("/resources/json/food.json",function(data){
+			console.log("음식점 정보를 불러옵니다.");
+			console.log(data);
+			var positions = [];
+
+			$.each(data, function(i, item) {
+				for(var a = 0;a < data.food_list.length; a++){
+					positions.push({
+		    	        content: '<div>'+ data.food_list[a].food.place_name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(data.food_list[a].food.y, data.food_list[a].food.x)
+					});
+				}
+			});
+		    for (var i = 0; i < positions.length; i ++) {
+			    addMarker(positions[i].latlng);
 			}
 		});
 		
@@ -440,12 +545,12 @@
         			lng:$("#centerLng").text()},
         		dataType:"JSON"
         	}).done(function(resp){
-        		console.log(resp);
         		var positions = [];
         		for(var i = 0;i < resp.documents.length;i++){
-            		console.log(resp.documents[i].place_name);
-            		console.log(resp.documents[i].x + " : " + resp.documents[i].y);
-            		console.log(resp.documents[i].place_url);
+            		console.log(resp.documents[i].id);
+            		//console.log(resp.documents[i].place_name);
+            		//console.log(resp.documents[i].x + " : " + resp.documents[i].y);
+            		//console.log(resp.documents[i].place_url);
             		positions.push({
         		        content: '<form action="/map/insert" method="get" id="inputForm"><div style="padding:5px;">'
         		        			+'<div><input type=text readonly name="name" value="'+resp.documents[i].place_name+'"></div>'

@@ -13,4 +13,7 @@
 	<select id="searchByKeyword" resultType="coma.spring.dto.MapDTO">
 		select * from map where place_id = #{place_id}
 	</select>
+	<select id="selectPartyOn" resultType="int">
+		select count(*) from party where place_id in (select place_id from map where place_id = #{place_id})
+	</select>
 </mapper>
