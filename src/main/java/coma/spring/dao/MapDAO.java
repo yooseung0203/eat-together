@@ -31,4 +31,8 @@ public class MapDAO {
 	public int selectPartyOn(int place_id) throws Exception{
 		return mybatis.selectOne("Map.selectPartyOn",place_id);
 	}
+	
+	public MapDTO selectOne(int place_id) throws Exception{
+		return mybatis.selectOne("Map.selectOne",place_id);
+	}
 }

@@ -24,8 +24,10 @@ public class MapService {
 	public List<MapDTO> searchByKeyword(int place_id) throws Exception{
 		return mdao.searchByKeyword(place_id);
 	}
-	
 	public int selectPartyOn(int place_id) throws Exception{
 		return mdao.selectPartyOn(place_id);
+	}
+	public MapDTO selectOne(int place_id) throws Exception{
+		return mdao.selectOne(place_id);
 	}
 }

@@ -323,6 +323,14 @@ public class MapController {
 		}
 		return respBody;
 	}
+	@ResponseBody
+	@RequestMapping(value="selectMarkerInfo",produces="application/json;charset=utf8",method=RequestMethod.GET)
+	public String selectMarkerInfo(int place_id, HttpServletRequest request) throws Exception{
+		Gson gson = new Gson();
+		MapDTO mdto = mservice.selectOne(place_id);
+		String respBody = gson.toJson(mdto);
+		return respBody;
+	}
 
 
 }

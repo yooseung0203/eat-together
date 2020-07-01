@@ -84,6 +84,10 @@
 	    height: 200px;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
+	    font-size:10pt;
+    }
+    .store_info i{
+    	color:#ffd900;
     }
     .partylist{
     	align:center;
@@ -232,65 +236,117 @@
 		    };
 		}
 		
+		function createMapTableMarker(positions, image){
+			positions.forEach(function(pos){
+				var marker = new kakao.maps.Marker({
+			        map: map, 
+			        position: pos.latlng,
+			        image: image
+			    });
+			    var iwRemoveable = true;
+			    var infowindow = new kakao.maps.InfoWindow({
+			        content: pos.content, 
+			        removable : iwRemoveable
+			    });
+			    kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {        
+			        $.ajax({
+			        	url:"/map/selectMarkerInfo",
+			        	data:{place_id:pos.place_id}
+			        }).done(function(resp){
+			        	$(".store_info .category").html("");
+			        	$(".store_info .name").html("");
+			        	$(".store_info .address").html("");
+			        	$(".store_info .road_address").html("");
+			        	$(".store_info .rating_avg").html("");
+			        	$(".store_info .phone").html("");
+			        	$(".store_info .place_url").html("");
+			        	$(".store_info .category").html(resp.category);
+			        	$(".store_info .name").html('<b>' + resp.name + '</b>');
+			        	$(".store_info .address").html(resp.address);
+			        	$(".store_info .road_address").html(resp.road_address);
+			        	if(resp.rating_avg == 0){
+			        		$(".store_info .rating_avg").html('<i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(resp.rating_avg == 1 ){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(resp.rating_avg == 2){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(resp.rating_avg == 3){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(resp.rating_avg == 4){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(resp.rating_avg == 5){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>');
+			        	}else if(0 < resp.rating_avg < 1){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(1 < resp.rating_avg < 2){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(2 < resp.rating_avg < 3){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
+			        	}else if(3 < resp.rating_avg < 4){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i>');
+			        	}else if(4 < resp.rating_avg < 5){
+			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i>');
+			        	}
+			        	$(".store_info .phone").html(resp.phone);
+			        	$(".store_info .place_url").html(resp.place_url);
+			        })
+			    });
+			});
+		}
+		
+		
 		$.getJSON("/resources/json/mapData.json",function(data){
 			var html = [];
 			var cafePositions = [];
 			var foodPositions = [];
-
-			// 일반 맛집 이미지
+			var cafePartyPositions = [];
+			var foodPartyPositions = [];
+			
 			var normalCafeImageSrc = 'https://i.imgur.com/WSYwwXl.png', 
-			normalFoodImageSrc = 'https://i.imgur.com/AvfFIoM.png',   
+			normalFoodImageSrc = 'https://i.imgur.com/AvfFIoM.png'
+			partyCafeImageSrc = 'https://i.imgur.com/RonPEnV.png',
+			partyFoodImageSrc = 'https://i.imgur.com/pCTdyj4.png',   
 		    baseImageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
 		    baseImageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 		    var normalCafeImage = new kakao.maps.MarkerImage(normalCafeImageSrc, baseImageSize, baseImageOption);
 		    var normalFoodImage = new kakao.maps.MarkerImage(normalFoodImageSrc, baseImageSize, baseImageOption);
+		    var partyCafeImage = new kakao.maps.MarkerImage(partyCafeImageSrc, baseImageSize, baseImageOption);
+		    var partyFoodImage = new kakao.maps.MarkerImage(partyFoodImageSrc, baseImageSize, baseImageOption);
 			
 			$.each(data, function(i, item) { 
-				console.log(item.category);
-				if(item.category == '카페'){
+				if(item.category == '카페' && item.partyOn == 0){
 					cafePositions.push({
 		    	        content: '<div>'+ item.name +'</div>', 
-		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng)
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
 		    		});
-				}else if(item.category == '음식점'){
+				}else if(item.category == '음식점' && item.partyOn == 0){
 					foodPositions.push({
 		    	        content: '<div>'+ item.name +'</div>', 
-		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng)
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
 		    		});
-				}else if(item.partyOn > 0){
-					
+				}else if(item.category == '카페' && item.partyOn > 0){
+					cafePartyPositions.push({
+		    	        content: '<div>'+ item.name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
+		    		});
+				}else if(item.category == '음식점' && item.partyOn > 0){
+					foodPartyPositions.push({
+		    	        content: '<div>'+ item.name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
+		    		});
 				}
 			});
 			// $('#target').html(html.join(''));
-			// 배열 DB에서 불러오기 
-
-		    for (var i = 0; i < cafePositions.length; i ++) {
-			    var marker = new kakao.maps.Marker({
-			        map: map, 
-			        position: cafePositions[i].latlng,
-			        image: normalCafeImage
-			    });
-			    var iwRemoveable = true;
-			    var infowindow = new kakao.maps.InfoWindow({
-			        content: cafePositions[i].content, 
-			        removable : iwRemoveable
-			    });
-			    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
-			}
+			createMapTableMarker(cafePositions, normalCafeImage); // 일반 카페
+			createMapTableMarker(foodPositions, normalFoodImage); // 일반 음식점
+			createMapTableMarker(cafePartyPositions, partyCafeImage); // 모임 모집중인 카페
+			createMapTableMarker(foodPartyPositions, partyFoodImage); // 모임 모집중인 음식점
 			
-		    for (var i = 0; i < foodPositions.length; i ++) {
-			    var marker = new kakao.maps.Marker({
-			        map: map, 
-			        position: foodPositions[i].latlng,
-			        image: normalFoodImage
-			    });
-			    var iwRemoveable = true;
-			    var infowindow = new kakao.maps.InfoWindow({
-			        content: foodPositions[i].content, 
-			        removable : iwRemoveable
-			    });
-			    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
-			}
+		    
 		});
 		
 		// MakrerImage 객체를 생성하여 반환하는 함수입니다
@@ -335,8 +391,6 @@
 	    }
 	    
 		$.getJSON("/resources/json/cafe.json",function(data){
-			console.log("카페 정보를 불러옵니다.");
-			console.log(data);
 			var positions = [];
 			
 			$.each(data, function(i, item) {
@@ -355,8 +409,6 @@
 		
 
   		$.getJSON("/resources/json/food.json",function(data){
-			console.log("음식점 정보를 불러옵니다.");
-			console.log(data);
 			var positions = [];
 
 			$.each(data, function(i, item) {
@@ -657,12 +709,15 @@
 			        </div>
 				</form>
 			</div>
-	        <div class="choose_info">
+				<div class="choose_info">
 	        	<div class="store_info mx-auto">
-	        	맛집 정보 출력<br>
-	        	가게명<br>
-	        	가게주소<br>
-	        	etc
+		        	<div class="category"></div>
+		        	<div class="name"></div>
+		        	<div class="address"></div>
+		        	<div class="road_address"></div>
+		        	<div class="rating_avg"></div>
+		        	<div class="phone"></div>
+		        	<div class="place_url"></div>
 	        	</div>
 	        <div class="partylist">
 	        	<b>진행중인 모임</b>
@@ -758,6 +813,7 @@
 		        	</div>
 		        </div>
 			</div>
+	        
 		</div>
 		<div id="map"></div>
 		<div class="foodInsert text-center">FD6</div>
