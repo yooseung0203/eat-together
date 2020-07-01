@@ -196,7 +196,8 @@ $(function(){
 				<div class="col-sm-12">
 					<h2 class="party_headline">모임 수정하기</h2>
 				</div>
-				<input type="hidden" name="writer" value="${con.writer}">
+				<input type="hidden" name="seq" value="${con.seq}">
+ 				<input type="hidden" name="writer" value="${con.writer}">
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">상호명</div>
