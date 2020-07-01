@@ -194,8 +194,32 @@ public class MemberController {
 
 	//비밀번호 수정하기
 	@RequestMapping("editPwProc")
-	public String editPwProc(String pw) {
-		return "";
+	@ResponseBody
+	public String editPwProc(String pw)throws Exception {
+		System.out.println("컨트롤러로 값 전달 성공");
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		String oriprotectedpw = mdto.getPw(); 
+		String newprotectedpw = mservice.getSha512(pw);
+		
+		if(oriprotectedpw.contentEquals(newprotectedpw)) {
+			System.out.println("수정하려는 비밀번호가 기존과 일치하여 에러 발생");
+			return "error";
+		}else {
+			Map<String, String> param = new HashMap<>();
+			param.put("targetColumn1", "pw");
+			param.put("targetValue1", newprotectedpw);
+			param.put("targetColumn2", "id");
+			param.put("targetValue2", id);
+			
+			int result = mservice.editPw(param);
+			
+			System.out.println("비밀번호 수정 성공 :" + result);
+			mdto.setPw(newprotectedpw);
+			return "/member/editMyInfo";
+		}
+
+
 	}
 	
 	

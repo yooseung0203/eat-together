@@ -71,6 +71,11 @@ public class MemberService {
 		int result = mdao.editMyInfo(param);
 		return result;
 	}
+	//비밀번호 수정하기
+	public int editPw(Map<String, String> param) throws Exception{
+		int result = mdao.editPw(param);
+		return result;
+	}
 
 	//	//카카오톡 로그인을 위한 어세스토큰 가져오기
 	//	public String getAccessToken (String code) {
