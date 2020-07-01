@@ -8,7 +8,7 @@
 	<div class="header-wrap  mt-3 px-0 mx-0">
 		<div class="row">
 			<div class="col-sm-1 logo-image ">
-				<a href="/"><img src="/resources/img/dummylogo.png"></a>
+				<a href="/"><img src="/resources/img/logo.png"></a>
 			</div>
 			<div class="col-sm-10 mb-3">
 				<div class="row navibar h5 text-center">
@@ -26,7 +26,7 @@
 						</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">내주변모임</div>
+						<div class="navi-menu">모임검색</div>
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">FAQ</div>
@@ -37,7 +37,7 @@
 					<div class="col-sm-1">
 
 						<div class="navi-menu">
-							<a href="/member/mypage_myinfo">마이페이지</a>
+							<a id="goToMyPage">마이페이지</a>
 						</div>
 					</div>
 				</div>
@@ -50,7 +50,7 @@
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
 				<div class="col-sm-1">
-					<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> / <a
+					<span class="main-login"> ${loginInfo.id}님, 환영합니다. / <a
 						href="/member/logoutProc" id="logout">로그아웃</a></span>
 				</div>
 			</c:if>
@@ -61,6 +61,14 @@
 <script>
 	$("#logout").on("click", function() {
 		alert("로그아웃되었습니다.");
+	})
+	$("#goToMyPage").on("click", function() {
+		if ("${loginInfo.id}" == "") {
+			alert("로그인 후 이용해주세요");
+			location.replace('/');
+		}else{
+			location.replace('/member/mypage_myinfo');
+		}
 	})
 </script>
 

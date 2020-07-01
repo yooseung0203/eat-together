@@ -16,12 +16,24 @@
 		select * from member where
 		id=#{value}
 	</select>
-	
+
 	<select id="isEmailAvailable" resultType="int">
-	select count(*) from member where account_email=#{value}
+		select count(*) from
+		member where account_email=#{value}
 	</select>
 
 	<select id="isIdAvailable" resultType="int">
-	select count(*) from member where id=#{value}
+		select count(*) from
+		member where id=#{value}
 	</select>
+	<update id="editMyInfo">
+		update member set ${targetColumn1}=#{targetValue1},
+		${targetColumn2}=#{targetValue2} where
+		${targetColumn3}=#{targetValue3}
+	</update>
+
+	<update id="editPw">
+		update member set ${targetColumn1}=#{targetValue1}
+		where ${targetColumn2}=#{targetValue2}
+	</update>
 </mapper>
