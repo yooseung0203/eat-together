@@ -30,9 +30,9 @@
 <!-- ******************* -->
 <meta charset="UTF-8">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>비밀번호 찾기</title>
 </head>
 <body>
-
+패스워드 찾는 창입니다.
 </body>
 </html>

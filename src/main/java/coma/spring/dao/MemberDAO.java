@@ -62,4 +62,8 @@ public class MemberDAO {
 	public int editPw(Map<String, String> param) throws Exception{
 		return mybatis.update("Member.editPw", param);
 	}
+	//아이디 찾기용 이메일 체크
+	public MemberDTO emailCheck(String account_email) throws Exception{
+		return mybatis.selectOne("Member.emailCheck", account_email);
+	}
 }
