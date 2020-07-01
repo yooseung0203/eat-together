@@ -35,9 +35,8 @@
 						<div class="navi-menu">공지사항</div>
 					</div>
 					<div class="col-sm-1">
-
 						<div class="navi-menu">
-							<a id="goToMyPage">마이페이지</a>
+							<div id="goToMyPage">마이페이지</div>
 						</div>
 					</div>
 				</div>

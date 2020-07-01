@@ -94,7 +94,7 @@
 							<th scope="row"></th>
 							<td class="edit_text">
 								<button type="submit" class="btn btn-warning" id="editMyInfo">
-									수정하기</button>
+									변경사항 저장하기</button>
 								<button type=button class="btn btn-light" id="back">되돌아가기</button>
 							</td>
 						</tr>
