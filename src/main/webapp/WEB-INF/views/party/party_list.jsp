@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +39,12 @@
 		width: 80%;
 		margin: auto;
 	}
+	.listtitle{
+		font-size: 35px;
+    }
+    .partylist{
+    	margin-bottom: 15px;
+    }
 </style>
 <script>
 	$(function(){
@@ -69,7 +76,7 @@
 		$("#sido").change(function(){
 			var areaindex = $('option:selected',$(this)).index();
 			$("option",$("#gugun")).remove();
-			if(idx==0){
+			if(areaindex==0){
 				$("#gugun").append("<option value=''>구/군 선택</option>");
 			}
 			else{
@@ -77,6 +84,11 @@
 					$("#gugun").append("<option value='"+this+"'>"+this+"</option>");
 				});
 			}
+		});
+		
+		$(".myBtn").on("click",function(){
+			
+			$("#mymodal").modal();
 		});
 	});
 </script>
@@ -91,8 +103,9 @@
 	<div class="container-fluid">
             <div class="row aa">
                 <div class="col-12 jumbotron">
-                    <div class="row">
-                        <div class="col mb-2">
+                	<span class="listtitle">이번주 인기 맛집 Top 5!</span>
+                    <div class="row ingi">
+                        <div class="col-12 col-sm-4 col-md-2">
                             <div class="card">
                                 <img src="/resources/img/itsearth.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
@@ -102,7 +115,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col mb-2">
+                        <div class="col-12 col-sm-4 col-md-2">
                             <div class="card">
                                 <img src="/resources/img/sixme.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
@@ -112,7 +125,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col mb-2">
+                        <div class="col-12 col-sm-4 col-md-2">
                             <div class="card">
                                 <img src="/resources/img/bab.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
@@ -122,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col mb-2">
+                        <div class="col-12 col-sm-4 col-md-2">
                             <div class="card">
                                 <img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
@@ -132,7 +145,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col mb-2">
+                        <div class="col-12 col-sm-4 col-md-2">
                             <div class="card">
                                 <img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
                                 <div class="card-body">
@@ -182,7 +195,126 @@
                     </div>
                 </div> 
             </div>
+            <div class="row aa">
+            	<div class="col-12 jumbotron">
+            		<div class="row">
+            		<c:forEach var="i" items="${list}">
+            			<div class="col-sm-12 col-md-3">
+            				<div class="card partylist">
+  								<img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
+								<div class="card-body">
+							    	<h5 class="card-title">${i.parent_name }</h5>
+								    <p class="card-text">날짜 : ${i.meetdate}<br>인원 : ${i.count }</p>
+								    <button type="button" class="btn btn-info btn-lg myBtn">Open Modal</button>
+								</div>
+							</div>
+            			</div>
+            			</c:forEach>
+            		</div>
+            	</div>
+            </div>
         </div>
+        
+    <div class="modal fade" id="mymodal" role="dialog">
+    <div class="modal-dialog modal-lg">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="container">
+		<div class="row mb-3">
+			<div class="col-sm-12 mt-3">
+				<h2 class="party_headline">${con.title}</h2>
+			</div>
+			<div class="col-sm-12">작성자 : ${con.writer}</div>
+		</div>
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">상태</div>
+			<div class="col-sm-3">
+				<c:choose>
+					<c:when test="${con.status  eq '1'}">멤버 모집중</c:when>
+					<c:when test="${con.status  eq '0'}">모집마감</c:when>
+				</c:choose>
+			</div>
+		</div>
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">상호명</div>
+			<div class="col-sm-3">${con.parent_name}</div>
+		</div>
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">위치</div>
+			<div class="col-sm-10">${con.parent_address}</div>
+		</div>
+		<%-- <div class="row mb-1">
+				<div class="col-sm-2">제목</div>
+				<div class="col-sm-10">
+					${con.title}
+				</div>
+			</div> --%>
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">모임날짜</div>
+			<div class="col-lg-2">${con.sDate }</div>
+		</div>
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">시간</div>
+			<div class="col-lg-2">${con.sTime }</div>
+		</div>
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">인원</div>
+			<div class="col-sm-2">${con.count }</div>
+
+		</div>
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">멤버구성</div>
+			<div class="col-sm-10">
+				<c:choose>
+					<c:when test="${con.gender  eq 'm'}">남자만</c:when>
+					<c:when test="${con.gender  eq 'f'}">여자만</c:when>
+
+					<c:otherwise> 남녀무관 </c:otherwise>
+				</c:choose>
+
+			</div>
+
+		</div>
+
+
+		<div class="row mb-1">
+			<div class="col-sm-2 party-titlelabel">연령대</div>
+			<div class="col-sm-10">${con.age}</div>
+		</div>
+
+		<div class="row mb-1" id="adult_q">
+			<div class="col-sm-2 party-titlelabel">음주</div>
+			<div class="col-sm-10">
+				<c:choose>
+					<c:when test="${con.drinking  eq '1'}">음주OK</c:when>
+					<c:when test="${con.drinking  eq '0'}">음주NO</c:when>
+				</c:choose>
+
+			</div>
+		</div>
+		<div class="row mb-1">
+			<div class="col-2 party-titlelabel">소개</div>
+			<div class="col-10">${con.content}</div>
+		</div>
+		<div class="row mb-3">
+			<div class="col-12">
+				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+				<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
+				<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
+				</c:if>
+				<button type="button" class="btn btn-primary" data-dismiss="modal">목록으로</button>
+				<button type="button" id="toPartyList" class="btn btn-secondary">목록으로</button>
+
+			</div>
+
+		</div>
+
+	</div>
+      </div>
+      
+    </div>
+  </div>
 	
 	<!-- ******************* -->
 	<!-- footer  -->

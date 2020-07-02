@@ -1,6 +1,7 @@
 package coma.spring.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -33,6 +34,10 @@ public class PartyDAO {
 	
 	public int update(PartyDTO dto) throws Exception{
   		return mybatis.update("Party.update",dto);
+	}
+	
+	public List<PartyDTO> selectList() {
+		return mybatis.selectList("Party.selectList");
 	}
 	
 }

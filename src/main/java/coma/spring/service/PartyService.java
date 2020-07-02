@@ -1,5 +1,7 @@
 package coma.spring.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,10 @@ public class PartyService {
 	public int update(PartyDTO dto) throws Exception{
 		int result= pdao.update(dto);
 		return result;
+	}
+	
+	public List<PartyDTO> selectList() throws Exception {
+		List<PartyDTO> list = pdao.selectList();
+		return list;
 	}
 }

@@ -3,6 +3,7 @@ package coma.spring.controller;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,9 +28,9 @@ import coma.spring.service.PartyService;
 @RequestMapping("/party/")
 public class PartyController {
 	
-
 	@Autowired
 	private PartyService pservice;
+	
 	@Autowired
 	private HttpSession session;
 	
@@ -157,7 +158,10 @@ public class PartyController {
 	}
 	
 	@RequestMapping("partylist")
-	public String partyList() throws Exception {
+	public String partyList(HttpServletRequest request) throws Exception {
+		
+		List<PartyDTO> partyList = pservice.selectList();
+		request.setAttribute("list", partyList);
 		return "/party/party_list";
 	}
 }
