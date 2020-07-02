@@ -61,6 +61,10 @@
 				</thead>
 				<tbody>
 					<tr>
+						<th scope="row">PROFILE IMAGE</th>
+						<td class="myinfo_text"><img src="#"></td>
+					</tr>
+					<tr>
 						<th scope="row">ID</th>
 						<td class="myinfo_text">${loginInfo.id}</td>
 					</tr>
@@ -92,9 +96,9 @@
 		$("#withdraw").on("click", function() {
 			var result = confirm("정말로 회원탈퇴를 진행하시겠습니까?");
 			console.log(result);
-			if(result){
+			if (result) {
 				location.replace('/member/withdrawView');
-			}else{
+			} else {
 				location.replace('/member/mypage_myinfo')
 			}
 
