@@ -33,6 +33,18 @@ public class PartyDAO {
 	} 
 	
 	public int update(PartyDTO dto) throws Exception{
+//		 Map<String, String> param = new HashMap<>();
+//	      param.put("columnName1", "title");
+//	      param.put("changeValue1", dto.getTitle());
+//	      param.put("columnName2", "contents");
+//	      param.put("changeValue2", dto.getContents());
+//	      param.put("targetColumn", "seq");
+//	      param.put("targetValue", Integer.toString(dto.getSeq()));
+//	      
+//	      System.out.println(param.size());
+//	      
+//		return mybatis.update("Board.update",param);
+		
   		return mybatis.update("Party.update",dto);
 	}
 	

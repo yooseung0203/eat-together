@@ -17,11 +17,16 @@ select party_seq.nextval from dual
 </delete>
 
 <update id="update">
-      update party set ${parent_name} = #{parent_name}, ${parent_address} = #{parent_address}, ${title} = #{title}, ${meetdate} = #{meetdate}, ${count}=#{count}, ${gender}=#{gender},${age}=#{age},${drinking}=#{drinking},${content}=#{content},${place_id}=#{place_id} where party
+      update party set parent_name = #{parent_name}, parent_address = #{parent_address}, title = #{title}, meetdate = #{meetdate}, count=#{count}, gender=#{gender},age=#{age},drinking=#{drinking},content=#{content},place_id=#{place_id} where seq=#{seq}
  </update>
  
  <select id="selectList" resultType="coma.spring.dto.PartyDTO">
 	select * from party order by seq desc
 </select>
  
+<!--  
+<update id="update">
+      update board set ${columnName1} = #{changeValue1}, ${columnName2} = #{changeValue2} where ${targetColumn} = #{targetValue}
+ </update> 
+ -->
 </mapper>

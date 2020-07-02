@@ -1,14 +1,10 @@
 package coma.spring.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
-public class MemberFileDTO {
+public class NoticeFileDTO {
 	private int seq;
 	private String sysname;
 	private String oriname;
-	private String parent_id;
-	private MultipartFile file;
-	
+	private int parent_seq;
 	public int getSeq() {
 		return seq;
 	}
@@ -27,32 +23,21 @@ public class MemberFileDTO {
 	public void setOriname(String oriname) {
 		this.oriname = oriname;
 	}
-	public String getParent_id() {
-		return parent_id;
+	public int getParent_seq() {
+		return parent_seq;
 	}
-	public void setParent_id(String parent_id) {
-		this.parent_id = parent_id;
+	public void setParent_seq(int parent_seq) {
+		this.parent_seq = parent_seq;
 	}
-	public MultipartFile getFile() {
-		return file;
-	}
-	public void setFile(MultipartFile file) {
-		this.file = file;
-	}
-	public MemberFileDTO(int seq, String sysname, String oriname, String parent_id, MultipartFile file) {
+	public NoticeFileDTO(int seq, String sysname, String oriname, int parent_seq) {
 		super();
 		this.seq = seq;
 		this.sysname = sysname;
 		this.oriname = oriname;
-		this.parent_id = parent_id;
-		this.file = file;
+		this.parent_seq = parent_seq;
 	}
-	public MemberFileDTO() {
+	public NoticeFileDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
-	
 }
