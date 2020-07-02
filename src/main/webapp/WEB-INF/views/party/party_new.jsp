@@ -136,6 +136,13 @@ $(function(){
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
+	
+	
+	
+	<c:if test="${empty sessionScope.loginInfo }">
+	<h3 class="text-center my-5"> 로그인 후 이용해주세요.</h3>
+	</c:if>
+	<c:if test="${!empty sessionScope.loginInfo }">
 	<form id="form" name="form" method="post" action="/party/party_New_Proc">
 		<div class="container formdiv">
 			<div class="row mb-3">
@@ -159,7 +166,8 @@ $(function(){
 				<div class="col-sm-2">위치</div>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="parent_address"
-						id="parent_addresse" readonly>
+						id="parent_address" readonly>
+					<input type="hidden" name="place_id" id="place_id">
 				</div>
 			</div>
 			<div class="row mb-1">
@@ -281,7 +289,7 @@ $(function(){
 
 		</div>
 	</form>
-
+</c:if>
 
 
 	<!-- ******************* -->

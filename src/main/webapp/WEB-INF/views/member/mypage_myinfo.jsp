@@ -40,7 +40,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
 <!-- ******************* -->
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>내 정보</title>
 </head>
 <body>
 	<!-- ******************* -->
@@ -61,30 +61,52 @@
 				</thead>
 				<tbody>
 					<tr>
-						<th scope="row">ID</th>
-						<td>${loginInfo.id}</td>
+						<th scope="row">PROFILE IMAGE</th>
+						<td class="myinfo_text"><img src="#"></td>
 					</tr>
 					<tr>
-						<th scope="row">PASSWORD</th>
-						<td><button type=button class="btn btn-light" id="pwEdit">비밀번호
-								수정하기</button></td>
+						<th scope="row">ID</th>
+						<td class="myinfo_text">${loginInfo.id}</td>
 					</tr>
 					<tr>
 						<th scope="row">NICKNAME</th>
-						<td>${loginInfo.nickname}</td>
+						<td class="myinfo_text">${loginInfo.nickname}</td>
 					</tr>
 					<tr>
 						<th scope="row">BIRTH</th>
-						<td>${loginInfo.birth}</td>
+						<td class="myinfo_text">${loginInfo.birth}</td>
 					</tr>
 					<tr>
 						<th scope="row">EMAIL</th>
-						<td>${loginInfo.account_email}</td>
+						<td class="myinfo_text">${loginInfo.account_email}</td>
+					</tr>
+					<tr>
+						<th scope="row"></th>
+						<td class="myinfo_text">
+							<button type="button" class="btn btn-warning" id="editMyInfo">내정보
+								수정</button>
+							<button type=button class="btn btn-light" id="withdraw">회원탈퇴</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 	</div>
+	<script>
+		$("#withdraw").on("click", function() {
+			var result = confirm("정말로 회원탈퇴를 진행하시겠습니까?");
+			console.log(result);
+			if (result) {
+				location.replace('/member/withdrawView');
+			} else {
+				location.replace('/member/mypage_myinfo')
+			}
+
+		})
+		$("#editMyInfo").on("click", function() {
+			location.replace('/member/editMyInfo');
+		})
+	</script>
 
 	<!-- ******************* -->
 	<!-- footer  -->
