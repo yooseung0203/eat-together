@@ -120,9 +120,26 @@ $(document).ready(function(){
 
 			search(page);
 			
-			
-			
-			
+		});
+		
+		$("#keyword").keydown(function(e){
+			if(e.keyCode == 13){
+				if ($.trim($("#keyword").val()) == "") {
+					alert("키워드를 입력해주세요");
+					return false;
+				}
+				
+				var isCategoryCk = $('input:radio[name=category]').is(':checked');
+				
+				if(!isCategoryCk){
+					alert('검색 카테고리를 선택해주세요');
+					return false;
+				};
+
+				search(page);
+				
+			}  
+				
 		});
 	});
 </script>

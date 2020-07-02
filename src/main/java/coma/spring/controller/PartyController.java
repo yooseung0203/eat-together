@@ -147,6 +147,23 @@ public class PartyController {
 	
 	@RequestMapping("party_modifyProc")
 	public String partymodifyProc(PartyDTO dto, HttpServletRequest request) throws Exception{
+		String date = dto.getDate();
+		String time = dto.getTime();
+		String dateAndtime = "";
+		if(time.length()==8) {
+		dateAndtime = date + " "+time+".0";
+		}else {
+		dateAndtime = date + " "+time+":00.0";
+		}
+		System.out.println(date);
+		System.out.println(time);
+		System.out.println(dateAndtime);
+		
+		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
+		dto.setMeetdate(meetdate);
+		
+		
+		System.out.println(dto.getMeetdate());
 		
 		pservice.update(dto);
 		return "redirect:/party/party_content?seq="+dto.getSeq();
@@ -158,4 +175,8 @@ public class PartyController {
 		return "redirect:/map/toMap";
 	}
 	
+	@RequestMapping("partylist")
+	public String partyList() throws Exception {
+		return "/party/party_list";
+	}
 }

@@ -1,9 +1,6 @@
 package coma.spring.controller;
 
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -12,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import coma.spring.dto.MemberDTO;
 import coma.spring.service.MemberService;
+import coma.spring.service.MsgService;
 
 @Controller
 @RequestMapping("/member/")
@@ -24,7 +21,10 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mservice;
-
+	
+	@Autowired
+	private MsgService msgservice;	
+	
 	@Autowired
 	private HttpSession session;
 
@@ -101,6 +101,7 @@ public class MemberController {
 		return "member/findid";
 	}
 	
+
 	//비밀번호 찾기 팝업 열기
 	@RequestMapping("findpw")
 	public String findpw() {
@@ -115,11 +116,14 @@ public class MemberController {
 		return "home";
 	}
 
+
 	//회원가입하기
 	@RequestMapping("signupProc")
 	public String signUp(MemberDTO mdto)throws Exception {
 
 		int result = mservice.signUp(mdto);
+		//회원가입축하메세지 입니다.
+		int msgresult= msgservice.insertWelcome(mdto.getId());
 		System.out.println("signupProc 비밀번호 : " + mdto.getPw());
 
 		System.out.println("회원가입 성공");
