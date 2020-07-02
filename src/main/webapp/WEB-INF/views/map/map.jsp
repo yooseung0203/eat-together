@@ -55,7 +55,22 @@
 	    border-radius: 5px;
 	    padding: 10px;
     }
-    .choose_info{overflow-x: hidden;overflow-y:auto;}
+    .side{overflow-x: hidden;overflow-y:auto;}
+    .search_count{padding: 20px;}
+    .search_result .cafe_info{
+    	align:center;
+	    border-top:1px solid #ededed;
+	    padding: 20px;
+	    margin-top:10px;
+	    font-size:10pt;
+	}
+    .search_result .food_info{
+    	align:center;
+	    border-top:1px solid #ededed;
+	    padding: 20px;
+	    margin-top:10px;
+	    font-size:10pt;
+	}
     .search_input{
 	    color: black;
 	    border: 0;
@@ -81,7 +96,6 @@
     }
     .store_info{
 		align:center;
-	    height: 200px;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
 	    font-size:10pt;
@@ -219,10 +233,70 @@
     .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
     #centerAddr {display:block;margin-top:2px;font-weight: normal;}
     .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-    
+    .badge-light{background-color:#ff9900;color:white;}
+    #partyModal table td{border:0px;}
+    #partyModal table th{border:0px;}
+    #partyModal .content{font-size:10pt;}
+	
+	.featImgWrap {
+	  width: 250px;
+	}
+	.featImgWrap {
+	  position: relative;
+	  padding-top: 56.57%;
+	  /* 16:9 ratio */
+	  overflow: hidden;
+	}
+	.featImgWrap .cropping {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  -webkit-transform: translate(50%, 50%);
+	  -ms-transform: translate(50%, 50%);
+	  transform: translate(50%, 50%);
+	}
+	.featImgWrap .cropping img {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  max-width: 100%;
+	  height: auto;
+	  -webkit-transform: translate(-50%, -50%);
+	  -ms-transform: translate(-50%, -50%);
+	  transform: translate(-50%, -50%);
+	}
+	.featImgWrap .cropping img.landscape {
+	  max-height: 100%;
+	  height: 100%;
+	  max-width: none;
+	}
+	.featImgWrap .cropping img.portrait {
+	  max-width: 100%;
+	  width: 100%;
+	  max-height: none;
+	}
+	#partyModal .badges div{float:left;padding-right:5px;}
 </style>
 <script>
 	$(function(){
+	    $('.cropping img').each(function (index, item) {
+	        if ($(this).height() / $(this).width() < 0.567) {
+	            $(this).addClass('landscape').removeClass('portrait');
+	        } else {
+	            $(this).addClass('portrait').removeClass('landscape');
+	        }
+	    });
+	    $('#programModalSummary').on('shown.bs.modal', function (e) {
+	        $('#programModalSummary .featImage > img').each(function (index, item) {
+	            if ($(this).height() / $(this).width() < 0.567) {
+	                $(this).addClass('landscape').removeClass('portrait');
+	            } else {
+	                $(this).addClass('portrait').removeClass('landscape');
+	            }
+	        });
+	    })
 		// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
 		function makeOverListener(map, marker, infowindow) {
 		    return function() {
@@ -249,47 +323,7 @@
 			        removable : iwRemoveable
 			    });
 			    kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {        
-			        $.ajax({
-			        	url:"/map/selectMarkerInfo",
-			        	data:{place_id:pos.place_id}
-			        }).done(function(resp){
-			        	$(".store_info .category").html("");
-			        	$(".store_info .name").html("");
-			        	$(".store_info .address").html("");
-			        	$(".store_info .road_address").html("");
-			        	$(".store_info .rating_avg").html("");
-			        	$(".store_info .phone").html("");
-			        	$(".store_info .place_url").html("");
-			        	$(".store_info .category").html(resp.category);
-			        	$(".store_info .name").html('<b>' + resp.name + '</b>');
-			        	$(".store_info .address").html(resp.address);
-			        	$(".store_info .road_address").html(resp.road_address);
-			        	if(resp.rating_avg == 0){
-			        		$(".store_info .rating_avg").html('<i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(resp.rating_avg == 1 ){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(resp.rating_avg == 2){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(resp.rating_avg == 3){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(resp.rating_avg == 4){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(resp.rating_avg == 5){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>');
-			        	}else if(0 < resp.rating_avg < 1){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(1 < resp.rating_avg < 2){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(2 < resp.rating_avg < 3){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i>');
-			        	}else if(3 < resp.rating_avg < 4){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i>');
-			        	}else if(4 < resp.rating_avg < 5){
-			        		$(".store_info .rating_avg").html('<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i>');
-			        	}
-			        	$(".store_info .phone").html(resp.phone);
-			        	$(".store_info .place_url").html(resp.place_url);
-			        })
+			        location.href = "/map/selectMarkerInfo?place_id="+pos.place_id;
 			    });
 			});
 		}
@@ -700,6 +734,73 @@
         		console.log(error2);
         	})
 		})
+		$(".join").on("click",function(){
+			$.ajax({
+				url:"/map/getPartyInfo",
+				data:{seq:$(this).parent().find(".seq").text()}
+			}).done(function(resp){
+				$("#partyModal #exampleModalLabel b").text(resp.title);
+				$("#partyModal .parent_name").text(resp.parent_name);
+				$("#partyModal .parent_address").text(resp.parent_address);
+				$("#partyModal .meetdate").text(resp.sDate);
+				$("#partyModal .count").text(resp.count);
+				if(resp.gender == 'a'){
+					$("#partyModal .gender").text("혼성모임");
+				}else if(resp.gender == 'f'){
+					$("#partyModal .gender").text("여성만");
+				}else if(resp.gender == 'm'){
+					$("#partyModal .gender").text("남성만");
+				}
+				$("#partyModal .age").html("");
+				if(resp.age.includes(", ")){
+					var ages = resp.age.split(", ");
+					for(var i = 0;i < ages.length();i++){
+						$("#partyModal .age").append('<span class="badge badge-pill badge-light">'+ ages[i] + '대</span>');
+					}
+				}else{
+					$("#partyModal .age").append("<span class='badge badge-pill badge-light'>" + resp.age + "대만</span>");
+				}
+				if(resp.drinking == 1){
+					$("#partyModal .drinking").text("음주OK");
+				}else if(resp.drinking == 0){
+					$("#partyModal .drinking").text("음주NO");
+				}
+				$("#partyModal .content").text(resp.content);
+			})
+		})
+		
+		$("#search").on("click",function(){
+			$.ajax({
+				url:"/map/search",
+				data:{keyword:$("#keyword").val()},
+				dataType:"JSON"
+			}).done(function(resp){
+				$(".choose_info").html("");
+				$(".search_result").html("");
+				var count = resp.cafe_list.length + resp.food_list.length;
+				$(".search_result").append("<div class='search_count'><b>장소</b> "+count+"</div>");
+				$(".search_result").css('height','80vh');
+				var line = $("<div class='search_list'></div>");
+				for(var i = 0; i < resp.cafe_list.length; i++){
+					var cafe = $("<div class='cafe_info'></div>");
+					cafe.append("<div class='place_name'>"+resp.cafe_list[i].place_name+"</div>");
+					cafe.append("<div class='address_name'>"+resp.cafe_list[i].address_name+"</div>");
+					cafe.append("<div class='category_name'>"+resp.cafe_list[i].category_name+"</div>");
+					cafe.append("<div class='phone'>"+resp.cafe_list[i].phone+"</div>");
+					line.append(cafe);		
+				}
+				for(var i = 0; i < resp.food_list.length; i++){
+					var food = $("<div class='food_info'></div>");
+					food.append("<div class='place_name'>"+resp.food_list[i].place_name+"</div>");
+					food.append("<div class='address_name'>"+resp.food_list[i].address_name+"</div>");
+					food.append("<div class='category_name'>"+resp.food_list[i].category_name+"</div>");
+					food.append("<div class='phone'>"+resp.food_list[i].phone+"</div>");
+					line.append(food);			
+				}
+				$(".search_result").append(line);
+				console.log(resp);
+			})
+		})
 		
 	})
 </script>
@@ -711,58 +812,69 @@
 	<!-- 사용자가 보고 있는 중심 좌표 -->
 	<div style="display:none;" id="centerLat"></div>
 	<div style="display:none;" id="centerLng"></div>
+	<!-- 선택해서 들어온 중심 좌표 -->
+	<div style="display:none;" id="lat"></div>
+	<div style="display:none;" id="lng"></div>
 	<div class="container-fluid all">
 		<div id="header"><jsp:include page="/WEB-INF/views/include/header.jsp" /></div>
 		<div id="sideBar">
 			<div class="search_area">
-				<form action="search" method="get">
-					<div class="searchbar mx-auto">
-			          <input type="text" class="search_input" name="keyword" placeholder="맛집 키워드 검색">
-			          <button type="submit" class="search_icon"><i class="fas fa-search"></i></button>
-			        </div>
-				</form>
+				<div class="searchbar mx-auto">
+		          <input type="text" class="search_input" id="keyword" placeholder="음식점, 카페 상호명 검색">
+		          <button type="button" class="search_icon" id="search"><i class="fas fa-search"></i></button>
+		        </div>
 			</div>
+			<div class="side">
+				<div class="search_result">
+					
+				</div>
 				<div class="choose_info">
-	        	<div class="store_info mx-auto">
-		        	<div class="category"></div>
-		        	<div class="name"></div>
-		        	<div class="address"></div>
-		        	<div class="road_address"></div>
-		        	<div class="rating_avg"></div>
-		        	<div class="phone"></div>
-		        	<div class="place_url"></div>
-	        	</div>
+				<c:if test="${not empty mapdto}">
+		        	<div class="store_info mx-auto">
+		        		<div class="featImgWrap">
+			        		<div class="cropping">
+			        			<img src="${img}" id="mapimg">
+			        		</div>		        		
+		        		</div>
+			        	<div class="category">${mapdto.category}</div>
+			        	<div class="name">${mapdto.name}</div>
+			        	<div class="address">${mapdto.address}</div>
+			        	<div class="road_address">${mapdto.road_address}</div>
+			        	<div class="rating_avg">
+			        		<c:choose>
+			        			<c:when test="${mapdto.rating_avg eq 0}"><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+			        			<c:when test="${mapdto.rating_avg eq 1}"><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 2}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 3}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 4}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 5}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 1}"><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 2}"><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 3}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 4}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 5}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i></c:when>
+			        		</c:choose>
+						</div>
+			        	<div class="phone">${mapdto.phone}</div>
+			        	<div class="place_url">${mapdto.place_url}</div>
+		        	</div>
+				</c:if>
 	        <div class="partylist">
 	        	<b>진행중인 모임</b>
-	        	<div class="party">
-	        		<div class="title">제목</div>
-	        		<button type="button" class="btn btn-primary join">참가</button>
-	        	</div>
-	        	<div class="party">
-	        		<div class="title">제목</div>
-	        		<button type="button" class="btn btn-primary join">참가</button>
-	        	</div>
-	        	<div class="party">
-	        		<div class="title">제목</div>
-	        		<button type="button" class="btn btn-primary join">참가</button>
-	        	</div>
+	        	<c:if test="${not empty partyList}">
+	        		<c:forEach var="i" items="${partyList}">
+		        		<div class="party">
+						    <div class="title">${i.title}</div>
+						    <div class="seq" style="display:none;">${i.seq}</div>
+						    <button type="button" class="btn btn-primary join" data-toggle="modal" data-target="#partyModal">참가</button>
+						</div>
+	        		</c:forEach>
+	        	</c:if>
 	        	<nav aria-label="Page navigation example">
 				  <ul class="pagination pagination-sm justify-content-center">
-				    <li class="page-item">
-				      <a class="page-link" href="#" aria-label="Previous">
-				        <i class="fas fa-chevron-left"></i>
-				      </a>
-				    </li>
-				    <li class="page-item"><a class="page-link" href="#">1</a></li>
-				    <li class="page-item"><a class="page-link" href="#">2</a></li>
-				    <li class="page-item"><a class="page-link" href="#">3</a></li>
-				    <li class="page-item"><a class="page-link" href="#">4</a></li>
-				    <li class="page-item"><a class="page-link" href="#">5</a></li>
-				    <li class="page-item">
-				      <a class="page-link" href="#" aria-label="Next">
-				        <i class="fas fa-chevron-right"></i>
-				      </a>
-				    </li>
+				  	<c:if test="${not empty navi}">
+				  		${navi}
+				  	</c:if>
 				  </ul>
 				</nav>
 				<button type="button" class="btn btn-primary" id="recruit">내가 직접 모집하기</button>
@@ -826,6 +938,8 @@
 		        	</div>
 		        </div>
 			</div>
+			</div>
+					
 	        
 		</div>
 		<div id="map"></div>
@@ -889,6 +1003,59 @@
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 		        <button type="button" class="btn btn-primary">등록</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+		<!-- 맛집 참가 modal -->
+		<div class="modal fade" id="partyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"><b></b></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        	<table class="table">
+						  <tbody>
+						    <tr>
+						    	<td class="badges">
+						      		<div><span class="badge badge-pill badge-light drinking"></span></div>
+						      		<div><span class="badge badge-pill badge-light gender"></span></div>
+						      		<div class="age"></div>
+						    	</td>
+						    </tr>
+						    <tr>
+						      <th scope="row">상호명</th>
+						      <td class="parent_name"></td>
+						      <th scope="row">위치</th>
+						      <td class="parent_address"></td>
+						    </tr>
+						    <tr>
+						      <th scope="row">모임날짜</th>
+						      <td class="meetdate"></td>
+						    </tr>
+						    <tr>
+						      <th scope="row">인원</th>
+						      <td class="count"></td>
+						    </tr>
+						    <tr>
+						      <th scope="row" colspan="2">소개말</th>
+						    </tr>
+						    <tr>
+						      <td scope="row" class="content" colspan="2"></td>
+						    </tr>
+						  </tbody>
+					</table>
+		      </div>
+		      <div class="modal-footer">
+		      	<!-- 수정, 삭제 버튼 : 로그인 세션과 작성자 아이디 비교 필요 -->
+		        <button type="button" class="btn btn-primary">수정</button>
+		        <button type="button" class="btn btn-primary">삭제</button>
+		        <button type="button" class="btn btn-primary" id="joinParty">채팅방 입장하기</button>
 		      </div>
 		    </div>
 		  </div>

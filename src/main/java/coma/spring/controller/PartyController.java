@@ -83,6 +83,8 @@ public class PartyController {
 	@RequestMapping(value="party_content")
 	public String party_content(String seq, HttpServletRequest request) throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		String img = pservice.clew(content.getParent_name());
+		request.setAttribute("img", img);
 		request.setAttribute("con",content);
 		return "/party/party_content";
 	}
