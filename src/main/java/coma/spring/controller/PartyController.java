@@ -82,10 +82,13 @@ public class PartyController {
 	
 	//모임 글보기
 	@RequestMapping(value="party_content")
-	public String party_content(String seq, HttpServletRequest request) throws Exception {
-		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+	public String party_content(HttpServletRequest request) throws Exception {
+		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
+		//PartyDTO content = pservice.selectBySeq(Integer.parseInt(seq));
 		request.setAttribute("con",content);
-		return "/party/party_content";
+		
+		return "/include/party_content_include";
+		//return "/party/party_content";
 	}
 	
 	
@@ -160,6 +163,13 @@ public class PartyController {
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
 		
+		List<PartyDTO> partyList = pservice.selectList();
+		request.setAttribute("list", partyList);
+		return "/party/party_list";
+	}
+	
+	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
+	public String partysearch(HttpServletRequest request) throws Exception {
 		List<PartyDTO> partyList = pservice.selectList();
 		request.setAttribute("list", partyList);
 		return "/party/party_list";
