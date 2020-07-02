@@ -95,6 +95,19 @@ public class MemberController {
 		return "member/editmyinfo";
 	}
 
+	//아이디 찾기 팝업 열기
+	@RequestMapping("findid")
+	public String findId() {
+		return "member/findid";
+	}
+	
+	//비밀번호 찾기 팝업 열기
+	@RequestMapping("findpw")
+	public String findpw() {
+		return "member/findpw";
+	}
+
+
 	//로그아웃하기
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
@@ -112,6 +125,7 @@ public class MemberController {
 		System.out.println("회원가입 성공");
 		return "home";
 	}
+	
 	//회원가입시 아이디 중복체크
 	@RequestMapping("isIdAvailable")
 	@ResponseBody
@@ -193,6 +207,35 @@ public class MemberController {
 	}
 
 	//비밀번호 수정하기
+	@RequestMapping("editPwProc")
+	@ResponseBody
+	public String editPwProc(String pw)throws Exception {
+		System.out.println("컨트롤러로 값 전달 성공");
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		String oriprotectedpw = mdto.getPw(); 
+		String newprotectedpw = mservice.getSha512(pw);
+
+		if(oriprotectedpw.contentEquals(newprotectedpw)) {
+			System.out.println("수정하려는 비밀번호가 기존과 일치하여 에러 발생");
+			return "error";
+		}else {
+			Map<String, String> param = new HashMap<>();
+			param.put("targetColumn1", "pw");
+			param.put("targetValue1", newprotectedpw);
+			param.put("targetColumn2", "id");
+			param.put("targetValue2", id);
+
+			int result = mservice.editPw(param);
+
+			System.out.println("비밀번호 수정 성공 :" + result);
+			mdto.setPw(newprotectedpw);
+			return "/member/editMyInfo";
+		}
+
+
+	}
+
 
 	//내정보 수정하기
 	@RequestMapping("editMyInfoProc")
@@ -212,11 +255,11 @@ public class MemberController {
 		param.put("targetValue3", id);
 
 		int result = mservice.editMyInfo(param);
-		
+
 		mdto.setNickname(nickname);
 		mdto.setAccount_email(account_email);
 
-		System.out.println("회원정보수정 성공" + result);
+		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
 		return "redirect:/member/mypage_myinfo";
 	}
 

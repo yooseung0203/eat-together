@@ -33,8 +33,8 @@
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
-<!-- mypage용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/mypage.css">
+<!-- page용 css  -->
+<link rel="stylesheet" type="text/css" href="/resources/css/editmyinfo.css">
 <!-- ******************* -->
 <!-- menubar용 css  -->
 <link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
@@ -63,26 +63,26 @@
 					<tbody>
 						<tr>
 							<th scope="row">ID</th>
-							<td>${loginInfo.id}</td>
+							<td class="edit_text">${loginInfo.id}</td>
 						</tr>
 						<tr>
 							<th scope="row">PASSWORD</th>
-							<td><button type=button class="btn btn-light"
+							<td class="edit_text"><button type=button class="btn btn-light"
 									onclick="window.open('/member/editPw','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');"
 									id="pwEdit">비밀번호 수정하기</button></td>
 						</tr>
 						<tr>
 							<th scope="row">NICKNAME</th>
-							<td><input type=text id="nickname" name="nickname"
+							<td class="edit_text"><input type=text id="nickname" name="nickname"
 								value="${loginInfo.nickname}"></td>
 						</tr>
 						<tr>
 							<th scope="row">BIRTH</th>
-							<td>${loginInfo.birth}</td>
+							<td class="edit_text">${loginInfo.birth}</td>
 						</tr>
 						<tr>
 							<th scope="row">EMAIL</th>
-							<td><input type=text id="account_email" name="account_email"
+							<td class="edit_text"><input type=text id="account_email" name="account_email"
 								value="${loginInfo.account_email}"> <input type=button
 								id=mail value="인증하기"> <br>
 								<div id=mail_div style="display: none;">
@@ -92,9 +92,9 @@
 						</tr>
 						<tr>
 							<th scope="row"></th>
-							<td>
+							<td class="edit_text">
 								<button type="submit" class="btn btn-warning" id="editMyInfo">
-									수정하기</button>
+									변경사항 저장하기</button>
 								<button type=button class="btn btn-light" id="back">되돌아가기</button>
 							</td>
 						</tr>

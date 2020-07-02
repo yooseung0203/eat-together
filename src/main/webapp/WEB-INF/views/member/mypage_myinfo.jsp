@@ -62,23 +62,23 @@
 				<tbody>
 					<tr>
 						<th scope="row">ID</th>
-						<td>${loginInfo.id}</td>
+						<td class="myinfo_text">${loginInfo.id}</td>
 					</tr>
 					<tr>
 						<th scope="row">NICKNAME</th>
-						<td>${loginInfo.nickname}</td>
+						<td class="myinfo_text">${loginInfo.nickname}</td>
 					</tr>
 					<tr>
 						<th scope="row">BIRTH</th>
-						<td>${loginInfo.birth}</td>
+						<td class="myinfo_text">${loginInfo.birth}</td>
 					</tr>
 					<tr>
 						<th scope="row">EMAIL</th>
-						<td>${loginInfo.account_email}</td>
+						<td class="myinfo_text">${loginInfo.account_email}</td>
 					</tr>
 					<tr>
 						<th scope="row"></th>
-						<td>
+						<td class="myinfo_text">
 							<button type="button" class="btn btn-warning" id="editMyInfo">내정보
 								수정</button>
 							<button type=button class="btn btn-light" id="withdraw">회원탈퇴</button>
@@ -90,8 +90,14 @@
 	</div>
 	<script>
 		$("#withdraw").on("click", function() {
-			alert("정말로 회원탈퇴를 진행하시겠습니까?");
-			location.replace('/member/withdrawView');
+			var result = confirm("정말로 회원탈퇴를 진행하시겠습니까?");
+			console.log(result);
+			if(result){
+				location.replace('/member/withdrawView');
+			}else{
+				location.replace('/member/mypage_myinfo')
+			}
+
 		})
 		$("#editMyInfo").on("click", function() {
 			location.replace('/member/editMyInfo');
