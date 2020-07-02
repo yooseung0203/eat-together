@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import coma.spring.dto.NoticeDTO;
 import coma.spring.dto.NoticeFileDTO;
+import coma.spring.service.NoticeFileService;
 import coma.spring.service.NoticeService;
 
 @Controller
@@ -26,6 +27,9 @@ public class NoticeController {
 	
 	@Autowired
 	private NoticeService nservice;
+	
+	@Autowired
+	private NoticeFileService nfservice;
 	
 	@Autowired
 	private HttpSession session;
@@ -89,7 +93,7 @@ public class NoticeController {
 		nservice.writeProc(filelist,ndto,realPath);
 
 		
-		return "/notice/content?seq="+ndto.getSeq();
+		return "/notice/list";
 	}
 	
 	
@@ -109,13 +113,11 @@ public class NoticeController {
 		return "/notice/notice_list";
 	}
 	
-	@RequestMapping("notice_content")
-	public String notice_content(HttpServletRequest request) throws Exception{
-		int seq = (int) request.getAttribute("seq");
+	@RequestMapping("contents")
+	public String notice_content(int seq, HttpServletRequest request) throws Exception{
 		NoticeDTO dto = nservice.selectBySeq(seq);
 		request.setAttribute("contents", dto);
 		request.setAttribute("fileList", nfservice.getFileList(seq));
-		
 		
 		return "/notice/notice_content";
 	}

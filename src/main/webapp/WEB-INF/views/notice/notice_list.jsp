@@ -83,7 +83,7 @@ $(function(){
 						<c:forEach var="i" items="${list}" varStatus="status">
 						<tr>
 							<th scope="row">${i.seq}</th>
-							<td><a href="contents?seq=${i.seq}"><c:out value="${i.title}"/></a></td>
+							<td><a href="/notice/contents?seq=${i.seq}"><c:out value="${i.title}"/></a></td>
 							<td>${i.sDate}</td>
 							<td>${i.attachment}</td>
 							<td>${i.view_count}</td>
