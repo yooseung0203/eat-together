@@ -96,5 +96,11 @@ public class NoticeService {
 		return navi;
 	}
 	
+	public NoticeDTO selectBySeq(int seq) throws Exception {
+		int result = ndao.view_count(seq); // 조회수 +1
+		NoticeDTO dto = ndao.selectBySeq(seq); // 읽어오기
+		return dto;
+	}
+	
 	
 }

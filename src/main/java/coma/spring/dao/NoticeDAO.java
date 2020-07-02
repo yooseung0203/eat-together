@@ -41,5 +41,13 @@ public class NoticeDAO {
 		return mybatis.selectOne("Notice.getArticleCount");
 
 	}
+	
+	public int view_count(int seq) throws Exception{
+		return mybatis.update("Notice.view_count",seq);
+	}
+
+	public NoticeDTO selectBySeq(int seq) throws Exception{
+		return mybatis.selectOne("Notice.selectBySeq",seq);
+	}
 
 }

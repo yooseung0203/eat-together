@@ -89,7 +89,7 @@ public class NoticeController {
 		nservice.writeProc(filelist,ndto,realPath);
 
 		
-		return "/notice/notice_content?seq="+ndto.getSeq();
+		return "/notice/content?seq="+ndto.getSeq();
 	}
 	
 	
@@ -107,6 +107,17 @@ public class NoticeController {
 		request.setAttribute("list", dto);
 		request.setAttribute("navi", navi);
 		return "/notice/notice_list";
+	}
+	
+	@RequestMapping("notice_content")
+	public String notice_content(HttpServletRequest request) throws Exception{
+		int seq = (int) request.getAttribute("seq");
+		NoticeDTO dto = nservice.selectBySeq(seq);
+		request.setAttribute("contents", dto);
+		request.setAttribute("fileList", nfservice.getFileList(seq));
+		
+		
+		return "/notice/notice_content";
 	}
 
 }
