@@ -47,10 +47,6 @@ $(function(){
 		location.href="/notice/write";
 	});
 	
-	$("#toBackBtn").on("click",function(){
-		location.href="/member/mypage";
-	})
-	
 });
 
 </script>
