@@ -68,7 +68,7 @@
 				return false;
 			}
 			
-			var isCheckCategory = $('input:checkbox[name=category]').is(':checked');
+			var isCheckCategory = $('input:radio[name=category]').is(':checked');
 			if (!isCheckCategory){
 				alert("카테고리를 선택해주세요.");
 				return false;
@@ -142,7 +142,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 mt-3 border-bottom border-dark">
-					<h2 class="notice-title">공지사항 작성하기</h2>
+					<h2 class="notice-title">FAQ 작성하기</h2>
 				</div>
 			</div>
 			<div class="row">

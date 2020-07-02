@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import coma.spring.dao.FaqDAO;
 import coma.spring.dto.FaqDTO;
+import coma.spring.dto.NoticeDTO;
+import coma.spring.dto.NoticeFileDTO;
 import coma.spring.statics.Configuration;
 
 @Service
@@ -81,5 +83,23 @@ public class FaqService {
 		String navi = this.getPageNav(cpage);
 		return navi;
 	}
+	
+	public int update(FaqDTO dto) throws Exception{
+		int result= fdao.update(dto);
+		return result;
+	}
+	
+	public FaqDTO selectBySeq(int seq) throws Exception {
+		FaqDTO dto = fdao.selectBySeq(seq); // 읽어오기
+		return dto;
+	}
+	
+	public int delete(String seq) throws Exception{
+		int result=fdao.delete(seq);
+		return result;
+	}
+	
+	
+	
 
 }

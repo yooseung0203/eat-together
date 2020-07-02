@@ -14,3 +14,13 @@
   *{
   	 font-family: 'Noto Sans KR', sans-serif;
   }
+  
+  .imp{
+  	background-color:#dddfe6;
+  	color:#fffff;
+  }
+  
+  th{
+	text-align: center;
+	
+}

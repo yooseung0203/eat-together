@@ -68,7 +68,7 @@ $(function(){
 				<table class="table border-bottom border-dark">
 					<thead class="thead-dark">
 						<tr>
-							<th scope="col">#</th>
+							<th scope="col" class="text-center">#</th>
 							<th scope="col">글제목</th>
 							<th scope="col">작성일</th>
 							<th scope="col">첨부파일</th>
@@ -78,10 +78,19 @@ $(function(){
 					<tbody>
 						<c:forEach var="i" items="${list}" varStatus="status">
 						<tr>
-							<th scope="row">
-							<c:if test="${i.importance eq '1'}">중요</c:if>
-							<c:if test ="${i.importance eq '0'}">${i.seq}</c:if>
+							
+							<c:if test="${i.importance eq '1'}">
+							<th scope="row" class="imp text-center" style="background-color:#ff7761;color:#ffffff;">
+							중요
 							</th>
+							</c:if>
+							
+							<c:if test ="${i.importance eq '0'}">
+							<th scope="row" class="text-center">
+							${i.seq}
+							</th>
+							</c:if>
+							
 							<td><a href="/notice/contents?seq=${i.seq}"><c:out value="${i.title}"/></a></td>
 							<td>${i.sDate}</td>
 							<td><c:if test="${i.attachment ne '0'}">&#x1F4BE;</c:if></td>

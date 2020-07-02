@@ -37,14 +37,21 @@
 <!-- ******************* -->
 <link rel="stylesheet" type="text/css" href="/resources/css/faq-css.css">
 
-	<script>
-$(function(){
+<script>
+	$(function() {
 
-	$("#toWriteBtn").on("click",function(){
-		location.href="/faq/write";
+		$("#toWriteBtn").on("click", function() {
+			location.href = "/faq/toWrite";
+		});
+		
+		$("#faq-delete").on("click",function(){
+			var ask = confirm("정말 삭제하시겠습니까?");
+			if(!ask){
+				return false;
+			};
+		});
 	});
 	
-});
 
 </script>
 </head>
@@ -58,26 +65,40 @@ $(function(){
 
 	<div class="container">
 		<div class="row">
-			<div class="col-12 mt-3">
-				<h2 class="notice-title">FAQ</h2>
+			<div class="col-12 mt-3 mb-3">
+				<h2 class="faq-title">FAQ</h2>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-12">
-				<c:forEach var="i" items="${list}" varStatus="status">
-					<div class="faq">
-						<div class="faq-q" onclick="$(this).next().show()">
-							<div class="row">
-								<div class="col-12 col-sm-8">질문 : ${list.title}</div>
-								<div class="col-12 col-sm-4">${list.sDate}</div>
-							</div>
-						</div>
-						<div class="faq-a">답변 : ${list.contents}</div>
+			<div class="col-12 mt-3 mb-3">
+				<div class="row">
+					<div class="col-12 col-sm-12">
+						<button type="button" class="btn btn-outline-primary">전체</button>
+						<button type="button" class="btn btn-outline-warning">회원/정보관련</button>
+						<button type="button" class="btn btn-outline-info">사이트이용관련</button>
 					</div>
-				</c:forEach>
+				</div>
 			</div>
 		</div>
+		<c:forEach var="i" items="${list}" varStatus="status">
+			<div class="row mb-3">
+				<div class="col-12 col-sm-12 faq">
 
+					<div class="faq-q" onclick="$(this).next().show()">
+						<div class="row">
+							<div class="col-12 col-sm-12">
+								<img src="/resources/img/question.png" /> ${i.title}
+							</div>
+							
+						</div>
+					</div>
+
+					<div class="faq-a">답변 : ${i.contents}</div>
+
+
+				</div>
+			</div>
+		</c:forEach>
 
 
 
@@ -90,14 +111,14 @@ $(function(){
 				</c:if>
 			</div>
 		</div>
+	</div>
 
 
+	<!-- ******************* -->
+	<!-- footer  -->
+	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 
-		<!-- ******************* -->
-		<!-- footer  -->
-		<jsp:include page="/WEB-INF/views/include/footer.jsp" />
-
-		<!-- footer  -->
-		<!-- ******************* -->
+	<!-- footer  -->
+	<!-- ******************* -->
 </body>
 </html>
