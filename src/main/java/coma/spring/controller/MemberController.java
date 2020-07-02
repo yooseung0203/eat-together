@@ -101,6 +101,7 @@ public class MemberController {
 		return "member/findid";
 	}
 	
+
 	//비밀번호 찾기 팝업 열기
 	@RequestMapping("findpw")
 	public String findpw() {
@@ -114,6 +115,7 @@ public class MemberController {
 		session.invalidate();
 		return "home";
 	}
+
 
 	//회원가입하기
 	@RequestMapping("signupProc")
