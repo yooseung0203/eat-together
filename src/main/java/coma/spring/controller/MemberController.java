@@ -77,7 +77,37 @@ public class MemberController {
 	public String getReviewlistView() {
 		return "member/mypage_reviewlist";
 	}
+	//회원탈퇴 페이지로 이동하기
+	@RequestMapping("withdrawView")
+	public String getWithdrawView() {
+		return "member/withdraw";
+	}
+
+	//비밀번호 수정하기 팝업 열기
+	@RequestMapping("editPw")
+	public String openEditPwView() {
+		return "member/editpw";
+	}
+
+	//내정보 수정 페이지로 이동하기
+	@RequestMapping("editMyInfo")
+	public String getEditMyInfoView() {
+		return "member/editmyinfo";
+	}
+
+	//아이디 찾기 팝업 열기
+	@RequestMapping("findid")
+	public String findId() {
+		return "member/findid";
+	}
 	
+	//비밀번호 찾기 팝업 열기
+	@RequestMapping("findpw")
+	public String findpw() {
+		return "member/findpw";
+	}
+
+
 	//로그아웃하기
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
@@ -95,6 +125,7 @@ public class MemberController {
 		System.out.println("회원가입 성공");
 		return "home";
 	}
+	
 	//회원가입시 아이디 중복체크
 	@RequestMapping("isIdAvailable")
 	@ResponseBody
@@ -138,7 +169,99 @@ public class MemberController {
 
 	}
 
+	//회원탈퇴하기
+	@RequestMapping("withdrawProc")
+	public String withdrawProc(String pw) throws Exception{
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		String protectedpw = mdto.getPw();
+		String inputpw = mservice.getSha512(pw);
 
+		System.out.println("회원탈퇴하는 id : " + id);
+		System.out.println("회원탈퇴하는 pw : " + protectedpw);
+		System.out.println("입력한 pw : " + inputpw);
+
+		if(protectedpw.contentEquals(inputpw)) {
+			Map<String, String> param = new HashMap<>();
+			param.put("targetColumn1", "id");
+			param.put("targetValue1", id);
+			param.put("targetColumn2", "pw");
+			param.put("targetValue2", protectedpw);
+
+			int result = mservice.deleteMember(param);
+			System.out.println("회원 탈퇴 성공 : " + result);
+
+
+			if(result>0) {
+				System.out.println("회원 탈퇴 완료");
+				session.invalidate();
+				return "home";
+			}else {
+				System.out.println("회원 탈퇴 실패, 관리자에게 문의하세요.");
+				return "error";
+			}
+		}else {
+			System.out.println("비밀번호 불일치");
+			return "error";	
+		}
+	}
+
+	//비밀번호 수정하기
+	@RequestMapping("editPwProc")
+	@ResponseBody
+	public String editPwProc(String pw)throws Exception {
+		System.out.println("컨트롤러로 값 전달 성공");
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		String oriprotectedpw = mdto.getPw(); 
+		String newprotectedpw = mservice.getSha512(pw);
+
+		if(oriprotectedpw.contentEquals(newprotectedpw)) {
+			System.out.println("수정하려는 비밀번호가 기존과 일치하여 에러 발생");
+			return "error";
+		}else {
+			Map<String, String> param = new HashMap<>();
+			param.put("targetColumn1", "pw");
+			param.put("targetValue1", newprotectedpw);
+			param.put("targetColumn2", "id");
+			param.put("targetValue2", id);
+
+			int result = mservice.editPw(param);
+
+			System.out.println("비밀번호 수정 성공 :" + result);
+			mdto.setPw(newprotectedpw);
+			return "/member/editMyInfo";
+		}
+
+
+	}
+
+
+	//내정보 수정하기
+	@RequestMapping("editMyInfoProc")
+	public String editMyInfoProc(String nickname, String account_email) throws Exception {
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		System.out.println("수정할 아이디 : " + id);
+		System.out.println("수정할 닉네임 : " + nickname);
+		System.out.println("수정할 이메일 : " + account_email);
+
+		Map<String, String> param = new HashMap<>();
+		param.put("targetColumn1", "nickname");
+		param.put("targetValue1", nickname);
+		param.put("targetColumn2", "account_email");
+		param.put("targetValue2", account_email);
+		param.put("targetColumn3", "id");
+		param.put("targetValue3", id);
+
+		int result = mservice.editMyInfo(param);
+
+		mdto.setNickname(nickname);
+		mdto.setAccount_email(account_email);
+
+		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
+		return "redirect:/member/mypage_myinfo";
+	}
 
 
 	//	
@@ -166,6 +289,7 @@ public class MemberController {
 	//	    session.removeAttribute("id");
 	//	    return "index";
 	//	}
+
 
 
 }

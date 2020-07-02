@@ -52,6 +52,31 @@ $(function(){
 	});
  }); 
  //유효성 - 미성년자 음주불가 끝
+ 
+ $(document).ready(function(){
+	 var gender=$("#gender_val").val();
+	 
+	 if(gender=="m"){
+		 $("#gender1").prop("checked",true);
+	 }else(gender=="f"){
+		 $("#gender2").prop("checked",true);
+	 }else(gender=="a"){
+		 $("#gender3").prop("checked",true);
+	 };
+	 
+	 var drinking = $("#drinking_val").val();
+	 
+	 if(drinking==1){
+		 $("#drinking1").attr('disabled',true);	
+		 $("#drinking1").prop("checked",false);
+		 $("#drinking2").prop("checked",true);
+	 }else{
+		 $("#drinking1").attr('disabled',false);	
+		 $("#drinking1").prop("checked",true);
+		 $("#drinking2").prop("checked",false);
+	 };
+ 	
+ };
 
 $(function(){
 	
@@ -137,28 +162,30 @@ $(function(){
 	<!-- hedaer  -->
 	<!-- ******************* -->
 	
-	
-	
-	<c:if test="${empty sessionScope.loginInfo }">
-	<h3 class="text-center my-5"> 로그인 후 이용해주세요.</h3>
+	<c:if test="${con.writer ne sessionScope.loginInfo.id}">
+	<script>
+	alert("작성자만 수정 가능합니다.");
+	location.href("/party/party_content?seq=${con.seq}");
+	</script>
 	</c:if>
-	<c:if test="${!empty sessionScope.loginInfo }">
-	<form id="form" name="form" method="post" action="/party/party_New_Proc">
+	
+	<c:if test="${con.writer eq sessionScope.loginInfo.id}">
+	<form id="form" name="form" method="post" action="/party/party_modifyProc">
 		<div class="container formdiv">
 			<div class="row mb-3">
 				<div class="col-sm-12">
-					<h2 class="party_headline">모임 모집하기</h2>
+					<h2 class="party_headline">모임 수정하기</h2>
 				</div>
-				<input type="hidden" name="writer">
+				<input type="hidden" name="writer" value="${con.writer}">
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">상호명</div>
 				<div class="col-sm-3">
 					<input type="text" class="form-control" name="parent_name"
-						id="parent_name" readonly>
+						id="parent_name" value="${con.parent_name}" readonly>
 				</div>
 				<div class="col-sm-3">
-					<button id="search_parent_name" class="btn btn-primary" type=button>상호
+					<button id="search_parent_name"class="btn btn-primary" type=button>상호
 						찾기</button>
 				</div>
 			</div>
@@ -166,35 +193,36 @@ $(function(){
 				<div class="col-sm-2">위치</div>
 				<div class="col-sm-10">
 					<input type="text" class="form-control" name="parent_address"
-						id="parent_address" readonly>
-					<input type="hidden" name="place_id" id="place_id">
+						id="parent_address"  value="${con.parent_address}"  readonly>
+					<input type="hidden" name="place_id" id="place_id" value="${con.place_id}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">제목</div>
 				<div class="col-sm-10">
 					<input class="form-control" type="text" name="title"
-						id="party_title">
+						id="party_title" value="${con.title}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">모임날짜</div>
 				<div class="col-lg-2">
 					<input class="form-control" type="date" name="date"
-						id="party_date">
+						id="party_date" value="${con.sDate}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">시간</div>
 				<div class="col-lg-2">
-					<input class="form-control" type="time" name="time" id="party_time">
+					<input class="form-control" type="time" name="time" id="party_time" value="${con.sTime}">
 				</div>
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">인원</div>
 				<div class="col-sm-2">
+					
 					<input class="form-control" type="number" name="count" min=2 max=4
-						id="party_count" aria-describedby="countHelpInline">
+						id="party_count" aria-describedby="countHelpInline" value="${con.count}">
 				</div>
 				<div class="col-sm-5">
 					<small id="countHelpInline" class="text-muted"> 인원수는 2~4명
@@ -206,6 +234,7 @@ $(function(){
 				<div class="col-sm-2">멤버구성</div>
 				<div class="col-sm-10">
 					<div class="form-check form-check-inline">
+					<input type=hidden id="gender_val" value="${con.gender}">
 						<input class="form-check-input" type="radio" name="gender"
 							value="m" id="gender1"> <label class="form-check-label"
 							for="gender1">남자만</label>
@@ -229,6 +258,7 @@ $(function(){
 				<div class="col-sm-2">연령대</div>
 				<div class="col-sm-10">
 					<div class="form-check form-check-inline">
+						<input type=hidden id=age_val value="${con.age}">
 						<input class="form-check-input" type="checkbox" name="age"
 							value="10" id="age1"> <label class="form-check-label"
 							for="age1">10대</label>
@@ -260,6 +290,7 @@ $(function(){
 				<div class="col-sm-2">음주</div>
 				<div class="col-sm-10">
 					<div class="form-check form-check-inline">
+						<input type=hidden id=drinking_val value="${con.drinking}">
 						<input class="form-check-input" type="radio" name="drinking"
 							value="1" id="drinking1"> <label class="form-check-label"
 							for="drinking1">OK</label>
@@ -276,20 +307,21 @@ $(function(){
 				<div class="col-2">소개</div>
 				<div class="col-10">
 					<textarea class="form-control " id="content" name="content"
-						placeholder="소개를 입력해주세요" rows="10"></textarea>
+						placeholder="소개를 입력해주세요" rows="10" value=${con.content}></textarea>
 				</div>
 			</div>
 			<div class="row mb-3">
 				<div class="col-12">
 					<button type=button id="submitBtn"
-						class="btn btn-primary btn-lg btn-block">모임 등록하기</button>
+						class="btn btn-warning btn-lg btn-block">모임 수정하기</button>
 				</div>
 
 			</div>
 
 		</div>
 	</form>
-</c:if>
+	</c:if>
+
 
 
 	<!-- ******************* -->

@@ -66,12 +66,8 @@
 		<!-- 카카오톡 아이디로 로그인 버튼 노출 영역 -->
 
 		<div class="login-container">
-			<div>
-				<a href="#">아이디를 잊으셨나요?</a>
-			</div>
-			<div>
-				<a href="#">비밀번호를 잊으셨나요?</a>
-			</div>
+			<div id="findId" onclick="window.open('/member/findid','아이디 찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">아이디를 잊으셨나요?</div>
+			<div id="findPw" onclick="window.open('/member/findpw','비밀번호 찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">비밀번호를 잊으셨나요?</div>
 		</div>
 	</div>
 
