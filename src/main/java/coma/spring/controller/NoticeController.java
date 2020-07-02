@@ -91,9 +91,8 @@ public class NoticeController {
 		
 
 		nservice.writeProc(filelist,ndto,realPath);
-
 		
-		return "/notice/contents?seq="+ndto.getSeq();
+		return "redirect:contents?seq="+ndto.getSeq();
 	}
 	
 	
@@ -136,8 +135,42 @@ public class NoticeController {
 	}
 
 	@RequestMapping("modifyProc")
-	public String Modify(NoticeDTO dto) throws Exception {
-		nservice.update(dto);
+	public String Modify(NoticeDTO dto, MultipartFile[] attfiles) throws Exception {
+		/*파일*/         
+		String realPath = session.getServletContext().getRealPath("upload/notice/");
+
+		File filePath = new File(realPath);
+		if(!filePath.exists()) {
+			filePath.mkdir(); //폴더 만들기
+		}
+
+		/* 파일 업로드 */      
+		List <NoticeFileDTO> filelist = new ArrayList<NoticeFileDTO>();
+		
+		dto.setAttachment("0");
+		if(attfiles.length != 0) { // 한개라도 폴더가 들어가면 나옴
+			dto.setAttachment("1");
+			int num = 0;
+			for(MultipartFile file : attfiles) {
+				if(!file.isEmpty()) { // 파일이 있는지 없는지 확인
+					NoticeFileDTO singleNFDTO= new NoticeFileDTO();
+					UUID uuid = UUID.randomUUID();
+
+					singleNFDTO.setOriname(file.getOriginalFilename());
+					
+					singleNFDTO.setSysname(uuid+"_"+file.getOriginalFilename());               
+					String systemFileName = uuid+"_"+file.getOriginalFilename();
+					System.out.println(systemFileName);
+					File flieDownload = new File(realPath + "/" + systemFileName);
+					file.transferTo(flieDownload); // 파일 생성
+					System.out.println(singleNFDTO.getSysname());
+					filelist.add(singleNFDTO);
+				}            
+			}
+		}else {
+			dto.setAttachment("0");
+		}
+		nservice.update(filelist,dto,realPath);
 		return "redirect:contents?seq="+dto.getSeq();
 	}
 

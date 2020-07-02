@@ -72,6 +72,7 @@
 			var title_RegEx = /[a-zA-Z0-9]{5,}$/;
 			var title = $("#title").val();
 			var contents = $("#contents").val();
+			contents.replace("\"","\'");
 			if (!write_RegEx.test(title)) {
 				alert("제목은 5글자 이상 입력해주세요.");
 				return false;
@@ -83,7 +84,8 @@
 			 }
 			 */
 		});
-		$('#summernote').summernote('code', "${contents.contents}");
+ 			
+		 $('#summernote').summernote('code', '${contents.contents}');
 		$('#summernote').summernote({
 			 minHeight: 500,             // 최소 높이
 		        maxHeight: null,             // 최대 높이
@@ -125,6 +127,7 @@
 		 }else{
 			 $("#imp").prop("checked",false);
 		 }
+		
 	 });
 </script>
 </head>

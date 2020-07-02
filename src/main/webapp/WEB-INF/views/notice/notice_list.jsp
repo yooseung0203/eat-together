@@ -88,7 +88,7 @@ $(function(){
 							</th>
 							<td><a href="/notice/contents?seq=${i.seq}"><c:out value="${i.title}"/></a></td>
 							<td>${i.sDate}</td>
-							<td><c:if test="${i.attachment eq '1'}">&#x1F4BE;</c:if></td>
+							<td><c:if test="${i.attachment ne '0'}">&#x1F4BE;</c:if></td>
 							<td>${i.view_count}</td>
 							
 						</tr>

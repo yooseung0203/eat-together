@@ -60,9 +60,11 @@ public class NoticeDAO {
 	      param.put("changeValue1", dto.getTitle());
 	      param.put("columnName2", "contents");
 	      param.put("changeValue2", dto.getContents());
+	      param.put("columnName3", "attachment");
+	      param.put("changeValue3", dto.getAttachment());
 	      param.put("targetColumn", "seq");
 	      param.put("targetValue", Integer.toString(dto.getSeq()));
-	      
+	     	      
 	      System.out.println(param.size());
 	      
 		return mybatis.update("Notice.update",param);
