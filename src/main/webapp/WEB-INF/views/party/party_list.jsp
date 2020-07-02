@@ -147,9 +147,39 @@
             </div>
             <div class="row aa">
                 <div class="col-12 jumbotron">
-                    <br>
-					<select name="sido" id="sido"></select>
-					<select name="gugun" id="gugun"></select>
+                    <span class="listtitle">상세 검색</span>
+                    <div id="areacheck">
+                        지역:  
+                        <select name="sido" id="sido"></select>
+                        <select name="gugun" id="gugun"></select>    
+                    </div>
+                    <div id="gendercheck">
+                        성별 :   
+                        <input type="radio" name="gender" value="man"/>남자만
+                        <input type="radio" name="gender" value="woman"/>여자만
+                        <input type="radio" name="gender" value="both" checked="checked"/>남녀무관
+                    </div>
+                    <div id="agecheck">
+                        연령 : 
+                        <input type="checkbox" name="age" value="10" checked/>10대
+                        <input type="checkbox" naem="age" value="20"/>20대
+                        <input type="checkbox" name="age" value="30"/>30대
+                        <input type="checkbox" name="age" value="40"/>40대
+                        <input type="checkbox" name="age" value="50"/>50대 이상
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                                <div role="separator" class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Separated link</a>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                    </div>
                 </div> 
             </div>
         </div>

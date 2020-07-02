@@ -43,10 +43,9 @@
 								<a href="#" onclick="window.open('/admin/toAdmin', 'Admin','width=1300, height=800, location=no'); return false">관리자페이지</a></span>
 							</c:when>
 							<c:otherwise>
-								<a id="goToMyPage">마이페이지</a>
+								<div id="goToMyPage">마이페이지</div>
 							</c:otherwise>
 						</c:choose>
-
 						</div>
 					</div>
 				</div>
