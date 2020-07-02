@@ -82,10 +82,13 @@ $(function(){
 					<tbody>
 						<c:forEach var="i" items="${list}" varStatus="status">
 						<tr>
-							<th scope="row">${i.seq}</th>
+							<th scope="row">
+							<c:if test="${i.importance eq '1'}">중요</c:if>
+							<c:if test ="${i.importance eq '0'}">${i.seq}</c:if>
+							</th>
 							<td><a href="/notice/contents?seq=${i.seq}"><c:out value="${i.title}"/></a></td>
 							<td>${i.sDate}</td>
-							<td>${i.attachment}</td>
+							<td><c:if test="${i.attachment eq '1'}">&#x1F4BE;</c:if></td>
 							<td>${i.view_count}</td>
 							
 						</tr>

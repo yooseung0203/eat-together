@@ -49,5 +49,23 @@ public class NoticeDAO {
 	public NoticeDTO selectBySeq(int seq) throws Exception{
 		return mybatis.selectOne("Notice.selectBySeq",seq);
 	}
+	
+	public int delete(String seq) throws Exception{
+		return mybatis.delete("Notice.delete",seq);
+	}
+
+	public int update(NoticeDTO dto) throws Exception{
+		 Map<String, String> param = new HashMap<>();
+	      param.put("columnName1", "title");
+	      param.put("changeValue1", dto.getTitle());
+	      param.put("columnName2", "contents");
+	      param.put("changeValue2", dto.getContents());
+	      param.put("targetColumn", "seq");
+	      param.put("targetValue", Integer.toString(dto.getSeq()));
+	      
+	      System.out.println(param.size());
+	      
+		return mybatis.update("Notice.update",param);
+	}
 
 }

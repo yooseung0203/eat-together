@@ -102,5 +102,15 @@ public class NoticeService {
 		return dto;
 	}
 	
+	public int delete(String seq) throws Exception{
+		int result=ndao.delete(seq);
+		return result;
+	}
+	
+	public int update(NoticeDTO dto) throws Exception{
+		int result= ndao.update(dto);
+		return result;
+	}
+	
 	
 }

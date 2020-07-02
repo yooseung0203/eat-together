@@ -15,7 +15,7 @@
 </insert>
 
 <select id="selectByPage" resultType="coma.spring.dto.NoticeDTO">
-	select * from (select notice.*, row_number() over(order by seq desc) rnum from notice) where rnum between #{start} and #{end}
+	select * from (select notice.*, row_number() over(order by importance desc, seq desc) rnum from notice) where rnum between #{start} and #{end}
 </select>
 
 <update id="view_count">
@@ -25,4 +25,12 @@
  <select id="selectBySeq" resultType="coma.spring.dto.NoticeDTO">
 	select * from notice where seq = #{value} order by seq desc
 </select>
+
+<delete id="delete">
+	delete from notice where seq = #{value}
+</delete>
+
+<update id="update">
+      update notice set ${columnName1} = #{changeValue1}, ${columnName2} = #{changeValue2} where ${targetColumn} = #{targetValue}
+ </update>
 </mapper>

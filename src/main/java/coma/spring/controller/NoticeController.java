@@ -93,7 +93,7 @@ public class NoticeController {
 		nservice.writeProc(filelist,ndto,realPath);
 
 		
-		return "/notice/list";
+		return "/notice/contents?seq="+ndto.getSeq();
 	}
 	
 	
@@ -120,6 +120,25 @@ public class NoticeController {
 		request.setAttribute("fileList", nfservice.getFileList(seq));
 		
 		return "/notice/notice_content";
+	}
+	
+	@RequestMapping("delete")
+	public String delete(String seq) throws Exception{
+		nservice.delete(seq);
+		return "redirect:list";
+	}
+
+	@RequestMapping("modify")
+	public String toModify(int seq, HttpServletRequest request) throws Exception {
+		NoticeDTO dto = nservice.selectBySeq(seq);
+		request.setAttribute("contents", dto);
+		return "notice/notice_modify";
+	}
+
+	@RequestMapping("modifyProc")
+	public String Modify(NoticeDTO dto) throws Exception {
+		nservice.update(dto);
+		return "redirect:contents?seq="+dto.getSeq();
 	}
 
 }

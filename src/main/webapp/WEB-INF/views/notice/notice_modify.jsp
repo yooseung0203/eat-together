@@ -83,7 +83,7 @@
 			 }
 			 */
 		});
-		
+		$('#summernote').summernote('code', "${contents.contents}");
 		$('#summernote').summernote({
 			 minHeight: 500,             // 최소 높이
 		        maxHeight: null,             // 최대 높이
@@ -115,6 +115,17 @@
 	        });
 	    };
 	});
+	
+	 $(document).ready(function(){
+		 var ipt=$("#importance_val").val();
+		 console.log(ipt);
+		 
+		 if(ipt=="1"){
+			 $("#imp").prop("checked",true);
+		 }else{
+			 $("#imp").prop("checked",false);
+		 }
+	 });
 </script>
 </head>
 <body>
@@ -134,7 +145,7 @@
 	 <div class="container">
         <div class="row">
 			<div class="col-sm-12 mt-3 border-bottom border-dark">
-				<h2 class="notice-title">공지사항 작성하기</h2>
+				<h2 class="notice-title">공지사항 수정하기</h2>
 			</div>
 		</div>
         <div class="row">
@@ -145,11 +156,13 @@
 						<div class="col-2 text-center">제목</div>
 						<div class="col-8">
 							<input type="text" class="form-control" name="title" id="title"
-								placeholder="제목을 입력하세요">
+								value="${contents.title}">
 						</div>
 						<div class="col-2"><input type="checkbox" name="importance" value="1" id="imp">
 						 <label class="form-check-label"
 							for="imp">중요</label>
+						<input type="hidden" name="seq" value="${contents.seq}">
+ 						<input type="hidden" id="importance_val" value=${contents.importance}>
 						
 						</div>
 
