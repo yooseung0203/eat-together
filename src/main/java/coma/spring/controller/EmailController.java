@@ -186,20 +186,23 @@ public class EmailController {
 		String username = "eat-together";
 		String password = "aktwlqrkTekrkffo?";
 		String resp;
-
-		String input_account_email = account_email;
-		System.out.println("아이디 찾기용 입력한 이메일 : " + account_email);
-		MemberDTO mdto = mservice.emailCheck(input_account_email);
 		String inputId = id;
+		String input_account_email = account_email;
+		System.out.println("비밀번호 찾기용 입력한 이메일 : " + account_email);
+		System.out.println("비밀번호 찾기용 입력한 아이디 : " + inputId);
+		
+		MemberDTO mdto = mservice.emailCheck(input_account_email);
 		
 		if(mdto == null) {
 			System.out.println("입력한 이메일과 동일한 회원정보가 존재하지 않음");
 			resp = "";
 			return resp;
-		}else if(mdto.getId()!= inputId) {
+			
+		}else if(!(mdto.getId().contentEquals(inputId))) {
 			System.out.println("아이디와 인증된 이메일의 불일치");
 			resp = "";
 			return resp;
+			
 		}else {
 			System.out.println("아이디와 인증된 이메일 일치");
 			String dice = this.getRandomString();
@@ -239,6 +242,7 @@ public class EmailController {
 			} catch (MessagingException e) {
 				throw new RuntimeException(e);
 			}
+			System.out.println("컨트롤러에서 resp 전달: " + resp);
 			return resp;
 		}
 	}

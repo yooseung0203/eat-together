@@ -34,7 +34,8 @@
 <!-- header,footer용 css  -->
 <!-- ******************* -->
 <!-- page용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/editmyinfo.css">
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/editmyinfo.css">
 <!-- ******************* -->
 <!-- menubar용 css  -->
 <link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
@@ -62,19 +63,28 @@
 					</thead>
 					<tbody>
 						<tr>
+							<th scope="row">PROFILE IMAGE</th>
+							<td class="myinfo_text" id="file_box">
+							<img src ="#">
+									<input type="file" id="ex_file" name="file">
+									<input type="button" id="uploadProfile" class="btn btn-light" value="프로필이미지 변경하기">
+							</td>
+						</tr>
+						<tr>
 							<th scope="row">ID</th>
 							<td class="edit_text">${loginInfo.id}</td>
 						</tr>
 						<tr>
 							<th scope="row">PASSWORD</th>
-							<td class="edit_text"><button type=button class="btn btn-light"
+							<td class="edit_text"><button type=button
+									class="btn btn-light"
 									onclick="window.open('/member/editPw','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');"
 									id="pwEdit">비밀번호 수정하기</button></td>
 						</tr>
 						<tr>
 							<th scope="row">NICKNAME</th>
-							<td class="edit_text"><input type=text id="nickname" name="nickname"
-								value="${loginInfo.nickname}"></td>
+							<td class="edit_text"><input type=text id="nickname"
+								name="nickname" value="${loginInfo.nickname}"></td>
 						</tr>
 						<tr>
 							<th scope="row">BIRTH</th>
@@ -82,9 +92,9 @@
 						</tr>
 						<tr>
 							<th scope="row">EMAIL</th>
-							<td class="edit_text"><input type=text id="account_email" name="account_email"
-								value="${loginInfo.account_email}"> <input type=button
-								id=mail value="인증하기"> <br>
+							<td class="edit_text"><input type=text id="account_email"
+								name="account_email" value="${loginInfo.account_email}">
+								<input type=button id=mail value="인증하기"> <br>
 								<div id=mail_div style="display: none;">
 									인증번호 : <input type=text id=mail_text>
 									<button type=button id=mail_accept>인증</button>
