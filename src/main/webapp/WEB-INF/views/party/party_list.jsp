@@ -48,7 +48,7 @@
 </style>
 <script>
 	$(function(){
-		var area0 = ["시/도 선택","서울특별시","인천광역시","대전광역시","광주광역시","대구광역시","울산광역시","부산광역시","경기도","강원도","충청북도","충청남도","전라북도","전라남도","경상북도","경상남도","제주도"];
+		var area0 = ["시/도 선택","서울","인천","대전","광주","대구","울산","부산","경기","강원","충북","충남","전북","전남","경북","경남","제주특별자치도"];
 		var area1 = ["강남구","강동구","강북구","강서구","관악구","광진구","구로구","금천구","노원구","도봉구","동대문구","동작구","마포구","서대문구","서초구","성동구","성북구","송파구","양천구","영등포구","용산구","은평구","종로구","중구","중랑구"];
 		var area2 = ["계양구","남구","남동구","동구","부평구","서구","연수구","중구","강화군","옹진군"];
 		var area3 = ["대덕구","동구","서구","유성구","중구"];
@@ -154,8 +154,8 @@
                 </div>
             </div>
             <div class="row aa">
-            	<form action="/party/partysearch" method="post">
                 <div class="col-12 jumbotron">
+                <form action="/party/partysearch" method="post">
                     <span class="listtitle">상세 검색</span>
                     <div id="areacheck">
                         지역:  
@@ -164,18 +164,24 @@
                     </div>
                     <div id="gendercheck">
                         성별 :   
-                        <input type="radio" name="gender" value="man"/>남자만
-                        <input type="radio" name="gender" value="woman"/>여자만
-                        <input type="radio" name="gender" value="both" checked="checked"/>남녀무관
+                        <input type="radio" name="gender" value="m"/>남자만
+                        <input type="radio" name="gender" value="f"/>여자만
+                        <input type="radio" name="gender" value="a" checked="checked"/>남녀무관
                     </div>
                     <div id="agecheck">
                         연령 : 
                         <input type="checkbox" name="age" value="10" checked/>10대
-                        <input type="checkbox" naem="age" value="20"/>20대
+                        <input type="checkbox" name="age" value="20"/>20대
                         <input type="checkbox" name="age" value="30"/>30대
                         <input type="checkbox" name="age" value="40"/>40대
                         <input type="checkbox" name="age" value="50"/>50대 이상
                     </div>
+                    <div id="drinkingcheck">
+                        음주 :   
+                        <input type="radio" name="drinking" value="0" checked="checked"/>불가능
+                        <input type="radio" name="drinking" value="1" />가능
+                    </div>
+                    <input type="submit">
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
                             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
@@ -189,8 +195,8 @@
                         </div>
                         <input type="text" class="form-control" aria-label="Text input with dropdown button">
                     </div>
+                    </form>
                 </div>
-                </form>
             </div>
             <div class="row aa">
             	<div class="col-12 jumbotron">
@@ -202,7 +208,7 @@
 								<div class="card-body">
 							    	<h5 class="card-title">${i.parent_name }</h5>
 								    <p class="card-text">날짜 : ${i.meetdate}<br>인원 : ${i.count }</p>
-								    <input type="hidden" class=readcontentsval id="party_seq" value="${i.seq}">
+								    <input type="hidden" class="party_seq" value="${i.seq}">
 								    <button type="button" class="btn btn-info btn-lg myBtn">Open Modal</button>
 								</div>
 							</div>
@@ -214,7 +220,7 @@
         </div>
         
     <div class="modal fade" id="mymodal" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
     
       <!-- Modal content-->
       <div class="modal-content" id="aaa">
@@ -231,18 +237,22 @@
 </body>
 <script>
 	$(".myBtn").on("click",function(){
-		
-		$.ajax({
-			url:"/party/party_content",
-			data:{
-				seq:$("#party_seq").val()
-			}
-		}).done(function(con){
-			console.log(con);
-			$("#aaa").append(con);
-			$("#mymodal").modal();
-		});
-			
+		if("${loginInfo.id}" == ""){
+			alert("로그인 후 이용해주세요");
+		}else{
+			var select_seq = $(this).siblings(".party_seq").val();
+			$("#aaa").empty();
+			$.ajax({
+				url:"/party/party_content",
+				data:{
+					seq:select_seq
+				}
+			}).done(function(con){
+				console.log(con);
+				$("#aaa").append(con);
+				$("#mymodal").modal();
+			});
+		}	
 	});
 	
 </script>

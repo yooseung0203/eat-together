@@ -22,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
 
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.PartySearchListDTO;
 import coma.spring.service.PartyService;
 
 @Controller
@@ -186,8 +187,10 @@ public class PartyController {
 	}
 	
 	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
-	public String partysearch(HttpServletRequest request) throws Exception {
-		List<PartyDTO> partyList = pservice.selectList();
+	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
+		
+		
+		List<PartyDTO> partyList = pservice.partySearch(pdto);
 		request.setAttribute("list", partyList);
 		return "/party/party_list";
 	}

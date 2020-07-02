@@ -23,6 +23,16 @@ select party_seq.nextval from dual
  <select id="selectList" resultType="coma.spring.dto.PartyDTO">
 	select * from party order by seq desc
 </select>
+
+<select id="partySearch" resultType="coma.spring.dto.PartyDTO">
+	select * from party 
+	<trim prefixOverrides="and" prefix="where">
+		<if test="address != '시/도 선택 구/군 선택'">address LIKE '%${address}'</if>
+		<if test="gender != ''">and gender =  #{gender}</if>
+		<if test="drinking != null">and drinking =  #{drinking}</if>
+		
+	</trim>
+</select>
  
 <!--  
 <update id="update">

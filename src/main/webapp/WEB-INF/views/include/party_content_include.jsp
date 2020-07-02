@@ -15,11 +15,6 @@ $(function(){
 		}
 	});
 	
-	$("#toPartyList").on("click",function(){
-		location.href = "/party/partylist";
-	});
-	
-	
 })
 
 </script>
@@ -106,10 +101,7 @@ $(function(){
 				<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 				<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
 				</c:if>
-				<button type="button" id="toPartyList" class="btn btn-secondary">목록으로</button>
-
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">목록으로</button>
 			</div>
-
 		</div>
-
 	</div>

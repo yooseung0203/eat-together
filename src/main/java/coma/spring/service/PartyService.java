@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import coma.spring.dao.PartyDAO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.PartySearchListDTO;
 
 @Service
 public class PartyService {
@@ -38,6 +39,12 @@ public class PartyService {
 	}
 	
 	public List<PartyDTO> selectList() throws Exception {
+		List<PartyDTO> list = pdao.selectList();
+		return list;
+	}
+	
+	public List<PartyDTO> partySearch(PartySearchListDTO
+			pdto) throws Exception{
 		List<PartyDTO> list = pdao.selectList();
 		return list;
 	}
