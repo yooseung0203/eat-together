@@ -54,7 +54,7 @@
 
 	    var kakaoCafeMarkers = [];
 	    var kakaoFoodMarkers = [];
-		$.get("/resources/json/cafe.json",function(data){
+		/*$.get("/resources/json/cafe.json",function(data){
 		
 			console.log(data);
 			var positions = [];
@@ -90,7 +90,7 @@
 		    	var marker = addMarker(positions[i].latlng);
 			    kakaoFoodMarkers.push({marker:marker});
 			}
-		});
+		});*/
 		
 
 		// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
@@ -135,9 +135,9 @@
 		var cafePartyMarkers = null;
 		var foodPartyMarkers = null;
 		
-		function createMapDataMarker(){
+		/*function createMapDataMarker(){
 			
-		}
+		}*/
 		
 		$.get("/resources/json/mapData.json",function(data){
 			console.log(data);
@@ -535,6 +535,56 @@
 				var count = resp.map_list.length + resp.cafe_list.length + resp.food_list.length;
 				$(".search_result").append("<div class='search_count'><b>장소</b> "+count+"</div>");
 				$(".search_result").css('height','80vh');
+				
+				var cafePositions = [];
+				var foodPositions = [];
+				var cafePartyPositions = [];
+				var foodPartyPositions = [];
+				
+				var normalCafeImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset6.png', 
+				normalFoodImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset5.png'
+				partyCafeImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset3.png',
+				partyFoodImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset4.png',   
+			    baseImageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
+			    baseImageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+			    var normalCafeImage = new kakao.maps.MarkerImage(normalCafeImageSrc, baseImageSize, baseImageOption);
+			    var normalFoodImage = new kakao.maps.MarkerImage(normalFoodImageSrc, baseImageSize, baseImageOption);
+			    var partyCafeImage = new kakao.maps.MarkerImage(partyCafeImageSrc, baseImageSize, baseImageOption);
+			    var partyFoodImage = new kakao.maps.MarkerImage(partyFoodImageSrc, baseImageSize, baseImageOption);
+				
+			    console.log(resp.map_list);
+				$.each(resp.map_list, function(i, item) { 
+					if(item.category == '카페' && item.partyOn == 0){
+						cafePositions.push({
+			    	        content: '<div>'+ item.name +'</div>', 
+			    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+			    	        place_id: item.place_id
+			    		});
+					}else if(item.category == '음식점' && item.partyOn == 0){
+						foodPositions.push({
+			    	        content: '<div>'+ item.name +'</div>', 
+			    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+			    	        place_id: item.place_id
+			    		});
+					}else if(item.category == '카페' && item.partyOn > 0){
+						cafePartyPositions.push({
+			    	        content: '<div>'+ item.name +'</div>', 
+			    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+			    	        place_id: item.place_id
+			    		});
+					}else if(item.category == '음식점' && item.partyOn > 0){
+						foodPartyPositions.push({
+			    	        content: '<div>'+ item.name +'</div>', 
+			    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+			    	        place_id: item.place_id
+			    		});
+					}
+				});
+				cafeMarkers = createMapTableMarker(cafePositions, normalCafeImage); // 일반 카페
+				foodMarkers = createMapTableMarker(foodPositions, normalFoodImage); // 일반 음식점
+				cafePartyMarkers = createMapTableMarker(cafePartyPositions, partyCafeImage); // 모임 모집중인 카페
+				foodPartyMarkers = createMapTableMarker(foodPartyPositions, partyFoodImage); // 모임 모집중인 음식점
+				
 				var line = $("<div class='search_list'></div>");
 				for(var i = 0; i < resp.map_list.length; i++){
 					var food = $("<div class='map_info'></div>");

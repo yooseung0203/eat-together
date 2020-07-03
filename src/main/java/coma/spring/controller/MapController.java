@@ -200,6 +200,11 @@ public class MapController {
 		JsonObject respObj = new JsonObject();
 		List<MapDTO> list = mapservice.searchByKeyword(keyword);
 		JsonArray maplist = gson.fromJson(gson.toJson(list), JsonArray.class);
+		for(JsonElement ele : maplist) {
+			JsonObject obj = ele.getAsJsonObject();
+			int result = mapservice.selectPartyOn(obj.get("place_id").getAsInt());
+			obj.addProperty("partyOn", result);
+		}
 		respObj.add("map_list", maplist);
 		File cafeFile = new File(cafePath);
 		if(cafeFile.exists()) {
