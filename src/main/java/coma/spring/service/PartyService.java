@@ -79,4 +79,8 @@ public class PartyService {
 	public String clew(String str) throws Exception{
 		return pdao.clew(str);
 	}
+	
+	public int stopRecruit(String seq) throws Exception {
+		return pdao.stopRecruit(seq);
+	}
 }

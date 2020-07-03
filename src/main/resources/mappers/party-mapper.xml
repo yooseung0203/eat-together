@@ -5,29 +5,33 @@
 select party_seq.nextval from dual 
 </select>
 <insert id="insert">
-	insert into party values (#{seq},#{parent_name}, #{parent_address}, #{title}, #{writer}, #{meetdate}, #{count}, #{gender}, #{age}, #{drinking}, #{content},#{status},#{place_id})
+   insert into party values (#{seq},#{parent_name}, #{parent_address}, #{title}, #{writer}, #{meetdate}, #{count}, #{gender}, #{age}, #{drinking}, #{content},#{status},#{place_id})
 </insert>
 
 <select id="selectBySeq" resultType="coma.spring.dto.PartyDTO">
-	select * from party where seq = #{value} order by seq desc
+   select * from party where seq = #{value} order by seq desc
 </select>
 
 <delete id="delete">
-	delete from party where seq = #{value}
+   delete from party where seq = #{value}
 </delete>
 
 <update id="update">
       update party set parent_name = #{parent_name}, parent_address = #{parent_address}, title = #{title}, meetdate = #{meetdate}, count=#{count}, gender=#{gender},age=#{age},drinking=#{drinking},content=#{content},place_id=#{place_id} where seq=#{seq}
  </update>
  <select id="selectByPlace_id" resultType="coma.spring.dto.PartyDTO">
- 		select * from party where place_id = #{place_id}
+       select * from party where place_id = #{place_id}
  </select>
-	<select id="getArticleCount" resultType="int">
-		select count(*) from party where place_id = #{place_id}
-	</select>
-	<select id="selectByPageNo" resultType="coma.spring.dto.PartyDTO">
-		select * from (select party.*, row_number() over(order by seq desc) as rnum from party where place_id = #{place_id}) where rnum between #{start} and #{end}
-	</select>
+   <select id="getArticleCount" resultType="int">
+      select count(*) from party where place_id = #{place_id}
+   </select>
+   <select id="selectByPageNo" resultType="coma.spring.dto.PartyDTO">
+      select * from (select party.*, row_number() over(order by seq desc) as rnum from party where place_id = #{place_id}) where rnum between #{start} and #{end}
+   </select>
+   
+   <update id="stopRecruit">
+   		update party set status = 0 where seq = #{value}
+   </update>
  
  
 <!--  
