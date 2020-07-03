@@ -85,7 +85,25 @@ public class PartyDAO {
 		return mybatis.selectList("Party.selectList");
 	}
 	// 태훈 모임 통합 검색
-	public List<PartyDTO> partySearch(String address, String gender, String drinking, String title, String writer, String content, String both){
-		return mybatis.selectList("Party.selectList");
+	public List<PartyDTO> partySearch(String address, String gender,List<String> ageList, int drinking, String title, String writer, String content, String both){
+		Map<String, Object> param = new HashMap<>();
+		param.put("address" ,address);
+		System.out.println(address);
+		param.put("gender",gender);
+		System.out.println(gender);
+		param.put("ageList",ageList);
+		System.out.println(ageList);
+		param.put("dringking",drinking);
+		System.out.println(drinking);
+		param.put("title",title);
+		System.out.println(title);
+		param.put("writer",writer);
+		System.out.println(writer);
+		param.put("content",content);
+		System.out.println(content);
+		param.put("both",both);
+		System.out.println(both);
+		System.out.println(mybatis.selectList("Party.selectList", param));
+		return mybatis.selectList("Party.partySearch", param);
 	}
 }

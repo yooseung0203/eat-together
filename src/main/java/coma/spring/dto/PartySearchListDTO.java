@@ -1,11 +1,13 @@
 package coma.spring.dto;
 
+import java.util.List;
+
 public class PartySearchListDTO {
 	private String sido;
 	private String gugun;
 	private String gender;
-	private int[] age;
-	private String drinking;
+	private List<Integer> age;
+	private int drinking;
 	private String text;
 	private String search;
 	
@@ -13,8 +15,8 @@ public class PartySearchListDTO {
 	public PartySearchListDTO() {
 		super();
 	}
-
-	public PartySearchListDTO(String sido, String gugun, String gender, int[] age, String drinking, String text,
+	
+	public PartySearchListDTO(String sido, String gugun, String gender, List<Integer> age, int drinking, String text,
 			String search) {
 		super();
 		this.sido = sido;
@@ -44,16 +46,16 @@ public class PartySearchListDTO {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
-	public int[] getAge() {
+	public List<Integer> getAge() {
 		return age;
 	}
-	public void setAge(int[] age) {
+	public void setAge(List<Integer> age) {
 		this.age = age;
 	}
-	public String getDrinking() {
+	public int getDrinking() {
 		return drinking;
 	}
-	public void setDrinking(String drinking) {
+	public void setDrinking(int drinking) {
 		this.drinking = drinking;
 	}
 	public String getText() {
@@ -68,4 +70,5 @@ public class PartySearchListDTO {
 	public void setSearch(String search) {
 		this.search = search;
 	}
+	
 }

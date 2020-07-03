@@ -178,7 +178,7 @@
                     </div>
                     <div id="drinkingcheck">
                         음주 :   
-                        <input type="radio" name="drinking" value="0" checked="checked"/>불가능
+                        <input type="radio" name="drinking" value="0" />불가능
                         <input type="radio" name="drinking" value="1" />가능
                     </div>
                     <div>

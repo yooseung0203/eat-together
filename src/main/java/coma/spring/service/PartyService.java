@@ -1,5 +1,6 @@
 package coma.spring.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class PartyService {
 		String writer = "";
 		String content = "";
 		String both = "";
+	 
 		 
 		if(pdto.getSido().equals("시/도 선택")) {
 			address="";
@@ -69,8 +71,13 @@ public class PartyService {
 		}else if(pdto.getText().equals("both")) {
 			both = pdto.getSearch();
 		}
+		List<String> ageList = new ArrayList<String>();
 		
-		List<PartyDTO> list = pdao.partySearch(address,pdto.getGender(),pdto.getDrinking(),title,content,writer,both);
+		for(int i=0; i<pdto.getAge().size();i++) {
+			ageList.add(Integer.toString(pdto.getAge().get(i)));
+		}
+		
+		List<PartyDTO> list = pdao.partySearch(address,pdto.getGender(),ageList,pdto.getDrinking(),title,content,writer,both);
 		return list;
 	}
 	// 예지 
