@@ -73,7 +73,7 @@
 			<div class="signup_text">
 				<label for="account_email" class="signup_text">이메일</label> <input
 					type="text" class="form-control" id="account_email"
-					name="account_email" placeholder="ex)asdf1234@naver.com"> <input
+					name="account_email" placeholder="ex)eat-together@naver.com"> <input
 					type=button id=mail value="인증하기"><br>
 				<div id=mail_div style="display: none;">
 					인증번호 : <input type=text id=mail_text>
@@ -239,7 +239,7 @@
 							}
 						})
 
-		//아이디 중복체크 수정 필요
+		//아이디 중복체크
 		$("#dublCheck").on("click", function() {
 			if ($("#id").val() != "") {
 				$.ajax({
@@ -268,14 +268,14 @@
 
 		})
 
-		//메일 인증 수정 필요
+		//메일 인증 
 		$("#mail").on("click", function() {
 			if ($("#account_email").val() == "") {
 				alert("이메일을 입력해주십시오.");
 				$("#account_email").focus();
 			} else {
 				$.ajax({
-					url : "/mail/mailSending", //바꿔야 한다
+					url : "/mail/mailSending",
 					type : "post",
 					data : {
 						account_email : $("#account_email").val()

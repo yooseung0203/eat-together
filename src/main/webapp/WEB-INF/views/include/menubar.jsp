@@ -5,15 +5,17 @@
 <!-- menubar -->
 <div id="menubar" class="h4 text-center">
 	<div class="menu">
-		<a href="/member/mypage_myinfo">내 정보</a>
+		<a href="/member/mypage_myinfo" class="menubar-list">내 정보</a>
 	</div>
 	<div class="menu">
-		<a href="/member/mypage_msglist">쪽지함</a>
+
+		<a href="/msg/msg_list_sender">쪽지함</a>
+
 	</div>
 	<div class="menu">
-		<a href="/member/mypage_chatlist">내 모임</a>
+		<a href="/member/mypage_chatlist" class="menubar-list">내 모임</a>
 	</div>
 	<div class="menu">
-		<a href="/member/mypage_reviewlist">내 리뷰</a>
+		<a href="/member/mypage_reviewlist" class="menubar-list">내 리뷰</a>
 	</div>
 </div>

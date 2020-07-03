@@ -40,7 +40,7 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
 <!-- ******************* -->
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>내 모임</title>
 </head>
 <body>
 	<!-- ******************* -->
