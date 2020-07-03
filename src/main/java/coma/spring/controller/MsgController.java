@@ -41,7 +41,16 @@ public class MsgController {
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 받은 쪽지함");
 		
-		List<MsgDTO> dto = msgservice.selectBySender(msg_receiver);
+		if(session.getAttribute("msgcpage")==null) {
+			session.setAttribute("msgcpage", 1);
+		}
+		try { 
+			session.setAttribute("msgcpage", Integer.parseInt(request.getParameter("msgcpage")));
+		} catch (Exception e) {}
+		int msgcpage=(int)session.getAttribute("msgcpage");
+		List<MsgDTO> dto = msgservice.selectBySender(msgcpage,msg_receiver);
+		String navi = msgservice.Sendnavi(msgcpage,msg_receiver);
+		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
 		return "msg/mypage_sendmsg";
 	}
@@ -52,13 +61,21 @@ public class MsgController {
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 관리자 쪽지함");
-//		내일해야지~
-//		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-//		String msg_receiver = mdto.getId();
-//		int newmsg = msgservice.newmsg(msg_receiver);
-//		session.setAttribute("newMsg", newmsg);
-		List<MsgDTO> dto = msgservice.selectByAdmin(msg_receiver);
+		
+		if(session.getAttribute("msgcpage")==null) {
+			session.setAttribute("msgcpage", 1);
+		}
+		try { 
+			session.setAttribute("msgcpage", Integer.parseInt(request.getParameter("msgcpage")));
+		} catch (Exception e) {}
+		int msgcpage=(int)session.getAttribute("msgcpage");
+
+		List<MsgDTO> dto = msgservice.selectByAdmin(msgcpage,msg_receiver);
+		String navi = msgservice.Adminnavi(msgcpage, msg_receiver);
+		
+		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
+		
 		return "msg/mypage_sendmsg";
 	}
 	//보낸쪽지함
@@ -69,7 +86,19 @@ public class MsgController {
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 보낸 쪽지함");
 		
-		List<MsgDTO> dto = msgservice.selectByReceiver(msg_receiver);
+		if(session.getAttribute("msgcpage")==null) {
+			session.setAttribute("msgcpage", 1);
+		}
+		try { 
+			session.setAttribute("msgcpage", Integer.parseInt(request.getParameter("msgcpage")));
+		} catch (Exception e) {}
+		
+		int msgcpage=(int)session.getAttribute("msgcpage");
+		
+		List<MsgDTO> dto = msgservice.selectByReceiver(msgcpage,msg_receiver);
+		String navi =msgservice.Receivenavi(msgcpage, msg_receiver);
+		
+		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
 		return "msg/mypage_receivemsg";
 	}
