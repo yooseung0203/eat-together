@@ -18,6 +18,10 @@
 		select * from msg where msg_seq= #{value}
 	</select>
 	
+	<select id="newmsg" resultType="java.lang.Integer">
+		select count(*) from msg where msg_receiver = #{value} and msg_view=0
+	</select>
+	
 	<!--insert 문  -->
 	<insert id="insert">
 	insert into msg values(msg_seq.nextval,#{msg_sender},#{msg_receiver},#{msg_title},#{msg_text},sysdate,0,0,0)

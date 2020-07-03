@@ -60,6 +60,10 @@ public class MsgService {
 		int result =msgdao.sender_del(msg_seq);
 		return result;
 	}
-	
+	//새로운쪽지
+	public int newmsg(String msg_receiver)throws Exception{
+		int result = msgdao.newmsg(msg_receiver);
+		return result;
+	}
 		
 }

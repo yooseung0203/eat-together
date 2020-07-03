@@ -52,7 +52,11 @@ public class MsgController {
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 관리자 쪽지함");
-		
+//		내일해야지~
+//		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
+//		String msg_receiver = mdto.getId();
+//		int newmsg = msgservice.newmsg(msg_receiver);
+//		session.setAttribute("newMsg", newmsg);
 		List<MsgDTO> dto = msgservice.selectByAdmin(msg_receiver);
 		request.setAttribute("list", dto);
 		return "msg/mypage_sendmsg";
