@@ -14,3 +14,7 @@
 .myinfo_text {
 	font-family: 'Noto Sans KR', sans-serif;
 }
+.myinfo_text > img{
+    width: 20px;
+    height: 20px;
+}

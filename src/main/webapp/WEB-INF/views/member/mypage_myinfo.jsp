@@ -62,7 +62,9 @@
 				<tbody>
 					<tr>
 						<th scope="row">PROFILE IMAGE</th>
-						<td class="myinfo_text"><img src="#"></td>
+						<td class="myinfo_text"><img
+								src="${pageContext.request.contextPath}\upload\${loginInfo.id}/${sysname}"
+								alt="" onError="this.src='/resources/img/no_img.png'"></td>
 					</tr>
 					<tr>
 						<th scope="row">ID</th>

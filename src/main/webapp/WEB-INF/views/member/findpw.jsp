@@ -26,11 +26,7 @@
 	rel="stylesheet">
 
 <!-- findpw css  -->
-<<<<<<< HEAD
-<link rel="stylesheet" type="text/css" href="/resources/css/editpw.css">
-=======
 <link rel="stylesheet" type="text/css" href="/resources/css/findpw.css">
->>>>>>> dddcd18234076be68bd4c58b0a8046cd5a4f5e82
 <!-- ******************* -->
 <meta charset="UTF-8">
 <meta charset="UTF-8">

@@ -54,7 +54,8 @@
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
-			<form action="/member/editMyInfoProc" method="post" enctype="multipart/form-data">
+			<form action="/member/editMyInfoProc" method="post"
+				enctype="multipart/form-data">
 				<table class="table">
 					<thead class="thead-dark">
 						<tr>
@@ -64,9 +65,11 @@
 					<tbody>
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
-							<td class="myinfo_text" id="file_box">
-							<img src ="#">
-									<input type="button" id="uploadProfile" class="btn btn-light" value="프로필이미지 변경하기" onclick="window.open('/memberfile/editProfileImage','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');">
+							<td class="myinfo_text" id="file_box"><img
+								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${sysname}"
+								alt="" onError="this.src='/resources/img/no_img.png'"> <input type="button" id="uploadProfile"
+								class="btn btn-light" value="프로필이미지 변경하기"
+								onclick="window.open('/memberfile/editProfileImage','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');">
 							</td>
 						</tr>
 						<tr>
@@ -82,8 +85,7 @@
 						</tr>
 						<tr>
 							<th scope="row">NICKNAME</th>
-							<td class="edit_text"><input type=text id="nickname"
-								name="nickname" value="${loginInfo.nickname}"></td>
+							<td class="edit_text">${loginInfo.nickname}</td>
 						</tr>
 						<tr>
 							<th scope="row">BIRTH</th>
