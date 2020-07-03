@@ -48,7 +48,7 @@ public class MapController {
 
 	@Autowired
 	private PartyService pservice;
-	
+
 	@Autowired
 	private ServletContext sc;
 
@@ -63,7 +63,7 @@ public class MapController {
 		System.out.println(respBody);
 		return respBody;
 	}
-	
+
 	@RequestMapping("toMap")
 	public String map(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		// 등록된 맛집 뿌려주기
@@ -115,46 +115,25 @@ public class MapController {
 	@ResponseBody
 	@RequestMapping(value="food",produces="application/json;charset=utf8",method=RequestMethod.GET)
 	public String getFood(String lng, String lat) throws RestClientException, URISyntaxException{
-		RestTemplate restTemplate = new RestTemplate();
-		// 수정 page 별로 ~~~ 
-		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-		params.add("x", lng);
-		params.add("y", lat);
-		params.add("category_group_code", "FD6");
-		params.add("radius", "20000");
-		params.add("page", "1");
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
-		headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
-
-		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-		String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/category.json"), request, String.class);
-		System.out.println(respBody);
-		return respBody;
-	}
-	@ResponseBody
-	@RequestMapping(value="cafe",produces="application/json;charset=utf8",method=RequestMethod.GET)
-	public String getCafe(String lng, String lat) throws RestClientException, URISyntaxException{
-		RestTemplate restTemplate = new RestTemplate();
 		Gson gson = new Gson();
-
 		JsonObject result = new JsonObject();
 		JsonArray resultadd = new JsonArray();
+		boolean breakpoint = false;
 		loop: for(int page = 1; page < 46;page++) {
+			if(breakpoint) {break loop;}
+			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
 			params.add("x", lng);
 			params.add("y", lat);
-			params.add("category_group_code", "CE7");
+			params.add("category_group_code", "FD6");
 			params.add("radius", "20000");
-			params.add("page", "1");
-	
+			params.add("page", "" + page);
+
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
 			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
 			headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
-	
+
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 			String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/category.json"), request, String.class);
 			System.out.println(respBody);
@@ -165,7 +144,44 @@ public class MapController {
 			for(JsonElement doc : docs) {
 				resultadd.add(doc);				
 			}
-			if(ele.getAsBoolean()) {break loop;}
+			if(ele.getAsBoolean()) {breakpoint = true;}
+		}
+		result.add("documents", resultadd);
+		String resp = result.toString();
+		return resp;
+	}
+	@ResponseBody
+	@RequestMapping(value="cafe",produces="application/json;charset=utf8",method=RequestMethod.GET)
+	public String getCafe(String lng, String lat) throws RestClientException, URISyntaxException{
+		Gson gson = new Gson();
+		JsonObject result = new JsonObject();
+		JsonArray resultadd = new JsonArray();
+		loop: for(int page = 1; page < 46;page++) {
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+			params.add("x", lng);
+			params.add("y", lat);
+			params.add("category_group_code", "CE7");
+			params.add("radius", "20000");
+			params.add("page", "" + page);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
+			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
+			headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
+
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+			String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/category.json"), request, String.class);
+			System.out.println(respBody);
+			JsonObject obj = gson.fromJson(respBody, JsonObject.class);
+			JsonArray docs = obj.getAsJsonArray("documents");
+			JsonObject meta = obj.getAsJsonObject("meta");
+			JsonElement ele = meta.get("is_end");
+			for(JsonElement doc : docs) {
+				resultadd.add(doc);				
+			}
+			if(!ele.getAsBoolean()) {continue loop;}
+			else{break loop;}
 		}
 		result.add("documents", resultadd);
 		String resp = result.toString();
@@ -175,14 +191,16 @@ public class MapController {
 	@ResponseBody
 	@RequestMapping(value="search",produces="application/json;charset=utf8",method=RequestMethod.GET)
 	public String searchByKeyword(String keyword, HttpServletRequest req) throws Exception{
-		
-		// 검색도 ajax 말고 ~~~ 이동할까나 ~~~~~~~~~~
-		// 검색 기능 ? keyword 로 Json 파일에서 검색 ! -> map 테이블에 있는 내용이 최상단, 그 다음으로 
+		// 검색도 ajax 말고 페이지 이동으로?
+		// 검색 기능 ? keyword 로 Json 파일에서 검색 ! -> map 테이블에 있는 내용이 최상단
 		// 카페 정보
 		String cafePath = sc.getRealPath("resources/json/cafe.json");
 		Gson gson = new Gson();
 		JsonArray cafeArr = new JsonArray();
 		JsonObject respObj = new JsonObject();
+		List<MapDTO> list = mapservice.searchByKeyword(keyword);
+		JsonArray maplist = gson.fromJson(gson.toJson(list), JsonArray.class);
+		respObj.add("map_list", maplist);
 		File cafeFile = new File(cafePath);
 		if(cafeFile.exists()) {
 			Reader reader = new FileReader(cafePath);
@@ -193,12 +211,19 @@ public class MapController {
 				JsonObject cafe = cafeObj.get("cafe").getAsJsonObject();
 				String place_name = cafe.get("place_name").getAsString();
 				if(place_name.contains(keyword)) { 
-					cafeArr.add(cafe);
+					for(JsonElement map : maplist) {
+						JsonObject mapObj = map.getAsJsonObject();
+						String id = cafe.get("id").getAsString();
+						String map_id = mapObj.get("place_id").getAsString();
+						if(!id.equals(map_id)) {
+							cafeArr.add(cafe);
+						}
+					}
 				}
 			}
 			respObj.add("cafe_list", cafeArr);
 		}
-		
+
 		String foodPath = sc.getRealPath("resources/json/food.json");
 		JsonArray foodArr = new JsonArray();
 		File foodFile = new File(foodPath);
@@ -211,14 +236,84 @@ public class MapController {
 				JsonObject food = foodObj.get("food").getAsJsonObject();
 				String place_name = food.get("place_name").getAsString();
 				if(place_name.contains(keyword)) { 
-					foodArr.add(food);
+					for(JsonElement map : maplist) {
+						JsonObject mapObj = map.getAsJsonObject();
+						String id = food.get("id").getAsString();
+						String map_id = mapObj.get("place_id").getAsString();
+						if(!id.equals(map_id)) {
+							cafeArr.add(food);
+						}
+					}
 				}
 			}
 			respObj.add("food_list", foodArr);
 		}
 		String respBody =  gson.toJson(respObj);
-		
-		
+		return respBody;
+	}
+
+	@ResponseBody
+	@RequestMapping(value="searchBtn",produces="application/json;charset=utf8",method=RequestMethod.GET)
+	public String searchByCategory(String category, HttpServletRequest req) throws Exception{
+		String cafePath = sc.getRealPath("resources/json/cafe.json");
+		Gson gson = new Gson();
+		JsonArray cafeArr = new JsonArray();
+		JsonObject respObj = new JsonObject();
+		String category_name = null;
+		System.out.println(category);
+		if(category.contentEquals("cafeBtn")) {category_name = "카페";}
+		else if(category.contentEquals("foodBtn")) {category_name = "음식점";}
+
+		List<MapDTO> list = mapservice.searchByCategory(category_name);
+		JsonArray maplist = gson.fromJson(gson.toJson(list), JsonArray.class);
+		respObj.add("map_list", maplist);
+		File cafeFile = new File(cafePath);
+		if(cafeFile.exists()) {
+			Reader reader = new FileReader(cafePath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("cafe_list");
+			for(JsonElement ele : arr) {
+				JsonObject cafeObj = ele.getAsJsonObject();
+				JsonObject cafe = cafeObj.get("cafe").getAsJsonObject();
+				String place_name = cafe.get("place_name").getAsString();
+				//				if(place_name.contains(keyword)) { 
+				for(JsonElement map : maplist) {
+					JsonObject mapObj = map.getAsJsonObject();
+					String id = cafe.get("id").getAsString();
+					String map_id = mapObj.get("place_id").getAsString();
+					if(!id.equals(map_id)) {
+						cafeArr.add(cafe);
+					}
+				}
+				//				}
+			}
+			respObj.add("cafe_list", cafeArr);
+		}
+		String foodPath = sc.getRealPath("resources/json/food.json");
+		JsonArray foodArr = new JsonArray();
+		File foodFile = new File(foodPath);
+		if(cafeFile.exists()) {
+			Reader reader = new FileReader(foodPath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("food_list");
+			for(JsonElement ele : arr) {
+				JsonObject foodObj = ele.getAsJsonObject();
+				JsonObject food = foodObj.get("food").getAsJsonObject();
+				String place_name = food.get("place_name").getAsString();
+				//				if(place_name.contains(keyword)) { 
+				for(JsonElement map : maplist) {
+					JsonObject mapObj = map.getAsJsonObject();
+					String id = food.get("id").getAsString();
+					String map_id = mapObj.get("place_id").getAsString();
+					if(!id.equals(map_id)) {
+						cafeArr.add(food);
+					}
+				}
+				//				}
+			}
+			respObj.add("food_list", foodArr);
+		}
+		String respBody =  gson.toJson(respObj);
 		return respBody;
 	}
 
@@ -235,9 +330,9 @@ public class MapController {
 		response.setHeader("cache-control","no-cache,no-store");
 		return insertJson("resources/json/food.json","FD6",lng,lat);
 	}
-	
+
 	public String insertJson(String path, String category_code, String lng, String lat) throws Exception {
-		
+
 		// 초기 설정
 		String list_name = null;
 		String category_name = null;
@@ -248,7 +343,7 @@ public class MapController {
 			list_name = "cafe_list";
 			category_name = "cafe";
 		}
-		
+
 		String jsonPath = sc.getRealPath(path);
 		System.out.println(jsonPath);
 		// 다음 지도 API 에서 값 json 파일로 저장하는 native 코드
@@ -354,7 +449,7 @@ public class MapController {
 		MapDTO mapdto = mapservice.selectOne(place_id);
 		// 진행중인 모임이 있다면 모임도 같이 보내준다.
 		int pcount = mapservice.selectPartyOn(place_id);
-		List<PartyDTO> plist = pservice.selectByPlace_id(place_id);
+		List<PartyDTO> plist = pservice.selectByPageNo(cpage, place_id);
 		String navi = pservice.getPageNavi(cpage, place_id);
 		// request
 		request.setAttribute("mapdto", mapdto);
@@ -363,9 +458,11 @@ public class MapController {
 		request.setAttribute("navi", navi);
 		String img = pservice.clew(mapdto.getName());
 		request.setAttribute("img", img);
+		request.setAttribute("markerlat", mapdto.getLat());
+		request.setAttribute("markerlng", mapdto.getLng());
 		return "map/map";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("getPartyInfo")
 	public PartyDTO getPartyInfo(int seq) throws Exception{
