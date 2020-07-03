@@ -12,7 +12,7 @@
 	</select>
 	
 	<delete id="deleteFilebyId">
-		delete from memberfile where parent_id = #{value}
+		delete from memberfile where parent_id=#{value}
 	</delete>
 
 </mapper>

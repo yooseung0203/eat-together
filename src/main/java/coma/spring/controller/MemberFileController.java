@@ -50,15 +50,23 @@ public class MemberFileController {
 
 	//프로필사진 업로드
 	@RequestMapping(value="uploadProc",  method=RequestMethod.POST, headers = ("content-type=multipart/*"))
-	public ModelAndView uploadProc(MemberFileDTO mfdto, MultipartFile file, ModelAndView mav)throws Exception {
+	public String uploadProc(MemberFileDTO mfdto, MultipartFile file)throws Exception {
 		System.out.println("파일업로드 Proc 접속하기");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String parent_id = mdto.getId();
-		int deleteResult = mfservice.deleteFilebyId(parent_id);
-		this.deleteFileById();
-		System.out.println("db상 기존 사진 삭제 성공1 실패0 : " + deleteResult);
+		int deleteResult = mfservice.deleteFilebyId(parent_id); //DB상에서 파일 삭제하는 코드
+		System.out.println("db상 삭제된 파일 개수 : " + deleteResult);
+
+		String filepath = session.getServletContext().getRealPath("upload/" +parent_id+"/" );
+		File deleteFile = new File(filepath);
 		
+		if(deleteFile.exists() == true){
+			deleteFile.delete();
+			System.out.println("파일 삭제 완료");
+			//서버 상에서 파일 삭제하는 코드
+		}
+
 		System.out.println("프로필 이미지 변경하는 아이디 : "+ parent_id);
 		String filePath = session.getServletContext().getRealPath("upload/" +parent_id+"/" );
 
@@ -86,66 +94,6 @@ public class MemberFileController {
 		System.out.println("oriName : " + oriname);
 		System.out.println("sysName : " + sysname);
 
-		mav.setViewName("member/editmyinfo");
-		mfdto = mfservice.getFilebyId(parent_id);
-		
-		sysname = mfdto.getSysname();
-
-		mav.addObject("sysname", sysname);
-
-		return mav;
+		return "/memberfile/editProfileImage";
 	}
-
-	//파일 삭제하기
-	public void deleteFileById()throws Exception {
-		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String parent_id = mdto.getId();
-		MemberFileDTO mfdto = new MemberFileDTO();
-		int deleteResult = 1;
-		
-		String filePath = session.getServletContext().getRealPath("upload/" +parent_id+"/");
-		File target = new File(filePath + "/" + mfdto.getSysname());
-		boolean result = target.delete();
-		
-		if(result) {
-			deleteResult = 1;
-		}else {
-			deleteResult = 0;
-		}
-		System.out.println("파일 삭제 성공1 실패0 : " + deleteResult);
-	}
-
-	//파일다운로드
-	@RequestMapping("downloadFile")
-	public String download(HttpServletResponse resp)throws Exception {
-		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String parent_id = mdto.getId();
-		MemberFileDTO mfdto = new MemberFileDTO();
-
-		mfdto = mfservice.getFilebyId(parent_id);
-
-		String filePath = session.getServletContext().getRealPath("upload/" +parent_id+"/" );
-
-		File target = new File(filePath + "/" + mfdto.getSysname());
-
-		try(DataInputStream dis = new DataInputStream(new FileInputStream(target));
-				ServletOutputStream sos= resp.getOutputStream();){
-
-			String fileName= new String(mfdto.getOriname().getBytes("utf8"), "iso-8859-1");
-
-			resp.reset();
-			resp.setContentType("application/octet-stream");
-			resp.setHeader("Content-disposition", "attachment;filename="+mfdto.getOriname()+";");
-
-			byte[] fileContents = new byte[(int)target.length()];
-			dis.readFully(fileContents);
-
-			sos.write(fileContents);
-			sos.flush();
-
-			return "/memberfile/editProfileImage";
-		}
-
-	}
-	
 }

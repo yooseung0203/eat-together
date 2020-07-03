@@ -47,6 +47,9 @@
 		$("#editProfileBtn").on("click", function() {
 			alert("프로필 이미지가 변경되었습니다.");
 			document.getElementById('editProfileImageForm').submit();
+			opener.parent.location.reload();
+			window.open("about:blank", "_self").close();
+			
 		})
 
 		var upload = document.querySelector('#upload');

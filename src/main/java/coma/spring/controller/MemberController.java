@@ -62,8 +62,21 @@ public class MemberController {
 
 	//마이페이지에서 내정보view로 이동
 	@RequestMapping("mypage_myinfo")
-	public String getMyInfoView() {
-		return "member/mypage_myinfo";
+	public ModelAndView getMyInfoView() throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("member/mypage_myinfo");
+		
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		mdto = mservice.selectMyInfo(id);
+		
+		mav.addObject("mdto", mdto);
+		
+		String parent_id = id;
+		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
+		mav.addObject("mfdto",mfdto);
+		
+		return mav;
 	}
 
 	//마이페이지에서 쪽지함으로 이동
@@ -97,8 +110,21 @@ public class MemberController {
 
 	//내정보 수정 페이지로 이동하기
 	@RequestMapping("editMyInfo")
-	public String getEditMyInfoView() {
-		return "member/editmyinfo";
+	public ModelAndView getEditMyInfoView()throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("member/editmyinfo");
+		
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		mdto = mservice.selectMyInfo(id);
+		
+		mav.addObject("mdto", mdto);
+		
+		String parent_id = id;
+		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
+		mav.addObject("mfdto",mfdto);
+		
+		return mav;
 	}
 
 	//아이디 찾기 팝업 열기
@@ -270,8 +296,8 @@ public class MemberController {
 		String parent_id = id;
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
 		
-		mav.addObject("member", mdto);
-		mav.addObject("file", mfdto);
+		mav.addObject("mdto", mdto);
+		mav.addObject("mfdto", mfdto);
 		
 		return mav;
 	}

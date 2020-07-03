@@ -65,7 +65,7 @@
 					<tbody>
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
-							<td class="myinfo_text" id="file_box"><img
+							<td class="myinfo_text" id="profile_box"><img
 								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${sysname}"
 								alt="" onError="this.src='/resources/img/no_img.png'"> <input type="button" id="uploadProfile"
 								class="btn btn-light" value="프로필이미지 변경하기"
@@ -85,16 +85,16 @@
 						</tr>
 						<tr>
 							<th scope="row">NICKNAME</th>
-							<td class="edit_text">${loginInfo.nickname}</td>
+							<td class="edit_text">${mdto.nickname}</td>
 						</tr>
 						<tr>
 							<th scope="row">BIRTH</th>
-							<td class="edit_text">${loginInfo.birth}</td>
+							<td class="edit_text">${mdto.birth}</td>
 						</tr>
 						<tr>
 							<th scope="row">EMAIL</th>
 							<td class="edit_text"><input type=text id="account_email"
-								name="account_email" value="${loginInfo.account_email}">
+								name="account_email" value="${mdto.account_email}">
 								<input type=button id=mail value="인증하기"> <br>
 								<div id=mail_div style="display: none;">
 									인증번호 : <input type=text id=mail_text>
