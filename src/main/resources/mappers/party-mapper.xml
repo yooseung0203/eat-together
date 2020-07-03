@@ -28,6 +28,10 @@ select party_seq.nextval from dual
    <select id="selectByPageNo" resultType="coma.spring.dto.PartyDTO">
       select * from (select party.*, row_number() over(order by seq desc) as rnum from party where place_id = #{place_id}) where rnum between #{start} and #{end}
    </select>
+   
+   <update id="stopRecruit">
+   		update party set status = 0 where seq = #{value}
+   </update>
  
  
 <!--  

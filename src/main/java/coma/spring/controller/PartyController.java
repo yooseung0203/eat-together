@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
 
 @Controller
@@ -30,6 +33,10 @@ public class PartyController {
 
 	@Autowired
 	private PartyService pservice;
+	
+	@Autowired
+	private MapService mapservice;
+	
 	@Autowired
 	private HttpSession session;
 	
@@ -41,7 +48,7 @@ public class PartyController {
 
 	@RequestMapping(value = "party_New_Proc", method = RequestMethod.POST)
 	/*public String partyNewProc(HttpServletRequest request) {*/
-	public String partyNewProc(PartyDTO dto, HttpServletRequest request) throws Exception {
+	public String partyNewProc(PartyDTO dto, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
 		
 //		String parent_name = dto.getParent_name();
 //		String parent_address = dto.getParent_address();
@@ -54,11 +61,12 @@ public class PartyController {
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-		String id= account.getId();
-		dto.setWriter(id);
+		String userid= account.getId();
+		dto.setWriter(userid);
 		dto.setStatus("1");
 //
-//		int count = dto.getCount();
+		int count = dto.getCount();
+		System.out.println("카운트="+count);
 //		
 //		String age = dto.getAge();
 //		String gender = dto.getGender();
@@ -66,17 +74,35 @@ public class PartyController {
 //		String drinking = dto.getDrinking();
 //		String content = dto.getContent();
 //		
+		System.out.println((String)request.getParameter("lat"));
+		System.out.println((String)request.getParameter("lng"));
+		String place_url = "http://place.map.kakao.com/" + dto.getPlace_id();
+		if(mapservice.insertPossible(place_url)) {
+			MapDTO mdto = new MapDTO();
+			mdto.setName(dto.getParent_name());
+			mdto.setAddress((String)request.getParameter("address_name"));
+			mdto.setRoad_address(dto.getParent_address());
+			mdto.setCategory((String)request.getParameter("category"));
+			Double lat = Double.parseDouble((String)request.getParameter("lat")); mdto.setLat(lat);
+			Double lng = Double.parseDouble((String)request.getParameter("lng")); mdto.setLng(lng);
+			mdto.setPhone((String)request.getParameter("phone"));
+			mdto.setPlace_url((String)request.getParameter("place_url"));
+			mdto.setPlace_id(dto.getPlace_id());
+			mapservice.insert(mdto);
+		}
+
+		
 		int myseq = pservice.partyInsert(dto); 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
 		//모임 등록 후 등록된 페이지로 이동 
-		PartyDTO content=pservice.selectBySeq(myseq);
+		//PartyDTO content=pservice.selectBySeq(myseq);
 		
-		System.out.println(content.getTime());
-		request.setAttribute("con",content);
-		
-		
-		return "/party/party_content";
+		redirectAttributes.addAttribute("seq", myseq);
+//		request.setAttribute("con", content);
+//		request.setAttribute("seq", myseq);
+		System.out.println("파티 이동!!1");
+		return "redirect:/party/party_content";
 	}
 	
 	//모임 글보기
@@ -178,5 +204,11 @@ public class PartyController {
 	@RequestMapping("partylist")
 	public String partyList() throws Exception {
 		return "/party/party_list";
+	}
+	
+	@RequestMapping("stopRecruit")
+	public String stopRecruit(String seq) throws Exception{
+		pservice.stopRecruit(seq);
+		return "redirect:/party/party_content?seq="+seq;
 	}
 }
