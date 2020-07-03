@@ -75,4 +75,8 @@ public class PartyDAO {
 
 		return img.split("fname=")[1].split("\"")[0];
 	}
+	
+	public int stopRecruit(String seq) throws Exception{
+		return mybatis.update("Party.stopRecruit",seq);
+	}
 }
