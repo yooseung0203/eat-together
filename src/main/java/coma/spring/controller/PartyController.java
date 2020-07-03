@@ -81,15 +81,25 @@ public class PartyController {
 		return "/party/party_content";
 	}
 	
-	//모임 글보기
-	@RequestMapping(value="party_content")
-	public String party_content(HttpServletRequest request) throws Exception {
+	// 태훈 모임 글보기
+	@RequestMapping(value="party_content_include")
+	public String party_content_include(HttpServletRequest request) throws Exception {
 		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
 		//PartyDTO content = pservice.selectBySeq(Integer.parseInt(seq));
+		
 		request.setAttribute("con",content);
 		
 		return "/include/party_content_include";
 		//return "/party/party_content";
+	}
+	// 예지 모임 글 보기
+	@RequestMapping(value="party_content")
+	public String party_content(String seq, HttpServletRequest request) throws Exception {
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		String img = pservice.clew(content.getParent_name());
+		request.setAttribute("img", img);
+		
+		return "/party/party_content";
 	}
 	
 	
@@ -177,7 +187,7 @@ public class PartyController {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
-	
+	// 태훈 모임 리스트 출력
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
 		
@@ -185,11 +195,17 @@ public class PartyController {
 		request.setAttribute("list", partyList);
 		return "/party/party_list";
 	}
-	
+	// 태훈 모임 상세 검색 작성 중
 	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
 	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
-		
-		
+
+		System.out.println(pdto.getSido());
+		System.out.println(pdto.getGugun());
+		System.out.println(pdto.getGender());
+		System.out.println(pdto.getAge());
+		System.out.println(pdto.getDrinking());
+		System.out.println(pdto.getText());
+		System.out.println(pdto.getSearch());
 		List<PartyDTO> partyList = pservice.partySearch(pdto);
 		request.setAttribute("list", partyList);
 		return "/party/party_list";

@@ -84,6 +84,7 @@ $(function(){
 				</c:choose>
 			</div>
 		</div>
+		<img src="${img}">
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">상호명</div>
 			<div class="col-sm-3">${con.parent_name}</div>

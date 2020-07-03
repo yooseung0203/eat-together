@@ -181,20 +181,16 @@
                         <input type="radio" name="drinking" value="0" checked="checked"/>불가능
                         <input type="radio" name="drinking" value="1" />가능
                     </div>
-                    <input type="submit">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                                <div role="separator" class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
-                            </div>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                    <div>
+                    	<select name="text">
+                    		<option value="title">제목</option>
+                    		<option value="writer">작성자</option>
+                    		<option value="content">내용</option>
+                    		<option value="both">제목 + 내용</option>
+                    	</select>
+                    	<input type="text" name="search">
                     </div>
+                    <input type="submit">
                     </form>
                 </div>
             </div>
@@ -243,7 +239,7 @@
 			var select_seq = $(this).siblings(".party_seq").val();
 			$("#aaa").empty();
 			$.ajax({
-				url:"/party/party_content",
+				url:"/party/party_content_include",
 				data:{
 					seq:select_seq
 				}
