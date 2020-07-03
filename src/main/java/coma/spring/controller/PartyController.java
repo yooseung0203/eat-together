@@ -46,6 +46,7 @@ public class PartyController {
 		return "/party/party_new";
 	}
 
+	
 	@RequestMapping(value = "party_New_Proc", method = RequestMethod.POST)
 	/*public String partyNewProc(HttpServletRequest request) {*/
 	public String partyNewProc(PartyDTO dto, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
@@ -92,7 +93,10 @@ public class PartyController {
 		}
 
 		
-		int myseq = pservice.partyInsert(dto); 
+		
+		int myseq = pservice.partyInsert(dto);   // 글번호
+		//채팅 insert (생성)  cservice.insert(seq);
+		
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
 		//모임 등록 후 등록된 페이지로 이동 
