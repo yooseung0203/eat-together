@@ -552,7 +552,7 @@
 			    var partyCafeImage = new kakao.maps.MarkerImage(partyCafeImageSrc, baseImageSize, baseImageOption);
 			    var partyFoodImage = new kakao.maps.MarkerImage(partyFoodImageSrc, baseImageSize, baseImageOption);
 				
-			    console.log(resp.map_list);
+			    console.log(resp);
 				$.each(resp.map_list, function(i, item) { 
 					if(item.category == '카페' && item.partyOn == 0){
 						cafePositions.push({
@@ -633,15 +633,14 @@
 				
 			})
 		})
-		$(".search_btn").on("click",function(){
+		$("#cafeBtn").on("click",function(){
 			$.ajax({
-				url:"/map/searchBtn",
-				data:{category:$(this).attr("id")},
+				url:"/map/searchCafeBtn",
 				dataType:"JSON"
 			}).done(function(resp){
 				$(".choose_info").html("");
 				$(".search_result").html("");
-				var count = resp.map_list.length + resp.cafe_list.length + resp.food_list.length;
+				var count = resp.map_list.length + resp.cafe_list.length;
 				$(".search_result").append("<div class='search_count'><b>장소</b> "+count+"</div>");
 				$(".search_result").css('height','80vh');
 				var line = $("<div class='search_list'></div>");
@@ -656,25 +655,54 @@
 					}
 					line.append(food);			
 				}
-				for(var i = 0; i < resp.cafe_list.length; i++){
-					var cafe = $("<div class='cafe_info'></div>");
-					cafe.append("<div class='place_name'>"+resp.cafe_list[i].place_name+"</div>");
-					cafe.append("<div class='address_name'>"+resp.cafe_list[i].address_name+"</div>");
-					cafe.append("<div class='category_name'>"+resp.cafe_list[i].category_group_name+"</div>");
-					cafe.append("<div class='phone'>"+resp.cafe_list[i].phone+"</div>");
-					line.append(cafe);		
-				}
-				for(var i = 0; i < resp.food_list.length; i++){
-					var food = $("<div class='food_info'></div>");
-					food.append("<div class='place_name'>"+resp.food_list[i].place_name+"</div>");
-					food.append("<div class='address_name'>"+resp.food_list[i].address_name+"</div>");
-					food.append("<div class='category_name'>"+resp.food_list[i].category_group_name+"</div>");
-					food.append("<div class='phone'>"+resp.food_list[i].phone+"</div>");
-					line.append(food);			
+				if(resp.cafe_list.length > 0){
+					for(var i = 0; i < resp.cafe_list.length; i++){
+						var cafe = $("<div class='cafe_info'></div>");
+						cafe.append("<div class='place_name'>"+resp.cafe_list[i].place_name+"</div>");
+						cafe.append("<div class='address_name'>"+resp.cafe_list[i].address_name+"</div>");
+						cafe.append("<div class='category_name'>"+resp.cafe_list[i].category_group_name+"</div>");
+						cafe.append("<div class='phone'>"+resp.cafe_list[i].phone+"</div>");
+						line.append(cafe);		
+					}
 				}
 				$(".search_result").append(line);
 				console.log(resp);
 			})
 		})
-		
+		$("#foodBtn").on("click",function(){
+			$.ajax({
+				url:"/map/searchFoodBtn",
+				dataType:"JSON"
+			}).done(function(resp){
+				$(".choose_info").html("");
+				$(".search_result").html("");
+				var count = resp.map_list.length + resp.food_list.length;
+				$(".search_result").append("<div class='search_count'><b>장소</b> "+count+"</div>");
+				$(".search_result").css('height','80vh');
+				var line = $("<div class='search_list'></div>");
+				for(var i = 0; i < resp.map_list.length; i++){
+					var food = $("<div class='map_info'></div>");
+					food.append("<img src='/resources/img/premium.png' style='height:25px;'>")
+					food.append("<div class='place_name'>"+resp.map_list[i].name+"</div>");
+					food.append("<div class='address_name'>"+resp.map_list[i].address+"</div>");
+					food.append("<div class='category_name'>"+resp.map_list[i].category+"</div>");
+					if(resp.map_list[i].phone != undefined){
+						food.append("<div class='phone'>"+resp.map_list[i].phone+"</div>");						
+					}
+					line.append(food);			
+				}
+				if(resp.food_list.length > 0){
+					for(var i = 0; i < resp.food_list.length; i++){
+						var food = $("<div class='food_info'></div>");
+						food.append("<div class='place_name'>"+resp.food_list[i].place_name+"</div>");
+						food.append("<div class='address_name'>"+resp.food_list[i].address_name+"</div>");
+						food.append("<div class='category_name'>"+resp.food_list[i].category_group_name+"</div>");
+						food.append("<div class='phone'>"+resp.food_list[i].phone+"</div>");
+						line.append(food);			
+					}					
+				}
+				$(".search_result").append(line);
+				console.log(resp);
+			})
+		})
 	})
