@@ -33,20 +33,48 @@
 <title>프로필 이미지 수정</title>
 </head>
 <body>
-	<form id="editProfileImageProc" action="editProfileImageProc">
-		<input type=file name=file>
-		<button type="button" id="editProfileBtn"class="btn btn-warning">프로필이미지 변경하기</button>
+	<form id="editProfileImageForm" action="uploadProc"
+		enctype="multipart/form-data" method="post">
+		<input type=file name=file id=upload>
+		<div id='preview'></div>
+		<button type="button" id="editProfileBtn" class="btn btn-warning">프로필이미지
+			변경하기</button>
 		<button type=button class="btn btn-light" id="back"
-			onClick="window.close()">되돌아가기</button>
+			onClick="window.close()">창닫기</button>
 	</form>
 
 	<script>
 		$("#editProfileBtn").on("click", function() {
 			alert("프로필 이미지가 변경되었습니다.");
-			document.getElementById('editProfileImageProc').submit();
+			document.getElementById('editProfileImageForm').submit();
+			opener.parent.location.reload();
 			window.open("about:blank", "_self").close();
+			
+		})
+
+		var upload = document.querySelector('#upload');
+		var preview = document.querySelector('#preview');
+
+		upload.addEventListener('change', function(e) {
+			var get_file = e.target.files;
+			var image = document.createElement('img');
+			var reader = new FileReader();
+
+			reader.onload = (function(aImg) {
+				console.log(1);
+				return function(e) {
+					console.log(3);
+					aImg.src = e.target.result
+				}
+			})(image)
+
+			if (get_file) {
+				reader.readAsDataURL(get_file[0]);
+				console.log(2);
+			}
+
+			preview.appendChild(image);
 		})
 	</script>
-
 </body>
 </html>
