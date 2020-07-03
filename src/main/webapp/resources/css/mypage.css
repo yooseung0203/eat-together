@@ -14,7 +14,7 @@
 .myinfo_text {
 	font-family: 'Noto Sans KR', sans-serif;
 }
-.profile_box > img{
+#profile_box > img{
     width: 50px;
     height: 50px;
 }

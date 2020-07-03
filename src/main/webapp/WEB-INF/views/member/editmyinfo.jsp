@@ -66,7 +66,7 @@
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
 							<td class="myinfo_text" id="profile_box"><img
-								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${sysname}"
+								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
 								alt="" onError="this.src='/resources/img/no_img.png'"> <input type="button" id="uploadProfile"
 								class="btn btn-light" value="프로필이미지 변경하기"
 								onclick="window.open('/memberfile/editProfileImage','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');">
