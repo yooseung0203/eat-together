@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import coma.spring.dao.ChatDAO;
 import coma.spring.dto.ChatDTO;
+import coma.spring.dto.PartyDTO;
 import coma.spring.statics.ChatStatics;
 
 @Service
@@ -19,6 +20,9 @@ public class ChatService {
 		List<ChatDTO> list = cdao.selectChats(roomNum);	
 		ChatStatics.savedChats.put(roomNum, list);
 		ChatStatics.savedChatsSeq.put(roomNum, list.size());		
+	}
+	public int insertChatRoom(PartyDTO pdto) {
+		return cdao.insertChatRoom(pdto);
 	}
 	
 }
