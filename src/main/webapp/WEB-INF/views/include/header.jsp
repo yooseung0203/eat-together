@@ -31,7 +31,7 @@
 						</div>
 					</div>
 					<div class="col-sm-1">
-						<div class="navi-menu">FAQ</div>
+						<div class="navi-menu"><a href="/faq/list">FAQ</a></div>
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">

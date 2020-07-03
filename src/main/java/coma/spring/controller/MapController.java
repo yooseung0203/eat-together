@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -32,7 +33,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import coma.spring.dto.MapDTO;
+import coma.spring.dto.PartyDTO;
 import coma.spring.service.MapService;
+import coma.spring.service.PartyService;
 
 @Controller
 @RequestMapping("/map/")
@@ -41,45 +44,70 @@ public class MapController {
 	private static final String HOST = "https://dapi.kakao.com";
 
 	@Autowired
-	private MapService mservice;
+	private MapService mapservice;
 
+	@Autowired
+	private PartyService pservice;
+	
 	@Autowired
 	private ServletContext sc;
 
-	@RequestMapping("toMap")
-	public String map(HttpServletRequest request) throws Exception{
-		// 등록된 맛집 뿌려주기
-		List<MapDTO> list = mservice.selectAll();
+	@ResponseBody
+	@RequestMapping("cafeJson")
+	public String getCafeJson() throws Exception {
 		Gson gson = new Gson();
+		String jsonPath = sc.getRealPath("resources/json/KakaoCafe.json");
+		Reader reader = new FileReader(jsonPath);
+		JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+		String respBody = gson.toJson(readObj);
+		System.out.println(respBody);
+		return respBody;
+	}
+	
+	@RequestMapping("toMap")
+	public String map(HttpServletRequest request, HttpServletResponse response) throws Exception{
+		// 등록된 맛집 뿌려주기
+		List<MapDTO> list = mapservice.selectAll();
+		Gson gson = new Gson();
+		int cpage = 1;
+		try {cpage = Integer.parseInt(request.getParameter("cpage"));}catch(Exception e) {}
+		int place_id = 0;
+		try{place_id = Integer.parseInt(request.getParameter("place_id"));}catch(Exception e) {}
 		String object = gson.toJson(list);
-		request.setAttribute("json", object);
+		//request.setAttribute("json", object);
 		String jsonPath = sc.getRealPath("resources/json/mapData.json");
-		//		InputStream jsonStream = new FileInputStream(jsonPath);
+		//InputStream jsonStream = new FileInputStream(jsonPath);
 		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
-
-		fw.write(object);
+		JsonArray arr = gson.fromJson(object, JsonArray.class);
+		for(JsonElement ele : arr) {
+			JsonObject obj = ele.getAsJsonObject();
+			int result = mapservice.selectPartyOn(obj.get("place_id").getAsInt());
+			obj.addProperty("partyOn", result);
+		}
+		fw.write(arr.toString());
 		fw.flush();
 		fw.close();
+		response.setHeader("cache-control","no-cache,no-store");
 		return "/map/map";
 	}
 	@RequestMapping("insert")
-	public String insert(MapDTO mdto, String detail_category) throws Exception {
+	public String insert(MapDTO mapdto, String detail_category) throws Exception {
 		// 판단
-		if(!mservice.insertPossible(mdto.getPlace_url())) {
+		if(!mapservice.insertPossible(mapdto.getPlace_url())) {
 			return "/map/insertFail";
 		}else {
-			System.out.println(mdto.getName() + " : " + 
-					mdto.getAddress() + " : " + 
-					mdto.getRoad_address() + " : " +
-					mdto.getCategory() + " : " + 
-					mdto.getLat() + " : " + 
-					mdto.getLng() + " : " +
-					mdto.getRating_avg() + " : " +
-					mdto.getPhone() + " : " + 
-					mdto.getPlace_url() + " : " + 
-					mdto.getPlace_id());
-			mservice.insert(mdto);
+			System.out.println(mapdto.getName() + " : " + 
+					mapdto.getAddress() + " : " + 
+					mapdto.getRoad_address() + " : " +
+					mapdto.getCategory() + " : " + 
+					mapdto.getLat() + " : " + 
+					mapdto.getLng() + " : " +
+					mapdto.getRating_avg() + " : " +
+					mapdto.getPhone() + " : " + 
+					mapdto.getPlace_url() + " : " + 
+					mapdto.getPlace_id());
+			mapservice.insert(mapdto);
 			return "redirect:/map/toMap";
 		}
 	}
@@ -88,7 +116,7 @@ public class MapController {
 	@RequestMapping(value="food",produces="application/json;charset=utf8",method=RequestMethod.GET)
 	public String getFood(String lng, String lat) throws RestClientException, URISyntaxException{
 		RestTemplate restTemplate = new RestTemplate();
-
+		// 수정 page 별로 ~~~ 
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
 		params.add("x", lng);
 		params.add("y", lat);
@@ -110,70 +138,102 @@ public class MapController {
 	@RequestMapping(value="cafe",produces="application/json;charset=utf8",method=RequestMethod.GET)
 	public String getCafe(String lng, String lat) throws RestClientException, URISyntaxException{
 		RestTemplate restTemplate = new RestTemplate();
+		Gson gson = new Gson();
 
-		MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-		params.add("x", lng);
-		params.add("y", lat);
-		params.add("category_group_code", "CE7");
-		params.add("radius", "20000");
-		params.add("page", "1");
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
-		headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
-
-		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-		String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/category.json"), request, String.class);
-		System.out.println(respBody);
-		return respBody;
+		JsonObject result = new JsonObject();
+		JsonArray resultadd = new JsonArray();
+		loop: for(int page = 1; page < 46;page++) {
+			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+			params.add("x", lng);
+			params.add("y", lat);
+			params.add("category_group_code", "CE7");
+			params.add("radius", "20000");
+			params.add("page", "1");
+	
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
+			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
+			headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
+	
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+			String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/category.json"), request, String.class);
+			System.out.println(respBody);
+			JsonObject obj = gson.fromJson(respBody, JsonObject.class);
+			JsonArray docs = obj.getAsJsonArray("documents");
+			JsonObject meta = obj.getAsJsonObject("meta");
+			JsonElement ele = meta.get("is_end");
+			for(JsonElement doc : docs) {
+				resultadd.add(doc);				
+			}
+			if(ele.getAsBoolean()) {break loop;}
+		}
+		result.add("documents", resultadd);
+		String resp = result.toString();
+		return resp;
 	}
 
-	@RequestMapping(value="search",method=RequestMethod.GET)
+	@ResponseBody
+	@RequestMapping(value="search",produces="application/json;charset=utf8",method=RequestMethod.GET)
 	public String searchByKeyword(String keyword, HttpServletRequest req) throws Exception{
-//		RestTemplate restTemplate = new RestTemplate();
-//		List<MapDTO> search_list = new ArrayList<>();
-//
-//		MultiValueMap<String, Object> params = new LinkedMultiValueMap<String, Object>();
-//		params.add("query", keyword);
-//		params.add("page", 1);
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
-//		headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-//		headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");		
-//
-//		HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, headers);
-//		String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/keyword.json"), request, String.class);
-//
-//		Gson gson = new Gson();
-//		JsonObject obj = gson.fromJson(respBody, JsonObject.class);
-//		JsonArray docs = (JsonArray)obj.get("documents");
-//
-//		for(JsonElement doc : docs) {
-//			JsonObject docobj = doc.getAsJsonObject(); 
-//			int place_id = docobj.get("id").getAsInt();
-//			List<MapDTO> list = mservice.searchByKeyword(place_id);
-//			if(list != null) {
-//				for(MapDTO search_result : list) {
-//					search_list.add(search_result);
-//					System.out.println(search_result.getName());
-//				}
-//			}
-//		}
-//		req.setAttribute("search_list", search_list);
-		return "redirect:/map/toMap";
+		
+		// 검색도 ajax 말고 ~~~ 이동할까나 ~~~~~~~~~~
+		// 검색 기능 ? keyword 로 Json 파일에서 검색 ! -> map 테이블에 있는 내용이 최상단, 그 다음으로 
+		// 카페 정보
+		String cafePath = sc.getRealPath("resources/json/cafe.json");
+		Gson gson = new Gson();
+		JsonArray cafeArr = new JsonArray();
+		JsonObject respObj = new JsonObject();
+		File cafeFile = new File(cafePath);
+		if(cafeFile.exists()) {
+			Reader reader = new FileReader(cafePath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("cafe_list");
+			for(JsonElement ele : arr) {
+				JsonObject cafeObj = ele.getAsJsonObject();
+				JsonObject cafe = cafeObj.get("cafe").getAsJsonObject();
+				String place_name = cafe.get("place_name").getAsString();
+				if(place_name.contains(keyword)) { 
+					cafeArr.add(cafe);
+				}
+			}
+			respObj.add("cafe_list", cafeArr);
+		}
+		
+		String foodPath = sc.getRealPath("resources/json/food.json");
+		JsonArray foodArr = new JsonArray();
+		File foodFile = new File(foodPath);
+		if(cafeFile.exists()) {
+			Reader reader = new FileReader(foodPath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("food_list");
+			for(JsonElement ele : arr) {
+				JsonObject foodObj = ele.getAsJsonObject();
+				JsonObject food = foodObj.get("food").getAsJsonObject();
+				String place_name = food.get("place_name").getAsString();
+				if(place_name.contains(keyword)) { 
+					foodArr.add(food);
+				}
+			}
+			respObj.add("food_list", foodArr);
+		}
+		String respBody =  gson.toJson(respObj);
+		
+		
+		return respBody;
 	}
 
 	@ResponseBody
 	@RequestMapping(value="cafeInsert",produces="application/json;charset=utf8",method=RequestMethod.GET)
-	public String insertKakaoCafeData(String lng, String lat) throws Exception {
-		return insertJson("resources/json/KakaoCafe.json","CE7",lng,lat);
+	public String insertKakaoCafeData(String lng, String lat, HttpServletResponse response) throws Exception {
+		response.setHeader("cache-control","no-cache,no-store");
+		return insertJson("resources/json/cafe.json","CE7",lng,lat);
 	}
 
 	@ResponseBody
 	@RequestMapping(value="foodInsert",produces="application/json;charset=utf8",method=RequestMethod.GET)
-	public String insertKakaoFoodData(String lng, String lat) throws Exception {
-		return insertJson("resources/json/KakaoFood.json","FD6",lng,lat);
+	public String insertKakaoFoodData(String lng, String lat, HttpServletResponse response) throws Exception {
+		response.setHeader("cache-control","no-cache,no-store");
+		return insertJson("resources/json/food.json","FD6",lng,lat);
 	}
 	
 	public String insertJson(String path, String category_code, String lng, String lat) throws Exception {
@@ -245,7 +305,6 @@ public class MapController {
 				fw.close();
 				break;
 			}else { // json 파일이 비어있지 않을 때
-				System.out.println("읽어 들인 음식점 : " + readObj);
 				JsonArray readArr = (JsonArray) readObj.get(list_name);
 				List<String> existIds = new ArrayList<>();
 				for(JsonElement readEle : readArr) { // 첫 번째 for문 (파일에 있는 맛집 반복해서 꺼냄) 
@@ -265,6 +324,7 @@ public class MapController {
 					}
 					if(insertable) {
 						// 입력 진행
+						System.out.println("입력함");
 						JsonObject place_info = doc.getAsJsonObject();
 						JsonObject insert_obj = new JsonObject();
 						insert_obj.add(category_name, place_info);
@@ -285,6 +345,32 @@ public class MapController {
 			}
 		}
 		return respBody;
+	}
+
+	@RequestMapping(value="selectMarkerInfo",method=RequestMethod.GET)
+	public String selectMarkerInfo(int place_id, HttpServletRequest request) throws Exception{
+		int cpage = 1;
+		try {cpage = Integer.parseInt(request.getParameter("cpage"));}catch(Exception e) {}
+		MapDTO mapdto = mapservice.selectOne(place_id);
+		// 진행중인 모임이 있다면 모임도 같이 보내준다.
+		int pcount = mapservice.selectPartyOn(place_id);
+		List<PartyDTO> plist = pservice.selectByPlace_id(place_id);
+		String navi = pservice.getPageNavi(cpage, place_id);
+		// request
+		request.setAttribute("mapdto", mapdto);
+		request.setAttribute("partyCount", pcount);
+		request.setAttribute("partyList", plist);
+		request.setAttribute("navi", navi);
+		String img = pservice.clew(mapdto.getName());
+		request.setAttribute("img", img);
+		return "map/map";
+	}
+	
+	@ResponseBody
+	@RequestMapping("getPartyInfo")
+	public PartyDTO getPartyInfo(int seq) throws Exception{
+		PartyDTO pdto = pservice.selectBySeq(seq);
+		return pdto;
 	}
 
 

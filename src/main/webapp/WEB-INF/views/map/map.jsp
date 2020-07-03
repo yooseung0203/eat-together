@@ -55,7 +55,22 @@
 	    border-radius: 5px;
 	    padding: 10px;
     }
-    .choose_info{overflow-x: hidden;overflow-y:auto;}
+    .side{overflow-x: hidden;overflow-y:auto;}
+    .search_count{padding: 20px;}
+    .search_result .cafe_info{
+    	align:center;
+	    border-top:1px solid #ededed;
+	    padding: 20px;
+	    margin-top:10px;
+	    font-size:10pt;
+	}
+    .search_result .food_info{
+    	align:center;
+	    border-top:1px solid #ededed;
+	    padding: 20px;
+	    margin-top:10px;
+	    font-size:10pt;
+	}
     .search_input{
 	    color: black;
 	    border: 0;
@@ -81,9 +96,12 @@
     }
     .store_info{
 		align:center;
-	    height: 200px;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
+	    font-size:10pt;
+    }
+    .store_info i{
+    	color:#ffd900;
     }
     .partylist{
     	align:center;
@@ -215,10 +233,70 @@
     .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
     #centerAddr {display:block;margin-top:2px;font-weight: normal;}
     .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
-    
+    .badge-light{background-color:#ff9900;color:white;}
+    #partyModal table td{border:0px;}
+    #partyModal table th{border:0px;}
+    #partyModal .content{font-size:10pt;}
+	
+	.featImgWrap {
+	  width: 250px;
+	}
+	.featImgWrap {
+	  position: relative;
+	  padding-top: 56.57%;
+	  /* 16:9 ratio */
+	  overflow: hidden;
+	}
+	.featImgWrap .cropping {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  -webkit-transform: translate(50%, 50%);
+	  -ms-transform: translate(50%, 50%);
+	  transform: translate(50%, 50%);
+	}
+	.featImgWrap .cropping img {
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  max-width: 100%;
+	  height: auto;
+	  -webkit-transform: translate(-50%, -50%);
+	  -ms-transform: translate(-50%, -50%);
+	  transform: translate(-50%, -50%);
+	}
+	.featImgWrap .cropping img.landscape {
+	  max-height: 100%;
+	  height: 100%;
+	  max-width: none;
+	}
+	.featImgWrap .cropping img.portrait {
+	  max-width: 100%;
+	  width: 100%;
+	  max-height: none;
+	}
+	#partyModal .badges div{float:left;padding-right:5px;}
 </style>
 <script>
 	$(function(){
+	    $('.cropping img').each(function (index, item) {
+	        if ($(this).height() / $(this).width() < 0.567) {
+	            $(this).addClass('landscape').removeClass('portrait');
+	        } else {
+	            $(this).addClass('portrait').removeClass('landscape');
+	        }
+	    });
+	    $('#programModalSummary').on('shown.bs.modal', function (e) {
+	        $('#programModalSummary .featImage > img').each(function (index, item) {
+	            if ($(this).height() / $(this).width() < 0.567) {
+	                $(this).addClass('landscape').removeClass('portrait');
+	            } else {
+	                $(this).addClass('portrait').removeClass('landscape');
+	            }
+	        });
+	    })
 		// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
 		function makeOverListener(map, marker, infowindow) {
 		    return function() {
@@ -232,38 +310,154 @@
 		    };
 		}
 		
-		$.getJSON("/resources/json/mapData.json",function(data){
-			var html = [];
-			var positions = [];
-
-			// 일반 맛집 이미지
-			var baseImageSrc = 'https://i.imgur.com/AvfFIoM.png', // 마커이미지의 주소입니다    
-		    baseImageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
-		    baseImageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-		    var baseMarkerImage = new kakao.maps.MarkerImage(baseImageSrc, baseImageSize, baseImageOption);
-			
-			$.each(data, function(i, item) { 
-				positions.push({
-		    	        content: '<div>'+ item.name +'</div>', 
-		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng)
-		    	});
-			});
-			// $('#target').html(html.join(''));
-			
-			// 배열 DB에서 불러오기 
-
-		    for (var i = 0; i < positions.length; i ++) {
-			    var marker = new kakao.maps.Marker({
+		function createMapTableMarker(positions, image){
+			positions.forEach(function(pos){
+				var marker = new kakao.maps.Marker({
 			        map: map, 
-			        position: positions[i].latlng,
-			        image: baseMarkerImage
+			        position: pos.latlng,
+			        image: image
 			    });
 			    var iwRemoveable = true;
 			    var infowindow = new kakao.maps.InfoWindow({
-			        content: positions[i].content, 
+			        content: pos.content, 
 			        removable : iwRemoveable
 			    });
-			    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
+			    kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {        
+			        location.href = "/map/selectMarkerInfo?place_id="+pos.place_id;
+			    });
+			});
+		}
+		
+		
+		$.getJSON("/resources/json/mapData.json",function(data){
+			var html = [];
+			var cafePositions = [];
+			var foodPositions = [];
+			var cafePartyPositions = [];
+			var foodPartyPositions = [];
+			
+			var normalCafeImageSrc = 'https://i.imgur.com/WSYwwXl.png', 
+			normalFoodImageSrc = 'https://i.imgur.com/AvfFIoM.png'
+			partyCafeImageSrc = 'https://i.imgur.com/RonPEnV.png',
+			partyFoodImageSrc = 'https://i.imgur.com/pCTdyj4.png',   
+		    baseImageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
+		    baseImageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+		    var normalCafeImage = new kakao.maps.MarkerImage(normalCafeImageSrc, baseImageSize, baseImageOption);
+		    var normalFoodImage = new kakao.maps.MarkerImage(normalFoodImageSrc, baseImageSize, baseImageOption);
+		    var partyCafeImage = new kakao.maps.MarkerImage(partyCafeImageSrc, baseImageSize, baseImageOption);
+		    var partyFoodImage = new kakao.maps.MarkerImage(partyFoodImageSrc, baseImageSize, baseImageOption);
+			
+			$.each(data, function(i, item) { 
+				if(item.category == '카페' && item.partyOn == 0){
+					cafePositions.push({
+		    	        content: '<div>'+ item.name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
+		    		});
+				}else if(item.category == '음식점' && item.partyOn == 0){
+					foodPositions.push({
+		    	        content: '<div>'+ item.name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
+		    		});
+				}else if(item.category == '카페' && item.partyOn > 0){
+					cafePartyPositions.push({
+		    	        content: '<div>'+ item.name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
+		    		});
+				}else if(item.category == '음식점' && item.partyOn > 0){
+					foodPartyPositions.push({
+		    	        content: '<div>'+ item.name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
+		    	        place_id: item.place_id
+		    		});
+				}
+			});
+			// $('#target').html(html.join(''));
+			createMapTableMarker(cafePositions, normalCafeImage); // 일반 카페
+			createMapTableMarker(foodPositions, normalFoodImage); // 일반 음식점
+			createMapTableMarker(cafePartyPositions, partyCafeImage); // 모임 모집중인 카페
+			createMapTableMarker(foodPartyPositions, partyFoodImage); // 모임 모집중인 음식점
+			
+		    
+		});
+		
+		// MakrerImage 객체를 생성하여 반환하는 함수입니다
+		function createMarkerImage(markerSize, offset, markerImageSrc) {
+		    var markerImage = new kakao.maps.MarkerImage(
+		    	markerImageSrc, // 마커 이미지 URL
+		        markerSize, // 마커의 크기
+		        {
+		            offset: offset, // 마커 이미지에서의 기준 좌표
+		        }
+		    );
+		    return markerImage;
+		}
+
+	    
+	    function addMarker(po) {
+			var markerSize = new kakao.maps.Size(10, 10),
+				markerOffset = new kakao.maps.Point(0, 0);
+			var normalImageSrc = 'https://i.imgur.com/xZ0vFqM.png';
+			var hoverImageSrc = 'https://i.imgur.com/whVKb3a.png';
+			
+	        var normalImage = createMarkerImage(markerSize, markerOffset, normalImageSrc),
+	        	hoverImage = createMarkerImage(markerSize, markerOffset, hoverImageSrc);
+	        var marker = new kakao.maps.Marker({
+	            map: map,
+	            position: po,
+	            image: normalImage
+	        });
+
+		    /* var iwRemoveable = true;
+		    var infowindow = new kakao.maps.InfoWindow({
+		        content: po.content, 
+		        removable : iwRemoveable
+		    }); */
+	        marker.normalImage = normalImage;
+	        kakao.maps.event.addListener(marker, 'mouseover', function() {
+	                marker.setImage(hoverImage);
+	        });
+	        kakao.maps.event.addListener(marker, 'mouseout', function() {
+	                marker.setImage(normalImage);
+	        });
+	    }
+	    
+		$.getJSON("/resources/json/cafe.json",function(data){
+			
+			console.log(data);
+			var positions = [];
+			
+			$.each(data, function(i, item) {
+				for(var a = 0;a < data.cafe_list.length; a++){
+					positions.push({
+		    	        content: '<div>'+ data.cafe_list[a].cafe.place_name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(data.cafe_list[a].cafe.y, data.cafe_list[a].cafe.x)
+					});
+				}
+			});
+		    for (var i = 0; i < positions.length; i ++) {
+			    addMarker(positions[i].latlng);
+			}
+			
+		});
+		
+
+  		$.getJSON("/resources/json/food.json",function(data){
+  			console.log(data);
+			var positions = [];
+
+			$.each(data, function(i, item) {
+				for(var a = 0;a < data.food_list.length; a++){
+					positions.push({
+		    	        content: '<div>'+ data.food_list[a].food.place_name +'</div>', 
+		    	        latlng: new kakao.maps.LatLng(data.food_list[a].food.y, data.food_list[a].food.x)
+					});
+				}
+			});
+		    for (var i = 0; i < positions.length; i ++) {
+			    addMarker(positions[i].latlng);
 			}
 		});
 		
@@ -440,12 +634,12 @@
         			lng:$("#centerLng").text()},
         		dataType:"JSON"
         	}).done(function(resp){
-        		console.log(resp);
         		var positions = [];
         		for(var i = 0;i < resp.documents.length;i++){
-            		console.log(resp.documents[i].place_name);
-            		console.log(resp.documents[i].x + " : " + resp.documents[i].y);
-            		console.log(resp.documents[i].place_url);
+            		console.log(resp.documents[i].id);
+            		//console.log(resp.documents[i].place_name);
+            		//console.log(resp.documents[i].x + " : " + resp.documents[i].y);
+            		//console.log(resp.documents[i].place_url);
             		positions.push({
         		        content: '<form action="/map/insert" method="get" id="inputForm"><div style="padding:5px;">'
         		        			+'<div><input type=text readonly name="name" value="'+resp.documents[i].place_name+'"></div>'
@@ -510,6 +704,11 @@
         		console.log(resp);
         		alert("입력 완료");
         	}).fail(function(error1,error2){
+        		var iCHK = 1;
+        		for(var i = 0;i<iCHK;i++)
+        		{
+        		document.location.reload();
+        		}
         		console.log(error1);
         		console.log(error2);
         	})
@@ -523,12 +722,84 @@
         			lng:$("#centerLng").text()},
         		dataType:"JSON"
         	}).done(function(resp){
+        		var iCHK = 1;
+        		for(var i = 0;i<iCHK;i++)
+        		{
+        		document.location.reload();
+        		}
         		console.log(resp);
         		alert("입력 완료");
         	}).fail(function(error1,error2){
         		console.log(error1);
         		console.log(error2);
         	})
+		})
+		$(".join").on("click",function(){
+			$.ajax({
+				url:"/map/getPartyInfo",
+				data:{seq:$(this).parent().find(".seq").text()}
+			}).done(function(resp){
+				$("#partyModal #exampleModalLabel b").text(resp.title);
+				$("#partyModal .parent_name").text(resp.parent_name);
+				$("#partyModal .parent_address").text(resp.parent_address);
+				$("#partyModal .meetdate").text(resp.sDate);
+				$("#partyModal .count").text(resp.count);
+				if(resp.gender == 'a'){
+					$("#partyModal .gender").text("혼성모임");
+				}else if(resp.gender == 'f'){
+					$("#partyModal .gender").text("여성만");
+				}else if(resp.gender == 'm'){
+					$("#partyModal .gender").text("남성만");
+				}
+				$("#partyModal .age").html("");
+				if(resp.age.includes(", ")){
+					var ages = resp.age.split(", ");
+					for(var i = 0;i < ages.length();i++){
+						$("#partyModal .age").append('<span class="badge badge-pill badge-light">'+ ages[i] + '대</span>');
+					}
+				}else{
+					$("#partyModal .age").append("<span class='badge badge-pill badge-light'>" + resp.age + "대만</span>");
+				}
+				if(resp.drinking == 1){
+					$("#partyModal .drinking").text("음주OK");
+				}else if(resp.drinking == 0){
+					$("#partyModal .drinking").text("음주NO");
+				}
+				$("#partyModal .content").text(resp.content);
+			})
+		})
+		
+		$("#search").on("click",function(){
+			$.ajax({
+				url:"/map/search",
+				data:{keyword:$("#keyword").val()},
+				dataType:"JSON"
+			}).done(function(resp){
+				$(".choose_info").html("");
+				$(".search_result").html("");
+				var count = resp.cafe_list.length + resp.food_list.length;
+				$(".search_result").append("<div class='search_count'><b>장소</b> "+count+"</div>");
+				$(".search_result").css('height','80vh');
+				var line = $("<div class='search_list'></div>");
+				for(var i = 0; i < resp.cafe_list.length; i++){
+					var cafe = $("<div class='cafe_info'></div>");
+					cafe.append("<div class='place_name'>"+resp.cafe_list[i].place_name+"</div>");
+					cafe.append("<div class='address_name'>"+resp.cafe_list[i].address_name+"</div>");
+					cafe.append("<div class='category_name'>"+resp.cafe_list[i].category_name+"</div>");
+					cafe.append("<div class='phone'>"+resp.cafe_list[i].phone+"</div>");
+					line.append(cafe);		
+				}
+				for(var i = 0; i < resp.food_list.length; i++){
+					var food = $("<div class='food_info'></div>");
+					food.append("<div class='place_name'>"+resp.food_list[i].place_name+"</div>");
+					food.append("<div class='address_name'>"+resp.food_list[i].address_name+"</div>");
+					food.append("<div class='category_name'>"+resp.food_list[i].category_name+"</div>");
+					food.append("<div class='phone'>"+resp.food_list[i].phone+"</div>");
+					line.append(food);			
+				}
+				$(".search_result").append(line);
+				console.log(resp);
+			})
 		})
 		
 	})
@@ -541,55 +812,69 @@
 	<!-- 사용자가 보고 있는 중심 좌표 -->
 	<div style="display:none;" id="centerLat"></div>
 	<div style="display:none;" id="centerLng"></div>
+	<!-- 선택해서 들어온 중심 좌표 -->
+	<div style="display:none;" id="lat"></div>
+	<div style="display:none;" id="lng"></div>
 	<div class="container-fluid all">
 		<div id="header"><jsp:include page="/WEB-INF/views/include/header.jsp" /></div>
 		<div id="sideBar">
 			<div class="search_area">
-				<form action="search" method="get">
-					<div class="searchbar mx-auto">
-			          <input type="text" class="search_input" name="keyword" placeholder="맛집 키워드 검색">
-			          <button type="submit" class="search_icon"><i class="fas fa-search"></i></button>
-			        </div>
-				</form>
+				<div class="searchbar mx-auto">
+		          <input type="text" class="search_input" id="keyword" placeholder="음식점, 카페 상호명 검색">
+		          <button type="button" class="search_icon" id="search"><i class="fas fa-search"></i></button>
+		        </div>
 			</div>
-	        <div class="choose_info">
-	        	<div class="store_info mx-auto">
-	        	맛집 정보 출력<br>
-	        	가게명<br>
-	        	가게주소<br>
-	        	etc
-	        	</div>
+			<div class="side">
+				<div class="search_result">
+					
+				</div>
+				<div class="choose_info">
+				<c:if test="${not empty mapdto}">
+		        	<div class="store_info mx-auto">
+		        		<div class="featImgWrap">
+			        		<div class="cropping">
+			        			<img src="${img}" id="mapimg">
+			        		</div>		        		
+		        		</div>
+			        	<div class="category">${mapdto.category}</div>
+			        	<div class="name">${mapdto.name}</div>
+			        	<div class="address">${mapdto.address}</div>
+			        	<div class="road_address">${mapdto.road_address}</div>
+			        	<div class="rating_avg">
+			        		<c:choose>
+			        			<c:when test="${mapdto.rating_avg eq 0}"><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+			        			<c:when test="${mapdto.rating_avg eq 1}"><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 2}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 3}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 4}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg eq 5}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 1}"><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 2}"><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 3}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 4}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i><i class="far fa-star"></i></c:when>
+				        		<c:when test="${mapdto.rating_avg < 5}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half"></i></c:when>
+			        		</c:choose>
+						</div>
+			        	<div class="phone">${mapdto.phone}</div>
+			        	<div class="place_url">${mapdto.place_url}</div>
+		        	</div>
+				</c:if>
 	        <div class="partylist">
 	        	<b>진행중인 모임</b>
-	        	<div class="party">
-	        		<div class="title">제목</div>
-	        		<button type="button" class="btn btn-primary join">참가</button>
-	        	</div>
-	        	<div class="party">
-	        		<div class="title">제목</div>
-	        		<button type="button" class="btn btn-primary join">참가</button>
-	        	</div>
-	        	<div class="party">
-	        		<div class="title">제목</div>
-	        		<button type="button" class="btn btn-primary join">참가</button>
-	        	</div>
+	        	<c:if test="${not empty partyList}">
+	        		<c:forEach var="i" items="${partyList}">
+		        		<div class="party">
+						    <div class="title">${i.title}</div>
+						    <div class="seq" style="display:none;">${i.seq}</div>
+						    <button type="button" class="btn btn-primary join" data-toggle="modal" data-target="#partyModal">참가</button>
+						</div>
+	        		</c:forEach>
+	        	</c:if>
 	        	<nav aria-label="Page navigation example">
 				  <ul class="pagination pagination-sm justify-content-center">
-				    <li class="page-item">
-				      <a class="page-link" href="#" aria-label="Previous">
-				        <i class="fas fa-chevron-left"></i>
-				      </a>
-				    </li>
-				    <li class="page-item"><a class="page-link" href="#">1</a></li>
-				    <li class="page-item"><a class="page-link" href="#">2</a></li>
-				    <li class="page-item"><a class="page-link" href="#">3</a></li>
-				    <li class="page-item"><a class="page-link" href="#">4</a></li>
-				    <li class="page-item"><a class="page-link" href="#">5</a></li>
-				    <li class="page-item">
-				      <a class="page-link" href="#" aria-label="Next">
-				        <i class="fas fa-chevron-right"></i>
-				      </a>
-				    </li>
+				  	<c:if test="${not empty navi}">
+				  		${navi}
+				  	</c:if>
 				  </ul>
 				</nav>
 				<button type="button" class="btn btn-primary" id="recruit">내가 직접 모집하기</button>
@@ -653,6 +938,9 @@
 		        	</div>
 		        </div>
 			</div>
+			</div>
+					
+	        
 		</div>
 		<div id="map"></div>
 		<div class="foodInsert text-center">FD6</div>
@@ -715,6 +1003,59 @@
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 		        <button type="button" class="btn btn-primary">등록</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+		<!-- 맛집 참가 modal -->
+		<div class="modal fade" id="partyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"><b></b></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        	<table class="table">
+						  <tbody>
+						    <tr>
+						    	<td class="badges">
+						      		<div><span class="badge badge-pill badge-light drinking"></span></div>
+						      		<div><span class="badge badge-pill badge-light gender"></span></div>
+						      		<div class="age"></div>
+						    	</td>
+						    </tr>
+						    <tr>
+						      <th scope="row">상호명</th>
+						      <td class="parent_name"></td>
+						      <th scope="row">위치</th>
+						      <td class="parent_address"></td>
+						    </tr>
+						    <tr>
+						      <th scope="row">모임날짜</th>
+						      <td class="meetdate"></td>
+						    </tr>
+						    <tr>
+						      <th scope="row">인원</th>
+						      <td class="count"></td>
+						    </tr>
+						    <tr>
+						      <th scope="row" colspan="2">소개말</th>
+						    </tr>
+						    <tr>
+						      <td scope="row" class="content" colspan="2"></td>
+						    </tr>
+						  </tbody>
+					</table>
+		      </div>
+		      <div class="modal-footer">
+		      	<!-- 수정, 삭제 버튼 : 로그인 세션과 작성자 아이디 비교 필요 -->
+		        <button type="button" class="btn btn-primary">수정</button>
+		        <button type="button" class="btn btn-primary">삭제</button>
+		        <button type="button" class="btn btn-primary" id="joinParty">채팅방 입장하기</button>
 		      </div>
 		    </div>
 		  </div>
