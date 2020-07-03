@@ -36,8 +36,8 @@
 
 	<fieldset class = "findid_text">
 		<legend>아이디 찾기</legend>
-		<div class="signup_text">
-			<label for="account_email" class="signup_text">이메일</label> <input
+		<div class="findid_text">
+			<label for="account_email" class="findid_text">이메일</label> <input
 				type="text" class="form-control" id="account_email"
 				name="account_email" placeholder="ex)eat-together@naver.com"> <input
 				type=button id=mail value="인증하기" class="btn btn-warning"><br>

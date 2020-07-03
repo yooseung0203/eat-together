@@ -62,7 +62,9 @@
 				<tbody>
 					<tr>
 						<th scope="row">PROFILE IMAGE</th>
-						<td class="myinfo_text"><img src="#"></td>
+						<td class="myinfo_text" id=profile_box><img
+								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
+								alt="" onError="this.src='/resources/img/no_img.png'"></td>
 					</tr>
 					<tr>
 						<th scope="row">ID</th>
@@ -70,15 +72,15 @@
 					</tr>
 					<tr>
 						<th scope="row">NICKNAME</th>
-						<td class="myinfo_text">${loginInfo.nickname}</td>
+						<td class="myinfo_text">${mdto.nickname}</td>
 					</tr>
 					<tr>
 						<th scope="row">BIRTH</th>
-						<td class="myinfo_text">${loginInfo.birth}</td>
+						<td class="myinfo_text">${mdto.birth}</td>
 					</tr>
 					<tr>
 						<th scope="row">EMAIL</th>
-						<td class="myinfo_text">${loginInfo.account_email}</td>
+						<td class="myinfo_text">${mdto.account_email}</td>
 					</tr>
 					<tr>
 						<th scope="row"></th>
