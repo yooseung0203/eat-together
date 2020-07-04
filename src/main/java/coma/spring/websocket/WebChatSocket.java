@@ -22,7 +22,7 @@ import coma.spring.dto.ChatDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.statics.ChatStatics;
 
-@ServerEndpoint(value="/chat", configurator = HttpSessionConfigurator.class)
+@ServerEndpoint(value="/chat/chatroom", configurator = HttpSessionConfigurator.class)
 public class WebChatSocket {
 	// clients : 현재 접속한 세션이 어떤 방에 접속중인지 방 번호를 저장 
 	private static Map<Session , Integer> clients = Collections.synchronizedMap(new HashMap<>());
@@ -33,10 +33,13 @@ public class WebChatSocket {
 	// 로그인 정보,들어온 방의 번호 : 세션값을 통해 가져옴
 	private int roomNum;
 	private MemberDTO mdto;
+	
+	
 
 	// 채팅방 접속시
 	@OnOpen
 	public void onConnect(Session client , EndpointConfig config) throws Exception {
+		System.out.println("웹소캣 접속");
 		// 접속시 세션값 저장
 		this.session = (HttpSession)config.getUserProperties().get("session");
 		// 세션의 로그인 정보를 저장, 방 번호를 저장한 후 방번호의 세션값 삭제
@@ -104,7 +107,6 @@ public class WebChatSocket {
 		//members 필드 내에 roomNum번호의 리스트의 세션들에서 메세지를 보냄
 		synchronized (members.get(roomNum)) {
 			for(Session client : members.get(roomNum)) {
-				System.out.println(members.get(roomNum).size());
 				if(clients.get(client)==roomNum) {
 					Basic basic = client.getBasicRemote();
 					try {
