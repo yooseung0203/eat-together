@@ -203,12 +203,12 @@ public class PartyController {
 		System.out.println(pdto.getGugun());
 		System.out.println(pdto.getGender());
 		System.out.println(pdto.getAge());
-		System.out.println(pdto.getAge());
 		System.out.println(pdto.getDrinking());
 		System.out.println(pdto.getText());
 		System.out.println(pdto.getSearch());
 		
 		List<PartyDTO> partyList = pservice.partySearch(pdto);
+		System.out.println(partyList);
 		request.setAttribute("list", partyList);
 		return "/party/party_list";
 	}

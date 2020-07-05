@@ -1,7 +1,9 @@
 package coma.spring.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,39 +48,60 @@ public class PartyService {
 		List<PartyDTO> list = pdao.selectList();
 		return list;
 	}
-	// 태훈 모임 글 상세 검색 작업 중
+	// 태훈 모임 글 상세 검색
 	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{
-		String address = "";
-		String title = "";
-		String writer = "";
-		String content = "";
-		String both = "";
+		
+		List<PartyDTO> list = pdao.partySearch(this.searchKey(pdto));
+		return list;
+	}
+	// 태훈 검색 키워드 가공
+	public Map<String, Object> searchKey(PartySearchListDTO pdto) throws Exception{
+		
+		Map<String, Object> param = new HashMap<>();
 	 
-		 
+		// 지역 정보
 		if(pdto.getSido().equals("시/도 선택")) {
-			address="";
+			param.put("address", "");
 		}
 		else {
-			address = pdto.getSido() + " " + pdto.getGugun();
+			param.put("address",pdto.getSido() + " " + pdto.getGugun());
 		}
-		
+		// 성별 정보
+		param.put("gender",pdto.getGender());
+		// 나이 정보
+		List<String> ageList = new ArrayList<String>();
+		if(pdto.getAge() != null) {
+			for(int i=0; i<pdto.getAge().size();i++) {
+				ageList.add(Integer.toString(pdto.getAge().get(i)));
+			}
+		}
+		param.put("ageList.size", ageList.size());
+		param.put("ageList", ageList);
+		// 음주 정보
+		param.put("drinking",pdto.getDrinking());
+		// 키워드 검색
+		String title = "", writer = "", content = "", both = ""; 
 		if(pdto.getText().equals("title")) {
 			title = pdto.getSearch();
-		}else if(pdto.getText().equals("writer")){
+			
+		}
+		else if(pdto.getText().equals("writer")){
 			writer = pdto.getSearch();
-		}else if(pdto.getText().equals("content")) {
+			System.out.println("W"+writer);
+		}
+		else if(pdto.getText().equals("content")) {
 			content = pdto.getSearch();
-		}else if(pdto.getText().equals("both")) {
+			System.out.println("C"+content);
+		}
+		else if(pdto.getText().equals("both")) {
 			both = pdto.getSearch();
 		}
-		List<String> ageList = new ArrayList<String>();
-		
-		for(int i=0; i<pdto.getAge().size();i++) {
-			ageList.add(Integer.toString(pdto.getAge().get(i)));
-		}
-		
-		List<PartyDTO> list = pdao.partySearch(address,pdto.getGender(),ageList,pdto.getDrinking(),title,content,writer,both);
-		return list;
+		param.put("title", title);
+		param.put("writer", writer);
+		param.put("content", content);
+		param.put("both", both);
+
+		return param;
 	}
 	// 예지 
 	public List<PartyDTO> selectByPlace_id(int place_id) throws Exception{

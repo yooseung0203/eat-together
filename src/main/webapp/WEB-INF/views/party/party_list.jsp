@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!-- BootStrap4 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -30,21 +31,24 @@
 
 <!-- ******************* -->
 <!-- header,footer용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/index-css.css">
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
 <title>모임 리스트</title>
 <style>
-	.aa{
-		width: 80%;
-		margin: auto;
-	}
-	.listtitle{
-		font-size: 35px;
-    }
-    .partylist{
-    	margin-bottom: 15px;
-    }
+.aa {
+	width: 80%;
+	margin: auto;
+}
+
+.listtitle {
+	font-size: 35px;
+}
+
+.partylist {
+	margin-bottom: 15px;
+}
 </style>
 <script>
 	$(function(){
@@ -94,137 +98,155 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
-	
+
 	<div class="container-fluid">
-            <div class="row aa">
-                <div class="col-12 jumbotron">
-                	<span class="listtitle">이번주 인기 맛집 Top 5!</span>
-                    <div class="row ingi">
-                        <div class="col-12 col-sm-4 col-md-2">
-                            <div class="card">
-                                <img src="/resources/img/itsearth.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h3 class="card-title">지구당</h3>
-                                    <p class="card-text">가성비 좋은 텐동 맛집. 곱배기로 시키면 추가 금액 없이 밥이 곱배기.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-2">
-                            <div class="card">
-                                <img src="/resources/img/sixme.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h3 class="card-title">육미 식당</h3>
-                                    <p class="card-text">점심에는 매일 다른 고정 메뉴가 나오는 선술식당. 공기밥도 무료고 배고플때 가면 아주 굳</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-2">
-                            <div class="card">
-                                <img src="/resources/img/bab.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">바비공방</h5>
-                                    <p class="card-text">양은 조금 적지만 맛은 보장되는 맛집.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-2">
-                            <div class="card">
-                                <img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-4 col-md-2">
-                            <div class="card">
-                                <img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row aa">
-                <div class="col-12 jumbotron">
-                <form action="/party/partysearch" method="post">
-                    <span class="listtitle">상세 검색</span>
-                    <div id="areacheck">
-                        지역:  
-                        <select name="sido" id="sido"></select>
-                        <select name="gugun" id="gugun"></select>    
-                    </div>
-                    <div id="gendercheck">
-                        성별 :   
-                        <input type="radio" name="gender" value="m"/>남자만
-                        <input type="radio" name="gender" value="f"/>여자만
-                        <input type="radio" name="gender" value="a" checked="checked"/>남녀무관
-                    </div>
-                    <div id="agecheck">
-                        연령 : 
-                        <input type="checkbox" name="age" value="10" checked/>10대
-                        <input type="checkbox" name="age" value="20"/>20대
-                        <input type="checkbox" name="age" value="30"/>30대
-                        <input type="checkbox" name="age" value="40"/>40대
-                        <input type="checkbox" name="age" value="50"/>50대 이상
-                    </div>
-                    <div id="drinkingcheck">
-                        음주 :   
-                        <input type="radio" name="drinking" value="0" />불가능
-                        <input type="radio" name="drinking" value="1" />가능
-                    </div>
-                    <div>
-                    	<select name="text">
-                    		<option value="title">제목</option>
-                    		<option value="writer">작성자</option>
-                    		<option value="content">내용</option>
-                    		<option value="both">제목 + 내용</option>
-                    	</select>
-                    	<input type="text" name="search">
-                    </div>
-                    <input type="submit">
-                    </form>
-                </div>
-            </div>
-            <div class="row aa">
-            	<div class="col-12 jumbotron">
-            		<div class="row">
-            		<c:forEach var="i" items="${list}">
-            			<div class="col-sm-12 col-md-3">
-            				<div class="card partylist">
-  								<img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
-								<div class="card-body">
-							    	<h5 class="card-title">${i.parent_name }</h5>
-								    <p class="card-text">날짜 : ${i.meetdate}<br>인원 : ${i.count }</p>
-								    <input type="hidden" class="party_seq" value="${i.seq}">
-								    <button type="button" class="btn btn-info btn-lg myBtn">Open Modal</button>
-								</div>
+		<div class="row aa">
+			<div class="col-12 jumbotron">
+				<span class="listtitle">이번주 인기 맛집 Top 5!</span>
+				<div class="row ingi">
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/itsearth.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h3 class="card-title">지구당</h3>
+								<p class="card-text">가성비 좋은 텐동 맛집. 곱배기로 시키면 추가 금액 없이 밥이 곱배기.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
 							</div>
-            			</div>
-            			</c:forEach>
-            		</div>
-            	</div>
-            </div>
-        </div>
-        
-    <div class="modal fade" id="mymodal" role="dialog">
-    <div class="modal-dialog modal-xl">
-    
-      <!-- Modal content-->
-      <div class="modal-content" id="aaa">
-        <!--<jsp:include page="/WEB-INF/views/include/party_content_include.jsp" />-->
-      </div>
-    </div>
-  </div>
-	
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/sixme.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h3 class="card-title">육미 식당</h3>
+								<p class="card-text">점심에는 매일 다른 고정 메뉴가 나오는 선술식당. 공기밥도 무료고
+									배고플때 가면 아주 굳</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/bab.jpg" class="card-img-top" alt="...">
+							<div class="card-body">
+								<h5 class="card-title">바비공방</h5>
+								<p class="card-text">양은 조금 적지만 맛은 보장되는 맛집.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/janga.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h5 class="card-title">Card title</h5>
+								<p class="card-text">Some quick example text to build on the
+									card title and make up the bulk of the card's content.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/janga.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h5 class="card-title">Card title</h5>
+								<p class="card-text">Some quick example text to build on the
+									card title and make up the bulk of the card's content.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row aa">
+			<div class="col-12 jumbotron">
+				<form action="/party/partysearch" method="post">
+					<span class="listtitle">상세 검색</span>
+					<div id="areacheck">
+						지역: <select name="sido" id="sido"></select> <select name="gugun"
+							id="gugun"></select>
+					</div>
+					<div id="gendercheck">
+						성별 : <input type="radio" name="gender" value="m" />남자만 <input
+							type="radio" name="gender" value="f" />여자만 <input type="radio"
+							name="gender" value="a" />남녀무관
+					</div>
+					<div id="agecheck">
+						연령 : <input type="checkbox" name="age" value="10" />10대 <input
+							type="checkbox" name="age" value="20" />20대 <input
+							type="checkbox" name="age" value="30" />30대 <input
+							type="checkbox" name="age" value="40" />40대 <input
+							type="checkbox" name="age" value="50" />50대 이상
+					</div>
+
+					<div id="drinkingcheck">
+						음주 : <input type="radio" name="drinking" value="0" />불가능 <input
+							type="radio" name="drinking" value="1" />가능 <input type="hidden"
+							name="drinking" value="2" />
+					</div>
+
+					<div>
+						<select name="text">
+							<option value="title">제목</option>
+							<option value="writer">작성자</option>
+							<option value="content">내용</option>
+							<option value="both">제목 + 내용</option>
+						</select> <input type="text" name="search">
+					</div>
+					<input type="submit">
+				</form>
+			</div>
+		</div>
+		<div class="row aa">
+			<div class="col-12 jumbotron">
+				<div class="row">
+					<c:choose>
+						<c:when test="${empty list}">
+							<div class="col-sm-12 col-md-3">
+								<span>검색 된 내용이 없습니다.</span>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="i" items="${list}">
+								<div class="col-sm-12 col-md-3">
+									<div class="card partylist">
+										<img src="/resources/img/janga.jpg" class="card-img-top"
+											alt="...">
+										<div class="card-body">
+											<h5 class="card-title">${i.parent_name }</h5>
+											<p class="card-text">
+												날짜 : ${i.meetdate}<br>인원 : ${i.count }
+											</p>
+											<input type="hidden" class="party_seq" value="${i.seq}">
+											<button type="button" class="btn btn-info btn-lg myBtn">Open
+												Modal</button>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="mymodal" role="dialog">
+		<div class="modal-dialog modal-xl">
+
+			<!-- Modal content-->
+			<div class="modal-content" id="aaa">
+				<!--<jsp:include page="/WEB-INF/views/include/party_content_include.jsp" />-->
+			</div>
+		</div>
+	</div>
+
 	<!-- ******************* -->
 	<!-- footer  -->
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />

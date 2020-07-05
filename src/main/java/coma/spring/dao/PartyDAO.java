@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import coma.spring.dto.PartyDTO;
-import coma.spring.dto.PartySearchListDTO;
 import coma.spring.statics.PartyConfiguration;
 
 
@@ -85,25 +84,54 @@ public class PartyDAO {
 		return mybatis.selectList("Party.selectList");
 	}
 	// 태훈 모임 통합 검색
-	public List<PartyDTO> partySearch(String address, String gender,List<String> ageList, int drinking, String title, String writer, String content, String both){
-		Map<String, Object> param = new HashMap<>();
-		param.put("address" ,address);
-		System.out.println(address);
-		param.put("gender",gender);
-		System.out.println(gender);
-		param.put("ageList",ageList);
-		System.out.println(ageList);
-		param.put("dringking",drinking);
-		System.out.println(drinking);
-		param.put("title",title);
-		System.out.println(title);
-		param.put("writer",writer);
-		System.out.println(writer);
-		param.put("content",content);
-		System.out.println(content);
-		param.put("both",both);
-		System.out.println(both);
-		System.out.println(mybatis.selectList("Party.selectList", param));
+	public List<PartyDTO> partySearch(Map<String, Object> param){
+		System.out.println();
+		
+		
+		System.out.println("address : " +param.get("address"));
+		
+		System.out.println("gender : "+param.get("gender"));
+		
+		System.out.println("ageList : "+param.get("ageList"));
+		
+		System.out.println("size" + param.get("ageList.size"));
+		
+		System.out.println("drinking : "+param.get("drinking"));
+		
+		System.out.println("title :"+param.get("title"));
+		
+		System.out.println("writer : "+param.get("writer"));
+		
+		System.out.println("content : "+param.get("content"));
+		
+		System.out.println("both : "+param.get("both"));
+		
 		return mybatis.selectList("Party.partySearch", param);
 	}
+	/*
+	// 태훈 모임 통합 검색
+	public List<PartyDTO> partySearch(String address, String gender,List<String> ageList, int drinking, String title, String writer, String content, String both){
+		System.out.println();
+		Map<String, Object> param = new HashMap<>();
+		param.put("address" ,address);
+		System.out.println("address : " +address);
+		param.put("gender",gender);
+		System.out.println("gender : "+gender);
+		param.put("ageList",ageList);
+		System.out.println("ageList : "+ageList);
+		param.put("ageList.size",ageList.size());
+		System.out.println(ageList.size());
+		param.put("drinking",drinking);
+		System.out.println("drinking : "+drinking);
+		param.put("title",title);
+		System.out.println("title :"+title);
+		param.put("writer",writer);
+		System.out.println("writer : "+writer);
+		param.put("content",content);
+		System.out.println("content : "+content);
+		param.put("both",both);
+		System.out.println("both : "+both);
+	
+		return mybatis.selectList("Party.partySearch", param);
+	}*/
 }
