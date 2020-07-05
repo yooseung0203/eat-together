@@ -60,6 +60,35 @@ $(function(){
 			openWin = window.open("/party/toSearchStore",
                     "childForm", "width=650, height=600, resizable = no, scrollbars = no");  
 		});
+		
+		/* $("#toCheckAddr").on("click",function(){
+				var lng = $("#lng").val();
+				var lat = $("#lat").val();
+				if($("#category").val()=='c'){
+					var category = 'cafe';
+				}else{
+					var category='food';
+				}
+				console.log(category);
+				console.log(lat);
+				console.log(lng);
+				
+				$.ajax({
+					url : "/map/" + category+"?lat="+lat+"&lng="+lng,
+					dataType : "json"
+				}).done(function(resp) {
+					console.log(resp);
+					var pid = $("#place_id").val();
+					for(var i=0; i< resp.documents.length;i++){
+					if(resp.documents[i].place_id==pid){
+						console.log(resp.documents[i].place_name);
+					}
+					}
+					
+				});
+			
+			
+		}); */
 
 		$("#submitBtn").on("click",function(){
 			var parent_name = $("#parent_name").val();
@@ -164,12 +193,19 @@ $(function(){
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">위치</div>
-				<div class="col-sm-10">
+				<div class="col-sm-8">
 					<input type="text" class="form-control" name="parent_address"
 						id="parent_address" readonly>
 					<input type="hidden" name="place_id" id="place_id">
+					<input type="hidden" name="lng" id="lng">
+					<input type="hidden" name="lat" id="lat">
+					<input type="hidden" name="category" id="category">
+					<input type="hidden" name="phone" id="phone">
+					<input type="hidden" name="address_name" id="address_name">
+					<input type="hidden" name="place_url" id="place_url">
 				</div>
 			</div>
+			
 			<div class="row mb-1">
 				<div class="col-sm-2">제목</div>
 				<div class="col-sm-10">

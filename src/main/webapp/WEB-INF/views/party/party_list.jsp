@@ -167,7 +167,7 @@
 		<div class="row aa">
 			<div class="col-12 jumbotron">
 				<form action="/party/partysearch" method="post">
-					<span class="listtitle">상세 검색</span>
+					<span class="listtitle">통합 검색</span>
 					<div id="areacheck">
 						지역: <select name="sido" id="sido"></select> <select name="gugun"
 							id="gugun"></select>
@@ -197,9 +197,11 @@
 							<option value="writer">작성자</option>
 							<option value="content">내용</option>
 							<option value="both">제목 + 내용</option>
-						</select> <input type="text" name="search">
+						</select> 
+						<input type="text" name="search">
+						<input type="submit" value="검색">
 					</div>
-					<input type="submit">
+					
 				</form>
 			</div>
 		</div>
@@ -213,19 +215,17 @@
 							</div>
 						</c:when>
 						<c:otherwise>
-							<c:forEach var="i" items="${list}">
+							<c:forEach var="partyList" items="${list}" varStatus="status">
 								<div class="col-sm-12 col-md-3">
 									<div class="card partylist">
-										<img src="/resources/img/janga.jpg" class="card-img-top"
-											alt="...">
+										<img src="${imglist[status.index]}" class="card-img-top">
 										<div class="card-body">
-											<h5 class="card-title">${i.parent_name }</h5>
+											<h5 class="card-title">${partyList.parent_name }</h5>
 											<p class="card-text">
-												날짜 : ${i.meetdate}<br>인원 : ${i.count }
+												날짜 : ${partyList.meetdate}<br>인원 : ${partyList.count }
 											</p>
-											<input type="hidden" class="party_seq" value="${i.seq}">
-											<button type="button" class="btn btn-info btn-lg myBtn">Open
-												Modal</button>
+											<input type="hidden" class="party_seq" value="${partyList.seq}">
+											<button type="button" class="btn btn-info btn-lg myBtn">상세 보기</button>
 										</div>
 									</div>
 								</div>
@@ -271,7 +271,6 @@
 				$("#mymodal").modal();
 			});
 		}	
-	});
-	
+	});	
 </script>
 </html>

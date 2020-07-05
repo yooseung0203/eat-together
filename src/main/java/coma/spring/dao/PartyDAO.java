@@ -134,4 +134,8 @@ public class PartyDAO {
 	
 		return mybatis.selectList("Party.partySearch", param);
 	}*/
+	
+	public int stopRecruit(String seq) throws Exception {
+		return mybatis.update("Party.stopRecruit",seq);
+	}
 }

@@ -37,7 +37,20 @@ function btnClick(clicked_id){
 		opener.document.getElementById("parent_name").value=document.getElementById("place_name"+clicked_id).innerHTML;
 		opener.document.getElementById("parent_address").value =document.getElementById("road_address_name"+clicked_id).innerHTML;
 		opener.document.getElementById("place_id").value = document.getElementById("api_id"+clicked_id).value;
-							
+		opener.document.getElementById("lng").value = document.getElementById("lng"+clicked_id).value;
+		opener.document.getElementById("lat").value = document.getElementById("lat"+clicked_id).value;
+		
+		var ct = $('input:radio[name=category]:checked').val();
+		
+		if(ct=='c'){
+		opener.document.getElementById("category").value="카페";
+		}else{
+			opener.document.getElementById("category").value="음식점";
+		}
+		opener.document.getElementById("phone").value = document.getElementById("phone"+clicked_id).innerHTML;
+		opener.document.getElementById("place_url").value = document.getElementById("place_url"+clicked_id).value;
+		opener.document.getElementById("address_name").value = document.getElementById("address_name"+clicked_id).value;
+		
 	window.close();
 };
 
@@ -93,7 +106,15 @@ $(document).ready(function(){
 					line.append("<div class=row><div class=col-12>"+resp.documents[i].road_address_name+"</div>");
 					line.append("<div class=row><div class=col-12><button class='btn btn-primary' id=button"+i+">선택</button></div>");
  */
- 					test.append("<div>"+ "<input type='hidden' id=api_id"+i+" value="+resp.documents[i].id +"><div id=place_name"+i+">"+resp.documents[i].place_name + "</div><div id=phone"+i+">" +resp.documents[i].phone + "</div><div id=road_address_name"+i+">" + resp.documents[i].road_address_name + "</div><button class='btn btn-primary' id="+i+" onClick='btnClick(this.id)')>선택</button></div>"); 
+ 					test.append("<div>"+ "<input type='hidden' id=api_id"+i+" value='"+resp.documents[i].id +"'>"+
+ 					"<input type='hidden' id='lat"+i+"' name='lat' value='"+resp.documents[i].y+"'>"+
+ 					"<input type='hidden' name='lng' id='lng"+i+"' value='"+resp.documents[i].x+"'>"+
+ 					"<input type='hidden' name='place_url' id='place_url"+i+"' value='"+resp.documents[i].place_url+"'>"+
+ 					"<input type='hidden' name='address_name' id='address_name"+i+"' value='"+resp.documents[i].address_name+"'>"+
+ 					"<div id=place_name"+i+">"+resp.documents[i].place_name + 
+ 					"</div><div id=phone"+i+">" +resp.documents[i].phone + 
+ 					"</div><div id=road_address_name"+i+">" + resp.documents[i].road_address_name + 
+ 					"</div><button class='btn btn-primary' id="+i+" onClick='btnClick(this.id)')>선택</button></div>"); 
 			
 				}
 				$("#resultdiv").html(test);

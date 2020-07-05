@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.MemberFileDTO;
+import coma.spring.service.MemberFileService;
 import coma.spring.service.MemberService;
 import coma.spring.service.MsgService;
 
@@ -21,6 +24,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mservice;
+	
+	@Autowired 
+	private MemberFileService mfservice;
 	
 	@Autowired
 	private MsgService msgservice;	
@@ -56,8 +62,21 @@ public class MemberController {
 
 	//마이페이지에서 내정보view로 이동
 	@RequestMapping("mypage_myinfo")
-	public String getMyInfoView() {
-		return "member/mypage_myinfo";
+	public ModelAndView getMyInfoView() throws Exception{
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("member/mypage_myinfo");
+		
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		mdto = mservice.selectMyInfo(id);
+		
+		mav.addObject("mdto", mdto);
+		
+		String parent_id = id;
+		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
+		mav.addObject("mfdto",mfdto);
+		
+		return mav;
 	}
 
 	//마이페이지에서 쪽지함으로 이동
@@ -91,8 +110,21 @@ public class MemberController {
 
 	//내정보 수정 페이지로 이동하기
 	@RequestMapping("editMyInfo")
-	public String getEditMyInfoView() {
-		return "member/editmyinfo";
+	public ModelAndView getEditMyInfoView()throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("member/editmyinfo");
+		
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getId();
+		mdto = mservice.selectMyInfo(id);
+		
+		mav.addObject("mdto", mdto);
+		
+		String parent_id = id;
+		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
+		mav.addObject("mfdto",mfdto);
+		
+		return mav;
 	}
 
 	//아이디 찾기 팝업 열기
@@ -113,7 +145,7 @@ public class MemberController {
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
 		session.invalidate();
-		return "home";
+		return "redirect:/";
 	}
 
 
@@ -163,12 +195,12 @@ public class MemberController {
 			MemberDTO mdto = mservice.selectMyInfo(id);
 			session.setAttribute("loginInfo", mdto);
 			System.out.println("로그인 성공");
-			return "home";
+			return "redirect:/";
 		}else {
 			System.out.println("id : " + id);
 			System.out.println("pw : " + protectedpw);
 			System.out.println("로그인 실패");
-			return "home";
+			return "redirect:/";
 		}
 
 	}
@@ -243,28 +275,31 @@ public class MemberController {
 
 	//내정보 수정하기
 	@RequestMapping("editMyInfoProc")
-	public String editMyInfoProc(String nickname, String account_email) throws Exception {
+	public ModelAndView editMyInfoProc(String nickname, String account_email) throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("member/mypage_myinfo");
+		
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 		System.out.println("수정할 아이디 : " + id);
-		System.out.println("수정할 닉네임 : " + nickname);
 		System.out.println("수정할 이메일 : " + account_email);
 
 		Map<String, String> param = new HashMap<>();
-		param.put("targetColumn1", "nickname");
-		param.put("targetValue1", nickname);
-		param.put("targetColumn2", "account_email");
-		param.put("targetValue2", account_email);
-		param.put("targetColumn3", "id");
-		param.put("targetValue3", id);
+		param.put("targetColumn1", "account_email");
+		param.put("targetValue1", account_email);
+		param.put("targetColumn2", "id");
+		param.put("targetValue2", id);
 
 		int result = mservice.editMyInfo(param);
-
-		mdto.setNickname(nickname);
-		mdto.setAccount_email(account_email);
-
 		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
-		return "redirect:/member/mypage_myinfo";
+		
+		String parent_id = id;
+		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
+		
+		mav.addObject("mdto", mdto);
+		mav.addObject("mfdto", mfdto);
+		
+		return mav;
 	}
 
 

@@ -47,9 +47,14 @@
 				인증번호 : <input type=text id=mail_text>
 				<button type=button id=mail_accept class="btn btn-light">인증</button>
 			</div>
-			<div id=findpw_result style="display: none;"></div>
+			<div id=findpw_result style="display: none;">
+				<button type=button class="btn btn-light"
+					onclick="window.open('/member/editPw?id=${id}','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');"
+					id="pwEdit">비밀번호 수정하기</button>
+			</div>
 		</div>
 	</fieldset>
+
 <script>
 	$(document).ready(function(){
 		//account_email regex
@@ -111,6 +116,7 @@
 			})
 	})
 	</script>
+	
 	<script>
 	$("#pwEdit").on("click",function() {
 		window.open('/member/editPw', '비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');
