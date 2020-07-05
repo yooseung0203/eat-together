@@ -59,7 +59,7 @@
 		</form>
 		<!-- 카카오톡 아이디로 로그인 버튼 노출 영역 -->
 		<a
-			href="https://kauth.kakao.com/oauth/authorize?client_id=39543f4353dc8ce2c9268fc23c6d67e4&redirect_uri=http://localhost/member/login&response_type=code">
+			href="https://kauth.kakao.com/oauth/authorize?client_id=39543f4353dc8ce2c9268fc23c6d67e4&redirect_uri=http://localhost/member/kakaoLogin&response_type=code">
 			<img src="/resources/img/kakao_login_medium_narrow.png"
 			id="kakaoLoginBtn">
 		</a>

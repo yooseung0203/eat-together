@@ -67,10 +67,9 @@
 							<th scope="row">PROFILE IMAGE</th>
 							<td class="myinfo_text" id="profile_box"><img
 								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
-								alt="" onError="this.src='/resources/img/no_img.png'"> <input type="button" id="uploadProfile"
-								class="btn btn-light" value="프로필이미지 변경하기"
-								onclick="window.open('/memberfile/editProfileImage','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');">
-							</td>
+								alt="" onError="this.src='/resources/img/no_img.png'"> <input
+								type="button" id="uploadProfile" class="btn btn-light"
+								value="프로필이미지 변경하기"></td>
 						</tr>
 						<tr>
 							<th scope="row">ID</th>
@@ -89,13 +88,15 @@
 						</tr>
 						<tr>
 							<th scope="row">BIRTH</th>
-							<td class="edit_text">${mdto.birth}</td>
+							<td class="edit_text"><input type="text"
+								class="form-control" id="birth" name="birth"
+								value="${mdto.birth}"></td>
 						</tr>
 						<tr>
 							<th scope="row">EMAIL</th>
 							<td class="edit_text"><input type=text id="account_email"
-								name="account_email" value="${mdto.account_email}">
-								<input type=button id=mail value="인증하기"> <br>
+								name="account_email" value="${mdto.account_email}"> <input
+								type=button id=mail value="인증하기"> <br>
 								<div id=mail_div style="display: none;">
 									인증번호 : <input type=text id=mail_text>
 									<button type=button id=mail_accept>인증</button>
@@ -115,74 +116,106 @@
 		</div>
 	</div>
 	<script>
-		$("#back").on("click", function() {
-			location.replace('/member/mypage_myinfo');
-		})
+		window.onload = function() {
+			var upload = document.getElementById('uploadProfile');
+			upload.onclick = function() {
+				location.href = "/memberfile/deleteFileById";
+				window
+						.open('/member/editProfileImage', '프로필이미지 수정하기',
+								'width=430,height=500,location=no,status=no,scrollbars=yes');
 
-		//nickname regex
-		$("#nickname").focusout(function() {
-			var nickname = $("#nickname").val();
-			var nicknameregex = /^[가-힣]{2,6}$/;
-			if ($("#nickname").val() != "") {
-				if (!nicknameregex.test(nickname)) {
-					$("#nickname").val("");
-					alert("한글 2~6글자를 입력하세요.");
-					$("#nickname").focus();
+			}
+
+			$("#back").on("click", function() {
+				location.replace('/member/mypage_myinfo');
+			})
+
+			//nickname regex
+			$("#nickname").focusout(function() {
+				var nickname = $("#nickname").val();
+				var nicknameregex = /^[가-힣]{2,6}$/;
+				if ($("#nickname").val() != "") {
+					if (!nicknameregex.test(nickname)) {
+						$("#nickname").val("");
+						alert("한글 2~6글자를 입력하세요.");
+						$("#nickname").focus();
+					}
 				}
-			}
-		})
-
-		//이메일 regex
-		$("#account_email")
-				.focusout(
-						function() {
-							if ($("#account_email").val() != "") {
-								var account_email = $("#account_email").val();
-								var account_emailregex = /[a-zA-Z0-9]*@[a-zA-Z0-9]*[.]{1}[a-zA-Z]{2,3}|([.]{1}[a-zA-Z]{2,3})$/;
-								if (!account_emailregex.test(account_email)) {
-									$("#account_email").val("");
-									alert("유효한 이메일을 입력해주세요.");
-									$("#account_email").focus();
+			})
+			//birth regex
+			$("#birth")
+					.focusout(
+							function() {
+								var birth = $("#birth").val();
+								var regex1 = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+								if ($("#birth").val() != "") {
+									if (regex1.test(birth)) {
+										birth = birth
+												.replace(
+														/^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
+														"$1-$2-$3");
+										$("#birth").val(birth);
+									} else {
+										$("#birth").val("");
+										alert("올바른 생년월일을 입력해주세요.");
+										$("#birth").focus();
+									}
 								}
-							}
-						})
+							})
 
-		//이메일 중복체크
-		$("#mail").on("click", function() {
-			if ($("#account_email").val() == "") {
-				alert("이메일을 입력해주십시오.");
-				$("#account_email").focus();
-			} else {
-				$.ajax({
-					url : "/mail/mailSending",
-					type : "post",
-					data : {
-						account_email : $("#account_email").val()
-					}
-				}).done(function(resp) {
-					if (resp != "") {
-						alert("인증메일이 발송되었습니다.");
-						$("#mail_div").css("display", "block");
-						$("#mail_accept").on("click", function() {
-							if ($("#mail_text").val() == resp) {
-								$("#mail_text").attr("readonly", true);
-								$("#mail_text").css("color", "blue");
-								$("#mail_text").val("인증에 성공하였습니다.");
-							} else {
-								alert("인증문자열을 확인해주세요.");
-								$("#mail_text").val("");
-								$("#mail_text").focus();
-							}
-						})
-					} else {
-						alert("이미 사용중인 이메일입니다.");
-						$("#mail_text").val("");
-						$("#mail_text").focus();
-					}
+			//이메일 regex
+			$("#account_email")
+					.focusout(
+							function() {
+								if ($("#account_email").val() != "") {
+									var account_email = $("#account_email")
+											.val();
+									var account_emailregex = /[a-zA-Z0-9]*@[a-zA-Z0-9]*[.]{1}[a-zA-Z]{2,3}|([.]{1}[a-zA-Z]{2,3})$/;
+									if (!account_emailregex.test(account_email)) {
+										$("#account_email").val("");
+										alert("유효한 이메일을 입력해주세요.");
+										$("#account_email").focus();
+									}
+								}
+							})
 
-				})
-			}
-		})
+			//이메일 중복체크
+			$("#mail").on("click", function() {
+				if ($("#account_email").val() == "") {
+					alert("이메일을 입력해주십시오.");
+					$("#account_email").focus();
+				} else {
+					$.ajax({
+						url : "/mail/mailSending",
+						type : "post",
+						data : {
+							account_email : $("#account_email").val()
+						}
+					}).done(function(resp) {
+						if (resp != "") {
+							alert("인증메일이 발송되었습니다.");
+							$("#mail_div").css("display", "block");
+							$("#mail_accept").on("click", function() {
+								if ($("#mail_text").val() == resp) {
+									$("#mail_text").attr("readonly", true);
+									$("#mail_text").css("color", "blue");
+									$("#mail_text").val("인증에 성공하였습니다.");
+								} else {
+									alert("인증문자열을 확인해주세요.");
+									$("#mail_text").val("");
+									$("#mail_text").focus();
+								}
+							})
+						} else {
+							alert("이미 사용중인 이메일입니다.");
+							$("#mail_text").val("");
+							$("#mail_text").focus();
+						}
+
+					})
+				}
+			})
+		}
 	</script>
 
 	<!-- ******************* -->

@@ -33,12 +33,13 @@
 <title>프로필 이미지 수정</title>
 </head>
 <body>
-	<form id="editProfileImageForm" action="uploadProc"
+	<form id="editProfileImageForm" action="/memberfile/uploadProc"
 		enctype="multipart/form-data" method="post">
 		<input type=file name=file id=upload>
 		<div id='preview'></div>
 		<button type="button" id="editProfileBtn" class="btn btn-warning">프로필이미지
 			변경하기</button>
+		<br>
 		<button type=button class="btn btn-light" id="back"
 			onClick="window.close()">창닫기</button>
 	</form>
@@ -47,8 +48,6 @@
 		$("#editProfileBtn").on("click", function() {
 			alert("프로필 이미지가 변경되었습니다.");
 			document.getElementById('editProfileImageForm').submit();
-			opener.parent.location.reload();
-			window.open("about:blank", "_self").close();
 			
 		})
 
