@@ -145,10 +145,12 @@ public class MemberController {
 	//로그아웃하기
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
+		//카카오톡 로그인의 경우 access_Token 로그아웃이 필요하다
 		if(session.getAttribute("access_Token")!=null) {
 			mservice.kakaoLogout((String)session.getAttribute("access_Token"));
 			session.invalidate();
 			return "redirect:/";
+		//카카오톡 로그인이 아닌 경우
 		}else {
 			session.invalidate();
 			return "redirect:/";
