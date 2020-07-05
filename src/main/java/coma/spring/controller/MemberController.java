@@ -22,7 +22,8 @@ import coma.spring.service.MsgService;
 @Controller
 @RequestMapping("/member/")
 public class MemberController {
-
+	//By 지은, 회원서비스 관련 기능을 모아놓은 컨트롤러
+	
 	@Autowired
 	private MemberService mservice;
 
@@ -35,7 +36,7 @@ public class MemberController {
 	@Autowired
 	private HttpSession session;
 
-	//try-catch 예외처리 대체할 수 있는 메서드, ExceptionHandler
+	//by지은, try-catch 예외처리 대체할 수 있는 메서드, ExceptionHandler_20200701
 	@ExceptionHandler
 	public String exceptionHandler(Exception e) {
 		e.printStackTrace();
@@ -61,7 +62,7 @@ public class MemberController {
 		return "member/signup_info";
 	}
 
-	//마이페이지에서 내정보view로 이동
+	//by지은, 마이페이지에서 내정보view로 이동_20200704
 	@RequestMapping("mypage_myinfo")
 	public ModelAndView getMyInfoView() throws Exception{
 		ModelAndView mav = new ModelAndView();
@@ -70,10 +71,11 @@ public class MemberController {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 		mdto = mservice.selectMyInfo(id);
-
+		//로그인한 회원 정보 view로 이동
 		mav.addObject("mdto", mdto);
 
 		String parent_id = id;
+		//프로필 이미지 view로 이동
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
 		mav.addObject("mfdto",mfdto);
 
@@ -109,7 +111,7 @@ public class MemberController {
 		return "member/editpw";
 	}
 
-	//내정보 수정 페이지로 이동하기
+	//By지은,  내정보 수정 페이지로 이동하기_20200704
 	@RequestMapping("editMyInfo")
 	public ModelAndView getEditMyInfoView()throws Exception {
 		ModelAndView mav = new ModelAndView();
@@ -117,11 +119,13 @@ public class MemberController {
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
+		
+		//로그인한 회원정보 view로 보내기
 		mdto = mservice.selectMyInfo(id);
-
 		mav.addObject("mdto", mdto);
 
 		String parent_id = id;
+		//프로필이미지 view로 보내기
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
 		mav.addObject("mfdto",mfdto);
 
@@ -145,7 +149,7 @@ public class MemberController {
 	//로그아웃하기
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
-		//카카오톡 로그인의 경우 access_Token 로그아웃이 필요하다
+		//By지은, 카카오톡 로그인의 경우 access_Token 로그아웃이 필요하다_20200705
 		if(session.getAttribute("access_Token")!=null) {
 			mservice.kakaoLogout((String)session.getAttribute("access_Token"));
 			session.invalidate();
