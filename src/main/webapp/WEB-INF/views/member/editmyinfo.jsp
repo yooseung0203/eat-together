@@ -88,7 +88,9 @@
 						</tr>
 						<tr>
 							<th scope="row">BIRTH</th>
-							<td class="edit_text">${mdto.birth}</td>
+							<td class="edit_text"><input type="text"
+								class="form-control" id="birth" name="birth"
+								value="${mdto.birth}"></td>
 						</tr>
 						<tr>
 							<th scope="row">EMAIL</th>
@@ -117,7 +119,7 @@
 		window.onload = function() {
 			var upload = document.getElementById('uploadProfile');
 			upload.onclick = function() {
-				location.href="/memberfile/deleteFileById";
+				location.href = "/memberfile/deleteFileById";
 				window
 						.open('/member/editProfileImage', '프로필이미지 수정하기',
 								'width=430,height=500,location=no,status=no,scrollbars=yes');
@@ -140,6 +142,26 @@
 					}
 				}
 			})
+			//birth regex
+			$("#birth")
+					.focusout(
+							function() {
+								var birth = $("#birth").val();
+								var regex1 = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+								if ($("#birth").val() != "") {
+									if (regex1.test(birth)) {
+										birth = birth
+												.replace(
+														/^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
+														"$1-$2-$3");
+										$("#birth").val(birth);
+									} else {
+										$("#birth").val("");
+										alert("올바른 생년월일을 입력해주세요.");
+										$("#birth").focus();
+									}
+								}
+							})
 
 			//이메일 regex
 			$("#account_email")

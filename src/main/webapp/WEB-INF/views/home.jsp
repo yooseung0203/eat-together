@@ -132,7 +132,12 @@
 			<div class="col-sm-12">회원가입 권유</div>
 		</div>
 	</div>
-
+	<script>
+		if ("${loginInfo.account_email}" == "need@eat-together.com") {
+			alert("이메일 인증 후 사이트를 이용해주시길 바랍니다.");
+			location.replace("/member/mypage_myinfo");
+		}
+	</script>
 
 	<!-- ******************* -->
 	<!-- footer  -->

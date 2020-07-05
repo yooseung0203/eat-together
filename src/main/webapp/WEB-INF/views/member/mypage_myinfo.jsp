@@ -68,7 +68,7 @@
 					</tr>
 					<tr>
 						<th scope="row">ID</th>
-						<td class="myinfo_text">${loginInfo.id}</td>
+						<td class="myinfo_text">${mdto.id}</td>
 					</tr>
 					<tr>
 						<th scope="row">NICKNAME</th>

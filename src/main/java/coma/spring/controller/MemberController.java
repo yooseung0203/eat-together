@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -144,8 +145,14 @@ public class MemberController {
 	//로그아웃하기
 	@RequestMapping("logoutProc")
 	public String logoutProc() {
-		session.invalidate();
-		return "redirect:/";
+		if(session.getAttribute("access_Token")!=null) {
+			mservice.kakaoLogout((String)session.getAttribute("access_Token"));
+			session.invalidate();
+			return "redirect:/";
+		}else {
+			session.invalidate();
+			return "redirect:/";
+		}
 	}
 	//프로필 사진 변경하는 팝업창 열기
 	@RequestMapping("editProfileImage")
@@ -235,7 +242,7 @@ public class MemberController {
 			if(result>0) {
 				System.out.println("회원 탈퇴 완료");
 				session.invalidate();
-				return "home";
+				return "redirect:/";
 			}else {
 				System.out.println("회원 탈퇴 실패, 관리자에게 문의하세요.");
 				return "error";
@@ -267,9 +274,10 @@ public class MemberController {
 			param.put("targetValue2", id);
 
 			int result = mservice.editPw(param);
-
 			System.out.println("비밀번호 수정 성공 :" + result);
 			mdto.setPw(newprotectedpw);
+			session.setAttribute("loginInfo", mdto);
+			
 			return "/member/editMyInfo";
 		}
 
@@ -279,24 +287,31 @@ public class MemberController {
 
 	//내정보 수정하기
 	@RequestMapping("editMyInfoProc")
-	public ModelAndView editMyInfoProc(String nickname, String account_email) throws Exception {
+	public ModelAndView editMyInfoProc(String nickname, String birth, String account_email) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 		System.out.println("수정할 아이디 : " + id);
+		System.out.println("수정할 생년월일 : " + birth);
 		System.out.println("수정할 이메일 : " + account_email);
 
 		Map<String, String> param = new HashMap<>();
-		param.put("targetColumn1", "account_email");
-		param.put("targetValue1", account_email);
-		param.put("targetColumn2", "id");
-		param.put("targetValue2", id);
+		param.put("targetColumn1", "birth");
+		param.put("targetValue1", birth);
+		param.put("targetColumn2", "account_email");
+		param.put("targetValue2", account_email);
+		param.put("targetColumn3", "id");
+		param.put("targetValue3", id);
 
 		int result = mservice.editMyInfo(param);
 		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
 
+		mdto.setBirth(birth);
+		mdto.setAccount_email(account_email);
+		session.setAttribute("loginInfo", mdto);
+		
 		String parent_id = id;
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
 
@@ -307,31 +322,22 @@ public class MemberController {
 	}
 
 
-	//	
-	//	@RequestMapping("/kakaologin")
-	//	public String login(@RequestParam("code") String code, HttpSession session) {
-	//		System.out.println("code : "+ code);
-	//	    String access_Token = mservice.getAccessToken(code);
-	//	    System.out.println(access_Token);
-	//	    HashMap<String, Object> userInfo = mservice.getUserInfo(access_Token);
-	//	    System.out.println("login Controller : " + userInfo);
-	//	    
-	//	    //    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
-	//	    if (userInfo.get("id") != null) {
-	//	        session.setAttribute("id", userInfo.get("id"));
-	//	        session.setAttribute("access_Token", access_Token);
-	//	    }
-	//	    return "index";
-	//	}
-	//
-	//	
-	//	@RequestMapping("/logout")
-	//	public String logout(HttpSession session) {
-	//	    mservice.kakaoLogout((String)session.getAttribute("access_Token"));
-	//	    session.removeAttribute("access_Token");
-	//	    session.removeAttribute("id");
-	//	    return "index";
-	//	}
+	//카카오톡 로그인하기
+	@RequestMapping("/kakaoLogin")
+	public String kakaoLogin(@RequestParam("code") String code, HttpSession session)throws Exception {
+		System.out.println("code : "+ code);
+		String access_Token = mservice.getAccessToken(code);
+		System.out.println("controller access_token : " + access_Token);
+		MemberDTO mdto = mservice.getloginInfo(access_Token);
+		System.out.println("login Controller : " + mdto);
+
+		//    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
+		if (mdto.getId() != null) {
+			session.setAttribute("loginInfo", mdto);
+			session.setAttribute("access_Token", access_Token);
+		}
+		return "redirect:/";
+	}
 
 
 
