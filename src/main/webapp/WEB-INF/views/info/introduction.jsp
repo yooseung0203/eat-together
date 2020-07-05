@@ -88,7 +88,7 @@ body {
 			<div class="col-12 col-sm-12 mx-0 px-0">
 				<div class="jb-box">
 					<video muted autoplay loop>
-						<source src="https://eat-together.s3.ap-northeast-2.amazonaws.com/movie/Lunch-2339.mp4" type="video/mp4">
+						<source src="/resources/movie/Lunch-2339.mp4" type="video/mp4">
 						<strong>Your browser does not support the video tag.</strong>
 					</video>
 					<div class="jb-text">
