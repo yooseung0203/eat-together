@@ -13,7 +13,7 @@
 			<div class="col-sm-10 mb-3">
 				<div class="row navibar h5 text-center">
 					<div class="col-sm-1">
-						<div class="navi-menu">사이트소개</div>
+						<div class="navi-menu"><a href="/info/toIntroduction">사이트소개</a></div>
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">
