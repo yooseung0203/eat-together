@@ -28,8 +28,8 @@
 	</select>
 	<update id="editMyInfo">
 		update member set
-		${targetColumn1}=#{targetValue1} where
-		${targetColumn2}=#{targetValue2}
+		${targetColumn1}=#{targetValue1}, ${targetColumn2}=#{targetValue2} where
+		${targetColumn3}=#{targetValue3}
 	</update>
 
 	<update id="editPw">
