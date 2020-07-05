@@ -24,13 +24,13 @@ public class MemberController {
 
 	@Autowired
 	private MemberService mservice;
-	
+
 	@Autowired 
 	private MemberFileService mfservice;
-	
+
 	@Autowired
 	private MsgService msgservice;	
-	
+
 	@Autowired
 	private HttpSession session;
 
@@ -65,17 +65,17 @@ public class MemberController {
 	public ModelAndView getMyInfoView() throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
-		
+
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 		mdto = mservice.selectMyInfo(id);
-		
+
 		mav.addObject("mdto", mdto);
-		
+
 		String parent_id = id;
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
 		mav.addObject("mfdto",mfdto);
-		
+
 		return mav;
 	}
 
@@ -113,17 +113,17 @@ public class MemberController {
 	public ModelAndView getEditMyInfoView()throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/editmyinfo");
-		
+
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 		mdto = mservice.selectMyInfo(id);
-		
+
 		mav.addObject("mdto", mdto);
-		
+
 		String parent_id = id;
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
 		mav.addObject("mfdto",mfdto);
-		
+
 		return mav;
 	}
 
@@ -132,7 +132,7 @@ public class MemberController {
 	public String findId() {
 		return "member/findid";
 	}
-	
+
 
 	//비밀번호 찾기 팝업 열기
 	@RequestMapping("findpw")
@@ -147,7 +147,11 @@ public class MemberController {
 		session.invalidate();
 		return "redirect:/";
 	}
-
+	//프로필 사진 변경하는 팝업창 열기
+	@RequestMapping("editProfileImage")
+	public String getEditProfileImageView() {
+		return "member/editprofileimage";
+	}
 
 	//회원가입하기
 	@RequestMapping("signupProc")
@@ -161,7 +165,7 @@ public class MemberController {
 		System.out.println("회원가입 성공");
 		return "home";
 	}
-	
+
 	//회원가입시 아이디 중복체크
 	@RequestMapping("isIdAvailable")
 	@ResponseBody
@@ -278,7 +282,7 @@ public class MemberController {
 	public ModelAndView editMyInfoProc(String nickname, String account_email) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
-		
+
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 		System.out.println("수정할 아이디 : " + id);
@@ -292,13 +296,13 @@ public class MemberController {
 
 		int result = mservice.editMyInfo(param);
 		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
-		
+
 		String parent_id = id;
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-		
+
 		mav.addObject("mdto", mdto);
 		mav.addObject("mfdto", mfdto);
-		
+
 		return mav;
 	}
 
