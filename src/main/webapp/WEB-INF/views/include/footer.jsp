@@ -7,7 +7,10 @@
                 <div class="col-sm-12 footer pt-4">
                     <p class="footer-menu">
                         <a href="/info/toIntroduction">사이트 소개</a> | 
-                        	이용약관 | 개인정보 처리방침 | 위치기반 서비스 이용약관 | 관리자 사이트 바로가기
+                        	<a href="/info/toPolicy">이용약관</a> | 
+                        	<a href="/info/toPrivacy">개인정보 처리방침</a> | 
+                        	<a href="/info/toLocationPolicy">위치기반 서비스 이용약관</a>
+                        	 | 관리자 사이트 바로가기
                     </p>
                     <span>
                         상호 : 맛집갔다갈래 |  팀원 : 김태훈, 박지은, 신예지, 윤상빈, 이수지, 차유승
