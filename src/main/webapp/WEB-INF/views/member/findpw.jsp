@@ -55,8 +55,7 @@
 		</div>
 	</fieldset>
 
-<script>
-	$(document).ready(function(){
+	<script>
 		//account_email regex
 		$("#account_email")
 				.focusout(
@@ -73,54 +72,103 @@
 						})
 
 		//메일 인증 
-		$("#mail").on("click",function() {
-			if ($("#account_email").val() == "" || $("#id").val()=="") {
-				alert("정보를 입력해주십시오.");
-				$("#account_email").focus();
-				} else {
-						$.ajax({
-							url : "/mail/mailSendingForPw",
-							type : "post",
-							dataType : "json",
-							data : {
-								id : $("#id").val(),
-								account_email : $("#account_email").val()
-								}
-						}).done(function(resp) {
-							console.log(resp+ "리스폰스 null 값 전달");
-							if (resp != null) {
-								alert("인증메일이 발송되었습니다.");
-								$("#mail_div").css("display","block");
-								$("#mail_accept").on("click",function() {
-									if ($("#mail_text").val() == resp) {
-										$("#mail_text").attr("readonly",true);
-										$("#mail_text").css("color","blue");
-										$("#mail_text").val("인증에 성공하였습니다.");
-										$("#findpw_result").css("display","block");
-										$("#findpw_result").append("<button type=button class='btn btn-warning' id='pwEdit'>비밀번호 수정하기</button>");
-										$("#findpw_result").append("<input type=button id=Back value=취소 class='btn btn-light' onclick='window.close();'>");
-										}else {
-											alert("인증에 실패하였습니다.");
-											$("#mail_text").val("");
-											$("#mail_text").focus();
-											}
-									})
-									} else {
-										alert("아이디 또는 이메일을 잘못 입력하였습니다.");
-										$("#account_email").val("");
-										$("#id").val("");
-										$("#id").focus();
-										}
-							})
+		$("#mail")
+				.on(
+						"click",
+						function() {
+							if ($("#account_email").val() == ""
+									|| $("#id").val() == "") {
+								alert("정보를 입력해주십시오.");
+								$("#account_email").focus();
+							} else {
+								$
+										.ajax(
+												{
+													url : "/mail/mailSendingForPw",
+													type : "post",
+													dataType : "json",
+													data : {
+														id : $("#id").val(),
+														account_email : $(
+																"#account_email")
+																.val()
+													}
+												})
+										.done(
+												function(resp) {
+													console.log(resp
+															+ "리스폰스 null 값 전달");
+													if (resp != null) {
+														alert("인증메일이 발송되었습니다.");
+														$("#mail_div").css(
+																"display",
+																"block");
+														$("#mail_accept")
+																.on(
+																		"click",
+																		function() {
+																			if ($(
+																					"#mail_text")
+																					.val() == resp) {
+																				$(
+																						"#mail_text")
+																						.attr(
+																								"readonly",
+																								true);
+																				$(
+																						"#mail_text")
+																						.css(
+																								"color",
+																								"blue");
+																				$(
+																						"#mail_text")
+																						.val(
+																								"인증에 성공하였습니다.");
+																				$(
+																						"#findpw_result")
+																						.css(
+																								"display",
+																								"block");
+																				$(
+																						"#findpw_result")
+																						.append(
+																								"<button type=button class='btn btn-warning' id='pwEdit'>비밀번호 수정하기</button>");
+																				$(
+																						"#findpw_result")
+																						.append(
+																								"<input type=button id=Back value=취소 class='btn btn-light' onclick='window.close();'>");
+																			} else {
+																				alert("인증에 실패하였습니다.");
+																				$(
+																						"#mail_text")
+																						.val(
+																								"");
+																				$(
+																						"#mail_text")
+																						.focus();
+																			}
+																		})
+													} else {
+														alert("아이디 또는 이메일을 잘못 입력하였습니다.");
+														$("#account_email")
+																.val("");
+														$("#id").val("");
+														$("#id").focus();
+													}
+												})
 							}
-			})
-	})
+						})
 	</script>
-	
+
 	<script>
-	$("#pwEdit").on("click",function() {
-		window.open('/member/editPw', '비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');
-	})
+		$("#pwEdit")
+				.on(
+						"click",
+						function() {
+							window
+									.open('/member/editPw', '비밀번호 수정하기',
+											'width=430,height=500,location=no,status=no,scrollbars=yes');
+						})
 	</script>
 </body>
 </html>

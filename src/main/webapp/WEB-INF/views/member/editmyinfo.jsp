@@ -50,6 +50,11 @@
 	<!-- header  -->
 	<!-- ******************* -->
 
+	<!-- contextpath 변수 정의-->
+	<c:set var="contextPath" value="<%=request.getContextPath()%>"></c:set>
+
+	<!-- contextpath 변수정의 -->
+
 
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
@@ -65,11 +70,14 @@
 					<tbody>
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
-							<td class="myinfo_text" id="profile_box"><img
-								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
-								alt="" onError="this.src='/resources/img/no_img.png'"> <input
-								type="button" id="uploadProfile" class="btn btn-light"
-								value="프로필이미지 변경하기"></td>
+							<td class="myinfo_text" id="profile_box">
+								<div id="image_container">
+									<img src="/memberfile/getPic?id=${loginInfo.id}" width="50"
+										height="50" alt=""
+										onError="this.src='/resources/img/no_img.png'">
+								</div> <input type="button" id="uploadProfile" class="btn btn-light"
+								value="프로필이미지 변경하기">
+							</td>
 						</tr>
 						<tr>
 							<th scope="row">ID</th>
@@ -118,9 +126,11 @@
 	<script>
 		window.onload = function() {
 			var upload = document.getElementById('uploadProfile');
+
 			upload.onclick = function() {
 				location.href = "/memberfile/deleteFileById";
-				window.open('/member/editProfileImage', '프로필이미지 수정하기',
+				window
+						.open('editProfileImage', '프로필이미지 수정하기',
 								'width=430,height=500,location=no,status=no,scrollbars=yes');
 
 			}
@@ -130,7 +140,7 @@
 			})
 
 			//nickname regex
-			$("#nickname").focusout(function() { 
+			$("#nickname").focusout(function() {
 				var nickname = $("#nickname").val();
 				var nicknameregex = /^[가-힣]{2,6}$/;
 				if ($("#nickname").val() != "") {
@@ -214,7 +224,28 @@
 					})
 				}
 			})
-		}
+			startLoadFile();
+
+			function startLoadFile() {
+				$.ajax({
+					url : '/memberfile/getPic',
+					type : 'GET',
+					dataType : 'json',
+					success : function(path) {
+						strDOM += '"<img src="' + path+ '">"';
+						var imageContainer = $("#image_container");
+						imageContainer.append(strDOM);
+					},
+					error : function(request, status, error) {
+						console.log("code:" + request.status + "\n"
+								+ "message:" + request.responseText + "\n"
+								+ "error:" + error);
+
+					}
+				});
+			}
+
+		}}
 	</script>
 
 	<!-- ******************* -->
