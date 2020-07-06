@@ -55,7 +55,7 @@
 	</select>
 
 	<select id="newmsg" resultType="java.lang.Integer">
-		select count(*) from msg where
+		select count(*) from msg where 
 		msg_receiver = #{value} and msg_view=0
 	</select>
 
