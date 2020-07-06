@@ -8,7 +8,9 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +36,11 @@ import com.google.gson.JsonObject;
 
 import coma.spring.dto.MapDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.ReviewDTO;
+import coma.spring.dto.ReviewFileDTO;
 import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
+import coma.spring.service.ReviewService;
 
 @Controller
 @RequestMapping("/map/")
@@ -45,10 +50,10 @@ public class MapController {
 
 	@Autowired
 	private MapService mapservice;
-
 	@Autowired
 	private PartyService pservice;
-
+	@Autowired
+	private ReviewService rservice;
 	@Autowired
 	private ServletContext sc;
 
@@ -211,19 +216,21 @@ public class MapController {
 			Reader reader = new FileReader(cafePath);
 			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
 			JsonArray arr = (JsonArray)readObj.get("cafe_list");
-			for(JsonElement ele : arr) {
+			boolean addPossible = false;
+			for(JsonElement ele : arr) { // cafe_list 에서 cafe 정보 빼오기
 				JsonObject cafeObj = ele.getAsJsonObject();
 				JsonObject cafe = cafeObj.get("cafe").getAsJsonObject();
 				String place_name = cafe.get("place_name").getAsString();
 				if(place_name.contains(keyword)) { 
-					for(JsonElement map : maplist) {
+					for(JsonElement map : maplist) { // maplist 에서 map 꺼내기
 						JsonObject mapObj = map.getAsJsonObject();
-						String id = cafe.get("id").getAsString();
+						String id = cafe.get("id").getAsString(); // id 비교 ~~ 
 						String map_id = mapObj.get("place_id").getAsString();
 						if(!id.equals(map_id)) {
-							cafeArr.add(cafe);
+							addPossible = true;
 						}
 					}
+					if(addPossible) cafeArr.add(cafe);
 				}
 			}
 			respObj.add("cafe_list", cafeArr);
@@ -232,10 +239,11 @@ public class MapController {
 		String foodPath = sc.getRealPath("resources/json/food.json");
 		JsonArray foodArr = new JsonArray();
 		File foodFile = new File(foodPath);
-		if(cafeFile.exists()) {
+		if(foodFile.exists()) {
 			Reader reader = new FileReader(foodPath);
 			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
 			JsonArray arr = (JsonArray)readObj.get("food_list");
+			boolean addPossible = false;
 			for(JsonElement ele : arr) {
 				JsonObject foodObj = ele.getAsJsonObject();
 				JsonObject food = foodObj.get("food").getAsJsonObject();
@@ -246,75 +254,96 @@ public class MapController {
 						String id = food.get("id").getAsString();
 						String map_id = mapObj.get("place_id").getAsString();
 						if(!id.equals(map_id)) {
-							cafeArr.add(food);
+							addPossible = true;
 						}
 					}
+					if(addPossible) foodArr.add(food);
 				}
 			}
 			respObj.add("food_list", foodArr);
 		}
 		String respBody =  gson.toJson(respObj);
+		System.out.println(respBody);
 		return respBody;
 	}
 
 	@ResponseBody
-	@RequestMapping(value="searchBtn",produces="application/json;charset=utf8",method=RequestMethod.GET)
-	public String searchByCategory(String category, HttpServletRequest req) throws Exception{
+	@RequestMapping(value="searchCafeBtn",produces="application/json;charset=utf8",method=RequestMethod.GET)
+	public String searchByCafe(String category, HttpServletRequest req) throws Exception{
 		String cafePath = sc.getRealPath("resources/json/cafe.json");
 		Gson gson = new Gson();
 		JsonArray cafeArr = new JsonArray();
 		JsonObject respObj = new JsonObject();
-		String category_name = null;
-		System.out.println(category);
-		if(category.contentEquals("cafeBtn")) {category_name = "카페";}
-		else if(category.contentEquals("foodBtn")) {category_name = "음식점";}
 
-		List<MapDTO> list = mapservice.searchByCategory(category_name);
+		List<MapDTO> list = mapservice.searchByCategory("카페");
 		JsonArray maplist = gson.fromJson(gson.toJson(list), JsonArray.class);
+		for(JsonElement ele : maplist) {
+			JsonObject obj = ele.getAsJsonObject();
+			int result = mapservice.selectPartyOn(obj.get("place_id").getAsInt());
+			obj.addProperty("partyOn", result);
+		}
 		respObj.add("map_list", maplist);
+		
 		File cafeFile = new File(cafePath);
 		if(cafeFile.exists()) {
 			Reader reader = new FileReader(cafePath);
 			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
 			JsonArray arr = (JsonArray)readObj.get("cafe_list");
+			boolean addPossible = false;
 			for(JsonElement ele : arr) {
 				JsonObject cafeObj = ele.getAsJsonObject();
 				JsonObject cafe = cafeObj.get("cafe").getAsJsonObject();
-				String place_name = cafe.get("place_name").getAsString();
-				//				if(place_name.contains(keyword)) { 
 				for(JsonElement map : maplist) {
 					JsonObject mapObj = map.getAsJsonObject();
 					String id = cafe.get("id").getAsString();
 					String map_id = mapObj.get("place_id").getAsString();
 					if(!id.equals(map_id)) {
-						cafeArr.add(cafe);
+						addPossible = true;
 					}
 				}
-				//				}
+				if(addPossible) cafeArr.add(cafe);
 			}
 			respObj.add("cafe_list", cafeArr);
 		}
+		
+		String respBody =  gson.toJson(respObj);
+		return respBody;
+	}
+	@ResponseBody
+	@RequestMapping(value="searchFoodBtn",produces="application/json;charset=utf8",method=RequestMethod.GET)
+	public String searchByFood(HttpServletRequest req) throws Exception{
+		Gson gson = new Gson();
+		JsonObject respObj = new JsonObject();
+		List<MapDTO> list = mapservice.searchByCategory("음식점");
+		JsonArray maplist = gson.fromJson(gson.toJson(list), JsonArray.class);
+		for(JsonElement ele : maplist) {
+			JsonObject obj = ele.getAsJsonObject();
+			int result = mapservice.selectPartyOn(obj.get("place_id").getAsInt());
+			obj.addProperty("partyOn", result);
+		}
+		respObj.add("map_list", maplist);
+		
 		String foodPath = sc.getRealPath("resources/json/food.json");
 		JsonArray foodArr = new JsonArray();
+		
 		File foodFile = new File(foodPath);
-		if(cafeFile.exists()) {
+		if(foodFile.exists()) {
 			Reader reader = new FileReader(foodPath);
 			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
 			JsonArray arr = (JsonArray)readObj.get("food_list");
 			for(JsonElement ele : arr) {
 				JsonObject foodObj = ele.getAsJsonObject();
 				JsonObject food = foodObj.get("food").getAsJsonObject();
-				String place_name = food.get("place_name").getAsString();
-				//				if(place_name.contains(keyword)) { 
+				boolean addPossible = false;
 				for(JsonElement map : maplist) {
 					JsonObject mapObj = map.getAsJsonObject();
 					String id = food.get("id").getAsString();
 					String map_id = mapObj.get("place_id").getAsString();
 					if(!id.equals(map_id)) {
-						cafeArr.add(food);
+						addPossible = true;
 					}
 				}
-				//				}
+				if(addPossible) foodArr.add(food);
 			}
 			respObj.add("food_list", foodArr);
 		}
@@ -465,6 +494,18 @@ public class MapController {
 		request.setAttribute("img", img);
 		request.setAttribute("markerlat", mapdto.getLat());
 		request.setAttribute("markerlng", mapdto.getLng());
+		request.setAttribute("parent_seq", mapdto.getSeq());
+		Map<ReviewDTO,ReviewFileDTO> rmap = new LinkedHashMap<>();
+		// Map 은 순서없이 저장??
+		List<ReviewDTO> rlist = rservice.selectByPseq(mapdto.getSeq());
+		for(ReviewDTO rdto : rlist) {
+			System.out.println(rdto.getSdate());
+			ReviewFileDTO rf = rservice.selectFileByPseq(rdto.getSeq());
+			rmap.put(rdto, rf);
+		}
+		request.setAttribute("reviewMap", rmap);
+		// 리뷰 사진
+		
 		return "map/map";
 	}
 
