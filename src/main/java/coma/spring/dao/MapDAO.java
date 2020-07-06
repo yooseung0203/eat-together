@@ -24,8 +24,8 @@ public class MapDAO {
 		return mybatis.selectList("Map.selectAll");
 	}
 	
-	public List<MapDTO> searchByKeyword(int place_id) throws Exception{
-		return mybatis.selectList("Map.searchByKeyword", place_id);
+	public List<MapDTO> searchByPlace_id(int place_id) throws Exception{
+		return mybatis.selectList("Map.searchByPlace_id", place_id);
 	}
 	
 	public int selectPartyOn(int place_id) throws Exception{
@@ -34,5 +34,13 @@ public class MapDAO {
 	
 	public MapDTO selectOne(int place_id) throws Exception{
 		return mybatis.selectOne("Map.selectOne",place_id);
+	}
+	
+	public List<MapDTO> searchByKeyword(String keyword) throws Exception{
+		return mybatis.selectList("Map.searchByKeyword",keyword);
+	}
+	
+	public List<MapDTO> searchByCategory(String category) throws Exception{
+		return mybatis.selectList("Map.searchByCategory",category);
 	}
 }

@@ -21,13 +21,19 @@ public class MapService {
 	public List<MapDTO> selectAll() throws Exception{
 		return mapdao.selectAll();
 	}
-	public List<MapDTO> searchByKeyword(int place_id) throws Exception{
-		return mapdao.searchByKeyword(place_id);
+	public List<MapDTO> searchByPlace_id(int place_id) throws Exception{
+		return mapdao.searchByPlace_id(place_id);
 	}
 	public int selectPartyOn(int place_id) throws Exception{
 		return mapdao.selectPartyOn(place_id);
 	}
 	public MapDTO selectOne(int place_id) throws Exception{
 		return mapdao.selectOne(place_id);
+	}
+	public List<MapDTO> searchByKeyword(String keyword) throws Exception{
+		return mapdao.searchByKeyword(keyword);
+	}
+	public List<MapDTO> searchByCategory(String category) throws Exception{
+		return mapdao.searchByCategory(category);
 	}
 }

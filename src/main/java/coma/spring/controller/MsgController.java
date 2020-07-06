@@ -40,6 +40,7 @@ public class MsgController {
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 받은 쪽지함");
+		int newMsg=msgservice.newmsg(msg_receiver);
 		
 		if(session.getAttribute("msgcpage")==null) {
 			session.setAttribute("msgcpage", 1);
@@ -50,6 +51,7 @@ public class MsgController {
 		int msgcpage=(int)session.getAttribute("msgcpage");
 		List<MsgDTO> dto = msgservice.selectBySender(msgcpage,msg_receiver);
 		String navi = msgservice.Sendnavi(msgcpage,msg_receiver);
+		request.setAttribute("newMsg", newMsg);
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
 		return "msg/mypage_sendmsg";
@@ -123,8 +125,10 @@ public class MsgController {
 	public String msgView(HttpServletRequest request,int msg_seq)throws Exception{
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
+
 		//읽음처리되는것
 		int result = msgservice.updateView(msg_seq);
+
 		request.setAttribute("msgView", msgDTO);
 		return "msg/msgView";
 	}

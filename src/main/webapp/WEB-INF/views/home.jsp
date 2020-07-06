@@ -55,6 +55,7 @@
 	<!-- ******************* -->
 
 	<!--contents-->
+	<a href="/chat/chatroom?roomNum=3">채팅하기</a>
 	<div class="container-fluid ">
 		<!-- 슬라이드 -->
 		<div class="row slide-area ">
@@ -132,7 +133,14 @@
 			<div class="col-sm-12">회원가입 권유</div>
 		</div>
 	</div>
-
+	
+	<!-- 카카오톡으로 로그인한 경우 accoun_email인증이 안되었기 때문에 mypage로 이동시킨다. -->
+	<script>
+		if ("${loginInfo.account_email}" == "need@eat-together.com") {
+			alert("이메일 인증 후 사이트를 이용해주시길 바랍니다.");
+			location.replace("/member/mypage_myinfo");
+		}
+	</script>
 
 	<!-- ******************* -->
 	<!-- footer  -->
