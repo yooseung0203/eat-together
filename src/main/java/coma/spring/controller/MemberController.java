@@ -176,7 +176,7 @@ public class MemberController {
 		System.out.println("signupProc 비밀번호 : " + mdto.getPw());
 
 		System.out.println("회원가입 성공");
-		return "home";
+		return "redirect:/";
 	}
 
 	//회원가입시 아이디 중복체크
@@ -208,6 +208,7 @@ public class MemberController {
 
 		System.out.println("loginResult 결과 : "+ result);
 
+		//by 지은, 로그인 성공시 세션에 값을 저장해준다_20200706
 		if(result==true) {
 			MemberDTO mdto = mservice.selectMyInfo(id);
 			session.setAttribute("loginInfo", mdto);
@@ -220,6 +221,34 @@ public class MemberController {
 			return "redirect:/";
 		}
 
+	}
+	
+	//로그인 시 유효성 검사
+	@RequestMapping("isPwCorrect")
+	@ResponseBody
+	public String isPwCorrect(@RequestParam String id, @RequestParam String pw)throws Exception {
+		System.out.println("id : " + id);
+		String protectedpw = mservice.getSha512(pw);
+		System.out.println("pw : " + protectedpw);
+
+		Map<String, String> param = new HashMap<>();
+		param.put("targetColumn1", "id");
+		param.put("targetValue1", id);
+		param.put("targetColumn2", "pw");
+		param.put("targetValue2", protectedpw);
+
+		boolean result = mservice.logIn(param);
+
+		System.out.println("loginResult 결과 : "+ result);
+
+		//by 지은, 아이디와 입력한 비밀번호가 일치한 경우 correct를 반환, 틀린 경우 uncorrect 반환_20200706
+		if(result==true) {
+			String msg = "correct";
+			return msg;
+		}else {
+			String msg = "uncorrect";
+			return msg;
+		}
 	}
 
 	//회원탈퇴하기

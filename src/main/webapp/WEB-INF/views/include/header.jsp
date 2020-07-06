@@ -91,7 +91,7 @@
 	$("#goToMyPage").on("click", function() {
 		if ("${loginInfo.id}" == "") {
 			alert("로그인 후 이용해주세요");
-			location.replace('/');
+			location.replace('/member/loginview');
 		} else {
 			location.replace('/member/mypage_myinfo');
 		}

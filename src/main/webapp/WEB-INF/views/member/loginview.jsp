@@ -66,21 +66,56 @@
 		<!-- 카카오톡 아이디로 로그인 버튼 노출 영역 -->
 
 		<div class="login-container">
-			<div id="findId" onclick="window.open('/member/findid','아이디 찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">아이디를 잊으셨나요?</div>
-			<div id="findPw" onclick="window.open('/member/findpw','비밀번호 찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">비밀번호를 잊으셨나요?</div>
+			<div id="findId"
+				onclick="window.open('/member/findid','아이디 찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">아이디를
+				잊으셨나요?</div>
+			<div id="findPw"
+				onclick="window.open('/member/findpw','비밀번호 찾기','width=430,height=500,location=no,status=no,scrollbars=yes');">비밀번호를
+				잊으셨나요?</div>
 		</div>
 	</div>
 
 	<script>
-	$("#loginBtn").on("click", function(){
-		if($("#id").val()==""){
-			alert("아이디를 입력해주세요.");
-			return false;
-		}else if($("#pw").val()==""){
-			alert("비밀번호를 입력해주세요.");
-			return false;
-		}
-	})
+		$("#loginBtn").on(
+				"click",
+				function() {
+					if ($("#id").val() == "") {
+						alert("아이디를 입력해주세요.");
+						return false;
+					} else if ($("#pw").val() == "") {
+						alert("비밀번호를 입력해주세요.");
+						return false;
+					} else {
+						//by 지은. 비밀번호 오류 시 유효성 검사하기_20200706
+						$.ajax({
+							url : "/member/isPwCorrect",
+							type : 'POST',
+							data : {
+								id : $("#id").val(),
+								pw : $('#pw').val()
+							},
+							success : function(msg) {
+								if (msg == "uncorrect") {
+									alert("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
+									$("#id").val("");
+									$("#pw").val("");
+									$("#id").focus();
+									location.replace("redirect:/member/loginview")
+								} else if(msg =="correct"){
+									alert("로그인 성공하였습니다.");
+									return true;
+								}
+							},
+							error : function(jqXHR, textStatus, errorThrown) {
+								console.log("arjax error : " + textStatus + "\n"
+										+ errorThrown);
+								console.warn(jqxhr.responseText);
+								return false;
+
+							}
+						});
+					}
+				})
 	</script>
 
 
