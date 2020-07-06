@@ -27,6 +27,7 @@ import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.PartySearchListDTO;
+import coma.spring.service.ChatService;
 import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
 
@@ -40,6 +41,9 @@ public class PartyController {
 	@Autowired
 	private MapService mapservice;
 
+	@Autowired
+	private ChatService cservice;
+	
 	@Autowired
 	private HttpSession session;
 	
@@ -102,6 +106,7 @@ public class PartyController {
 		
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
+		cservice.insertChatRoom(dto);
 		//모임 등록 후 등록된 페이지로 이동 
 		//PartyDTO content=pservice.selectBySeq(myseq);
 		
