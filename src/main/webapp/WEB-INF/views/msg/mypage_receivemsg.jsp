@@ -151,6 +151,11 @@ function msgViewPopUp(msg_seq){
 					</c:forEach>
 				</div>
 				<div class="row">
+				<div class="col-12">
+					${navi}
+				</div>
+				</div>
+				<div class="row">
 					<div class="col-12" align="center">
 						<button id="writeMsg">쪽지보내기</button>
 					</div>
