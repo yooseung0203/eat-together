@@ -210,7 +210,13 @@ public class MemberController {
 
 		if(result==true) {
 			MemberDTO mdto = mservice.selectMyInfo(id);
+			String msg_receiver=mdto.getId();
+			System.out.println("아이디는"+msg_receiver);
+			int newmsg = msgservice.newmsg(msg_receiver);
+			System.out.println("새로운메세지"+newmsg);
 			session.setAttribute("loginInfo", mdto);
+			//새로운메세지 확인
+			session.setAttribute("newMsg", newmsg);
 			System.out.println("로그인 성공");
 			return "redirect:/";
 		}else {
