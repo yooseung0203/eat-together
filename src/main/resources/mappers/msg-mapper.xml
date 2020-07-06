@@ -4,13 +4,13 @@
 	<!-- navi 카운트 -->
 	<select id="getAdminCount" resultType="int">
 		select count(*) from msg
-		where msg_receiver = #{msg_receiver} and msg_sender!='administrator'
+		where msg_receiver = #{msg_receiver} and msg_sender='administrator'
 		and
 		receiver_del=0
 	</select>
 	<select id="getSenderCount" resultType="int">
 		select count(*) from msg
-		where msg_receiver = #{msg_receiver} and msg_sender='administrator'
+		where msg_receiver = #{msg_receiver} and msg_sender!='administrator'
 		and
 		receiver_del=0
 	</select>
