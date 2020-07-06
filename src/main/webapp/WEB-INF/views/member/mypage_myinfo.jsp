@@ -63,8 +63,9 @@
 					<tr>
 						<th scope="row">PROFILE IMAGE</th>
 						<td class="myinfo_text" id=profile_box><img
-								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
-								alt="" onError="this.src='/resources/img/no_img.png'"></td>
+                        src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
+                        alt="" onError="this.src='/resources/img/no_img.png'"></td>
+
 					</tr>
 					<tr>
 						<th scope="row">ID</th>

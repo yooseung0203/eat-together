@@ -120,8 +120,7 @@
 			var upload = document.getElementById('uploadProfile');
 			upload.onclick = function() {
 				location.href = "/memberfile/deleteFileById";
-				window
-						.open('/member/editProfileImage', '프로필이미지 수정하기',
+				window.open('/member/editProfileImage', '프로필이미지 수정하기',
 								'width=430,height=500,location=no,status=no,scrollbars=yes');
 
 			}
@@ -131,7 +130,7 @@
 			})
 
 			//nickname regex
-			$("#nickname").focusout(function() {
+			$("#nickname").focusout(function() { 
 				var nickname = $("#nickname").val();
 				var nicknameregex = /^[가-힣]{2,6}$/;
 				if ($("#nickname").val() != "") {
