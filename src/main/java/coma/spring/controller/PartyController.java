@@ -133,7 +133,7 @@ public class PartyController {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		String img = pservice.clew(content.getParent_name());
 		request.setAttribute("img", img);
-		
+		request.setAttribute("con",content);
 		return "/party/party_content";
 	}
 	
