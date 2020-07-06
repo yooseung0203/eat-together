@@ -49,7 +49,7 @@
 									</span>
 								</c:when>
 								<c:otherwise>
-									<div id="goToMyPage">마이페이지</div>
+									<a href="#" id="goToMyPage">마이페이지</a>
 								</c:otherwise>
 							</c:choose>
 						</div>

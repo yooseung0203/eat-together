@@ -23,7 +23,7 @@ import coma.spring.service.MsgService;
 @RequestMapping("/member/")
 public class MemberController {
 	//By 지은, 회원서비스 관련 기능을 모아놓은 컨트롤러
-	
+
 	@Autowired
 	private MemberService mservice;
 
@@ -119,7 +119,7 @@ public class MemberController {
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
-		
+
 		//로그인한 회원정보 view로 보내기
 		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
@@ -154,7 +154,7 @@ public class MemberController {
 			mservice.kakaoLogout((String)session.getAttribute("access_Token"));
 			session.invalidate();
 			return "redirect:/";
-		//카카오톡 로그인이 아닌 경우
+			//카카오톡 로그인이 아닌 경우
 		}else {
 			session.invalidate();
 			return "redirect:/";
@@ -247,8 +247,16 @@ public class MemberController {
 
 			if(result>0) {
 				System.out.println("회원 탈퇴 완료");
-				session.invalidate();
-				return "redirect:/";
+				//By지은, 카카오톡 로그인의 경우 access_Token로그아웃이 필요하다_20200706
+				if(session.getAttribute("access_Token")!=null) {
+					mservice.kakaoLogout((String)session.getAttribute("access_Token"));
+					session.invalidate();
+					return "redirect:/";
+					//카카오톡 로그인이 아닌 경우
+				}else {
+					session.invalidate();
+					return "redirect:/";
+				}
 			}else {
 				System.out.println("회원 탈퇴 실패, 관리자에게 문의하세요.");
 				return "error";
@@ -283,7 +291,7 @@ public class MemberController {
 			System.out.println("비밀번호 수정 성공 :" + result);
 			mdto.setPw(newprotectedpw);
 			session.setAttribute("loginInfo", mdto);
-			
+
 			return "/member/editMyInfo";
 		}
 
@@ -317,7 +325,7 @@ public class MemberController {
 		mdto.setBirth(birth);
 		mdto.setAccount_email(account_email);
 		session.setAttribute("loginInfo", mdto);
-		
+
 		String parent_id = id;
 		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
 
