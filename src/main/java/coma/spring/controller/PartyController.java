@@ -3,6 +3,8 @@ package coma.spring.controller;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,6 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.PartySearchListDTO;
+import coma.spring.service.ChatService;
 import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
 
@@ -30,12 +34,14 @@ import coma.spring.service.PartyService;
 @RequestMapping("/party/")
 public class PartyController {
 	
-
 	@Autowired
 	private PartyService pservice;
 	
 	@Autowired
 	private MapService mapservice;
+
+	@Autowired
+	private ChatService cservice;
 	
 	@Autowired
 	private HttpSession session;
@@ -99,6 +105,7 @@ public class PartyController {
 		
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
+		cservice.insertChatRoom(dto);
 		//모임 등록 후 등록된 페이지로 이동 
 		//PartyDTO content=pservice.selectBySeq(myseq);
 		
@@ -109,7 +116,18 @@ public class PartyController {
 		return "redirect:/party/party_content";
 	}
 	
-	//모임 글보기
+	// 태훈 모임 글보기
+	@RequestMapping(value="party_content_include")
+	public String party_content_include(HttpServletRequest request) throws Exception {
+		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
+		String img = pservice.clew(content.getParent_name());
+		
+		request.setAttribute("con",content);
+		request.setAttribute("img", img);
+		
+		return "/include/party_content_include";
+	}
+	// 예지 모임 글 보기
 	@RequestMapping(value="party_content")
 	public String party_content(String seq, HttpServletRequest request) throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
@@ -204,9 +222,53 @@ public class PartyController {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
-	
+	// 태훈 모임 리스트 출력
 	@RequestMapping("partylist")
-	public String partyList() throws Exception {
+	public String partyList(HttpServletRequest request) throws Exception {
+		
+		List<PartyDTO> partyList = pservice.selectList();
+		System.out.println(partyList.size());
+		// seq 11번 , 9번 글이 이미지 안읽어짐 뭔가 오류
+		//System.out.println(pservice.clew(partyList.get(38).getParent_name()));
+		//System.out.println(pservice.clew(partyList.get(37).getParent_name()));
+		
+		
+		List<String> imgList = new ArrayList<>();
+		for(int i=0; i<partyList.size(); i++) {
+					
+			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
+			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
+		}
+		
+		
+		request.setAttribute("list", partyList);
+		request.setAttribute("imglist", imgList);
+		return "/party/party_list";
+	}
+	// 태훈 모임 상세 검색
+	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
+	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
+
+		System.out.println(pdto.getSido());
+		System.out.println(pdto.getGugun());
+		System.out.println(pdto.getGender());
+		System.out.println(pdto.getAge());
+		System.out.println(pdto.getDrinking());
+		System.out.println(pdto.getText());
+		System.out.println(pdto.getSearch());
+		
+		List<PartyDTO> partyList = pservice.partySearch(pdto);
+		System.out.println(partyList.size());
+		List<String> imgList = new ArrayList<>();
+		for(int i=0; i<partyList.size(); i++) {
+					
+			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
+			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
+		}
+		
+		System.out.println(partyList);
+		request.setAttribute("list", partyList);
+		request.setAttribute("imglist", imgList);
 		return "/party/party_list";
 	}
 	

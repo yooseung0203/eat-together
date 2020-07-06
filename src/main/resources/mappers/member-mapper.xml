@@ -27,8 +27,8 @@
 		member where id=#{value}
 	</select>
 	<update id="editMyInfo">
-		update member set ${targetColumn1}=#{targetValue1},
-		${targetColumn2}=#{targetValue2} where
+		update member set
+		${targetColumn1}=#{targetValue1}, ${targetColumn2}=#{targetValue2} where
 		${targetColumn3}=#{targetValue3}
 	</update>
 

@@ -1,10 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!-- BootStrap4 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -29,19 +31,28 @@
 
 <!-- ******************* -->
 <!-- header,footer용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/index-css.css">
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
 <title>모임 리스트</title>
 <style>
-	.aa{
-		width: 80%;
-		margin: auto;
-	}
+.aa {
+	width: 80%;
+	margin: auto;
+}
+
+.listtitle {
+	font-size: 35px;
+}
+
+.partylist {
+	margin-bottom: 15px;
+}
 </style>
 <script>
 	$(function(){
-		var area0 = ["시/도 선택","서울특별시","인천광역시","대전광역시","광주광역시","대구광역시","울산광역시","부산광역시","경기도","강원도","충청북도","충청남도","전라북도","전라남도","경상북도","경상남도","제주도"];
+		var area0 = ["시/도 선택","서울","인천","대전","광주","대구","울산","부산","경기","강원","충북","충남","전북","전남","경북","경남","제주특별자치도"];
 		var area1 = ["강남구","강동구","강북구","강서구","관악구","광진구","구로구","금천구","노원구","도봉구","동대문구","동작구","마포구","서대문구","서초구","성동구","성북구","송파구","양천구","영등포구","용산구","은평구","종로구","중구","중랑구"];
 		var area2 = ["계양구","남구","남동구","동구","부평구","서구","연수구","중구","강화군","옹진군"];
 		var area3 = ["대덕구","동구","서구","유성구","중구"];
@@ -69,7 +80,7 @@
 		$("#sido").change(function(){
 			var areaindex = $('option:selected',$(this)).index();
 			$("option",$("#gugun")).remove();
-			if(idx==0){
+			if(areaindex==0){
 				$("#gugun").append("<option value=''>구/군 선택</option>");
 			}
 			else{
@@ -87,107 +98,179 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
-	
+
 	<div class="container-fluid">
-            <div class="row aa">
-                <div class="col-12 jumbotron">
-                    <div class="row">
-                        <div class="col mb-2">
-                            <div class="card">
-                                <img src="/resources/img/itsearth.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h3 class="card-title">지구당</h3>
-                                    <p class="card-text">가성비 좋은 텐동 맛집. 곱배기로 시키면 추가 금액 없이 밥이 곱배기.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-2">
-                            <div class="card">
-                                <img src="/resources/img/sixme.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h3 class="card-title">육미 식당</h3>
-                                    <p class="card-text">점심에는 매일 다른 고정 메뉴가 나오는 선술식당. 공기밥도 무료고 배고플때 가면 아주 굳</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-2">
-                            <div class="card">
-                                <img src="/resources/img/bab.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">바비공방</h5>
-                                    <p class="card-text">양은 조금 적지만 맛은 보장되는 맛집.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-2">
-                            <div class="card">
-                                <img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col mb-2">
-                            <div class="card">
-                                <img src="/resources/img/janga.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                    <a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row aa">
-                <div class="col-12 jumbotron">
-                    <span class="listtitle">상세 검색</span>
-                    <div id="areacheck">
-                        지역:  
-                        <select name="sido" id="sido"></select>
-                        <select name="gugun" id="gugun"></select>    
-                    </div>
-                    <div id="gendercheck">
-                        성별 :   
-                        <input type="radio" name="gender" value="man"/>남자만
-                        <input type="radio" name="gender" value="woman"/>여자만
-                        <input type="radio" name="gender" value="both" checked="checked"/>남녀무관
-                    </div>
-                    <div id="agecheck">
-                        연령 : 
-                        <input type="checkbox" name="age" value="10" checked/>10대
-                        <input type="checkbox" naem="age" value="20"/>20대
-                        <input type="checkbox" name="age" value="30"/>30대
-                        <input type="checkbox" name="age" value="40"/>40대
-                        <input type="checkbox" name="age" value="50"/>50대 이상
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                                <div role="separator" class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
-                            </div>
-                        </div>
-                        <input type="text" class="form-control" aria-label="Text input with dropdown button">
-                    </div>
-                </div> 
-            </div>
-        </div>
-	
+		<div class="row aa">
+			<div class="col-12 jumbotron">
+				<span class="listtitle">이번주 인기 맛집 Top 5!</span>
+				<div class="row ingi">
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/itsearth.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h3 class="card-title">지구당</h3>
+								<p class="card-text">가성비 좋은 텐동 맛집. 곱배기로 시키면 추가 금액 없이 밥이 곱배기.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/sixme.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h3 class="card-title">육미 식당</h3>
+								<p class="card-text">점심에는 매일 다른 고정 메뉴가 나오는 선술식당. 공기밥도 무료고
+									배고플때 가면 아주 굳</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/bab.jpg" class="card-img-top" alt="...">
+							<div class="card-body">
+								<h5 class="card-title">바비공방</h5>
+								<p class="card-text">양은 조금 적지만 맛은 보장되는 맛집.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/janga.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h5 class="card-title">Card title</h5>
+								<p class="card-text">Some quick example text to build on the
+									card title and make up the bulk of the card's content.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 col-sm-4 col-md-2">
+						<div class="card">
+							<img src="/resources/img/janga.jpg" class="card-img-top"
+								alt="...">
+							<div class="card-body">
+								<h5 class="card-title">Card title</h5>
+								<p class="card-text">Some quick example text to build on the
+									card title and make up the bulk of the card's content.</p>
+								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row aa">
+			<div class="col-12 jumbotron">
+				<form action="/party/partysearch" method="post">
+					<span class="listtitle">통합 검색</span>
+					<div id="areacheck">
+						지역: <select name="sido" id="sido"></select> <select name="gugun"
+							id="gugun"></select>
+					</div>
+					<div id="gendercheck">
+						성별 : <input type="radio" name="gender" value="m" />남자만 <input
+							type="radio" name="gender" value="f" />여자만 <input type="radio"
+							name="gender" value="a" />남녀무관
+					</div>
+					<div id="agecheck">
+						연령 : <input type="checkbox" name="age" value="10" />10대 <input
+							type="checkbox" name="age" value="20" />20대 <input
+							type="checkbox" name="age" value="30" />30대 <input
+							type="checkbox" name="age" value="40" />40대 <input
+							type="checkbox" name="age" value="50" />50대 이상
+					</div>
+
+					<div id="drinkingcheck">
+						음주 : <input type="radio" name="drinking" value="0" />불가능 <input
+							type="radio" name="drinking" value="1" />가능 <input type="hidden"
+							name="drinking" value="2" />
+					</div>
+
+					<div>
+						<select name="text">
+							<option value="title">제목</option>
+							<option value="writer">작성자</option>
+							<option value="content">내용</option>
+							<option value="both">제목 + 내용</option>
+						</select> 
+						<input type="text" name="search">
+						<input type="submit" value="검색">
+					</div>
+					
+				</form>
+			</div>
+		</div>
+		<div class="row aa">
+			<div class="col-12 jumbotron">
+				<div class="row">
+					<c:choose>
+						<c:when test="${empty list}">
+							<div class="col-sm-12 col-md-3">
+								<span>검색 된 내용이 없습니다.</span>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<c:forEach var="partyList" items="${list}" varStatus="status">
+								<div class="col-sm-12 col-md-3">
+									<div class="card partylist">
+										<img src="${imglist[status.index]}" class="card-img-top">
+										<div class="card-body">
+											<h5 class="card-title">${partyList.parent_name }</h5>
+											<p class="card-text">
+												날짜 : ${partyList.meetdate}<br>인원 : ${partyList.count }
+											</p>
+											<input type="hidden" class="party_seq" value="${partyList.seq}">
+											<button type="button" class="btn btn-info btn-lg myBtn">상세 보기</button>
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal fade" id="mymodal" role="dialog">
+		<div class="modal-dialog modal-xl">
+
+			<!-- Modal content-->
+			<div class="modal-content" id="aaa">
+				<!--<jsp:include page="/WEB-INF/views/include/party_content_include.jsp" />-->
+			</div>
+		</div>
+	</div>
+
 	<!-- ******************* -->
 	<!-- footer  -->
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 	<!-- footer  -->
 	<!-- ******************* -->
 </body>
+<script>
+	$(".myBtn").on("click",function(){
+		if("${loginInfo.id}" == ""){
+			alert("로그인 후 이용해주세요");
+		}else{
+			var select_seq = $(this).siblings(".party_seq").val();
+			$("#aaa").empty();
+			$.ajax({
+				url:"/party/party_content_include",
+				data:{
+					seq:select_seq
+				}
+			}).done(function(con){
+				console.log(con);
+				$("#aaa").append(con);
+				$("#mymodal").modal();
+			});
+		}	
+	});	
+</script>
 </html>
