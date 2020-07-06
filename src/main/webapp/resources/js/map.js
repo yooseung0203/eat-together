@@ -705,4 +705,21 @@
 				console.log(resp);
 			})
 		})
+		$("#review_write").on("submit",function(){
+			var result = false;
+			if($(".input_content").text()==""){
+				alert("리뷰 내용을 입력해주세요.");
+			}else if(!$("input[name='rating']").is(':checked')){
+				alert("별점을 선택해주세요.");
+			}else if($(".reviewlist .writer b").text()==""){
+				alert("로그인을 해주세요.");
+			}else{
+				result = true;
+				$("#review_content").val($(".input_content").text());
+			}
+			return result;
+		})
+		$('#imgFile').on("change",function() {
+			$(".filebox i").css('color','blue');
+		});
 	})

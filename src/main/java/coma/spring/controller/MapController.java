@@ -8,7 +8,9 @@ import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -34,8 +36,11 @@ import com.google.gson.JsonObject;
 
 import coma.spring.dto.MapDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.ReviewDTO;
+import coma.spring.dto.ReviewFileDTO;
 import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
+import coma.spring.service.ReviewService;
 
 @Controller
 @RequestMapping("/map/")
@@ -45,10 +50,10 @@ public class MapController {
 
 	@Autowired
 	private MapService mapservice;
-
 	@Autowired
 	private PartyService pservice;
-
+	@Autowired
+	private ReviewService rservice;
 	@Autowired
 	private ServletContext sc;
 
@@ -489,6 +494,18 @@ public class MapController {
 		request.setAttribute("img", img);
 		request.setAttribute("markerlat", mapdto.getLat());
 		request.setAttribute("markerlng", mapdto.getLng());
+		request.setAttribute("parent_seq", mapdto.getSeq());
+		Map<ReviewDTO,ReviewFileDTO> rmap = new LinkedHashMap<>();
+		// Map 은 순서없이 저장??
+		List<ReviewDTO> rlist = rservice.selectByPseq(mapdto.getSeq());
+		for(ReviewDTO rdto : rlist) {
+			System.out.println(rdto.getSdate());
+			ReviewFileDTO rf = rservice.selectFileByPseq(rdto.getSeq());
+			rmap.put(rdto, rf);
+		}
+		request.setAttribute("reviewMap", rmap);
+		// 리뷰 사진
+		
 		return "map/map";
 	}
 
