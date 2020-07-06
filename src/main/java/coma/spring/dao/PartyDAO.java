@@ -70,7 +70,7 @@ public class PartyDAO {
 		param.put("place_id", place_id);
 		return mybatis.selectList("Party.selectByPageNo",param);
 	}
-	
+	// 이미지 뽑아오기
 	public String clew(String str) throws Exception {
 		Document doc = Jsoup.connect("https://m.map.kakao.com/actions/searchView?q="+str).get();
 		Element linkTag = doc.selectFirst("ul#placeList>li>a>span");
@@ -80,60 +80,27 @@ public class PartyDAO {
 	}
 
 	// 태훈 모임 리스트 뽑기
-	public List<PartyDTO> selectList() {
-		return mybatis.selectList("Party.selectList");
+//	public List<PartyDTO> selectList() {
+//		return mybatis.selectList("Party.selectList");
+//	}
+	public List<PartyDTO> selectList(int cpage) {
+		int start = cpage * PartyConfiguration.SEARCH_COUNT_PER_PAGE - (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
+		int end = start + (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
+		Map<String, Integer> param = new HashMap<>();
+		param.put("start", start);
+		param.put("end", end);
+		return mybatis.selectList("Party.selectList" ,param);
 	}
+	// 태훈 전체 모임 카운트
+	public int getListCount() throws Exception{
+		return mybatis.selectOne("Party.getArticleCount");
+	}
+	
 	// 태훈 모임 통합 검색
 	public List<PartyDTO> partySearch(Map<String, Object> param){
-		System.out.println();
-		
-		
-		System.out.println("address : " +param.get("address"));
-		
-		System.out.println("gender : "+param.get("gender"));
-		
-		System.out.println("ageList : "+param.get("ageList"));
-		
-		System.out.println("size" + param.get("ageList.size"));
-		
-		System.out.println("drinking : "+param.get("drinking"));
-		
-		System.out.println("title :"+param.get("title"));
-		
-		System.out.println("writer : "+param.get("writer"));
-		
-		System.out.println("content : "+param.get("content"));
-		
-		System.out.println("both : "+param.get("both"));
 		
 		return mybatis.selectList("Party.partySearch", param);
 	}
-	/*
-	// 태훈 모임 통합 검색
-	public List<PartyDTO> partySearch(String address, String gender,List<String> ageList, int drinking, String title, String writer, String content, String both){
-		System.out.println();
-		Map<String, Object> param = new HashMap<>();
-		param.put("address" ,address);
-		System.out.println("address : " +address);
-		param.put("gender",gender);
-		System.out.println("gender : "+gender);
-		param.put("ageList",ageList);
-		System.out.println("ageList : "+ageList);
-		param.put("ageList.size",ageList.size());
-		System.out.println(ageList.size());
-		param.put("drinking",drinking);
-		System.out.println("drinking : "+drinking);
-		param.put("title",title);
-		System.out.println("title :"+title);
-		param.put("writer",writer);
-		System.out.println("writer : "+writer);
-		param.put("content",content);
-		System.out.println("content : "+content);
-		param.put("both",both);
-		System.out.println("both : "+both);
-	
-		return mybatis.selectList("Party.partySearch", param);
-	}*/
 	
 	public int stopRecruit(String seq) throws Exception {
 		return mybatis.update("Party.stopRecruit",seq);

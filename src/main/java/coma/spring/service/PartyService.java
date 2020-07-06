@@ -44,9 +44,46 @@ public class PartyService {
 	}
 	
 	// 태훈 그냥 모임 글 보기
-	public List<PartyDTO> selectList() throws Exception {
-		List<PartyDTO> list = pdao.selectList();
+//	public List<PartyDTO> selectList() throws Exception {
+//		List<PartyDTO> list = pdao.selectList();
+//		return list;
+//	}
+	// 태훈 모임 20개씩
+	public List<PartyDTO> selectListByPage(int cpage) throws Exception {
+		List<PartyDTO> list = pdao.selectList(cpage);
 		return list;
+	}
+	// 태훈 페이지 네비
+	public String getPageNavi(int currentPage) throws Exception{
+		int recordTotalCount = pdao.getListCount(); 
+		int pageTotalCount = 0; 
+		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
+			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
+		}else {
+			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
+		}
+		if(currentPage < 1) {
+			currentPage = 1;
+		}else if(currentPage > pageTotalCount) {
+			currentPage = pageTotalCount;
+		}
+		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
+		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
+		if(endNavi > pageTotalCount) {
+			endNavi = pageTotalCount;
+		}
+		boolean needPrev = true; // <
+		boolean needNext = true; // >
+		StringBuilder sb = new StringBuilder();
+		if(startNavi == 1) {needPrev = false;}
+		if(endNavi == pageTotalCount) {needNext = false;}
+
+		if(needPrev) {sb.append("<li class='page-item'><a class='page-link' href='partylistByPage?cpage="+(startNavi-1)+"' tabindex='-1' aria-disabled='true'><i class=\"fas fa-chevron-left\"></i> </a></li>");}
+		for(int i = startNavi;i <= endNavi;i++) {
+			sb.append("<li class='page-item'><a class='page-link' href='selectMarkerInfo?cpage="+i+"&place_id="+place_id+"'>" + i + "</a></li>");
+		}
+		if(needNext) {sb.append("<li class='page-item'><a class='page-link' href='selectMarkerInfo?cpage="+(endNavi+1)+"'><i class=\"fas fa-chevron-right\"></i></a></li>");}
+		return sb.toString();
 	}
 	// 태훈 모임 글 상세 검색
 	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{
@@ -57,7 +94,8 @@ public class PartyService {
 	// 태훈 검색 키워드 가공
 	public Map<String, Object> searchKey(PartySearchListDTO pdto) throws Exception{
 		
-		Map<String, Object> param = new HashMap<>();
+		Map<String, Object> param = new HashMap<
+				>();
 	 
 		// 지역 정보
 		if(pdto.getSido().equals("시/도 선택")) {

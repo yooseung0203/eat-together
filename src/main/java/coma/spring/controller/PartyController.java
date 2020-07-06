@@ -117,7 +117,8 @@ public class PartyController {
 	}
 	
 	// 태훈 모임 글보기
-	@RequestMapping(value="party_content_include")
+	//@RequestMapping(value="party_content_include")
+	@RequestMapping(value="party_content_include2")
 	public String party_content_include(HttpServletRequest request) throws Exception {
 		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
 		String img = pservice.clew(content.getParent_name());
@@ -125,7 +126,8 @@ public class PartyController {
 		request.setAttribute("con",content);
 		request.setAttribute("img", img);
 		
-		return "/include/party_content_include";
+		//return "/include/party_content_include";
+		return "/include/party_content_include2";
 	}
 	// 예지 모임 글 보기
 	@RequestMapping(value="party_content")
@@ -222,25 +224,54 @@ public class PartyController {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
+//	// 태훈 모임 리스트 출력
+//	@RequestMapping("partylist")
+//	public String partyList(HttpServletRequest request) throws Exception {
+//		
+//		List<PartyDTO> partyList = pservice.selectList();
+//		System.out.println(partyList.size());
+//		// seq 11번 , 9번 글이 이미지 안읽어짐 뭔가 오류
+//		//System.out.println(pservice.clew(partyList.get(38).getParent_name()));
+//		//System.out.println(pservice.clew(partyList.get(37).getParent_name()));
+//		
+//		
+//		List<String> imgList = new ArrayList<>();
+//		for(int i=0; i<partyList.size(); i++) {
+//					
+//			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
+//			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
+//		}
+//		
+//		
+//		request.setAttribute("list", partyList);
+//		request.setAttribute("imglist", imgList);
+//		return "/party/party_list";
+//	}
 	// 태훈 모임 리스트 출력
-	@RequestMapping("partylist")
-	public String partyList(HttpServletRequest request) throws Exception {
+	@RequestMapping("partylistByPage")
+	public String partyListByPage(HttpServletRequest request) throws Exception {
 		
-		List<PartyDTO> partyList = pservice.selectList();
+		int cpage=1;
+		try {
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
+
+		}
+		List<PartyDTO> partyList = pservice.selectListByPage(cpage);
 		System.out.println(partyList.size());
 		// seq 11번 , 9번 글이 이미지 안읽어짐 뭔가 오류
 		//System.out.println(pservice.clew(partyList.get(38).getParent_name()));
 		//System.out.println(pservice.clew(partyList.get(37).getParent_name()));
-		
-		
+
+
 		List<String> imgList = new ArrayList<>();
 		for(int i=0; i<partyList.size(); i++) {
-					
+
 			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
 			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
 		}
-		
-		
+
+
 		request.setAttribute("list", partyList);
 		request.setAttribute("imglist", imgList);
 		return "/party/party_list";
