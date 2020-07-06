@@ -21,8 +21,11 @@ public class ChatService {
 		ChatStatics.savedChats.put(roomNum, list);
 		ChatStatics.savedChatsSeq.put(roomNum, list.size());		
 	}
+	// 채팅방 만들기 - PartyController에서 사용
 	public int insertChatRoom(PartyDTO pdto) {
 		return cdao.insertChatRoom(pdto);
 	}
+	
+	
 	
 }
