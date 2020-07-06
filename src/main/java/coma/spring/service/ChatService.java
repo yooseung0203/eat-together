@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import coma.spring.dao.ChatDAO;
 import coma.spring.dto.ChatDTO;
+import coma.spring.dto.ChatMemberDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.statics.ChatStatics;
 
@@ -26,6 +27,9 @@ public class ChatService {
 		return cdao.insertChatRoom(pdto);
 	}
 	
-	
+	public int exitChatRoom(String nickName , int roomNum) {
+		ChatMemberDTO cmdto = new ChatMemberDTO(roomNum , nickName);
+		return cdao.exitChatRoom(cmdto);
+	}
 	
 }

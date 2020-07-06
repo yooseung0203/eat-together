@@ -5,22 +5,24 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>채팅방</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/resources/css/chatroom.css">
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/chatroom.css">
 
 <script>
 	$(function() {
 		var scrolled = false;
 		var viewed;
 		$(".input-area").empty();
-		var ws = new WebSocket("ws://192.168.0.8/chat/chatroom")
+		var ws = new WebSocket("ws://192.168.60.19/chat/chatroom")
 		ws.onmessage = function(e) {
 			var some = e.data.split(":");
 			var str = some[1];
 			for (var i = 2; i < some.length; i++) {
-				str += ":"+some[i];
+				str += ":" + some[i];
 			}
 			if (some[0] == $(".message-area>div:last").attr("class")) {
 				$(".message-area>div:last").append("<br><div>" + str);
@@ -28,7 +30,7 @@
 				var line = $("<div>");
 				line.attr("class", some[0]);
 				line.append(some[0]);
-				line.append("<br><div>" +str)
+				line.append("<br><div>" + str)
 				if (some[0] == "hereasd") {
 					viewed = $('.message-area')[0].scrollHeight;
 				}
@@ -71,6 +73,12 @@
 				return false;
 			}
 		})
+		$("#exit").on("click",function(){
+			var realExit = confirm("퇴장하시겠습니까?\n진행중인 대화방은 삭제되며 참가중인 모임에서도 퇴장하게 됩니다");
+			if(realExit){
+				location.href="/chat/exit?roomNum="+${roomNum };
+			}
+		})
 	})
 </script>
 
@@ -78,11 +86,35 @@
 <body>
 	<div class="chat-box">
 		<div class="head-area">
-			<br>
-			<b>CHATROOM#</b>
+			<br> <b>CHATROOM#</b>
 		</div>
 		<div class="message-area"></div>
-		<div class="input-area" contenteditable="true" placeholder="Type a message"></div>
+		<div class="input-area" contenteditable="true"
+			placeholder="Type a message"></div>
+	</div>
+	<div class="user_list">
+		<b>채팅 그룹</b>
+		<div id="kim" class="exist">
+			<b>kim</b>
+			<div class="kick">강퇴</div>
+			<div class="post">쪽지</div>
+		</div>
+		<div id="yoon" class="noexist">
+			<b>yoon</b>
+			<div class="kick">강퇴</div>
+			<div class="post">쪽지</div>
+		</div>
+		<div id="cha" class="exist">
+			<b>cha</b>
+			<div class="kick">강퇴</div>
+			<div class="post">쪽지</div>
+		</div>
+		<div id="park" class="exist">
+			<b>park</b>
+			<div class="kick">강퇴</div>
+			<div class="post">쪽지</div>
+		</div>
+		<div id="exit">나가기</div>
 	</div>
 </body>
 </html>

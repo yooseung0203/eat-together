@@ -17,4 +17,7 @@
 			#{item.view_count})
 		</foreach>
 	</insert>
+	<delete id="exitChatRoom">
+		delete from chat_partylist where chatSeq_parent = #{chatroom_seq} and participant = #{name}
+	</delete>
 </mapper>

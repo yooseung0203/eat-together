@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import coma.spring.dto.ChatDTO;
+import coma.spring.dto.ChatMemberDTO;
 import coma.spring.dto.PartyDTO;
 
 @Repository
@@ -22,4 +23,7 @@ public class ChatDAO {
 		return mybatis.insert("insertChatRoom" , pdto);
 	}
 
+	public int exitChatRoom(ChatMemberDTO cmdto) {
+		return mybatis.delete("exitChatRoom",cmdto);
+	}
 }

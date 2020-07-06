@@ -1,5 +1,6 @@
 package coma.spring.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class ChatController {
 	private ChatService cservice;
 	
 	@RequestMapping("chatroom")
-	public String chat(int roomNum) {
+	public String chatroom(int roomNum , HttpServletRequest request) {
 		// 방번호를 받음 : 웹소켓에서 삭제됨
 		this.session.setAttribute("roomNum", roomNum);
 		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
@@ -33,6 +34,13 @@ public class ChatController {
 		if(ChatroomExist) {
 			cservice.savedChat(roomNum);
 		}
+		request.setAttribute("roomNum", roomNum);
 		return "/chat/chatroom";
+	}		
+	@RequestMapping("exit")
+	public String chat(int roomNum) {
+		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
+		cservice.exitChatRoom(name, roomNum);
+		return "redirect:/";
 	}	
 }
