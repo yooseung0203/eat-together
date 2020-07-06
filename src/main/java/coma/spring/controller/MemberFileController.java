@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.UUID;
 
-import javax.annotation.Resource;
+//import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,8 +33,8 @@ import coma.spring.service.MemberFileService;
 public class MemberFileController {
 	private static final Logger logger = LoggerFactory.getLogger(MemberFileController.class);
 
-	@Resource(name="uploadPath")
-	String uploadPath;
+	//@Resource(name="uploadPath")
+	//String uploadPath;
 
 	@Autowired
 	private MemberFileService mfservice;
