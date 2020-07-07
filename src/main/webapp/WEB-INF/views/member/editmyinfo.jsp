@@ -72,7 +72,7 @@
 							<th scope="row">PROFILE IMAGE</th>
 							<td class="myinfo_text" id="profile_box">
 								<div id="image_container">
-									<img src="/memberfile/getPic?id=${loginInfo.id}" width="50"
+									<img src="/upload/${loginInfo.id}/${sysname}" width="50"
 										height="50" alt=""
 										onError="this.src='/resources/img/no_img.png'">
 								</div> <input type="button" id="uploadProfile" class="btn btn-light"
