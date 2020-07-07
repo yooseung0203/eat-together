@@ -152,4 +152,8 @@ public class PartyService {
 	public int stopRecruit(String seq) throws Exception {
 		return pdao.stopRecruit(seq);
 	}
+	
+	public int selectAllCount() throws Exception{
+		return pdao.selectAllCount();
+	}
 }

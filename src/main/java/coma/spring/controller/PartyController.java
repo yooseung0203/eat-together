@@ -222,7 +222,11 @@ public class PartyController {
 	public String partymodify(String seq, HttpServletRequest request)  throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		request.setAttribute("con",content);
-
+		try {
+		      MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		      String age = account.getBirth();
+		      request.setAttribute("age", age);
+		}catch(Exception e) {}
 		return "/party/party_modify";
 	}
 
