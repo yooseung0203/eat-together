@@ -41,6 +41,15 @@
 	href="/resources/css/party-css.css">
 </head>
 <script>
+$(document).ready(function(){
+	var stime = "${con.sTime}";
+	var time = stime.substr(0,5);
+	console.log(time);
+	$("#time").html(time);
+	 
+
+});
+
 	$(function() {
 		$("#partyModify").on("click", function() {
 			location.href = "/party/partymodify?seq=${con.seq}";
@@ -69,7 +78,7 @@
 		});
 
 	});
-
+	
 	//페이지 리사이징
 	$(function() {
 		$('.cropping img').each(function(index, item) {
@@ -168,11 +177,11 @@
 			</div> --%>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">모임날짜</div>
-			<div class="col-lg-2">${con.sDate }</div>
+			<div class="col-sm-2">${con.sDate }</div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">시간</div>
-			<div class="col-lg-2">${con.sTime }</div>
+			<div class="col-sm-2" id="time"></div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">인원</div>

@@ -54,8 +54,12 @@ public class PartyController {
 	private HttpSession session;
 
 	@RequestMapping("toParty_New")
-	public String toPartyNew() {
-
+	public String toPartyNew(HttpServletRequest request) {
+		try {
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String age = account.getBirth();
+		request.setAttribute("age", age);
+		}catch(Exception e) {}
 		return "/party/party_new";
 	}
 
@@ -161,13 +165,15 @@ public class PartyController {
 		Gson gson = new Gson();
 		JsonObject result = new JsonObject();
 		JsonArray resultadd = new JsonArray();
-
+		boolean breakpoint = false;
+		
 		loop: for(int page = 1; page < 46;page++) {
 
+			if(breakpoint) {break loop;}
 			RestTemplate restTemplate = new RestTemplate(); 
 			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
 			params.add("page", "" + page);
-
+			System.out.println("페이지 : " + page);
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Authorization", APIKEY);
 			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
@@ -176,6 +182,7 @@ public class PartyController {
 			String  query = URLEncoder.encode(keyword,"UTF-8");
 
 			HttpEntity entity = new HttpEntity(params, headers); 
+			
 			URI foodurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=FD6&page="+page); 
 			URI cafeurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=CE7&page="+page);
 
@@ -204,8 +211,7 @@ public class PartyController {
 			for(JsonElement doc : docs) {
 				resultadd.add(doc);				
 			}
-			if(!ele.getAsBoolean()) {continue loop;}
-			else{break loop;}
+			if(ele.getAsBoolean()) {breakpoint = true;}
 		}
 		result.add("documents", resultadd);
 		String resp = result.toString();
