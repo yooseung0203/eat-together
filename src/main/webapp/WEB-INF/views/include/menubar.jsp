@@ -8,7 +8,7 @@
 		<a href="/member/mypage_myinfo" class="menubar-list">내 정보</a>
 	</div>
 	<div class="menu">
-		<a href="/member/mypage_msglist" class="menubar-list">쪽지함</a>
+		<a href="/msg/msg_list_sender" class="menubar-list">쪽지함</a>
 	</div>
 	<div class="menu">
 		<a href="/member/mypage_chatlist" class="menubar-list">내 모임</a>

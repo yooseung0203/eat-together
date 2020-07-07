@@ -3,6 +3,8 @@ package coma.spring.controller;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,39 +16,58 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.PartySearchListDTO;
+import coma.spring.service.ChatService;
+import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
 
 @Controller
 @RequestMapping("/party/")
 public class PartyController {
-	
 
 	@Autowired
 	private PartyService pservice;
+
+	@Autowired
+	private MapService mapservice;
+
+	@Autowired
+	private ChatService cservice;
+
 	@Autowired
 	private HttpSession session;
-	
+
 	@RequestMapping("toParty_New")
 	public String toPartyNew() {
-		
+
 		return "/party/party_new";
 	}
 
+
 	@RequestMapping(value = "party_New_Proc", method = RequestMethod.POST)
 	/*public String partyNewProc(HttpServletRequest request) {*/
-	public String partyNewProc(PartyDTO dto, HttpServletRequest request) throws Exception {
-		
-//		String parent_name = dto.getParent_name();
-//		String parent_address = dto.getParent_address();
-//		String title = dto.getTitle();
-		
+	public String partyNewProc(PartyDTO dto, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
+
+		//		String parent_name = dto.getParent_name();
+		//		String parent_address = dto.getParent_address();
+		//		String title = dto.getTitle();
+
 		String date = dto.getDate();
 		String time = dto.getTime();
 		String dateAndtime = date + " "+time+":00.0";
@@ -54,110 +75,233 @@ public class PartyController {
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-		String id= account.getId();
-		dto.setWriter(id);
+		String userid= account.getId();
+		dto.setWriter(userid);
 		dto.setStatus("1");
-//
-//		int count = dto.getCount();
-//		
-//		String age = dto.getAge();
-//		String gender = dto.getGender();
-//		
-//		String drinking = dto.getDrinking();
-//		String content = dto.getContent();
-//		
-		int myseq = pservice.partyInsert(dto); 
+		//
+		int count = dto.getCount();
+		System.out.println("카운트="+count);
+		//		
+		//		String age = dto.getAge();
+		//		String gender = dto.getGender();
+		//		
+		//		String drinking = dto.getDrinking();
+		//		String content = dto.getContent();
+		//		
+		System.out.println((String)request.getParameter("lat"));
+		System.out.println((String)request.getParameter("lng"));
+		String place_url = "http://place.map.kakao.com/" + dto.getPlace_id();
+		if(mapservice.insertPossible(place_url)) {
+			MapDTO mdto = new MapDTO();
+			mdto.setName(dto.getParent_name());
+			mdto.setAddress((String)request.getParameter("address_name"));
+			mdto.setRoad_address(dto.getParent_address());
+			mdto.setCategory((String)request.getParameter("category"));
+			Double lat = Double.parseDouble((String)request.getParameter("lat")); mdto.setLat(lat);
+			Double lng = Double.parseDouble((String)request.getParameter("lng")); mdto.setLng(lng);
+			mdto.setPhone((String)request.getParameter("phone"));
+			mdto.setPlace_url((String)request.getParameter("place_url"));
+			mdto.setPlace_id(dto.getPlace_id());
+			mapservice.insert(mdto);
+		}
+
+
+
+		int myseq = pservice.partyInsert(dto);   // 글번호
+		//채팅 insert (생성)  cservice.insert(seq);
+
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
+		cservice.insertChatRoom(dto);
 		//모임 등록 후 등록된 페이지로 이동 
-		PartyDTO content=pservice.selectBySeq(myseq);
-		
-		System.out.println(content.getTime());
-		request.setAttribute("con",content);
-		
-		
-		return "/party/party_content";
+		//PartyDTO content=pservice.selectBySeq(myseq);
+
+		redirectAttributes.addAttribute("seq", myseq);
+		//		request.setAttribute("con", content);
+		//		request.setAttribute("seq", myseq);
+		System.out.println("파티 이동!!1");
+		return "redirect:/party/party_content";
 	}
-	
-	//모임 글보기
+
+	// 태훈 모임 글보기
+	@RequestMapping(value="party_content_include")
+	public String party_content_include(HttpServletRequest request) throws Exception {
+		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
+		String img = pservice.clew(content.getParent_name());
+
+		request.setAttribute("con",content);
+		request.setAttribute("img", img);
+
+		return "/include/party_content_include";
+	}
+	// 예지 모임 글 보기
 	@RequestMapping(value="party_content")
 	public String party_content(String seq, HttpServletRequest request) throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		String img = pservice.clew(content.getParent_name());
+		request.setAttribute("img", img);
 		request.setAttribute("con",content);
 		return "/party/party_content";
 	}
-	
-	
-	
+
+
+
 	@RequestMapping(value="toSearchStore", method=RequestMethod.GET)
 	public String toSearchStore() {
 		return "/party/searchStore";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value="searchStoreProc", method=RequestMethod.GET, produces="application/json;charset=utf8")
-	public String searchStoreProc(String keyword, String category, String page) throws Exception {
+	public String searchStoreProc(String keyword, String category) throws Exception {
 		String HOST = "https://dapi.kakao.com";
 		String APIKEY = "KakaoAK 80c29b1bba14c9c568e4ae4f89fc9368";
 		System.out.println(keyword);
 		
-		RestTemplate restTemplate = new RestTemplate(); 
-		
-		HttpHeaders headers = new HttpHeaders();
-	    headers.add("Authorization", APIKEY);
-	    headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-	    headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
-	  
-	    String  query = URLEncoder.encode(keyword,"UTF-8");
+		Gson gson = new Gson();
+		JsonObject result = new JsonObject();
+		JsonArray resultadd = new JsonArray();
 
-		HttpEntity entity = new HttpEntity("parameters", headers); 
-		URI foodurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=FD6&page="+page); 
-		URI cafeurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=CE7&page="+page);
-		
-		String resp;
-		
-		RequestEntity<String> rq = new RequestEntity<>(headers, HttpMethod.GET, foodurl);
-		RequestEntity<String> rq1 = new RequestEntity<>(headers, HttpMethod.GET, cafeurl);
-		if(category.contentEquals("f")) {
-		resp = restTemplate.postForObject(foodurl, rq, String.class);
-		System.out.println("f");
-		}else {
-		resp = restTemplate.postForObject(cafeurl, rq1, String.class);
-		System.out.println("c");
+		loop: for(int page = 1; page < 46;page++) {
+
+			RestTemplate restTemplate = new RestTemplate(); 
+			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+			params.add("page", "" + page);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Authorization", APIKEY);
+			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
+			headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
+
+			String  query = URLEncoder.encode(keyword,"UTF-8");
+
+			HttpEntity entity = new HttpEntity(params, headers); 
+			URI foodurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=FD6&page="+page); 
+			URI cafeurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=CE7&page="+page);
+
+			String resp;
+
+			RequestEntity<String> rq = new RequestEntity<>(headers, HttpMethod.GET, foodurl);
+			RequestEntity<String> rq1 = new RequestEntity<>(headers, HttpMethod.GET, cafeurl);
+			if(category.contentEquals("f")) {
+				resp = restTemplate.postForObject(foodurl, rq, String.class);
+				System.out.println("f");
+			}else {
+				resp = restTemplate.postForObject(cafeurl, rq1, String.class);
+				System.out.println("c");
+			}
+			/*
+			 * Map<String,String> respBody = new HashMap<String, String>();
+			 * respBody.put("food",resp); respBody.put("cafe",resp2);
+			 */
+			System.out.println(page);
+
+			System.out.println(resp);
+			JsonObject obj = gson.fromJson(resp, JsonObject.class);
+			JsonArray docs = obj.getAsJsonArray("documents");
+			JsonObject meta = obj.getAsJsonObject("meta");
+			JsonElement ele = meta.get("is_end");
+			for(JsonElement doc : docs) {
+				resultadd.add(doc);				
+			}
+			if(!ele.getAsBoolean()) {continue loop;}
+			else{break loop;}
 		}
-		/*
-		 * Map<String,String> respBody = new HashMap<String, String>();
-		 * respBody.put("food",resp); respBody.put("cafe",resp2);
-		 */
-		System.out.println(page);
-		
-        System.out.println(resp);
+		result.add("documents", resultadd);
+		String resp = result.toString();
 		return resp;
 	}
-	
+
 	@RequestMapping("partymodify")
 	public String partymodify(String seq, HttpServletRequest request)  throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		request.setAttribute("con",content);
-		
+
 		return "/party/party_modify";
 	}
-	
+
 	@RequestMapping("party_modifyProc")
 	public String partymodifyProc(PartyDTO dto, HttpServletRequest request) throws Exception{
-		
+		String date = dto.getDate();
+		String time = dto.getTime();
+		String dateAndtime = "";
+		if(time.length()==8) {
+			dateAndtime = date + " "+time+".0";
+		}else {
+			dateAndtime = date + " "+time+":00.0";
+		}
+		System.out.println(date);
+		System.out.println(time);
+		System.out.println(dateAndtime);
+
+		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
+		dto.setMeetdate(meetdate);
+
+
+		System.out.println(dto.getMeetdate());
+
 		pservice.update(dto);
 		return "redirect:/party/party_content?seq="+dto.getSeq();
 	}
-	
+
 	@RequestMapping("partydelete")
 	public String partydelete(String seq)  throws Exception {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
-	
+	// 태훈 모임 리스트 출력
 	@RequestMapping("partylist")
-	public String partyList() throws Exception {
+	public String partyList(HttpServletRequest request) throws Exception {
+
+		List<PartyDTO> partyList = pservice.selectList();
+		System.out.println(partyList.size());
+		// seq 11번 , 9번 글이 이미지 안읽어짐 뭔가 오류
+		//System.out.println(pservice.clew(partyList.get(38).getParent_name()));
+		//System.out.println(pservice.clew(partyList.get(37).getParent_name()));
+
+
+		List<String> imgList = new ArrayList<>();
+		for(int i=0; i<partyList.size(); i++) {
+
+			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
+			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
+		}
+
+
+		request.setAttribute("list", partyList);
+		request.setAttribute("imglist", imgList);
 		return "/party/party_list";
+	}
+	// 태훈 모임 상세 검색
+	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
+	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
+
+		System.out.println(pdto.getSido());
+		System.out.println(pdto.getGugun());
+		System.out.println(pdto.getGender());
+		System.out.println(pdto.getAge());
+		System.out.println(pdto.getDrinking());
+		System.out.println(pdto.getText());
+		System.out.println(pdto.getSearch());
+
+		List<PartyDTO> partyList = pservice.partySearch(pdto);
+		System.out.println(partyList.size());
+		List<String> imgList = new ArrayList<>();
+		for(int i=0; i<partyList.size(); i++) {
+
+			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
+			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
+		}
+
+		System.out.println(partyList);
+		request.setAttribute("list", partyList);
+		request.setAttribute("imglist", imgList);
+		return "/party/party_list";
+	}
+
+	@RequestMapping("stopRecruit")
+	public String stopRecruit(String seq) throws Exception{
+		pservice.stopRecruit(seq);
+		return "redirect:/party/party_content?seq="+seq;
 	}
 }

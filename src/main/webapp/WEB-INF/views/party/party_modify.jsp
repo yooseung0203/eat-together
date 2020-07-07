@@ -55,14 +55,33 @@ $(function(){
  
  $(document).ready(function(){
 	 var gender=$("#gender_val").val();
+	 console.log(gender);
 	 
 	 if(gender=="m"){
 		 $("#gender1").prop("checked",true);
-	 }else(gender=="f"){
+	 }else if(gender=="f"){
 		 $("#gender2").prop("checked",true);
-	 }else(gender=="a"){
+	 }else if(gender=="a"){
 		 $("#gender3").prop("checked",true);
-	 };
+	 }
+	 var age = $("#age_val").val();
+	 
+	 if(age.includes("10")){
+		 $("#age1").prop("checked",true);
+	 }
+	 if(age.includes("20")){
+		 $("#age2").prop("checked",true);
+	 }
+	 if(age.includes("30")){
+		 $("#age3").prop("checked",true);
+	 }
+	 if(age.includes("40")){
+		 $("#age4").prop("checked",true);
+	 }
+	 if(age.includes("50")){
+		 $("#age5").prop("checked",true);
+	 }
+	 
 	 
 	 var drinking = $("#drinking_val").val();
 	 
@@ -74,9 +93,10 @@ $(function(){
 		 $("#drinking1").attr('disabled',false);	
 		 $("#drinking1").prop("checked",true);
 		 $("#drinking2").prop("checked",false);
-	 };
- 	
- };
+	 }
+
+ });
+
 
 $(function(){
 	
@@ -176,7 +196,8 @@ $(function(){
 				<div class="col-sm-12">
 					<h2 class="party_headline">모임 수정하기</h2>
 				</div>
-				<input type="hidden" name="writer" value="${con.writer}">
+				<input type="hidden" name="seq" value="${con.seq}">
+ 				<input type="hidden" name="writer" value="${con.writer}">
 			</div>
 			<div class="row mb-1">
 				<div class="col-sm-2">상호명</div>
@@ -307,7 +328,7 @@ $(function(){
 				<div class="col-2">소개</div>
 				<div class="col-10">
 					<textarea class="form-control " id="content" name="content"
-						placeholder="소개를 입력해주세요" rows="10" value=${con.content}></textarea>
+						placeholder="소개를 입력해주세요" rows="10"><c:out value="${con.content}" /></textarea>
 				</div>
 			</div>
 			<div class="row mb-3">

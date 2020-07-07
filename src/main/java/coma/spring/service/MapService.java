@@ -11,17 +11,29 @@ import coma.spring.dto.MapDTO;
 @Service
 public class MapService {
 	@Autowired
-	private MapDAO mdao;
+	private MapDAO mapdao;
 	public int insert(MapDTO mdto) throws Exception{
-		return mdao.insert(mdto);
+		return mapdao.insert(mdto);
 	}
 	public boolean insertPossible(String place_url) throws Exception{
-		return mdao.insertPossible(place_url);
+		return mapdao.insertPossible(place_url);
 	}
 	public List<MapDTO> selectAll() throws Exception{
-		return mdao.selectAll();
+		return mapdao.selectAll();
 	}
-	public List<MapDTO> searchByKeyword(int place_id) throws Exception{
-		return mdao.searchByKeyword(place_id);
+	public List<MapDTO> searchByPlace_id(int place_id) throws Exception{
+		return mapdao.searchByPlace_id(place_id);
+	}
+	public int selectPartyOn(int place_id) throws Exception{
+		return mapdao.selectPartyOn(place_id);
+	}
+	public MapDTO selectOne(int place_id) throws Exception{
+		return mapdao.selectOne(place_id);
+	}
+	public List<MapDTO> searchByKeyword(String keyword) throws Exception{
+		return mapdao.searchByKeyword(keyword);
+	}
+	public List<MapDTO> searchByCategory(String category) throws Exception{
+		return mapdao.searchByCategory(category);
 	}
 }
