@@ -310,11 +310,11 @@ public class PartyController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="clewimg", method=RequestMethod.GET, produces="text/plain;charset=utf8")
+	@RequestMapping(value="clewimg", produces="text/plain;charset=UTF-8")
 	public String clewimg(String parent_name)  throws Exception {
 		System.out.println("상점이름" + parent_name);
 		String imgaddr = pservice.clew(parent_name);
 		System.out.println("이미지 주소 " + imgaddr);
-		return String.valueOf(imgaddr);
+		return imgaddr;
 	}
 }
