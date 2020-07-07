@@ -70,19 +70,28 @@ public class PartyDAO {
 		param.put("place_id", place_id);
 		return mybatis.selectList("Party.selectByPageNo",param);
 	}
-	// 이미지 뽑아오기
+	// 예지
+	public int stopRecruit(String seq) throws Exception {
+		return mybatis.update("Party.stopRecruit",seq);
+	}
+	// 예지 이미지 뽑아오기
 	public String clew(String str) throws Exception {
 		Document doc = Jsoup.connect("https://m.map.kakao.com/actions/searchView?q="+str).get();
 		Element linkTag = doc.selectFirst("ul#placeList>li>a>span");
 		String img = linkTag.html();
-
-		return img.split("fname=")[1].split("\"")[0];
+		if(img.contains("fname=")) {
+			return img.split("fname=")[1].split("\"")[0];
+		}
+		else {
+			// 이미지 소스 없는 가게 에러 해결 위해 추가 - 태훈
+			return "https://tpc.googlesyndication.com/simgad/11554535643826380039?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qnk_Y1zzDS1b6Wu1KYZ-_e0LjecDg";
+		}
 	}
-
 	// 태훈 모임 리스트 뽑기
 //	public List<PartyDTO> selectList() {
 //		return mybatis.selectList("Party.selectList");
 //	}
+	// 태훈 모임 리스트 뽑기 네비 포함
 	public List<PartyDTO> selectList(int cpage) {
 		int start = cpage * PartyConfiguration.SEARCH_COUNT_PER_PAGE - (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
 		int end = start + (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
@@ -92,17 +101,16 @@ public class PartyDAO {
 		return mybatis.selectList("Party.selectList" ,param);
 	}
 	// 태훈 전체 모임 카운트
-	public int getListCount() throws Exception{
-		return mybatis.selectOne("Party.getArticleCount");
+	public int getListCount() {
+		return mybatis.selectOne("Party.getListCount");
 	}
-	
 	// 태훈 모임 통합 검색
-	public List<PartyDTO> partySearch(Map<String, Object> param){
-		
+	public List<PartyDTO> partySearch(Map<String, Object> param){	
 		return mybatis.selectList("Party.partySearch", param);
 	}
-	
-	public int stopRecruit(String seq) throws Exception {
-		return mybatis.update("Party.stopRecruit",seq);
+	// 태훈 모집 순위순 뽑아오기
+	public List<String> partyCountById() {
+		return mybatis.selectList("Party.PartyCountById");
 	}
+	
 }

@@ -49,11 +49,48 @@
 .partylist {
 	margin-bottom: 15px;
 }
-.badge-light{background-color:#ff9900;color:white;}
-#partyModal table td{border:0px;}
-#partyModal table th{border:0px;}
-#partyModal .content{font-size:10pt;}
-#partyModal .badges div{float:left;padding-right:5px;}
+.featImgWrap {
+   height: 250px;
+   position: relative;
+   padding-top: 56.57%;
+   /* 16:9 ratio */
+   overflow: hidden;
+}
+
+.featImgWrap .cropping {
+   position: absolute;
+   top: 0;
+   left: 0;
+   right: 0;
+   bottom: 0;
+   -webkit-transform: translate(50%, 50%);
+   -ms-transform: translate(50%, 50%);
+   transform: translate(50%, 50%);
+}
+
+.featImgWrap .cropping img {
+   position: absolute;
+   top: 0;
+   left: 0;
+   max-width: 100%;
+   height: auto;
+   -webkit-transform: translate(-50%, -50%);
+   -ms-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+}
+
+.featImgWrap .cropping img.landscape {
+   max-height: 100%;
+   height: 100%;
+   max-width: none;
+}
+
+.featImgWrap .cropping img.portrait {
+   max-width: 100%;
+   width: 100%;
+   max-height: none;
+   border: 1px solid black;
+}
 </style>
 <script>
 	$(function() {
@@ -135,7 +172,7 @@
 			<div class="col-12 jumbotron">
 				<span class="listtitle">이번주 인기 맛집 Top 5!</span>
 				<div class="row ingi">
-					<div class="col-12 col-sm-4 col-md-2">
+					<!-- <div class="col-12 col-sm-4 col-md-2">
 						<div class="card">
 							<img src="/resources/img/itsearth.jpg" class="card-img-top"
 								alt="...">
@@ -145,53 +182,22 @@
 								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
 							</div>
 						</div>
-					</div>
-					<div class="col-12 col-sm-4 col-md-2">
-						<div class="card">
-							<img src="/resources/img/sixme.jpg" class="card-img-top"
-								alt="...">
-							<div class="card-body">
-								<h3 class="card-title">육미 식당</h3>
-								<p class="card-text">점심에는 매일 다른 고정 메뉴가 나오는 선술식당. 공기밥도 무료고
-									배고플때 가면 아주 굳</p>
-								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
+					</div> -->
+					<c:forEach var="top" items="${top}" varStatus="status">
+						<div class="col-sm-12 col-md-3">
+							<div class="card partylist">
+								<img src="${imglist2[status.index]}" class="card-img-top">
+								<div class="card-body">
+									<h5 class="card-title">${top.name }</h5>
+									<p class="card-text">
+										
+									</p>
+									<input type="hidden" class="store_seq" value="${top.seq}">
+									<button type="button" class="btn btn-info btn-lg topBtn">모집하러 가기</button>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="col-12 col-sm-4 col-md-2">
-						<div class="card">
-							<img src="/resources/img/bab.jpg" class="card-img-top" alt="...">
-							<div class="card-body">
-								<h5 class="card-title">바비공방</h5>
-								<p class="card-text">양은 조금 적지만 맛은 보장되는 맛집.</p>
-								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-12 col-sm-4 col-md-2">
-						<div class="card">
-							<img src="/resources/img/janga.jpg" class="card-img-top"
-								alt="...">
-							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-								<p class="card-text">Some quick example text to build on the
-									card title and make up the bulk of the card's content.</p>
-								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-							</div>
-						</div>
-					</div>
-					<div class="col-12 col-sm-4 col-md-2">
-						<div class="card">
-							<img src="/resources/img/janga.jpg" class="card-img-top"
-								alt="...">
-							<div class="card-body">
-								<h5 class="card-title">Card title</h5>
-								<p class="card-text">Some quick example text to build on the
-									card title and make up the bulk of the card's content.</p>
-								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-							</div>
-						</div>
-					</div>
+					</c:forEach>
 				</div>
 			</div>
 		</div>
@@ -265,10 +271,15 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
+				<nav aria-label="Page navigation example">
+				  <ul class="pagination justify-content-center">
+				  	${navi}
+				  </ul>
+				</nav>
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
+	<!-- <div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-xl modal-dialog-centered"
 			role="document">
@@ -276,15 +287,15 @@
 			</div>
 		</div>
 	</div>
-	<!-- <div class="modal fade" id="mymodal" role="dialog"> -->
-	<!-- <div class="modal-dialog modal-xl"> -->
-
-	<!-- Modal content-->
-	<!-- <div class="modal-content" id="aaa"> -->
-	<!--<jsp:include page="/WEB-INF/views/include/party_content_include.jsp" />-->
-	<!-- </div> -->
-	<!-- </div> -->
-	<!-- </div> -->
+	 -->
+	<div class="modal fade" id="mymodal" role="dialog">
+		<div class="modal-dialog modal-xl">
+			<!-- Modal content-->
+			<div class="modal-content" id="aaa">
+				
+			</div>
+		</div>
+	</div>
 
 	<!-- ******************* -->
 	<!-- footer  -->
@@ -300,8 +311,8 @@
 			var select_seq = $(this).siblings(".party_seq").val();
 			$("#aaa").empty();
 			$.ajax({
-				//url:"/party/party_content_include",
-				url : "/party/party_content_include2",
+				url:"/party/party_content_include",
+				//url : "/party/party_content_include2",
 				data : {
 					seq : select_seq
 				}
@@ -309,8 +320,8 @@
 				console.log(con);
 				$("#aaa").append(con);
 
-				$("#partyModal").modal();
-				//$("#mymodal").modal();
+				//$("#partyModal").modal();
+				$("#mymodal").modal();
 			});
 		}
 	});

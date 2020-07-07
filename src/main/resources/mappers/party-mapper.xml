@@ -5,7 +5,7 @@
 select party_seq.nextval from dual 
 </select>
 <insert id="insert">
-   insert into party values (#{seq},#{parent_name}, #{parent_address}, #{title}, #{writer}, #{meetdate}, #{count}, #{gender}, #{age}, #{drinking}, #{content},#{status},#{place_id})
+   insert into party values (#{seq},#{parent_name}, #{parent_address}, #{title}, #{writer}, #{meetdate}, #{count}, #{gender}, #{age}, #{drinking}, #{content},#{status},#{place_id},'aa')
 </insert>
 
 <select id="selectBySeq" resultType="coma.spring.dto.PartyDTO">
@@ -34,12 +34,12 @@ select party_seq.nextval from dual
    </update>
  
  <select id="selectList" resultType="coma.spring.dto.PartyDTO">
-	<!-- select * from party where status = 1 and seq not in (11,9) order by seq desc -->
-	select * from (select party.*, row_number() over(order by seq desc) as rnum from party where status =1 and seq not in (11,9)) where rnum between #{start} and #{end}
+	<!-- select * from party where status = 1 order by seq desc -->
+	select * from (select party.*, row_number() over(order by seq desc) as rnum from party where status=1) where rnum between #{start} and #{end}
 </select>
 
 <select id="partySearch" resultType="coma.spring.dto.PartyDTO">
-	select * from (select * from party where status =1 and seq not in (11,9))
+	select * from (select * from party where status =1)
 	<trim prefixOverrides="or" prefix="where">
 		<if test="address != ''">parent_address like '%${address}%'</if>
 		<if test="gender != null">or gender =  '${gender}'</if>
@@ -56,10 +56,15 @@ select party_seq.nextval from dual
 	</trim>
 	  order by seq desc
 </select>
+
 <select id="getListCount" resultType="int">
-      select count(*) from party where status =1 and seq not in (11,9)
+      select count(*) from party where status =1
 </select>
- 
+
+<select id="PartyCountById" resultType="String">
+      select place_id from party group by place_id order by count(*) desc
+</select>
+
 <!--  
 <update id="update">
       update board set ${columnName1} = #{changeValue1}, ${columnName2} = #{changeValue2} where ${targetColumn} = #{targetValue}

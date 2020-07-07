@@ -49,12 +49,12 @@ public class PartyService {
 //		return list;
 //	}
 	// 태훈 모임 20개씩
-	public List<PartyDTO> selectListByPage(int cpage) throws Exception {
+	public List<PartyDTO> selectList(int cpage) throws Exception {
 		List<PartyDTO> list = pdao.selectList(cpage);
 		return list;
 	}
 	// 태훈 페이지 네비
-	public String getPageNavi(int currentPage) throws Exception{
+	public String getPageNaviTH(int currentPage) throws Exception{
 		int recordTotalCount = pdao.getListCount(); 
 		int pageTotalCount = 0; 
 		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
@@ -78,16 +78,31 @@ public class PartyService {
 		if(startNavi == 1) {needPrev = false;}
 		if(endNavi == pageTotalCount) {needNext = false;}
 
-		if(needPrev) {sb.append("<li class='page-item'><a class='page-link' href='partylistByPage?cpage="+(startNavi-1)+"' tabindex='-1' aria-disabled='true'><i class=\"fas fa-chevron-left\"></i> </a></li>");}
-		for(int i = startNavi;i <= endNavi;i++) {
-			sb.append("<li class='page-item'><a class='page-link' href='selectMarkerInfo?cpage="+i+"&place_id="+place_id+"'>" + i + "</a></li>");
+		if(needPrev) {
+			sb.append("<li class='page-item'><a class='page-link' href='partylistBy?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
 		}
-		if(needNext) {sb.append("<li class='page-item'><a class='page-link' href='selectMarkerInfo?cpage="+(endNavi+1)+"'><i class=\"fas fa-chevron-right\"></i></a></li>");}
+		else {
+			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
+		}
+		for(int i = startNavi;i <= endNavi;i++) {
+			if(currentPage == i) {
+				sb.append("<li class='page-item active' aria-current=\"page\"><span class=\"page-link\">" + i +"<span class=\"sr-only\">(current)</span></span></li>");
+			}
+			else {
+				sb.append("<li class='page-item'><a class='page-link' href=\"partylist?cpage="+i+"\">" + i + "</a></li>");
+			}	
+		}
+		if(needNext) {
+			sb.append("<li class='page-item'><a class='page-link' href='partylistBy?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+		}
+		else {
+			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+		}
+		
 		return sb.toString();
 	}
-	// 태훈 모임 글 상세 검색
-	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{
-		
+	// 태훈 모임 글 통합 검색
+	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{	
 		List<PartyDTO> list = pdao.partySearch(this.searchKey(pdto));
 		return list;
 	}
@@ -141,6 +156,15 @@ public class PartyService {
 
 		return param;
 	}
+	
+	public Map<String,String> partyCountById(){
+		List<String> list =  pdao.partyCountById();
+		Map<String, String> param = new HashMap<>();
+		for (int i=0; i<5; i++) {
+			param.put("top"+(i+1),list.get(i));
+		}
+		return param;
+	}
 	// 예지 
 	public List<PartyDTO> selectByPlace_id(int place_id) throws Exception{
 		List<PartyDTO> result = pdao.selectByPlace_id(place_id);
@@ -186,7 +210,7 @@ public class PartyService {
 	public String clew(String str) throws Exception{
 		return pdao.clew(str);
 	}
-	
+	// 예지
 	public int stopRecruit(String seq) throws Exception {
 		return pdao.stopRecruit(seq);
 	}
