@@ -41,13 +41,22 @@
 	href="/resources/css/party-css.css">
 </head>
 <script>
+$(document).ready(function(){
+	var stime = "${con.sTime}";
+	var time = stime.substr(0,5);
+	console.log(time);
+	$("#time").html(time);
+	 
+
+});
+
 	$(function() {
 		$("#partyModify").on("click", function() {
 			location.href = "/party/partymodify?seq=${con.seq}";
 		});
 
 		$("#partyDelete").on("click", function() {
-			var ask = confirm("삭제 후에는 복구할 수 없습니다. <br> 정말 삭제하겠습니까?");
+			var ask = confirm("삭제 후에는 복구할 수 없습니다.\n 정말 삭제하겠습니까?");
 			if (ask) {
 				location.href = "/party/partydelete?seq=${con.seq}";
 			}
@@ -58,18 +67,18 @@
 		});
 		
 		$("#toChatroom").on("click", function() {
-			location.href = "/chat/"; // 채팅연결 
+			location.href = "/chat/chatroom?roomNum=${con.seq}"; // 채팅연결 
 		});
 		
 		$("#toStopRecruit").on("click",function(){
-			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. <br> 정말 모집을 종료하시겠습니까?");
+			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
 			if (ask) {
 			location.href= "/party/stopRecruit?seq=${con.seq}";
 			}
 		});
 
 	});
-
+	
 	//페이지 리사이징
 	$(function() {
 		$('.cropping img').each(function(index, item) {
@@ -147,7 +156,7 @@
 			<div class="col-sm-5">
 				<div class="featImgWrap">
 					<div class="cropping">
-						<img src="${img}" id="img">
+						<img src="${con.imgaddr}" id="img">
 					</div>
 				</div>
 			</div>
@@ -168,11 +177,11 @@
 			</div> --%>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">모임날짜</div>
-			<div class="col-lg-2">${con.sDate }</div>
+			<div class="col-sm-2">${con.sDate }</div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">시간</div>
-			<div class="col-lg-2">${con.sTime }</div>
+			<div class="col-sm-2" id="time"></div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">인원</div>
@@ -214,7 +223,7 @@
 			<div class="col-10">${con.content}</div>
 		</div>
 		<div class="row mb-3">
-			<div class="col-12">
+			<div class="col-12 mb-5">
 					<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로 이동</button>
 				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
 				<c:choose>

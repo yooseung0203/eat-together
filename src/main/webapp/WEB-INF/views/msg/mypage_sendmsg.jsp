@@ -74,7 +74,7 @@ function msgReceiverDel(msg_seq){
 }
 function msgWritePopUp(){
 	var name = "popup.test";
-	var option ="width=500,height=400 location=no";
+	var option ="width=500,height=400 location=no,top=200,left=600";
 	window.open("msgWrite",name,option);
 }
 function msgViewPopUp(msg_seq){
@@ -157,6 +157,9 @@ function msgViewPopUp(msg_seq){
 						</div>
 
 					</c:forEach>
+				</div>
+				<div class="row">
+					<div class="col-12">${navi}</div>
 				</div>
 				<div class="row">
 					<div class="col-12" align="center">

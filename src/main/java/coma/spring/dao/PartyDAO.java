@@ -38,21 +38,21 @@ public class PartyDAO {
 	} 
 
 	public int update(PartyDTO dto) throws Exception{
-//		 Map<String, String> param = new HashMap<>();
-//	      param.put("columnName1", "title");
-//	      param.put("changeValue1", dto.getTitle());
-//	      param.put("columnName2", "contents");
-//	      param.put("changeValue2", dto.getContents());
-//	      param.put("targetColumn", "seq");
-//	      param.put("targetValue", Integer.toString(dto.getSeq()));
-//	      
-//	      System.out.println(param.size());
-//	      
-//		return mybatis.update("Board.update",param);
-		
+		//		 Map<String, String> param = new HashMap<>();
+		//	      param.put("columnName1", "title");
+		//	      param.put("changeValue1", dto.getTitle());
+		//	      param.put("columnName2", "contents");
+		//	      param.put("changeValue2", dto.getContents());
+		//	      param.put("targetColumn", "seq");
+		//	      param.put("targetValue", Integer.toString(dto.getSeq()));
+		//	      
+		//	      System.out.println(param.size());
+		//	      
+		//		return mybatis.update("Board.update",param);
+
 		return mybatis.update("Party.update",dto);
 	}
- 
+
 	public List<PartyDTO> selectByPlace_id(int place_id) throws Exception{
 		return mybatis.selectList("Party.selectByPlace_id",place_id);
 	}
@@ -70,6 +70,7 @@ public class PartyDAO {
 		param.put("place_id", place_id);
 		return mybatis.selectList("Party.selectByPageNo",param);
 	}
+<<<<<<< HEAD
 	// 예지
 	public int stopRecruit(String seq) throws Exception {
 		return mybatis.update("Party.stopRecruit",seq);
@@ -87,6 +88,9 @@ public class PartyDAO {
 			return "https://tpc.googlesyndication.com/simgad/11554535643826380039?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qnk_Y1zzDS1b6Wu1KYZ-_e0LjecDg";
 		}
 	}
+=======
+
+>>>>>>> e073781d490e66f4382e86811a8fdcdba18faa31
 	// 태훈 모임 리스트 뽑기
 //	public List<PartyDTO> selectList() {
 //		return mybatis.selectList("Party.selectList");
@@ -100,11 +104,39 @@ public class PartyDAO {
 		param.put("end", end);
 		return mybatis.selectList("Party.selectList" ,param);
 	}
+<<<<<<< HEAD
 	// 태훈 전체 모임 카운트
 	public int getListCount() {
 		return mybatis.selectOne("Party.getListCount");
+=======
+	// 태훈 모임 통합 검색
+	public List<PartyDTO> partySearch(Map<String, Object> param){
+		System.out.println();
+
+
+		System.out.println("address : " +param.get("address"));
+
+		System.out.println("gender : "+param.get("gender"));
+
+		System.out.println("ageList : "+param.get("ageList"));
+
+		System.out.println("size" + param.get("ageList.size"));
+
+		System.out.println("drinking : "+param.get("drinking"));
+
+		System.out.println("title :"+param.get("title"));
+
+		System.out.println("writer : "+param.get("writer"));
+
+		System.out.println("content : "+param.get("content"));
+
+		System.out.println("both : "+param.get("both"));
+
+		return mybatis.selectList("Party.partySearch", param);
+>>>>>>> e073781d490e66f4382e86811a8fdcdba18faa31
 	}
 	// 태훈 모임 통합 검색
+<<<<<<< HEAD
 	public List<PartyDTO> partySearch(Map<String, Object> param){	
 		return mybatis.selectList("Party.partySearch", param);
 	}
@@ -113,4 +145,48 @@ public class PartyDAO {
 		return mybatis.selectList("Party.PartyCountById");
 	}
 	
+=======
+	public List<PartyDTO> partySearch(String address, String gender,List<String> ageList, int drinking, String title, String writer, String content, String both){
+		System.out.println();
+		Map<String, Object> param = new HashMap<>();
+		param.put("address" ,address);
+		System.out.println("address : " +address);
+		param.put("gender",gender);
+		System.out.println("gender : "+gender);
+		param.put("ageList",ageList);
+		System.out.println("ageList : "+ageList);
+		param.put("ageList.size",ageList.size());
+		System.out.println(ageList.size());
+		param.put("drinking",drinking);
+		System.out.println("drinking : "+drinking);
+		param.put("title",title);
+		System.out.println("title :"+title);
+		param.put("writer",writer);
+		System.out.println("writer : "+writer);
+		param.put("content",content);
+		System.out.println("content : "+content);
+		param.put("both",both);
+		System.out.println("both : "+both);
+
+		return mybatis.selectList("Party.partySearch", param);
+	}*/
+
+	public int stopRecruit(String seq) throws Exception {
+		return mybatis.update("Party.stopRecruit",seq);
+	}
+
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	public List<PartyDTO> selectByWriterPage(Map<String, Object> param)throws Exception{
+		return mybatis.selectList("Party.selectByWriterPage", param);
+	}
+	//by 지은, 마이페이지 - 내 모임 리스트 출력을 위한 네비바 생성 중 게시글 개수 세는 select문 작성_20200707
+	public int getMyPageArticleCount(String writer) throws Exception{
+		return mybatis.selectOne("Party.getMyPageArticleCount", writer);
+	}
+
+	public int selectAllCount() throws Exception{
+		return mybatis.selectOne("Party.selectAllCount");
+
+	}
+>>>>>>> e073781d490e66f4382e86811a8fdcdba18faa31
 }

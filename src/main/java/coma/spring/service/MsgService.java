@@ -14,20 +14,20 @@ import coma.spring.dto.MsgDTO;
 public class MsgService {
 	@Autowired
 	private MsgDAO msgdao;
-	
+
 	//받은쪽지함
-	public List<MsgDTO> selectBySender(String msg_receiver) throws Exception{
-		List<MsgDTO> dto = msgdao.selectBySender(msg_receiver);
+	public List<MsgDTO> selectBySender(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = msgdao.selectBySender(cpage,msg_receiver);
 		return dto;
 	}
 	//보낸쪽지함
-	public List<MsgDTO> selectByReceiver(String msg_receiver) throws Exception{
-		List<MsgDTO> dto = msgdao.selectByReceiver(msg_receiver);
+	public List<MsgDTO> selectByReceiver(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = msgdao.selectByReceiver(cpage,msg_receiver);
 		return dto;
 	}
 	//관리자쪽지함
-	public List<MsgDTO> selectByAdmin(String msg_receiver) throws Exception{
-		List<MsgDTO> dto = msgdao.selectByAdmin(msg_receiver);
+	public List<MsgDTO> selectByAdmin(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = msgdao.selectByAdmin(cpage,msg_receiver);
 		return dto;
 	}
 	//쪽지 보기
@@ -60,6 +60,25 @@ public class MsgService {
 		int result =msgdao.sender_del(msg_seq);
 		return result;
 	}
-	
-		
+	//새로운쪽지
+	public int newmsg(String msg_receiver)throws Exception{
+		int result = msgdao.newmsg(msg_receiver);
+		return result;
+	}
+
+	//관리자 쪽지함 네비
+	public String Adminnavi (int cpage,String msg_receiver) throws Exception{
+		String navi = msgdao.getAdminPageNav(cpage,msg_receiver);
+		return navi;
+	}
+	//네비
+	public String Sendnavi (int cpage,String msg_receiver) throws Exception{
+		String navi = msgdao.getSenderPageNav(cpage,msg_receiver);
+		return navi;
+	}
+	//네비
+	public String Receivenavi (int cpage,String msg_receiver) throws Exception{
+		String navi = msgdao.getReceiverPageNav(cpage,msg_receiver);
+		return navi;
+	}
 }

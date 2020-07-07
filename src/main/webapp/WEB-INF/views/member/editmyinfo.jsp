@@ -50,6 +50,11 @@
 	<!-- header  -->
 	<!-- ******************* -->
 
+	<!-- contextpath 변수 정의-->
+	<c:set var="contextPath" value="<%=request.getContextPath()%>"></c:set>
+
+	<!-- contextpath 변수정의 -->
+
 
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
@@ -65,11 +70,14 @@
 					<tbody>
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
-							<td class="myinfo_text" id="profile_box"><img
-								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
-								alt="" onError="this.src='/resources/img/no_img.png'"> <input
-								type="button" id="uploadProfile" class="btn btn-light"
-								value="프로필이미지 변경하기"></td>
+							<td class="myinfo_text" id="profile_box">
+								<div id="image_container">
+									<img src="/upload/${loginInfo.id}/${sysname}" width="50"
+										height="50" alt=""
+										onError="this.src='/resources/img/no_img.png'">
+								</div> <input type="button" id="uploadProfile" class="btn btn-light"
+								value="프로필이미지 변경하기">
+							</td>
 						</tr>
 						<tr>
 							<th scope="row">ID</th>
@@ -117,11 +125,35 @@
 	</div>
 	<script>
 		window.onload = function() {
+			//by 지은, 프로필이미지 path를 ajax로 가져와서 img src에 넣어준다_20200707
+			startLoadFile();
+
+			function startLoadFile() {
+				$.ajax({
+					url : '/memberfile/getPic',
+					type : 'GET',
+					dataType : 'json',
+					success : function(path) {
+						strDOM += '"<img src="' + path+ '">"';
+						var imageContainer = $("#image_container");
+						imageContainer.append(strDOM);
+					},
+					error : function(request, status, error) {
+						console.log("code:" + request.status + "\n"
+								+ "message:" + request.responseText + "\n"
+								+ "error:" + error);
+
+					}
+				});
+			}
+
+			//by지은, 버튼을 누르면 프로필 이미지 수정하는 팝업창 열기_20200707
 			var upload = document.getElementById('uploadProfile');
+
 			upload.onclick = function() {
 				location.href = "/memberfile/deleteFileById";
 				window
-						.open('/member/editProfileImage', '프로필이미지 수정하기',
+						.open('editProfileImage', '프로필이미지 수정하기',
 								'width=430,height=500,location=no,status=no,scrollbars=yes');
 
 			}
@@ -147,17 +179,17 @@
 					.focusout(
 							function() {
 								var birth = $("#birth").val();
-								var regex1 = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+								var regex1 = /^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
 								if ($("#birth").val() != "") {
 									if (regex1.test(birth)) {
 										birth = birth
 												.replace(
-														/^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
+														/^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
 														"$1-$2-$3");
 										$("#birth").val(birth);
 									} else {
 										$("#birth").val("");
-										alert("올바른 생년월일을 입력해주세요.");
+										alert("2005년 이전 출생자만 이용가능합니다.\n올바른 생년월일을 입력해주세요.");
 										$("#birth").focus();
 									}
 								}
@@ -215,6 +247,7 @@
 					})
 				}
 			})
+
 		}
 	</script>
 

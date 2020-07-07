@@ -40,6 +40,7 @@ function btnClick(clicked_id){
 		opener.document.getElementById("lng").value = document.getElementById("lng"+clicked_id).value;
 		opener.document.getElementById("lat").value = document.getElementById("lat"+clicked_id).value;
 		
+		var parent_name = document.getElementById("place_name"+clicked_id).innerHTML;
 		var ct = $('input:radio[name=category]:checked').val();
 		
 		if(ct=='c'){
@@ -50,30 +51,50 @@ function btnClick(clicked_id){
 		opener.document.getElementById("phone").value = document.getElementById("phone"+clicked_id).innerHTML;
 		opener.document.getElementById("place_url").value = document.getElementById("place_url"+clicked_id).value;
 		opener.document.getElementById("address_name").value = document.getElementById("address_name"+clicked_id).value;
+		var imgaddr="";
+		$.ajax({
+			url : "/party/clewimg?parent_name="+parent_name,
+			type : "get"
+		}).done(function(resp) {
+			alert(resp);
+			opener.document.getElementById("imgaddr").value = ""+resp;
+			opener.document.getElementById("img-area").insertAdjacentHTML("");
+			var src = '<img src ='+resp+'>';
+			opener.document.getElementById("img-area").insertAdjacentHTML('afterend', src);
+
+		});
+		
+		
+
+		
 		
 	window.close();
 };
+
+$(function(){
+	$("#back").on("click",function(){
+		if(page>1){
+			page=page-1;
+			search(page);
+		}else{
+			alert("첫페이지입니다.");
+		};
+	});
+	$("#next").on("click",function(){
+		if(page==lastpage){
+			alert("마지막페이지입니다.");
+		}else{
+		page=page+1;
+		search(page);
+		}
+	});
+});
 
 
 $(document).ready(function(){
 		var page = 1;
 		var lastpage=1;
-		$("#back").on("click",function(){
-			if(page>1){
-				page=page-1;
-				search(page);
-			}else{
-				alert("첫페이지입니다.");
-			};
-		});
-		$("#next").on("click",function(){
-			if(page==lastpage){
-				alert("마지막페이지입니다.");
-			}else{
-			page=page+1;
-			search(page);
-			}
-		});
+		
 		
 		
 		
@@ -90,12 +111,12 @@ $(document).ready(function(){
 				$("#resultdiv").html("");
 			
 				
-				var totalcount = resp.meta.total_count;
+				/* var totalcount = resp.meta.total_count;
 				lastpage=totalcount.toFixed(0);
 				console.log("검색결과 = "+ totalcount);
-				
-				$("#searchstore_totalcount").html(totalcount + "건");
-				
+		*/		
+				$("#searchstore_totalcount").html(resp.documents.length + "건");
+		 
 				//for(var i=0;i+)
 				var line = $("<div></div>");
 				var test = $("<div></div>");
@@ -118,7 +139,8 @@ $(document).ready(function(){
 			
 				}
 				$("#resultdiv").html(test);
-				$("#resultdiv").append("<button id=back>◀ </button>  <button id=next>▶</button>");
+				$("#resultdiv").append("<br><br>");
+				//$("#resultdiv").append("<button id=back>◀ </button>  <button id=next>▶</button>");
 			});
 		}
 		
@@ -144,20 +166,10 @@ $(document).ready(function(){
 		});
 		
 		$("#keyword").keydown(function(e){
-			if(e.keyCode == 13){
-				if ($.trim($("#keyword").val()) == "") {
-					alert("키워드를 입력해주세요");
-					return false;
-				}
-				
-				var isCategoryCk = $('input:radio[name=category]').is(':checked');
-				
-				if(!isCategoryCk){
-					alert('검색 카테고리를 선택해주세요');
-					return false;
-				};
-
-				search(page);
+			var keyCode = e.which || e.keyCode;
+			if(keyCode == 13){
+				 $('#searchBtn').click();
+		         return false;
 				
 			}  
 				
@@ -194,7 +206,7 @@ $(document).ready(function(){
 				<div class="col-8">
 					<input type="text" id="keyword" name="keyword" class="form-control"
 						aria-describedby="countHelpInline"> <small id="HelpInline"
-						class="text-muted"> 예시 : 을지로 스타벅스, 홍대 락희돈 </small>
+						class="text-muted"> 예시 : 지역명+상호명 / 을지로 스타벅스, 홍대 락희돈 </small>
 				</div>
 				<div class="col-3">
 					<button type=button id=searchBtn class="btn btn-primary">검색</button>
