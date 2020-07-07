@@ -16,12 +16,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
@@ -48,17 +50,14 @@ public class PartyController {
 	private MapService mapservice;
 
 	@Autowired
-	private ChatService cservice;
-
-	@Autowired
 	private HttpSession session;
 
 	@RequestMapping("toParty_New")
 	public String toPartyNew(HttpServletRequest request) {
 		try {
-		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-		String age = account.getBirth();
-		request.setAttribute("age", age);
+			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+			String age = account.getBirth();
+			request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_new";
 	}
@@ -116,7 +115,7 @@ public class PartyController {
 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
-		cservice.insertChatRoom(dto);
+
 		//모임 등록 후 등록된 페이지로 이동 
 		//PartyDTO content=pservice.selectBySeq(myseq);
 
@@ -131,10 +130,7 @@ public class PartyController {
 	@RequestMapping(value="party_content_include")
 	public String party_content_include(HttpServletRequest request) throws Exception {
 		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
-		String img = pservice.clew(content.getParent_name());
-
 		request.setAttribute("con",content);
-		request.setAttribute("img", img);
 
 		return "/include/party_content_include";
 	}
@@ -153,6 +149,7 @@ public class PartyController {
 	@RequestMapping(value="toSearchStore", method=RequestMethod.GET)
 	public String toSearchStore() {
 		return "/party/searchStore";
+
 	}
 
 	@ResponseBody
@@ -161,12 +158,12 @@ public class PartyController {
 		String HOST = "https://dapi.kakao.com";
 		String APIKEY = "KakaoAK 80c29b1bba14c9c568e4ae4f89fc9368";
 		System.out.println(keyword);
-		
+
 		Gson gson = new Gson();
 		JsonObject result = new JsonObject();
 		JsonArray resultadd = new JsonArray();
 		boolean breakpoint = false;
-		
+
 		loop: for(int page = 1; page < 46;page++) {
 
 			if(breakpoint) {break loop;}
@@ -182,7 +179,7 @@ public class PartyController {
 			String  query = URLEncoder.encode(keyword,"UTF-8");
 
 			HttpEntity entity = new HttpEntity(params, headers); 
-			
+
 			URI foodurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=FD6&page="+page); 
 			URI cafeurl=URI.create("https://dapi.kakao.com/v2/local/search/keyword.json?query="+query+"&"+"category_group_code=CE7&page="+page);
 
@@ -223,9 +220,9 @@ public class PartyController {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		request.setAttribute("con",content);
 		try {
-		      MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-		      String age = account.getBirth();
-		      request.setAttribute("age", age);
+			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+			String age = account.getBirth();
+			request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_modify";
 	}
@@ -310,8 +307,39 @@ public class PartyController {
 	}
 
 	@RequestMapping("stopRecruit")
-	public String stopRecruit(String seq) throws Exception{
+	public String stopRecruit(String seq) throws Exception {
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
+	}
+
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	@RequestMapping("selectByWriter")
+	public ModelAndView selectByWriter(int mcpage) throws Exception{
+
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("member/mypage_chatlist");
+
+		if(mcpage==0) {
+			mcpage=1;
+		}
+
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String writer = mdto.getId();
+		List<PartyDTO> partyList = pservice.selectByWriterPage(writer, mcpage);
+		String navi = pservice.getMyPageNav(mcpage, writer);
+		System.out.println("내 모임 개수 : " + partyList.size());
+		mav.addObject("partyList", partyList);
+		mav.addObject("navi", navi);
+
+		return mav;
+	}
+
+	@ResponseBody
+	@RequestMapping(value="clewimg", method=RequestMethod.GET, produces="text/plain;charset=utf8")
+	public String clewimg(String parent_name)  throws Exception {
+		System.out.println("상점이름" + parent_name);
+		String imgaddr = pservice.clew(parent_name);
+		System.out.println("이미지 주소 " + imgaddr);
+		return String.valueOf(imgaddr);
 	}
 }
