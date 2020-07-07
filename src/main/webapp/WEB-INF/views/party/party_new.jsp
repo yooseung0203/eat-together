@@ -14,6 +14,8 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<script
+  src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!-- BootStrap4 End-->
 
 <!-- google font -->
@@ -38,6 +40,8 @@
 
 <script>
 
+
+
 //유효성 - 미성년자 음주불가
 $("#drinking1").attr('disabled',true);
 $(function(){
@@ -54,6 +58,46 @@ $(function(){
  //유효성 - 미성년자 음주불가 끝
 
 $(function(){
+	$("#party_date").datepicker({ 
+		dateFormat: 'yy-mm-dd',
+		minDate: 0,
+		dayNamesShort:[ "일", "월", "화", "수", "목", "금", "토" ],
+		
+	});
+	
+	var birthday = "${age}";
+	var yyyy = birthday.substr(0,4);
+    var mm = birthday.substr(5,2);
+    var dd = birthday.substr(8,2);  
+
+    var ymd = new Date(yyyy, mm-1, dd);
+	var today = new Date();
+	var years = today.getFullYear() - ymd.getFullYear();
+	console.log('계산 된 나이 : ' + years);
+
+	if(years>=50){
+		$("input:checkbox[id='age5']").prop("checked", true);
+		$("input:checkbox[id='age5']").attr("disabled",true);
+		var agech=age5;
+	}else if(years>=40){
+		$("input:checkbox[id='age4']").prop("checked", true);
+		$("input:checkbox[id='age5']").attr("disabled",true);
+		var agech=age4;
+	}else if(years>=30){
+		$("input:checkbox[id='age3']").prop("checked", true);
+		$("input:checkbox[id='age5']").attr("disabled",true);
+		var agech=age3;
+	}else if(years>=20){
+		$("input:checkbox[id='age2']").prop("checked", true);
+		$("input:checkbox[id='age5']").attr("disabled",true);
+		var agech=age2;
+	}else if(years>=14){
+		$("input:checkbox[id='age1']").prop("checked", true);
+		$("input:checkbox[id='age5']").attr("disabled",true);
+		var agech=age1;
+	};
+	
+	
 	
 		$("#search_parent_name").on("click",function(){
 			window.name = "parentForm";
@@ -100,7 +144,7 @@ $(function(){
 			var content = $("#content").val();
 			var isCheckGender = $('input:radio[name=gender]').is(':checked');
 			var isCheckAge = $('input:checkbox[name=age]').is(':checked');
-			
+			$("input:checkbox[id=agech]").attr("disabled",false);
 			console.log(title);
 			console.log(date);
 			console.log(time);
@@ -109,7 +153,7 @@ $(function(){
 			console.log(isCheckGender);
 			console.log(isCheckAge);
 			
-			/* if($.trim(parent_name)==''){
+			if($.trim(parent_name)==''){
 				alert('상호명 찾기버튼으로 모임장소를 등록해주세요');
 				return false;
 			}; 
@@ -119,23 +163,18 @@ $(function(){
 				return false;
 			};
 			
-			if($.trim(meetdate)=''){
+			if(!date){
 				alert('모임날짜를 선택해주세요');
 				return false;
 			};
 			
-			if($.trim(time)==''){
+			if(!time){
 				alert("모임시간을 선택해주세요");
 				return false;
 			};
 			
 			if($.trim(count)==''){
 				alert("모임인원을 선택해주세요");
-				return false;
-			};
-			
-			if($.trim(content)==''){
-				alert('모임 소개를 작성해주세요');
 				return false;
 			};
 			
@@ -148,7 +187,27 @@ $(function(){
 				alert('모집하고자하는 연령대를 선택해주세요');
 				return false;
 			};
-			*/
+			
+			if($.trim(content)==''){
+				alert('모임 소개를 작성해주세요');
+				return false;
+			};
+			
+			let today = new Date();
+			console.log(today);
+			console.log(date);
+
+			let tyear = today.getFullYear(); // 년도
+			let tmonth = today.getMonth() + 1;  // 월
+			let tdate = today.getDate();  // 날짜
+			let tday = today.getDay();  // 요일
+
+			if(today>date){
+				alert('선택된 날짜가 과거입니다.');
+				return false;
+			}
+
+			
 			
 			  document.form.submit();
 			
@@ -216,7 +275,7 @@ $(function(){
 			<div class="row mb-1">
 				<div class="col-sm-2">모임날짜</div>
 				<div class="col-lg-2">
-					<input class="form-control" type="date" name="date"
+					<input class="form-control" type="text" name="date"
 						id="party_date">
 				</div>
 			</div>

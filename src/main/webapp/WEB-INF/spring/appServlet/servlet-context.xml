@@ -24,6 +24,7 @@
 	<resources mapping="/media/**" location="/media/" />
 	<resources mapping="/summernoteImage/**"
 		location="/summernote_image/"></resources>
+	<resources mapping="/upload/files/**" location="/upload/files/"/>
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
 		in the /WEB-INF/views directory -->

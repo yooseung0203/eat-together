@@ -45,7 +45,15 @@ body {
 	overflow-x: hidden;
 }
 </style>
+<script>
+	$(function() {
+		$("#toJoinBtn").on("click", function() {
+			location.href = "/member/signup_check";
+		});
+	})
+</script>
 </head>
+
 <body>
 	<!-- ******************* -->
 	<!-- header  -->
@@ -53,7 +61,7 @@ body {
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<div class="container-fluid big-title mt-5 pt-3 mb-5 pb-3">
+	<div class="container-fluid big-title mt-5 pt-3 mb-3 pb-3">
 		<div class="row">
 			<div class="col-12 col-sm-12 text-center">
 				<h4 class="info-s-title">맛집 동행 찾기 서비스</h4>
@@ -64,8 +72,8 @@ body {
 				<h1 class="info-title text-center">맛집 갔다 갈래</h1>
 			</div>
 		</div>
-
 	</div>
+
 	<div class="container">
 		<div class="row">
 			<div class="col-12 my-3"></div>
@@ -75,11 +83,25 @@ body {
 				<img src="/resources/img/logo/eattogether-logo-rectangle.png"
 					class="info-logo">
 			</div>
-			<div class="col-12 col-sm-7 ">
-				<h3 class="info-copyright mt-5 pt-5 text-center">
+			<div class="col-12 col-sm-7 text-center">
+				<h3 class="info-copyright mt-5 pt-5 ">
 					"우리는 사람과 식탁을 연결하고,<br>더 즐거운 삶의 방식을 만듭니다."
 				</h3>
+				<a href="/info/toIntroduction" class="badge badge-warning">사이트
+					소개</a> <a href="/info/aboutUs" class="badge badge-success">제작팀 소개</a>
+
 			</div>
+		</div>
+		<div class="row">
+		<div class="col-12 col-sm-12 my-1"></div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12 col-sm-12 text-center mt-5 pt-5"><h3 class="page-title">사이트 소개</h3>
+			<hr class="title-hr"/></div>
+			
 		</div>
 	</div>
 
@@ -109,7 +131,7 @@ body {
 					<h4 class="info-small-title">주요 서비스</h4>
 				</div>
 				<div class="row">
-					<div class="col-12 col-sm-12 py-5">
+					<div class="col-12 col-sm-12 my-5 py-5">
 						<div class="card-deck">
 							<div class="card">
 								<img src="/resources/img/info/service01.png"
@@ -143,6 +165,41 @@ body {
 						</div>
 					</div>
 				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12 my-3 mt-5 "></div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-sm-12 mt-5 ">
+				<h4 class="info-small-title text-center">사이트 이용방법</h4>
+			</div>
+			<div class="col-12 col-sm-12 text-center mt-5 pt-2 mb-5 pb-5">
+				<iframe width="560" height="315"
+					src="https://www.youtube.com/embed/I7CfaDYzTVM" frameborder="0"
+					allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen></iframe>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid bg-fdc23e">
+		<div class="row">
+			<div class="col-12 col-sm-12 mx-5 my-5"></div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-sm-12 mb-2 text-center">
+				<h1 class="lastcopy text-center">1분만에 간편 무료회원가입하고</h1>
+				<h1 class="lastcopy text-center">모임을 시작해보세요.</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-sm-12 mb-5 pb-5 text-center">
+				<button type="button" id="toJoinBtn"
+					class="btn btn-primary btn-lg text-center">간편 무료회원가입</button>
 			</div>
 		</div>
 	</div>
