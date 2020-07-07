@@ -130,4 +130,8 @@ public class PartyDAO {
 	public int stopRecruit(String seq) throws Exception {
 		return mybatis.update("Party.stopRecruit",seq);
 	}
+	
+	public int selectAllCount() throws Exception{
+		return mybatis.selectOne("Party.selectAllCount");
+	}
 }
