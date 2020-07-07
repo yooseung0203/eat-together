@@ -11,7 +11,7 @@
 		<a href="/msg/msg_list_sender" class="menubar-list">쪽지함</a>
 	</div>
 	<div class="menu">
-		<a href="/member/mypage_chatlist" class="menubar-list">내 모임</a>
+		<a href="/party/selectByWriter?mcpage=0" class="menubar-list">내 모임</a>
 	</div>
 	<div class="menu">
 		<a href="/member/mypage_reviewlist" class="menubar-list">내 리뷰</a>

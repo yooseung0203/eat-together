@@ -53,7 +53,46 @@
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
-		<!-- 컨텐츠 들어가는 공간 -->
+			<table class="table">
+				<thead class="thead-dark">
+					<tr>
+						<th scope="col" colspan=12>My Party</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">No.</th>
+						<td>모임위치</td>
+						<td>모임날짜</td>
+					</tr>
+
+					<c:if test="${partyList eq null}">
+						<tr>
+							<td colspan=12>진행중인 모임이 없습니다.</td>
+						</tr>
+					</c:if>
+					<c:if test="${partyList ne null}">
+						<c:forEach var="i" items="${partyList}">
+							<tr>
+								<th scope="row">${i.seq}</th>
+								<td class="one-line"><a
+									href="/party/party_content?seq=${i.seq}">${i.parent_name}</a></td>
+								<td>${i.sDate}</td>
+							</tr>
+						</c:forEach>
+						<tr>
+							<td colspan=12>
+								<nav id="pagenavi">
+									<ul class="pagination justify-content-center" id="navibtn">
+										${navi}
+									</ul>
+								</nav>
+							</td>
+						</tr>
+					</c:if>
+
+				</tbody>
+			</table>
 		</div>
 	</div>
 

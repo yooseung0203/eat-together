@@ -138,4 +138,14 @@ public class PartyDAO {
 	public int stopRecruit(String seq) throws Exception {
 		return mybatis.update("Party.stopRecruit",seq);
 	}
+	
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	public List<PartyDTO> selectByWriterPage(Map<String, Object> param)throws Exception{
+		return mybatis.selectList("Party.selectByWriterPage", param);
+	}
+	//by 지은, 마이페이지 - 내 모임 리스트 출력을 위한 네비바 생성 중 게시글 개수 세는 select문 작성_20200707
+	public int getMyPageArticleCount(String writer) throws Exception{
+		return mybatis.selectOne("Party.getMyPageArticleCount", writer);
+
+	}
 }

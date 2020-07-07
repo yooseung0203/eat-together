@@ -16,12 +16,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.gson.Gson;
@@ -303,5 +305,28 @@ public class PartyController {
 	public String stopRecruit(String seq) throws Exception{
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
+	}
+	
+	
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	@RequestMapping("selectByWriter")
+	public ModelAndView selectByWriter(int mcpage) throws Exception{
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("member/mypage_chatlist");
+		
+		if(mcpage==0) {
+			mcpage=1;
+		}
+		
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String writer = mdto.getId();
+		List<PartyDTO> partyList = pservice.selectByWriterPage(writer, mcpage);
+		String navi = pservice.getMyPageNav(mcpage, writer);
+		System.out.println("내 모임 개수 : " + partyList.size());
+		mav.addObject("partyList", partyList);
+		mav.addObject("navi", navi);
+		
+		return mav;
 	}
 }
