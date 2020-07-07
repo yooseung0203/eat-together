@@ -151,6 +151,7 @@ public class PartyController {
 	@RequestMapping(value="toSearchStore", method=RequestMethod.GET)
 	public String toSearchStore() {
 		return "/party/searchStore";
+		
 	}
 
 	@ResponseBody

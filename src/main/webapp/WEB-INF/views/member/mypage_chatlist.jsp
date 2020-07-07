@@ -53,7 +53,7 @@
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
-			<table class="table">
+			<table class="table" id="mypage_table">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col" colspan=12>My Party</th>
@@ -62,20 +62,25 @@
 				<tbody>
 					<tr>
 						<th scope="row">No.</th>
-						<td>모임위치</td>
-						<td>모임날짜</td>
+						<td class="myinfo_text">모임위치</td>
+						<td class="myinfo_text">모임날짜</td>
 					</tr>
 
-					<c:if test="${partyList eq null}">
+					<c:if test="${empty partyList}">
 						<tr>
-							<td colspan=12>진행중인 모임이 없습니다.</td>
+							<td colspan=12 class="myinfo_text">진행중인 모임이 없습니다. 모임을 시작해보세요!</td>
+						</tr>
+						<tr>
+							<td class="myinfo_text"><button type="button" class="btn btn-warning"
+									text-center onclick="location.href='/party/toParty_New'">모임
+									만들기</button></td>
 						</tr>
 					</c:if>
-					<c:if test="${partyList ne null}">
+					<c:if test="${!empty partyList}">
 						<c:forEach var="i" items="${partyList}">
 							<tr>
 								<th scope="row">${i.seq}</th>
-								<td class="one-line"><a
+								<td class="myinfo_text"><a
 									href="/party/party_content?seq=${i.seq}">${i.parent_name}</a></td>
 								<td>${i.sDate}</td>
 							</tr>

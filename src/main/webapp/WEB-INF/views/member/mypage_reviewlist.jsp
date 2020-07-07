@@ -53,44 +53,48 @@
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
-			<table class="table">
-				<thead class="thead-light">
+			<table class="table" id="mypage_table">
+				<thead class="thead-dark">
 					<tr>
-						<th scope="col" colspan=12>My REVIEW</th>
+						<th scope="col" colspan=12>My Review</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<th scope="row">PROFILE IMAGE</th>
-						<td class="myinfo_text" id=profile_box><img
-							src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
-							alt="" onError="this.src='/resources/img/no_img.png'"></td>
+						<th scope="row" class="myinfo_text">No.</th>
+						<td class="myinfo_text">모임위치</td>
+						<td class="myinfo_text">모임날짜</td>
+					</tr>
 
-					</tr>
-					<tr>
-						<th scope="row">ID</th>
-						<td class="myinfo_text">${mdto.id}</td>
-					</tr>
-					<tr>
-						<th scope="row">NICKNAME</th>
-						<td class="myinfo_text">${mdto.nickname}</td>
-					</tr>
-					<tr>
-						<th scope="row">BIRTH</th>
-						<td class="myinfo_text">${mdto.birth}</td>
-					</tr>
-					<tr>
-						<th scope="row">EMAIL</th>
-						<td class="myinfo_text">${mdto.account_email}</td>
-					</tr>
-					<tr>
-						<th scope="row"></th>
-						<td class="myinfo_text">
-							<button type="button" class="btn btn-warning" id="editMyInfo">내정보
-								수정</button>
-							<button type=button class="btn btn-light" id="withdraw">회원탈퇴</button>
-						</td>
-					</tr>
+					<c:if test="${empty reviewList}">
+						<tr>
+							<td colspan=12 class="myinfo_text">직접 남긴 리뷰가 없습니다. 맛집을 탐방해보세요!</td>
+						</tr>
+						<tr>
+							<td class="myinfo_text"><button type="button" class="btn btn-warning"
+									text-center onclick="location.href='/party/partylist'">모임 검색하기</button></td>
+						</tr>
+					</c:if>
+					<c:if test="${!empty reviewList}">
+						<c:forEach var="i" items="${reviewList}">
+							<tr>
+								<th scope="row">${i.seq}</th>
+								<td class="myinfo_text"><a
+									href="/party/party_content?seq=${i.seq}">${i.content}</a></td>
+								<td class="myinfo_text">${i.rating}</td>
+							</tr>
+						</c:forEach>
+						<tr>
+							<td colspan=12>
+								<nav id="pagenavi">
+									<ul class="pagination justify-content-center" id="navibtn">
+										${navi}
+									</ul>
+								</nav>
+							</td>
+						</tr>
+					</c:if>
+
 				</tbody>
 			</table>
 		</div>

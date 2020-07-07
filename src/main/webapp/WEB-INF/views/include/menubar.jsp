@@ -14,6 +14,6 @@
 		<a href="/party/selectByWriter?mcpage=0" class="menubar-list">내 모임</a>
 	</div>
 	<div class="menu">
-		<a href="/member/mypage_reviewlist" class="menubar-list">내 리뷰</a>
+		<a href="/review/selectById?mcpage=0" class="menubar-list">내 리뷰</a>
 	</div>
 </div>
