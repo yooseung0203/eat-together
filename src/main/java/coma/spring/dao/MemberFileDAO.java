@@ -24,7 +24,7 @@ public class MemberFileDAO {
 	
 	//아아디로 파일 찾아오기
 	public MemberFileDTO getFileById(String parent_id)throws Exception{
-		return mybatis.selectOne("MemberFile.uploadProfile", parent_id);
+		return mybatis.selectOne("MemberFile.getFileById", parent_id);
 	}
 	
 	//프로필 사진 삭제하기

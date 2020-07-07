@@ -67,18 +67,11 @@ public class MemberController {
 	public ModelAndView getMyInfoView() throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
-
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
+
 		mdto = mservice.selectMyInfo(id);
-		//로그인한 회원 정보 view로 이동
 		mav.addObject("mdto", mdto);
-
-		String parent_id = id;
-		//프로필 이미지 view로 이동
-		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-		mav.addObject("mfdto",mfdto);
-
 		return mav;
 	}
 
@@ -120,17 +113,12 @@ public class MemberController {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 
-		//로그인한 회원정보 view로 보내기
 		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
-
-		String parent_id = id;
-		//프로필이미지 view로 보내기
-		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-		mav.addObject("mfdto",mfdto);
-
 		return mav;
+
 	}
+
 
 	//아이디 찾기 팝업 열기
 	@RequestMapping("findid")
@@ -159,11 +147,6 @@ public class MemberController {
 			session.invalidate();
 			return "redirect:/";
 		}
-	}
-	//프로필 사진 변경하는 팝업창 열기
-	@RequestMapping("editProfileImage")
-	public String getEditProfileImageView() {
-		return "member/editprofileimage";
 	}
 
 	//회원가입하기
@@ -228,7 +211,7 @@ public class MemberController {
 		}
 
 	}
-	
+
 	//로그인 시 유효성 검사
 	@RequestMapping("isPwCorrect")
 	@ResponseBody
@@ -361,13 +344,11 @@ public class MemberController {
 		mdto.setAccount_email(account_email);
 		session.setAttribute("loginInfo", mdto);
 
-		String parent_id = id;
-		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-
+		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
-		mav.addObject("mfdto", mfdto);
-
 		return mav;
+
+
 	}
 
 
