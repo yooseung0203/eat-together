@@ -62,8 +62,8 @@
 				<tbody>
 					<tr>
 						<th scope="row" class="myinfo_text">No.</th>
-						<td class="myinfo_text">모임위치</td>
-						<td class="myinfo_text">모임날짜</td>
+						<td class="myinfo_text">리뷰내용</td>
+						<td class="myinfo_text">별점</td>
 					</tr>
 
 					<c:if test="${empty reviewList}">
@@ -79,8 +79,7 @@
 						<c:forEach var="i" items="${reviewList}">
 							<tr>
 								<th scope="row">${i.seq}</th>
-								<td class="myinfo_text"><a
-									href="/party/party_content?seq=${i.seq}">${i.content}</a></td>
+								<td class="myinfo_text">${i.content}</td>
 								<td class="myinfo_text">${i.rating}</td>
 							</tr>
 						</c:forEach>

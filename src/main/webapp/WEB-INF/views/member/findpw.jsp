@@ -43,6 +43,8 @@
 				type="text" class="form-control" id="account_email"
 				name="account_email" placeholder="ex)eat-together@naver.com">
 			<input type=button id=mail value="인증하기" class="btn btn-warning"><br>
+
+			<!--by지은, #mail 인증하기 버튼 클릭시 display:block으로 생성되는 div_20200707 -->
 			<div id=mail_div style="display: none;">
 				인증번호 : <input type=text id=mail_text>
 				<button type=button id=mail_accept class="btn btn-light">인증</button>
@@ -72,9 +74,7 @@
 						})
 
 		//메일 인증 
-		$("#mail")
-				.on(
-						"click",
+		$("#mail").on("click",
 						function() {
 							if ($("#account_email").val() == ""
 									|| $("#id").val() == "") {
@@ -158,9 +158,6 @@
 												})
 							}
 						})
-	</script>
-
-	<script>
 		$("#pwEdit")
 				.on(
 						"click",
