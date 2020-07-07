@@ -125,6 +125,29 @@
 	</div>
 	<script>
 		window.onload = function() {
+			//by 지은, 프로필이미지 path를 ajax로 가져와서 img src에 넣어준다_20200707
+			startLoadFile();
+
+			function startLoadFile() {
+				$.ajax({
+					url : '/memberfile/getPic',
+					type : 'GET',
+					dataType : 'json',
+					success : function(path) {
+						strDOM += '"<img src="' + path+ '">"';
+						var imageContainer = $("#image_container");
+						imageContainer.append(strDOM);
+					},
+					error : function(request, status, error) {
+						console.log("code:" + request.status + "\n"
+								+ "message:" + request.responseText + "\n"
+								+ "error:" + error);
+
+					}
+				});
+			}
+			
+			//by지은, 버튼을 누르면 프로필 이미지 수정하는 팝업창 열기_20200707
 			var upload = document.getElementById('uploadProfile');
 
 			upload.onclick = function() {
@@ -224,28 +247,8 @@
 					})
 				}
 			})
-			startLoadFile();
 
-			function startLoadFile() {
-				$.ajax({
-					url : '/memberfile/getPic',
-					type : 'GET',
-					dataType : 'json',
-					success : function(path) {
-						strDOM += '"<img src="' + path+ '">"';
-						var imageContainer = $("#image_container");
-						imageContainer.append(strDOM);
-					},
-					error : function(request, status, error) {
-						console.log("code:" + request.status + "\n"
-								+ "message:" + request.responseText + "\n"
-								+ "error:" + error);
-
-					}
-				});
-			}
-
-		}}
+		}
 	</script>
 
 	<!-- ******************* -->
