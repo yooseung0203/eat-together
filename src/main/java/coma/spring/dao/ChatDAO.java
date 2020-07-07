@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import coma.spring.dto.ChatDTO;
 import coma.spring.dto.ChatMemberDTO;
-import coma.spring.dto.PartyDTO;
+import coma.spring.dto.PartyMemberDTO;
 
 @Repository
 public class ChatDAO {
@@ -19,11 +19,12 @@ public class ChatDAO {
 	public List<ChatDTO> selectChats(int roomNum){
 		return mybatis.selectList("selectChats", roomNum);
 	}
-	public int insertChatRoom(PartyDTO pdto){
-		return mybatis.insert("insertChatRoom" , pdto);
-	}
 
 	public int exitChatRoom(ChatMemberDTO cmdto) {
 		return mybatis.delete("exitChatRoom",cmdto);
+	}
+	
+	public List<PartyMemberDTO> selectChatMembers(int roomNum) {
+		return mybatis.selectList("selectChatMembers",roomNum);
 	}
 }

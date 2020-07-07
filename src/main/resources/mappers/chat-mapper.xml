@@ -4,9 +4,9 @@
 	<select id="selectChats" resultType="coma.spring.dto.ChatDTO">
 		select * from chat_messages where chatSeq_parent=#{value} order by seq
 	</select>
-	<insert id="insertChatRoom">
-		insert into chat_list values (chat_list_seq.nextval, #{writer} , #{count} , sysdate ,#{meetdate} ,#{seq}, 1)
-	</insert>
+	<select id="selectChatMembers" resultType="coma.spring.dto.PartyMemberDTO">
+		select participant from partylist where chatSeq_parent=#{value}
+	</select>
 	<insert id="insertChat" parameterType="java.util.List">
 		<foreach collection="list" item="item" index="index"
 			open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
@@ -18,6 +18,6 @@
 		</foreach>
 	</insert>
 	<delete id="exitChatRoom">
-		delete from chat_partylist where chatSeq_parent = #{chatroom_seq} and participant = #{name}
+		delete from partylist where chatSeq_parent = #{chatroom_seq} and participant = #{name}
 	</delete>
 </mapper>
