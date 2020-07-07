@@ -217,9 +217,9 @@ public class PartyController {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		request.setAttribute("con",content);
 		try {
-			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-			String age = account.getBirth();
-			request.setAttribute("age", age);
+		      MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		      String age = account.getBirth();
+		      request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_modify";
 	}

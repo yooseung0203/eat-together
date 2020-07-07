@@ -61,5 +61,7 @@ select party_seq.nextval from dual
       update board set ${columnName1} = #{changeValue1}, ${columnName2} = #{changeValue2} where ${targetColumn} = #{targetValue}
  </update> 
  -->
-
+<select id="selectAllCount" resultType="int">
+	select count(*) from party
+</select>
 </mapper>

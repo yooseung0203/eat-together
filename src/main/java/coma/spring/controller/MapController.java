@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -56,6 +57,8 @@ public class MapController {
 	private ReviewService rservice;
 	@Autowired
 	private ServletContext sc;
+	@Autowired
+	private HttpSession session;
 
 	@ResponseBody
 	@RequestMapping("cafeJson")
@@ -94,6 +97,10 @@ public class MapController {
 		fw.flush();
 		fw.close();
 		response.setHeader("cache-control","no-cache,no-store");
+		if(session.getAttribute("loginInfo")==null) {
+			int count = pservice.selectAllCount();
+			request.setAttribute("partyCount", count);
+		}
 		return "/map/map";
 	}
 	@RequestMapping("insert")
