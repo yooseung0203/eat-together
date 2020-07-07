@@ -5,7 +5,7 @@
 select party_seq.nextval from dual 
 </select>
 <insert id="insert">
-   insert into party values (#{seq},#{parent_name}, #{parent_address}, #{title}, #{writer}, #{meetdate}, #{count}, #{gender}, #{age}, #{drinking}, #{content},#{status},#{place_id})
+   insert into party values (#{seq},#{parent_name}, #{parent_address}, #{title}, #{writer}, #{meetdate}, #{count}, #{gender}, #{age}, #{drinking}, #{content},#{status},#{place_id}, #{imgaddr})
 </insert>
 
 <select id="selectBySeq" resultType="coma.spring.dto.PartyDTO">

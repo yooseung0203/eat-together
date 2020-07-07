@@ -48,9 +48,6 @@ public class PartyController {
 	private MapService mapservice;
 
 	@Autowired
-	private ChatService cservice;
-
-	@Autowired
 	private HttpSession session;
 
 	@RequestMapping("toParty_New")
@@ -116,7 +113,7 @@ public class PartyController {
 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
-		cservice.insertChatRoom(dto);
+		
 		//모임 등록 후 등록된 페이지로 이동 
 		//PartyDTO content=pservice.selectBySeq(myseq);
 
@@ -131,10 +128,7 @@ public class PartyController {
 	@RequestMapping(value="party_content_include")
 	public String party_content_include(HttpServletRequest request) throws Exception {
 		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
-		String img = pservice.clew(content.getParent_name());
-
 		request.setAttribute("con",content);
-		request.setAttribute("img", img);
 
 		return "/include/party_content_include";
 	}
@@ -310,8 +304,17 @@ public class PartyController {
 	}
 
 	@RequestMapping("stopRecruit")
-	public String stopRecruit(String seq) throws Exception{
+	public String stopRecruit(String seq) throws Exception {
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="clewimg", method=RequestMethod.GET, produces="text/plain;charset=utf8")
+	public String clewimg(String parent_name)  throws Exception {
+		System.out.println("상점이름" + parent_name);
+		String imgaddr = pservice.clew(parent_name);
+		System.out.println("이미지 주소 " + imgaddr);
+		return String.valueOf(imgaddr);
 	}
 }

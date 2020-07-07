@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +22,11 @@ public class PartyService {
 	@Autowired
 	private PartyDAO pdao;
 	
-	public int partyInsert(PartyDTO dto) {
+	public int partyInsert(PartyDTO dto) throws Exception  {
 		int seq = pdao.getNextVal();
+		String imgaddr = this.clew(dto.getParent_name());
 		dto.setSeq(seq);
+		dto.setImgaddr(imgaddr);
 		pdao.insert(dto);
 		return seq;
 	}
@@ -145,10 +150,18 @@ public class PartyService {
 		return sb.toString();
 	}
 	// 예지 음식점 이미지 클롤링
-	public String clew(String str) throws Exception{
-		return pdao.clew(str);
-	}
-	
+	public String clew(String str) throws Exception {
+	      Document doc = Jsoup.connect("https://m.map.kakao.com/actions/searchView?q="+str).get();
+	      Element linkTag = doc.selectFirst("ul#placeList>li>a>span");
+	      String img = linkTag.html();
+	      if(img.contains("fname=")) {
+	         return img.split("fname=")[1].split("\"")[0];
+	      }
+	      else {
+	         // 이미지 소스 없는 가게 에러 해결 위해 추가 - 태훈
+	         return "https://tpc.googlesyndication.com/simgad/11554535643826380039?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qnk_Y1zzDS1b6Wu1KYZ-_e0LjecDg";
+	      }
+	   }
 	public int stopRecruit(String seq) throws Exception {
 		return pdao.stopRecruit(seq);
 	}

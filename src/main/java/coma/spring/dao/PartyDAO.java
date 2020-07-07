@@ -70,14 +70,6 @@ public class PartyDAO {
 		param.put("place_id", place_id);
 		return mybatis.selectList("Party.selectByPageNo",param);
 	}
-	
-	public String clew(String str) throws Exception {
-		Document doc = Jsoup.connect("https://m.map.kakao.com/actions/searchView?q="+str).get();
-		Element linkTag = doc.selectFirst("ul#placeList>li>a>span");
-		String img = linkTag.html();
-
-		return img.split("fname=")[1].split("\"")[0];
-	}
 
 	// 태훈 모임 리스트 뽑기
 	public List<PartyDTO> selectList() {
