@@ -80,6 +80,8 @@ public class PartyController {
 		dto.setWriter(userid);
 		dto.setStatus("1");
 		//
+		
+		
 		int count = dto.getCount();
 		System.out.println("카운트="+count);
 		//		
@@ -217,9 +219,9 @@ public class PartyController {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		request.setAttribute("con",content);
 		try {
-		      MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-		      String age = account.getBirth();
-		      request.setAttribute("age", age);
+			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+			String age = account.getBirth();
+			request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_modify";
 	}
