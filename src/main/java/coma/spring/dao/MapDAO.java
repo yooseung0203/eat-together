@@ -43,4 +43,19 @@ public class MapDAO {
 	public List<MapDTO> searchByCategory(String category) throws Exception{
 		return mybatis.selectList("Map.searchByCategory",category);
 	}
+	
+	public int updateRatingAvg(int seq) throws Exception{
+		return mybatis.update("Map.updateRatingAvg",seq);
+	}
+	
+	public List<MapDTO> selectTop5() throws Exception{
+		List<MapDTO> list = mybatis.selectList("Map.selectTop5");
+		for(int i = 0;i < list.size();i++) {
+			MapDTO mapdto = list.get(i);
+			if(mapdto.getRating_avg()==0) {
+				list.remove(i);
+			}
+		}
+		return list;
+	}
 }

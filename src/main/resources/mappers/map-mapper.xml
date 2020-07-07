@@ -25,4 +25,10 @@
 	<select id="searchByCategory" resultType="coma.spring.dto.MapDTO">
 		select * from map where category = #{category}
 	</select>
+	<update id="updateRatingAvg">
+		update map set rating_avg = (select round(avg(rating),2) from review where parent_seq = #{seq}) where seq = #{seq}
+	</update>
+	<select id="selectTop5" resultType="coma.spring.dto.MapDTO">
+		select * from (select * from map order by rating_avg desc) <![CDATA[where rownum <= 5]]>
+	</select>
 </mapper>

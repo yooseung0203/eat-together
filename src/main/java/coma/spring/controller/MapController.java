@@ -82,16 +82,20 @@ public class MapController {
 		int place_id = 0;
 		try{place_id = Integer.parseInt(request.getParameter("place_id"));}catch(Exception e) {}
 		String object = gson.toJson(list);
-		//request.setAttribute("json", object);
 		String jsonPath = sc.getRealPath("resources/json/mapData.json");
-		//InputStream jsonStream = new FileInputStream(jsonPath);
 		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
 		JsonArray arr = gson.fromJson(object, JsonArray.class);
+		List<MapDTO> toplist = mapservice.selectTop5();
 		for(JsonElement ele : arr) {
 			JsonObject obj = ele.getAsJsonObject();
 			int result = mapservice.selectPartyOn(obj.get("place_id").getAsInt());
 			obj.addProperty("partyOn", result);
+			for(MapDTO mapdto : toplist) {
+				if(obj.get("place_id").getAsInt() == mapdto.getPlace_id()) {
+					obj.addProperty("top", 1);
+				}
+			}
 		}
 		fw.write(arr.toString());
 		fw.flush();
@@ -99,7 +103,7 @@ public class MapController {
 		response.setHeader("cache-control","no-cache,no-store");
 		if(session.getAttribute("loginInfo")==null) {
 			int count = pservice.selectAllCount();
-			request.setAttribute("partyCount", count);
+			request.setAttribute("partyAllCount", count);
 		}
 		return "/map/map";
 	}
@@ -512,7 +516,9 @@ public class MapController {
 		}
 		request.setAttribute("reviewMap", rmap);
 		// 리뷰 사진
-		
+		if(session.getAttribute("loginInfo")==null) {
+			request.setAttribute("partyAllCount", pservice.selectAllCount());
+		}
 		return "map/map";
 	}
 
@@ -523,5 +529,35 @@ public class MapController {
 		return pdto;
 	}
 
-
+	@ResponseBody
+	@RequestMapping(value="chooseMapInfo",produces="application/json;charset=utf8")
+	public String chooseMapInfo(int place_id) throws Exception{
+		List<MapDTO> mapdto = mapservice.searchByPlace_id(place_id);
+		Gson gson = new Gson();
+		return gson.toJson(mapdto);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="chooseCafeInfo",produces="application/json;charset=utf8")
+	public String chooseCafeInfo(int place_id) throws Exception{
+		String cafePath = sc.getRealPath("resources/json/cafe.json");
+		Gson gson = new Gson();
+		JsonObject respObj = new JsonObject();
+		File cafeFile = new File(cafePath);
+		if(cafeFile.exists()) {
+			Reader reader = new FileReader(cafePath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("cafe_list");
+			for(JsonElement ele : arr) {
+				JsonObject obj = ele.getAsJsonObject();
+				int id = obj.get("cafe").getAsJsonObject().get("id").getAsInt();
+				if(id == place_id) {
+					respObj.add("result", obj);
+				}
+			}
+		}
+		String respBody = gson.toJson(respObj);
+		System.out.println(respBody);
+		return respBody;
+	}
 }

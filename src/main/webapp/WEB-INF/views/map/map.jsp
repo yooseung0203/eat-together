@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>지도 생성하기</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asda'></script>
+<script src='/resources/js/map.js?asd'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asdddd">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asdddadsd">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -50,12 +50,15 @@
 				page="/WEB-INF/views/include/header.jsp" /></div>
 		<c:if test="${empty sessionScope.loginInfo}">
 			<div class="loginPlease">
-				<p class="loginMsg">현재 진행중인 모임 ${partyCount}개<br>
+				<p class="loginMsg">현재 진행중인 모임 ${partyAllCount}개<br>
 					<button type="button" class="btn btn-primary toLogin">로그인</button>
 					<button type="button" class="btn btn-primary toSignUp">회원가입</button>
 				</p>
 			</div>
 		</c:if>
+		<div id = "Progress_Loading"><!-- 로딩바 -->
+			<img src="/resources/img/Progress_Loading.gif"/>
+		</div>
 		<div id="sideBar">
 			<div class="search_area">
 				<div class="category_search_btns mx-auto">
@@ -133,7 +136,7 @@
 										<i class="fas fa-star"></i>
 									</c:when>
 									<c:when test="${mapdto.rating_avg < 1}">
-										<i class="fas fa-star-half"></i>
+										<i class="fas fa-star-half-alt"></i>
 										<i class="far fa-star"></i>
 										<i class="far fa-star"></i>
 										<i class="far fa-star"></i>
@@ -141,7 +144,7 @@
 									</c:when>
 									<c:when test="${mapdto.rating_avg < 2}">
 										<i class="fas fa-star"></i>
-										<i class="fas fa-star-half"></i>
+										<i class="fas fa-star-half-alt"></i>
 										<i class="far fa-star"></i>
 										<i class="far fa-star"></i>
 										<i class="far fa-star"></i>
@@ -149,7 +152,7 @@
 									<c:when test="${mapdto.rating_avg < 3}">
 										<i class="fas fa-star"></i>
 										<i class="fas fa-star"></i>
-										<i class="fas fa-star-half"></i>
+										<i class="fas fa-star-half-alt"></i>
 										<i class="far fa-star"></i>
 										<i class="far fa-star"></i>
 									</c:when>
@@ -157,7 +160,7 @@
 										<i class="fas fa-star"></i>
 										<i class="fas fa-star"></i>
 										<i class="fas fa-star"></i>
-										<i class="fas fa-star-half"></i>
+										<i class="fas fa-star-half-alt"></i>
 										<i class="far fa-star"></i>
 									</c:when>
 									<c:when test="${mapdto.rating_avg < 5}">
@@ -165,7 +168,7 @@
 										<i class="fas fa-star"></i>
 										<i class="fas fa-star"></i>
 										<i class="fas fa-star"></i>
-										<i class="fas fa-star-half"></i>
+										<i class="fas fa-star-half-alt"></i>
 									</c:when>
 								</c:choose>
 							</div>

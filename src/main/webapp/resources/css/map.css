@@ -63,21 +63,18 @@
     	align:center;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
-	    margin-top:10px;
 	    font-size:10pt;
     }
     .search_result .cafe_info{
     	align:center;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
-	    margin-top:10px;
 	    font-size:10pt;
 	}
     .search_result .food_info{
     	align:center;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
-	    margin-top:10px;
 	    font-size:10pt;
 	}
     .search_input{
@@ -337,5 +334,29 @@
 	    border:none;
 	 	width:200px;
 	 	text-align: center; 
+	}
+	#Progress_Loading{
+		position:fixed;
+		height:100vh;
+		width:100vw;
+        background-color: rgba( 255, 255, 255, 0.5 );
+		z-index:100;
+	}
+	#Progress_Loading img{
+		position:absolute;
+		left: 50%;
+		top: 40%;
+	}
+	.map_info:hover{
+		cursor:pointer;
+		background-color:#ededed;
+	}
+	.cafe_info:hover{
+		cursor:pointer;
+		background-color:#ededed;
+	}
+	.food_info:hover{
+		cursor:pointer;
+		background-color:#ededed;
 	}
 @font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
