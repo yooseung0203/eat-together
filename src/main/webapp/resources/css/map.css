@@ -229,8 +229,6 @@
 	    position:relative;
 	}
     .review_comment .writer{font-size:10pt;}
-    .review_comment i{position:absolute;right:10px;top:10px;color:#e2e2e2;}
-    .review_comment i:hover{color:black;}
     .review_comment input[type=submit]{position:absolute;right:10px;bottom:30px;float:left;}
     .map_add{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:10px;right:10px;color:#ff9900;line-height:50px;}
     .foodInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:190px;right:10px;color:#ff9900;line-height:50px;}
@@ -287,3 +285,30 @@
 	  max-height: none;
 	}
 	#partyModal .badges div{float:left;padding-right:5px;}
+	.filebox{position:absolute;right:0px;top:-10px;color:#e2e2e2;}
+	.filebox label { 
+		  display: inline-block;
+		  padding: .5em .75em;
+		  color: #999;
+		  font-size: inherit;
+		  line-height: normal;
+		  vertical-align: middle;
+		  background-color: #fdfdfd;
+		  cursor: pointer;
+		  border-bottom-color: #e2e2e2;
+		  border-radius: .25em;
+	}
+	/* .filebox  */
+	.filebox input[type=file]{ /* 파일 필드 숨기기  */
+		  position: absolute;
+		  width: 1px;
+		  height: 1px;
+		  padding: 0;
+		  margin: -1px;
+		  overflow: hidden;
+		  clip:rect(0,0,0,0);
+		  border: 0;
+	}
+	.attachedImage img{
+		width:100px;
+	}
