@@ -73,8 +73,8 @@
 			<div class="signup_text">
 				<label for="account_email" class="signup_text">이메일</label> <input
 					type="text" class="form-control" id="account_email"
-					name="account_email" placeholder="ex)eat-together@naver.com"> <input
-					type=button id=mail value="인증하기"><br>
+					name="account_email" placeholder="ex)eat-together@naver.com">
+				<input type=button id=mail value="인증하기"><br>
 				<div id=mail_div style="display: none;">
 					인증번호 : <input type=text id=mail_text>
 					<button type=button id=mail_accept>인증</button>
@@ -226,14 +226,11 @@
 							var regex1 = /^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
 							if ($("#birth").val() != "") {
 								if (regex1.test(birth)) {
-									birth = birth
-											.replace(
-													/^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
-													"$1-$2-$3");
+									birth = birth.replace(/^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,"$1-$2-$3");
 									$("#birth").val(birth);
 								} else {
 									$("#birth").val("");
-									alert("만 15세 이상 이용가능한 사이트입니다.\n올바른 생년월일을 입력해주세요.");
+									alert("2005년 이전 출생자만 이용가능합니다.\n올바른 생년월일을 입력해주세요.");
 									$("#birth").focus();
 								}
 							}
