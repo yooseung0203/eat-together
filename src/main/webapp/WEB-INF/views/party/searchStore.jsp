@@ -122,7 +122,8 @@ $(document).ready(function(){
 			
 				}
 				$("#resultdiv").html(test);
-				$("#resultdiv").append("<button id=back>◀ </button>  <button id=next>▶</button>");
+				$("#resultdiv").append("<br><br>");
+				//$("#resultdiv").append("<button id=back>◀ </button>  <button id=next>▶</button>");
 			});
 		}
 		
@@ -188,7 +189,7 @@ $(document).ready(function(){
 				<div class="col-8">
 					<input type="text" id="keyword" name="keyword" class="form-control"
 						aria-describedby="countHelpInline"> <small id="HelpInline"
-						class="text-muted"> 예시 : 을지로 스타벅스, 홍대 락희돈 </small>
+						class="text-muted"> 예시 : 지역명+상호명 / 을지로 스타벅스, 홍대 락희돈 </small>
 				</div>
 				<div class="col-3">
 					<button type=button id=searchBtn class="btn btn-primary">검색</button>
