@@ -24,6 +24,7 @@
 	<resources mapping="/media/**" location="/media/" />
 	<resources mapping="/summernoteImage/**"
 		location="/summernote_image/"></resources>
+	<resources mapping="/upload/files/**" location="/upload/files/"/>
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
 		in the /WEB-INF/views directory -->
@@ -61,6 +62,11 @@
 		<beans:property name="maxInMemorySize" value="10485760"></beans:property>
 	</beans:bean>
 
+	<!-- 회원 프로필 이미지 파일 업로드를 위한 디렉토리 설정 -->
+	<beans:bean id="uploadPath" class="java.lang.String">
+		<!-- 파일업로드 디렉토리 -->
+		<beans:constructor-arg value="해당디렉토리" />
+	</beans:bean>
 
 
 </beans:beans>

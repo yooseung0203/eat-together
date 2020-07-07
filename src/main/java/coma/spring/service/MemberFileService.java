@@ -1,6 +1,7 @@
 package coma.spring.service;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,25 +18,20 @@ public class MemberFileService {
 	private MemberFileDAO mfdao;
 
 	//프로필 이미지 변경하기
-	public int editProfileImageProc(MemberFileDTO mfdto, String filePath)throws Exception {
-		MultipartFile file = mfdto.getFile();
-
-		UUID uuid = UUID.randomUUID();
-		String sysname = uuid.toString()+"_"+ file.getOriginalFilename();
-		String oriname = file.getOriginalFilename();
-		String parent_id = mfdto.getParent_id();
-
-		System.out.println("parent_id : " + parent_id);
-		System.out.println("sysName : " + sysname);
-		System.out.println("oriName : " + oriname);
-
-		mfdto.setSysname(sysname);
-		mfdto.setOriname(oriname);
-
-		File targetLoc = new File(filePath + "/" + sysname);
-		file.transferTo(targetLoc);
-
-		int result = mfdao.editProfileImageProc(mfdto);
+	public int uploadProfile(MemberFileDTO mfdto)throws Exception {
+		int result = mfdao.uploadProfile(mfdto);
+		return result;
+	}
+	
+	//프로필이미지 다운로드
+	public MemberFileDTO getFilebyId(String parent_id)throws Exception{
+		MemberFileDTO mfdto = mfdao.getFileById(parent_id);
+		return mfdto;
+	}
+	
+	//프로필이미지 삭제하기
+	public int deleteFilebyId(String parent_id)throws Exception{
+		int result = mfdao.deleteFilebyId(parent_id);
 		return result;
 	}
 
