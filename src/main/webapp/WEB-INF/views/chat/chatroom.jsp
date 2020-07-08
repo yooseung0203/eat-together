@@ -14,7 +14,8 @@
 <script>
 	$(function() {
 		var scrolled = false;
-		var viewed;
+		var userenter = true;
+		var viewed = 0;
 		$(".input-area").empty();
 		var ws = new WebSocket("ws://192.168.60.19/chat/chatroom")
 		ws.onmessage = function(e) {
@@ -39,11 +40,22 @@
 					$(".user_list").children("#" + some[1]).attr("class",
 							"exist");
 				}
-
+				if(userenter){
+					userenter = false;
+					$('.message-area').scrollTop(viewed);
+				}
 			} else if (some[0] == "qCPxXT9PAati6uDl2lecy4Ufjbnf6ExYsrN7iZA6dA4e4X") {
 				$(".user_list").children("#" + some[1])
 						.attr("class", "noexist");
-			} else {
+			} 
+			else if(some[0] == "elgnNST1qytCBnpR3DYlHqMIBxbMA0Kl7ld6B10nvOr2jMhDAfMwo0"){
+				viewed = $('.message-area')[0].scrollHeight;
+				var line = $("<div>");
+				line.attr("class", "viewed");
+				line.append(some[1])
+				$(".message-area").append(line);
+			}
+			else {
 				var str = some[1];
 				for (var i = 2; i < some.length; i++) {
 					str += ":" + some[i];
@@ -55,14 +67,11 @@
 					line.attr("class", some[0]);
 					line.append(some[0]);
 					line.append("<br><div>" + str)
-					if (some[0] == "hereasd") {
-						viewed = $('.message-area')[0].scrollHeight;
-					}
 					$(".message-area").append(line);
 				}
 				if (scrolled) {
-					$('.message-area').scrollTop(
-							$('.message-area')[0].scrollHeight);
+						$('.message-area').scrollTop(
+								$('.message-area')[0].scrollHeight);
 				}
 			}
 		}
@@ -80,8 +89,7 @@
 							}
 							if ($('.message-area')[0].scrollHeight - 50 <= ($(
 									'.message-area').scrollTop() + $('.chat-box')[0].scrollHeight)) {
-								$(".hereasd").remove();
-
+								$(".viewed").remove();
 								scrolled = true;
 							}
 							console.log(scrolled);
@@ -122,7 +130,7 @@
 <body>
 	<div class="chat-box">
 		<div class="head-area">
-			<br> <b>CHATROOM#</b>
+			<br> <b>CHATROOM#${roomNum }</b>
 		</div>
 		<div class="message-area"></div>
 		<div class="input-area" contenteditable="true"

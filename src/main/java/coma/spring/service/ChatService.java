@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import coma.spring.dao.ChatDAO;
 import coma.spring.dto.ChatDTO;
-import coma.spring.dto.ChatMemberDTO;
 import coma.spring.dto.PartyMemberDTO;
 import coma.spring.statics.ChatStatics;
 
@@ -23,11 +22,21 @@ public class ChatService {
 		ChatStatics.savedChatsSeq.put(roomNum, list.size());		
 	}
 	public int exitChatRoom(String nickName , int roomNum) {
-		ChatMemberDTO cmdto = new ChatMemberDTO(roomNum , nickName);
-		return cdao.exitChatRoom(cmdto);
+		PartyMemberDTO pmdto = new PartyMemberDTO(roomNum , nickName);
+		return cdao.exitChatRoom(pmdto);
 	}
 
 	public List<PartyMemberDTO> selectChatMembers(int roomNum) {
 		return cdao.selectChatMembers(roomNum);
+	}
+	
+	public int chatParted(int roomNum , String name) {
+		PartyMemberDTO pmdto = new PartyMemberDTO(roomNum, name);
+		return cdao.chatParted(pmdto);
+	}
+	public int chatViewedSave(int chatSeq_parent, String participant, int viewed_seq) {
+
+		PartyMemberDTO pmdto = new PartyMemberDTO(chatSeq_parent, participant,viewed_seq);
+		return cdao.chatViewedSave(pmdto);
 	}
 }

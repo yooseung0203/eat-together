@@ -5,7 +5,7 @@
 		select * from chat_messages where chatSeq_parent=#{value} order by seq
 	</select>
 	<select id="selectChatMembers" resultType="coma.spring.dto.PartyMemberDTO">
-		select participant from partylist where chatSeq_parent=#{value}
+		select * from partylist where chatSeq_parent=#{value}
 	</select>
 	<insert id="insertChat" parameterType="java.util.List">
 		<foreach collection="list" item="item" index="index"
@@ -17,7 +17,14 @@
 			#{item.view_count})
 		</foreach>
 	</insert>
+	
+	<select id="chatParted" resultType="int">
+		select count(*) from partylist where participant=#{participant} and chatSeq_parent = #{chatSeq_parent}
+	</select>
 	<delete id="exitChatRoom">
-		delete from partylist where chatSeq_parent = #{chatroom_seq} and participant = #{name}
+		delete from partylist where chatSeq_parent = #{chatSeq_parent} and participant = #{participant}
 	</delete>
+	<update id="chatViewedSave">
+		update partylist set viewed_seq = #{viewed_seq} where participant=#{participant} and chatSeq_parent = #{chatSeq_parent}
+	</update>
 </mapper>

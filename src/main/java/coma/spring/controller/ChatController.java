@@ -25,12 +25,18 @@ public class ChatController {
 
 	@Autowired
 	private ChatService cservice;
-
+	
 	@RequestMapping("chatroom")
 	public String chatroom(int roomNum , HttpServletRequest request) {
+
+		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
+		//사용자가 참여자가 아니면 에러페이지
+		if(cservice.chatParted(roomNum, name) == 0) {
+			return "/chat/error";
+		}
+		
 		// 방번호를 받음 : 웹소켓에서 삭제됨
 		this.session.setAttribute("roomNum", roomNum);
-		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
 		// 방번호의 저장된 채팅이 있는지 검색 
 		boolean ChatroomExist = true;
 		for(int i : ChatStatics.savedChats.keySet()) {
@@ -40,30 +46,37 @@ public class ChatController {
 		if(ChatroomExist) {
 			cservice.savedChat(roomNum);
 		}
+		// 채팅방 참여 인원의 정보를 가지고옴
 		List<PartyMemberDTO> list = cservice.selectChatMembers(roomNum);
-
 		try {
-		Iterator iterator = WebChatSocket.members.get(roomNum).entrySet().iterator();
-		while(iterator.hasNext()) {
-			Entry entry = (Entry)iterator.next();
-
-			for(int i = 0 ; i < list.size() ; i++) {
-				if(entry.getValue().equals(list.get(i).getParticipant())) {
-					list.get(i).setExist("exist");
-					break;
+			// 현재 접속중인 인원을 '존재함'으로 표시함
+			Iterator iterator = WebChatSocket.members.get(roomNum).entrySet().iterator();
+			while(iterator.hasNext()) {
+				Entry entry = (Entry)iterator.next();
+				for(int i = 0 ; i < list.size() ; i++) {
+					if(entry.getValue().equals(list.get(i).getParticipant())) {
+						list.get(i).setExist("exist");
+						break;
+					}
 				}
 			}
-		}
-		}catch(Exception e) {
 			
-		}
+		}catch(Exception e) {
 
+		}
+		
+		//존재하지 않으면 존재하지 않는다고 초기화
 		for(int i = 0 ; i < list.size() ; i++) {
+			if(list.get(i).getParticipant().contentEquals(name)) {
+				this.session.setAttribute("viewed", list.get(i).getViewed_seq());
+				System.out.println(list.get(i).getViewed_seq());
+			}
 			if(list.get(i).getExist() == null) {
 				list.get(i).setExist("noexist");
 			}
-			System.out.println(list.get(i).getParticipant() +"  "+list.get(i).getExist());
 		}
+		
+		// 방번호와 맴버값을 초기화
 		request.setAttribute("roomNum", roomNum);
 		request.setAttribute("memberList", list);
 		return "/chat/chatroom";
@@ -73,5 +86,10 @@ public class ChatController {
 		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
 		cservice.exitChatRoom(name, roomNum);
 		return "redirect:/";
-	}	
+	}
+	@RequestMapping("hacker")
+	public String asd() {
+		return "/chat/error2";
+	}
+	
 }

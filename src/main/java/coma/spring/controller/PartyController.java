@@ -116,7 +116,6 @@ public class PartyController {
 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
-		cservice.insertChatRoom(dto);
 		//모임 등록 후 등록된 페이지로 이동 
 		//PartyDTO content=pservice.selectBySeq(myseq);
 

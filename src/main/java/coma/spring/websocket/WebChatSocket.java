@@ -1,7 +1,6 @@
 package coma.spring.websocket;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,13 +16,17 @@ import javax.websocket.RemoteEndpoint.Basic;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import coma.spring.config.HttpSessionConfigurator;
 import coma.spring.dto.ChatDTO;
 import coma.spring.dto.MemberDTO;
+import coma.spring.service.ChatService;
 import coma.spring.statics.ChatStatics;
 
 @ServerEndpoint(value="/chat/chatroom", configurator = HttpSessionConfigurator.class)
 public class WebChatSocket {
+	private ChatService cservice = MyApplicationContextAware.getApplicationContext().getBean(ChatService.class);
 	// clients : 현재 접속한 세션이 어떤 방에 접속중인지 방 번호를 저장 
 	private static Map<Session , Integer> clients = Collections.synchronizedMap(new HashMap<>());
 	// memebers : 방번호마다 현재 접속하고 있는 멤버의 목록을 저장  
@@ -33,7 +36,6 @@ public class WebChatSocket {
 	// 로그인 정보,들어온 방의 번호 : 세션값을 통해 가져옴
 	private int roomNum;
 	private MemberDTO mdto;
-	
 	
 
 	// 채팅방 접속시
@@ -45,10 +47,13 @@ public class WebChatSocket {
 		mdto = (MemberDTO)this.session.getAttribute("loginInfo");
 		roomNum = (int)this.session.getAttribute("roomNum");
 		this.session.removeAttribute("roomNum");
-
+		int viewed = (int)this.session.getAttribute("viewed");
+		this.session.removeAttribute("viewed");
+		System.out.println("여기까지 읽은 "+viewed);
 		//clients에 세션정보와 방의 번호를 저장
 		clients.put(client , roomNum);
 
+//		System.out.println(mdto.getNickname() +" 은 여기까지 읽음 " + viewed);
 		// members 내에 roomNum 방번호가 존재하면 방을 만들지 않음, 존재하지 않으면 방을 만듬
 		boolean memberExist = true;
 		for(int i : members.keySet()) {
@@ -70,7 +75,9 @@ public class WebChatSocket {
 			}else {
 				basic.sendText(d.getWriter() + ":" +d.getContent());
 			}
-
+			if(viewed == d.getSeq()) {
+				basic.sendText("elgnNST1qytCBnpR3DYlHqMIBxbMA0Kl7ld6B10nvOr2jMhDAfMwo0:여기까지 읽으셨습니다");
+			}
 		}
 		// 현재 서버에 저장된 채팅 가져오기
 		List<ChatDTO> list = (ChatStatics.savedChat ? ChatStatics.chats1 : ChatStatics.chats2);
@@ -81,6 +88,9 @@ public class WebChatSocket {
 					basic.sendText("나:" +d.getContent());
 				}else {
 					basic.sendText(d.getWriter() + ":" +d.getContent());
+				}
+				if(viewed == d.getSeq()) {
+					basic.sendText("elgnNST1qytCBnpR3DYlHqMIBxbMA0Kl7ld6B10nvOr2jMhDAfMwo0:여기까지 읽으셨습니다");
 				}
 			}
 		}
@@ -135,8 +145,16 @@ public class WebChatSocket {
 	@OnClose
 	public void onClose(Session session) {
 		
+		
+//		System.out.println(roomNum);
+//		System.out.println(mdto.getNickname());
+		System.out.println("세큐 몇번:" +ChatStatics.savedChatsSeq.get(roomNum));
+		cservice.chatViewedSave(roomNum,
+				mdto.getNickname(),
+				ChatStatics.savedChatsSeq.get(roomNum)-1);
+		
 		//member와 client의 정보를 모두 삭제
-		members.get(roomNum).remove(session);
+			members.get(roomNum).remove(session);
 		clients.remove(session);
 		synchronized (members.get(roomNum)) {
 			for(Session member : members.get(roomNum).keySet()) {
