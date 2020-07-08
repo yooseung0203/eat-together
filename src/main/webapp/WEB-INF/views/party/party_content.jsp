@@ -41,13 +41,18 @@
 	href="/resources/css/party-css.css">
 </head>
 <script>
+
+function toChatroom(num){
+    var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"
+    window.open("/chat/chatroom?roomNum="+num, num, option);
+}
+
+
 $(document).ready(function(){
 	var stime = "${con.sTime}";
 	var time = stime.substr(0,5);
 	console.log(time);
 	$("#time").html(time);
-	 
-
 });
 
 	$(function() {
@@ -66,9 +71,14 @@ $(document).ready(function(){
 			location.href = "/party/partylist";
 		});
 		
-		$("#toChatroom").on("click", function() {
-			location.href = "/chat/chatroom?roomNum=${con.seq}"; // 채팅연결 
+		$("#toPartyJoin").on("click",function(){ //모임가입
+			location.href="/party/partyJoin?seq=${con.seq}";
 		});
+		
+		$("#toChatroom").on("click", function() {
+			toChatroom(${con.seq});
+		});
+        
 		
 		$("#toStopRecruit").on("click",function(){
 			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
@@ -224,7 +234,12 @@ $(document).ready(function(){
 		</div>
 		<div class="row mb-3">
 			<div class="col-12 mb-5">
-					<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로 이동</button>
+					<c:choose>
+					<c:when test="${partyFullCheck eq false && partyParticipantCheck eq false}"><button type="button" id="toPartyJoin" class="btn btn-success">모임참가하기</button></c:when>
+					<c:when test="${partyParticipantCheck  eq true}"><button type="button" id="toChatroom" class="btn btn-primary">채팅방으로 이동</button></c:when>
+				</c:choose>
+					
+			
 				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
 				<c:choose>
 					<c:when test="${con.status  eq '1'}"><button type="button" id="toStopRecruit" class="btn btn-light">모집종료하기</button></c:when>

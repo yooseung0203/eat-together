@@ -20,9 +20,11 @@ import coma.spring.statics.PartyConfiguration;
 
 @Service
 public class PartyService {
+	
 	@Autowired
 	private PartyDAO pdao;
 
+	// 수지 모임 생성
 	public int partyInsert(PartyDTO dto) throws Exception  {
 		int seq = pdao.getNextVal();
 		//String imgaddr = this.clew(dto.getParent_name());
@@ -31,32 +33,109 @@ public class PartyService {
 		pdao.insert(dto);
 		return seq;
 	}
+	
+	//수지 파티 참가 
+	public int partyJoin(String seq, String nickname) throws Exception {
+		int result = pdao.partyJoin(seq,nickname);
+		return result;
+	}
+	// 수지 계정당 모임 생성수 확인
+	public int getMadePartyCount(String writer) throws Exception{
+		return pdao.getMadePartyCount(writer);
+	}
+	
+	//수지 파티 정원초과 확인
+	public boolean isPartyfull(String seq) throws Exception {
+		boolean result = pdao.isPartyfull(seq);
+		return result;
+	}
 
+	
+	//수지 파티 참가인인지 확인
+	public boolean isPartyParticipant(String seq, String nickname) throws Exception{
+		boolean result = pdao.isPartyParticipant(seq,nickname);
+		return result;
+	}
 
+	
+	// 수지 모임 글 보기 
 	public PartyDTO selectBySeq(int seq) throws Exception {
 		PartyDTO dto = pdao.selectBySeq(seq); // 읽어오기
 		return dto;
 	}
 
-
+	// 수지 모임 삭제
 	public int delete(String seq) throws Exception{
 		int result=pdao.delete(seq);
 		return result;
 	}
 
+	// 수지 모임 수정
 	public int update(PartyDTO dto) throws Exception{
 		int result= pdao.update(dto);
 		return result;
 	}
 
 	// 태훈 그냥 모임 글 보기
-	public List<PartyDTO> selectList() throws Exception {
-		List<PartyDTO> list = pdao.selectList();
+//	public List<PartyDTO> selectList() throws Exception {
+//		List<PartyDTO> list = pdao.selectList();
+//		return list;
+//	}
+	// 태훈 모임 리스트
+	public List<PartyDTO> selectList(int cpage) throws Exception {
+		List<PartyDTO> list = pdao.selectList(cpage);
 		return list;
+	}
+	// 태훈 페이지 네비
+	public String getPageNaviTH(int currentPage) throws Exception{
+		int recordTotalCount = pdao.getListCount(); 
+		int pageTotalCount = 0; 
+		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
+			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
+		}else {
+			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
+		}
+		if(currentPage < 1) {
+			currentPage = 1;
+		}else if(currentPage > pageTotalCount) {
+			currentPage = pageTotalCount;
+		}
+		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
+		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
+		if(endNavi > pageTotalCount) {
+			endNavi = pageTotalCount;
+		}
+		boolean needPrev = true; // <
+		boolean needNext = true; // >
+		StringBuilder sb = new StringBuilder();
+		if(startNavi == 1) {needPrev = false;}
+		if(endNavi == pageTotalCount) {needNext = false;}
+
+		if(needPrev) {
+			sb.append("<li class='page-item'><a class='page-link' href='partylistBy?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
+		}
+		else {
+			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
+		}
+		for(int i = startNavi;i <= endNavi;i++) {
+			if(currentPage == i) {
+				sb.append("<li class='page-item active' aria-current=\"page\"><span class=\"page-link\">" + i +"<span class=\"sr-only\">(current)</span></span></li>");
+			}
+			else {
+				sb.append("<li class='page-item'><a class='page-link' href=\"partylist?cpage="+i+"\">" + i + "</a></li>");
+			}	
+		}
+		if(needNext) {
+			sb.append("<li class='page-item'><a class='page-link' href='partylistBy?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+		}
+		else {
+			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+		}
+		
+		return sb.toString();
 	}
 	// 태훈 모임 글 상세 검색
 	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{
-
 		List<PartyDTO> list = pdao.partySearch(this.searchKey(pdto));
 		return list;
 	}
@@ -109,12 +188,16 @@ public class PartyService {
 
 		return param;
 	}
-	// 예지 
-	public List<PartyDTO> selectByPlace_id(int place_id) throws Exception{
-		List<PartyDTO> result = pdao.selectByPlace_id(place_id);
-		return result;
+	// 태훈 맛집 top5 장소 아이디 리스트
+	public Map<String,String> partyCountById(){
+		List<String> list =  pdao.partyCountById();
+		Map<String, String> param = new HashMap<>();
+		for (int i=0; i<5; i++) {
+			param.put("top"+(i+1),list.get(i));
+		}
+		return param;
 	}
-	// 예지 페이지 글 10개 씩
+	// 예지 장소 아이디 별 모임 리스트
 	public List<PartyDTO> selectByPageNo(int cpage, int place_id) throws Exception{
 		return pdao.selectByPageNo(cpage, place_id);
 	}
@@ -150,7 +233,16 @@ public class PartyService {
 		if(needNext) {sb.append("<li class='page-item'><a class='page-link' href='selectMarkerInfo?cpage="+(endNavi+1)+"'><i class=\"fas fa-chevron-right\"></i></a></li>");}
 		return sb.toString();
 	}
-	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	
+	// 수지 모임 종료
+	public int stopRecruit(String seq) throws Exception {
+		return pdao.stopRecruit(seq);
+	}
+	// 예지 모임 전체 갯수
+	public int selectAllCount() throws Exception{
+		return pdao.selectAllCount();
+	}
+	// 지은 작성자 별 모임 리스트
 	public List<PartyDTO> selectByWriterPage(String writer, int mcpage)throws Exception{
 		int start = mcpage * Configuration.recordCountPerPage-(Configuration.recordCountPerPage-1);
 		int end = start + (Configuration.recordCountPerPage-1);
@@ -163,8 +255,7 @@ public class PartyService {
 		List<PartyDTO> partyList = pdao.selectByWriterPage(param);
 		return partyList;
 	}
-
-	//by지은, 마이페이지 - 내 모임리스트 출력을 위한 네비바 생성_20200707
+	// 지은 페이지 네비
 	public String getMyPageNav(int mcpage, String writer) throws Exception{
 		int recordTotalCount = pdao.getMyPageArticleCount(writer); // 총 개시물의 개수
 		int pageTotalCount = 0; // 전체 페이지의 개수
@@ -218,7 +309,7 @@ public class PartyService {
 		sb.append("</ul></nav>");
 		return sb.toString();
 	}
-
+	// 이지미 클롤링
 	public String clew(String str) throws Exception {
 		Document doc = Jsoup.connect("https://m.map.kakao.com/actions/searchView?q="+str).get();
 		Element linkTag = doc.selectFirst("ul#placeList>li>a>span");
@@ -232,6 +323,7 @@ public class PartyService {
 		}
 	}
 
+<<<<<<< HEAD
 	public int stopRecruit(String seq) throws Exception {
 		return pdao.stopRecruit(seq);
 	}
@@ -239,4 +331,6 @@ public class PartyService {
 	public int selectAllCount() throws Exception{
 		return pdao.selectAllCount();
 	}
+=======
+>>>>>>> 9f0ec55a61916c5a302230ac3bc74832e92bffb2
 }

@@ -20,23 +20,60 @@ public class PartyDAO {
 
 	@Autowired
 	private SqlSessionTemplate mybatis;
-
+	
+	// 수지 모임 다음 시퀀스
 	public int getNextVal() {
 		return mybatis.selectOne("Party.getNextval");
 	}
-
+	// 수지 모임 생성
 	public int insert(PartyDTO dto) {
 		return mybatis.insert("Party.insert",dto);
 	}
-
+	// 수지 계정당 모임 생성수 확인
+	public int getMadePartyCount(String writer) throws Exception{
+		return mybatis.selectOne("Party.getMadePartyCount",writer);
+	}
+	// 수지 파티 참가
+	public int partyJoin(String seq, String nickname) throws Exception{
+		Map<String, String> param = new HashMap<>();
+			      param.put("seq", seq);
+			      param.put("nickname", nickname);
+		return mybatis.insert("Party.partyJoin",param);
+	}
+	//수지 파티 정원초과 확인
+	public Boolean isPartyfull(String seq) throws Exception {
+		int limit = mybatis.selectOne("Party.getPartyCount",seq);
+		int nowCount= mybatis.selectOne("Party.getParticipantCount",seq);
+		
+		if(nowCount<limit) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	//수지 파티 참가인인지 확인
+	public Boolean isPartyParticipant(String seq, String nickname) throws Exception{
+		Map<String, String> param = new HashMap<>();
+	      param.put("seq", seq);
+	      param.put("nickname", nickname);
+	      int check = mybatis.selectOne("Party.isPartyParticipant",param);
+	      
+	      if(check>0) {
+	    	  return true;
+	      }else {
+	    	  return false;
+	      }
+	}
+	
+	// 수지 모임 삭제
 	public int delete(String seq) throws Exception{
 		return mybatis.delete("Party.delete",seq);
 	}
-
+	// 수지 모임 내용
 	public PartyDTO selectBySeq(int seq) throws Exception{
 		return mybatis.selectOne("Party.selectBySeq",seq);
 	} 
-
+	// 수지 모임 수정
 	public int update(PartyDTO dto) throws Exception{
 		//		 Map<String, String> param = new HashMap<>();
 		//	      param.put("columnName1", "title");
@@ -52,15 +89,11 @@ public class PartyDAO {
 
 		return mybatis.update("Party.update",dto);
 	}
-
-	public List<PartyDTO> selectByPlace_id(int place_id) throws Exception{
-		return mybatis.selectList("Party.selectByPlace_id",place_id);
-	}
-	// 예지 전체 모임 카운트
+	// 예지 장소 아이디 별 모임 갯수
 	public int getArticleCount(int place_id) throws Exception{
 		return mybatis.selectOne("Party.getArticleCount", place_id);
 	}
-	// 예지씨 모임 페이지별 검색
+	// 예지 장소 아이디 별 모임 리스트
 	public List<PartyDTO> selectByPageNo(int cpage, int place_id) throws Exception{
 		int start = cpage * PartyConfiguration.RECORD_COUNT_PER_PAGE - (PartyConfiguration.RECORD_COUNT_PER_PAGE-1);
 		int end = start + (PartyConfiguration.RECORD_COUNT_PER_PAGE-1);
@@ -70,78 +103,46 @@ public class PartyDAO {
 		param.put("place_id", place_id);
 		return mybatis.selectList("Party.selectByPageNo",param);
 	}
-
-	// 태훈 모임 리스트 뽑기
-	public List<PartyDTO> selectList() {
-		return mybatis.selectList("Party.selectList");
-	}
-	// 태훈 모임 통합 검색
-	public List<PartyDTO> partySearch(Map<String, Object> param){
-		System.out.println();
-
-
-		System.out.println("address : " +param.get("address"));
-
-		System.out.println("gender : "+param.get("gender"));
-
-		System.out.println("ageList : "+param.get("ageList"));
-
-		System.out.println("size" + param.get("ageList.size"));
-
-		System.out.println("drinking : "+param.get("drinking"));
-
-		System.out.println("title :"+param.get("title"));
-
-		System.out.println("writer : "+param.get("writer"));
-
-		System.out.println("content : "+param.get("content"));
-
-		System.out.println("both : "+param.get("both"));
-
-		return mybatis.selectList("Party.partySearch", param);
-	}
-	/*
-	// 태훈 모임 통합 검색
-	public List<PartyDTO> partySearch(String address, String gender,List<String> ageList, int drinking, String title, String writer, String content, String both){
-		System.out.println();
-		Map<String, Object> param = new HashMap<>();
-		param.put("address" ,address);
-		System.out.println("address : " +address);
-		param.put("gender",gender);
-		System.out.println("gender : "+gender);
-		param.put("ageList",ageList);
-		System.out.println("ageList : "+ageList);
-		param.put("ageList.size",ageList.size());
-		System.out.println(ageList.size());
-		param.put("drinking",drinking);
-		System.out.println("drinking : "+drinking);
-		param.put("title",title);
-		System.out.println("title :"+title);
-		param.put("writer",writer);
-		System.out.println("writer : "+writer);
-		param.put("content",content);
-		System.out.println("content : "+content);
-		param.put("both",both);
-		System.out.println("both : "+both);
-
-		return mybatis.selectList("Party.partySearch", param);
-	}*/
-
+	// 예지 잘 모르겠음
 	public int stopRecruit(String seq) throws Exception {
 		return mybatis.update("Party.stopRecruit",seq);
 	}
-
-	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	// 예지 모임 전체 갯수
+	public int selectAllCount() throws Exception{
+		return mybatis.selectOne("Party.selectAllCount");
+	}
+	// 태훈 모임 리스트 뽑기
+//	public List<PartyDTO> selectList() {
+//		return mybatis.selectList("Party.selectList");
+//	}
+	// 태훈 모임 리스트 뽑기 네비 포함
+	public List<PartyDTO> selectList(int cpage) {
+		int start = cpage * PartyConfiguration.SEARCH_COUNT_PER_PAGE - (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
+		int end = start + (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
+		Map<String, Integer> param = new HashMap<>();
+		param.put("start", start);
+		param.put("end", end);
+		return mybatis.selectList("Party.selectList" ,param);
+	}
+	// 태훈 열려있는 모임 전체 갯수
+	public int getListCount() {
+		return mybatis.selectOne("Party.getListCount");
+	}
+	// 태훈 모임 통합 검색
+	public List<PartyDTO> partySearch(Map<String, Object> param){	
+		return mybatis.selectList("Party.partySearch", param);
+	}
+	// 태훈 모임 순위순 장소 아이디 리스트
+	public List<String> partyCountById() {
+		return mybatis.selectList("Party.PartyCountById");
+	}
+	// 지은 작성자 별 모임 리스트
 	public List<PartyDTO> selectByWriterPage(Map<String, Object> param)throws Exception{
 		return mybatis.selectList("Party.selectByWriterPage", param);
 	}
-	//by 지은, 마이페이지 - 내 모임 리스트 출력을 위한 네비바 생성 중 게시글 개수 세는 select문 작성_20200707
+	// 지은 작성자 별 모임 갯수
 	public int getMyPageArticleCount(String writer) throws Exception{
 		return mybatis.selectOne("Party.getMyPageArticleCount", writer);
 	}
 
-	public int selectAllCount() throws Exception{
-		return mybatis.selectOne("Party.selectAllCount");
-
-	}
 }

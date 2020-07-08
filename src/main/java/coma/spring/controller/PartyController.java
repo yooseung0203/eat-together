@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -51,18 +52,28 @@ public class PartyController {
 
 	@Autowired
 	private HttpSession session;
-
+	
+	// 수지 모임글 작성 페이지 이동
 	@RequestMapping("toParty_New")
 	public String toPartyNew(HttpServletRequest request) {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+			String userid= account.getId();
+			int gender = account.getGender();
+			
+			//계정당 활성화된 모임 체크
+			int myPartyCount = pservice.getMadePartyCount(userid);
+			if(myPartyCount>4) {
+				return "/error/partyfull";
+			}
+			
 			String age = account.getBirth();
+			request.setAttribute("gender", gender);
 			request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_new";
 	}
-
-
+	// 수지 모임글 작성
 	@RequestMapping(value = "party_New_Proc", method = RequestMethod.POST)
 	/*public String partyNewProc(HttpServletRequest request) {*/
 	public String partyNewProc(PartyDTO dto, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
@@ -79,6 +90,9 @@ public class PartyController {
 		dto.setMeetdate(meetdate);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String userid= account.getId();
+		
+		
+		
 		dto.setWriter(userid);
 		dto.setStatus("1");
 		//
@@ -110,50 +124,24 @@ public class PartyController {
 			mapservice.insert(mdto);
 		}
 
-
-
 		int myseq = pservice.partyInsert(dto);   // 글번호
 		//채팅 insert (생성)  cservice.insert(seq);
+		String nickname = account.getNickname();
+		pservice.partyJoin(Integer.toString(myseq),nickname);
 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
-
-		//모임 등록 후 등록된 페이지로 이동 
-		//PartyDTO content=pservice.selectBySeq(myseq);
-
 		redirectAttributes.addAttribute("seq", myseq);
-		//		request.setAttribute("con", content);
-		//		request.setAttribute("seq", myseq);
+		//모임 등록 후 등록된 페이지로 이동 
 		System.out.println("파티 이동!!1");
 		return "redirect:/party/party_content";
 	}
-
-	// 태훈 모임 글보기
-	@RequestMapping(value="party_content_include")
-	public String party_content_include(HttpServletRequest request) throws Exception {
-		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
-		request.setAttribute("con",content);
-
-		return "/include/party_content_include";
-	}
-	// 예지 모임 글 보기
-	@RequestMapping(value="party_content")
-	public String party_content(String seq, HttpServletRequest request) throws Exception {
-		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
-		String img = pservice.clew(content.getParent_name());
-		request.setAttribute("img", img);
-		request.setAttribute("con",content);
-		return "/party/party_content";
-	}
-
-
-
+	// 수지 모임 생성 중 상호 검색 창 이동 
 	@RequestMapping(value="toSearchStore", method=RequestMethod.GET)
 	public String toSearchStore() {
 		return "/party/searchStore";
-
 	}
-
+	// 수지 모임 생성 중 상호 검색 
 	@ResponseBody
 	@RequestMapping(value="searchStoreProc", method=RequestMethod.GET, produces="application/json;charset=utf8")
 	public String searchStoreProc(String keyword, String category) throws Exception {
@@ -216,7 +204,7 @@ public class PartyController {
 		String resp = result.toString();
 		return resp;
 	}
-
+	// 수지 모임 수정 페이지 이동
 	@RequestMapping("partymodify")
 	public String partymodify(String seq, HttpServletRequest request)  throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
@@ -228,7 +216,7 @@ public class PartyController {
 		}catch(Exception e) {}
 		return "/party/party_modify";
 	}
-
+	// 수지 모임 수정
 	@RequestMapping("party_modifyProc")
 	public String partymodifyProc(PartyDTO dto, HttpServletRequest request) throws Exception{
 		String date = dto.getDate();
@@ -252,33 +240,59 @@ public class PartyController {
 		pservice.update(dto);
 		return "redirect:/party/party_content?seq="+dto.getSeq();
 	}
-
+	// 수지 모임 삭제
 	@RequestMapping("partydelete")
 	public String partydelete(String seq)  throws Exception {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
 	// 태훈 모임 리스트 출력
+//	@RequestMapping("partylist")
+//	public String partyList(HttpServletRequest request) throws Exception {
+//		
+//		List<PartyDTO> partyList = pservice.selectList();
+//		System.out.println(partyList.size());
+//		
+//		List<String> imgList = new ArrayList<>();
+//		for(int i=0; i<partyList.size(); i++) {
+//					
+//			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
+//			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
+//		}
+//		
+//		
+//		request.setAttribute("list", partyList);
+//		request.setAttribute("imglist", imgList);
+//		return "/party/party_list";
+//	}
+	// 태훈 모임 리스트 네비 포함
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
+		
+		int cpage=1;
+		try {
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
 
-		List<PartyDTO> partyList = pservice.selectList();
-		System.out.println(partyList.size());
-		// seq 11번 , 9번 글이 이미지 안읽어짐 뭔가 오류
-		//System.out.println(pservice.clew(partyList.get(38).getParent_name()));
-		//System.out.println(pservice.clew(partyList.get(37).getParent_name()));
-
-
-		List<String> imgList = new ArrayList<>();
-		for(int i=0; i<partyList.size(); i++) {
-
-			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
-			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
 		}
-
-
+		List<PartyDTO> partyList = pservice.selectList(cpage);
+		String navi = pservice.getPageNaviTH(cpage);
+		System.out.println(partyList.size());
+		
+		Map<String,String> param = pservice.partyCountById();
+		List<MapDTO> top = mapservice.selectTopStroe(param);
+		
+		List<String> imgList2 = new ArrayList<>();
+		for(int i=0; i<top.size(); i++) {
+			imgList2.add(pservice.clew(top.get(i).getName()));
+			System.out.println(i + " : " + top.get(i).getSeq() + " : "+imgList2.get(i));
+			System.out.println(top.get(i).getName());
+		}
+		
+		request.setAttribute("navi", navi);
 		request.setAttribute("list", partyList);
-		request.setAttribute("imglist", imgList);
+		request.setAttribute("top", top);
+		request.setAttribute("imglist2", imgList2);
 		return "/party/party_list";
 	}
 	// 태훈 모임 상세 검색
@@ -300,6 +314,7 @@ public class PartyController {
 
 			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
 			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
+			System.out.println();
 		}
 
 		System.out.println(partyList);
@@ -307,17 +322,83 @@ public class PartyController {
 		request.setAttribute("imglist", imgList);
 		return "/party/party_list";
 	}
+	// 태훈 모임 내용 모달 창
+	//@RequestMapping(value="party_content_include2")
+	@RequestMapping(value="party_content_include")
+	public String party_content_include(HttpServletRequest request) throws Exception {
+		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
+		String img = pservice.clew(content.getParent_name());
+		
+		request.setAttribute("con",content);
+		request.setAttribute("img", img);
+		
+		return "/include/party_content_include";
+		//return "/include/party_content_include2";
+	}
+	// 수지 모임 글 보기
+	@RequestMapping(value="party_content")
+	public String party_content(String seq, HttpServletRequest request) throws Exception {
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		String img = pservice.clew(content.getParent_name());
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = account.getNickname();
+		boolean partyFullCheck = pservice.isPartyfull(seq);
+		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
+		
+//		if(partyParticipantCheck) {
+//			request.setAttribute("participant", 1);
+//		}
 
+		request.setAttribute("img", img);
+		request.setAttribute("con",content);
+		request.setAttribute("partyFullCheck", partyFullCheck);
+		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
+		return "/party/party_content";
+	}
+	// 수지 모임  참여
+	@RequestMapping(value="partyJoin")
+	public String partyJoin(String seq, HttpServletRequest request) throws Exception {
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = mdto.getNickname();
+		
+		System.out.println(seq);
+		System.out.println(nickname);
+		
+		boolean partyFullCheck = pservice.isPartyfull(seq);
+		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
+		
+		//모임 참여
+		if(!partyFullCheck && !partyParticipantCheck) {
+			pservice.partyJoin(seq, nickname);
+		}else {
+			return "/error/partyJoin";
+		}
+		
+		//모임참여 후 참가인원수 확인
+		boolean AfterpartyFullCheck = pservice.isPartyfull(seq);
+		//참가인원이 다 차면 모집종료처리
+		if(AfterpartyFullCheck) {
+			pservice.stopRecruit(seq);
+		}
+		boolean AfterpartyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
+		
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		request.setAttribute("con",content);
+		request.setAttribute("partyFullCheck", AfterpartyFullCheck);
+		request.setAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
+		return "/party/party_content";
+		
+	}
+	// 예지 잘 모르겠음
 	@RequestMapping("stopRecruit")
 	public String stopRecruit(String seq) throws Exception {
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
 	}
-
-	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	// 지은 작성자 별 모임 리스트
 	@RequestMapping("selectByWriter")
 	public ModelAndView selectByWriter(int mcpage) throws Exception{
-
+		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_chatlist");
 
@@ -335,7 +416,7 @@ public class PartyController {
 
 		return mav;
 	}
-
+	// 이미지 클롤링
 	@ResponseBody
 	@RequestMapping(value="clewimg", produces="text/plain;charset=UTF-8")
 	public String clewimg(String parent_name)  throws Exception {
