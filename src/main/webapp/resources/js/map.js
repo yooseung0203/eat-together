@@ -558,9 +558,9 @@ $(function(){
 					$("#partyModal .gender").text("남성만");
 				}
 				$("#partyModal .age").html("");
-				if(resp.age.includes(", ")){
-					var ages = resp.age.split(", ");
-					for(var i = 0;i < ages.length();i++){
+				if(resp.age.includes(",")){
+					var ages = resp.age.split(",");
+					for(var i = 0;i < ages.length;i++){
 						$("#partyModal .age").append('<span class="badge badge-pill badge-light">'+ ages[i] + '대</span>');
 					}
 				}else{
