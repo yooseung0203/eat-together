@@ -249,7 +249,7 @@
 			action="/party/party_New_Proc">
 			<div class="container">
 				<div class="row">
-					<div class="col-12 col-sm-8 formdiv">
+					<div class="col-12 col-sm-7 formdiv">
 						<div class="row mb-3">
 							<div class="col-sm-12">
 								<h2 class="party_headline">모임 모집하기</h2>
@@ -292,21 +292,21 @@
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">모임날짜</div>
-							<div class="col-lg-2">
+							<div class="col-sm-4">
 								<input class="form-control" type="text" name="date"
 									id="party_date">
 							</div>
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">시간</div>
-							<div class="col-lg-2">
+							<div class="col-sm-4">
 								<input class="form-control" type="time" step="300" name="time"
 									id="party_time">
 							</div>
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">인원</div>
-							<div class="col-sm-2">
+							<div class="col-sm-4">
 								<input class="form-control" type="number" name="count" min=2
 									max=4 id="party_count" aria-describedby="countHelpInline">
 							</div>
@@ -387,7 +387,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-3" id="img-area"></div>
+					<div class="col-12 col-sm-5" id="img-area"></div>
 				</div>
 			</div>
 			<div class="container formdiv">
