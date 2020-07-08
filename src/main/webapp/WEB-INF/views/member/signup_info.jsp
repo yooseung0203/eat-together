@@ -45,52 +45,71 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<form action="/member/signupProc" method="post">
+	<form action="/member/signupProc" method="post" id="signupProc" enctype="multipart/form-data">
 		<div class="article container">
 			<div class="signup_text">
 				<label for="id" class="signup_text">아이디</label> <input type="text"
-					class="form-control" id="id" name="id" placeholder="영문+숫자 4~10글자">
-				<button type=button id=dublCheck class="btn btn-light">중복확인</button>
+					class="form-control" id="id" name="id" placeholder="영문+숫자 4~10글자"><br>
+				<button type=button id=dublCheck class="btn btn-secondary">중복확인</button>
 				<div id=id_text style="display: none;"></div>
-			</div>
+			</div><br>
+			
 			<div class="signup_text">
 				<label for="pw" class="signup_text">비밀번호</label> <input
 					type="password" class="form-control" id="pw" name="pw"
 					placeholder="특수문자+숫자+영문 6~12글자">
 			</div>
+			
 			<div class="signup_text">
 				<label for="pw" class="signup_text">비밀번호 확인</label> <input
 					type="password" class="form-control" id="pwCorrection">
 				<div id="pw_text" style="display: none;"></div>
-			</div>
+			</div><br>
+			
+			<div class="signup_text">
+				<label for="profile" class="signup_text">프로필 이미지</label><br>
+				<label
+					class="btn btn-secondary btn-file"> 업로드하기 <input type="file" id="profile" name="profile"
+					style="display: none;">
+				</label>
+			</div><br>
 
 			<div class="signup_text">
 				<label for="nickname" class="signup_text">닉네임</label> <input
 					type="text" class="form-control" id="nickname" name="nickname"
-					placeholder="한글 2~6자">
-			</div>
+					placeholder="한글 2~6자 /수정 불가능하므로 신중하게 선택해주세요.">
+			</div><br>
 
 			<div class="signup_text">
 				<label for="account_email" class="signup_text">이메일</label> <input
 					type="text" class="form-control" id="account_email"
-					name="account_email" placeholder="ex)eat-together@naver.com">
-				<button type=button id=mail class="btn btn-light">인증하기</button><br>
+					name="account_email" placeholder="ex)eat-together@naver.com"><br>
+				<button type=button id=mail class="btn btn-secondary">인증하기</button>
+				<br>
 				<div id=mail_div style="display: none;">
 					인증번호 : <input type=text id=mail_text>
-					<button type=button id=mail_accept class="btn btn-light">인증</button>
+					<button type=button id=mail_accept class="btn btn-secondary">인증</button>
 				</div>
-			</div>
-
+				
+			</div><br>
+			<div class="signup_text">
+				<label for="gender" class="signup_text">성별</label> <input
+					type="radio" name="gender" value="1">남 <input
+					type="radio" name="gender" value="2">여
+			</div><br>
+			
 			<div class="signup_text">
 				<label for="birth" class="signup_text">생년월일</label> <input
 					type="text" class="form-control" id="birth" name="birth"
 					placeholder="ex)19941122">
-			</div>
+			</div><br>
+
 
 			<div align=center>
 				<button type=submit id=btn class="btn btn-warning signup_text">가입하기</button>
-				<button type=reset class="btn btn-light signup_text" style="margin-left: 5px;">다시 작성하기</button>
-			</div>
+				<button type=reset class="btn btn-light signup_text"
+					style="margin-left: 5px;">다시 작성하기</button>
+			</div><br>
 		</div>
 	</form>
 
@@ -226,7 +245,10 @@
 							var regex1 = /^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
 							if ($("#birth").val() != "") {
 								if (regex1.test(birth)) {
-									birth = birth.replace(/^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,"$1-$2-$3");
+									birth = birth
+											.replace(
+													/^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
+													"$1-$2-$3");
 									$("#birth").val(birth);
 								} else {
 									$("#birth").val("");

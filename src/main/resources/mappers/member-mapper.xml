@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Member">
+<!--by 지은, 사이트 회원가입 sql문 수정_20200708 -->
 	<insert id="signUp">
 		insert into member
-		values(#{id},#{pw},#{nickname},#{birth},#{account_email},0,sysdate, default)
+		values(#{mdto.id},#{mdto.pw},#{mdto.nickname},#{mdto.birth},#{mdto.account_email},0,sysdate,#{mfdto.sysname},#{mdto.gender})
+	</insert>
+
+<!-- by 지은, 파일업로드를 위해서 db에는 profile컬럼을 생성하였으나 dto에는 임의로 sysname이라는 맴버필드를 생성하여 프로필파일 경로를 가져옴-->
+<!-- 따라서 db상의 profile컬럼 값을 dto의 sysname으로 String 형태로 가져오겠다는 의미이다_20200708 -->
+	<resultMap id="MemberProfile"
+		type="coma.spring.dto.MemberDTO">
+		<result property="sysname" column="profile" />
+	</resultMap>
+
+<!--by 지은, 카카오톡 회원가입의 경우 입력값을 모두 default로 받아오프로 signUp mapper를 사이트 회원가입과 구분함_20200708 -->
+	<insert id="signUpKakao">
+		insert into member
+		values(#{id},#{pw},#{nickname},#{birth},#{account_email},0,sysdate,
+		default, default)
 	</insert>
 
 	<select id="logIn" resultType="int">
@@ -28,7 +43,8 @@
 	</select>
 	<update id="editMyInfo">
 		update member set
-		${targetColumn1}=#{targetValue1}, ${targetColumn2}=#{targetValue2} where
+		${targetColumn1}=#{targetValue1},
+		${targetColumn2}=#{targetValue2} where
 		${targetColumn3}=#{targetValue3}
 	</update>
 
@@ -36,10 +52,10 @@
 		update member set ${targetColumn1}=#{targetValue1}
 		where ${targetColumn2}=#{targetValue2}
 	</update>
-	
+
 	<select id="emailCheck" resultType="coma.spring.dto.MemberDTO">
 		select * from member where
 		account_email=#{value}
 	</select>
-	
+
 </mapper>
