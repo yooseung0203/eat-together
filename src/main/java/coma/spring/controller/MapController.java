@@ -490,14 +490,15 @@ public class MapController {
 	}
 
 	@RequestMapping(value="selectMarkerInfo",method=RequestMethod.GET)
-	public String selectMarkerInfo(int place_id, HttpServletRequest request) throws Exception{
+	public String selectMarkerInfo(String place_id, HttpServletRequest request) throws Exception{
 		int cpage = 1;
 		try {cpage = Integer.parseInt(request.getParameter("cpage"));}catch(Exception e) {}
-		MapDTO mapdto = mapservice.selectOne(place_id);
+		int id = Integer.parseInt(place_id);
+		MapDTO mapdto = mapservice.selectOne(id);
 		// 진행중인 모임이 있다면 모임도 같이 보내준다.
-		int pcount = mapservice.selectPartyOn(place_id);
-		List<PartyDTO> plist = pservice.selectByPageNo(cpage, place_id);
-		String navi = pservice.getPageNavi(cpage, place_id);
+		int pcount = mapservice.selectPartyOn(id);
+		List<PartyDTO> plist = pservice.selectByPageNo(cpage, id);
+		String navi = pservice.getPageNavi(cpage, id);
 		// request
 		request.setAttribute("mapdto", mapdto);
 		request.setAttribute("partyCount", pcount);

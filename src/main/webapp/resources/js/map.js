@@ -41,23 +41,21 @@ $(function(){
 	        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
 			function infoOverSet(map) {
 			    customOverlay.setMap(map);
-			    customOverlay.setZIndex(3);
 			}
 			// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
 			function infoOverClose() {
 			    customOverlay.setMap(null);
-			    customOverlay.setZIndex(1);
 			}
 	        marker.normalImage = normalImage;
 	        kakao.maps.event.addListener(marker, 'mouseover', function() {
 	                marker.setImage(hoverImage);
-	                marker.setZIndex(3);
+	                marker.setZIndex(1);
 	                infoOverSet(marker.getMap());
 	        });
 	        kakao.maps.event.addListener(marker, 'mouseout', function() {
 	                marker.setImage(normalImage);
-	                marker.setZIndex(1);
 	                infoOverClose();
+	                marker.setZIndex(0);
 	        });
 	        return marker;
 	    }
@@ -118,22 +116,20 @@ $(function(){
 		        });
 				function infoOverSet(map) {
 					customOverlay.setMap(map);
-				    customOverlay.setZIndex(3);
 				}
 				function infoOverClose() {
 					customOverlay.setMap(null);
-				    customOverlay.setZIndex(1);
 				}
 			    kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {        
 			        location.href = "/map/selectMarkerInfo?place_id="+pos.place_id;
 			    });
 				kakao.maps.event.addListener(marker, 'mouseover', function() {
 	                infoOverSet(marker.getMap());
-	                marker.setZIndex(3);
+	                marker.setZIndex(1);
 		        });
 		        kakao.maps.event.addListener(marker, 'mouseout', function() {
 		            infoOverClose();
-	                marker.setZIndex(1);
+	                marker.setZIndex(0);
 		        });
                 markers.push({
 	    	        marker: marker
@@ -570,12 +566,10 @@ $(function(){
 		// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
 		function infoOverSet(customOverlay,map) {
 			customOverlay.setMap(map);
-		    customOverlay.setZIndex(3);
 		}
 		// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
 		function infoOverClose(customOverlay) {
 			customOverlay.setMap(null);
-		    customOverlay.setZIndex(1);
 		}
 		var customOverlayArray = [];
 		var searchResultArray = [];

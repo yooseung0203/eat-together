@@ -15,19 +15,25 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import coma.spring.dao.MemberDAO;
+import coma.spring.dao.MemberFileDAO;
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.MemberFileDTO;
 
 @Service
 public class MemberService {
 
 	@Autowired
 	private MemberDAO mdao;
+	
+	@Autowired
+	private MemberFileDAO mfdao;
 
 	//비밀번호 암호화하기
 	public String getSha512(String pw) throws Exception{
@@ -41,13 +47,21 @@ public class MemberService {
 	}
 
 	//회원가입하기
-	public int signUp(MemberDTO mdto) throws Exception{
+	@Transactional("txManager")
+	public int signUp(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
 		System.out.println("원래 비밀번호 : " + mdto.getPw());
 		String encPw = this.getSha512(mdto.getPw());
 		mdto.setPw(encPw);
 		System.out.println("암호화된 비밀번호 : " + mdto.getPw());
+		
+		Map<String, Object> signUpParam = new HashMap<>();
+		signUpParam.put("mdto", mdto);
+		signUpParam.put("mfdto", mfdto);
+		
+		int result = mdao.signUp(signUpParam);
+		mfdao.uploadProc(mfdto);
 
-		return mdao.signUp(mdto);
+		return result;
 	}
 
 	//로그인하기
@@ -194,7 +208,7 @@ public class MemberService {
 				mdto.setBirth("1999-12-31");
 				mdto.setAccount_email("need@eat-together.com");
 
-				int kakaoSignUpResult = mdao.signUp(mdto);
+				int kakaoSignUpResult = mdao.signUpKakao(mdto);
 				System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
 			}else {
 				System.out.println("이미 회원가입된 카카오계정입니다.");

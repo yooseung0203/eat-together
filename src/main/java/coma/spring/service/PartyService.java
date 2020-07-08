@@ -23,31 +23,55 @@ public class PartyService {
 	
 	@Autowired
 	private PartyDAO pdao;
-	
+
 	// 수지 모임 생성
 	public int partyInsert(PartyDTO dto) throws Exception  {
 		int seq = pdao.getNextVal();
-		String imgaddr = this.clew(dto.getParent_name());
+		//String imgaddr = this.clew(dto.getParent_name());
 		dto.setSeq(seq);
-		dto.setImgaddr(imgaddr);
+		//dto.setImgaddr(imgaddr);
 		pdao.insert(dto);
 		return seq;
 	}
+	
+	//수지 파티 참가 
+	public int partyJoin(String seq, String nickname) throws Exception {
+		int result = pdao.partyJoin(seq,nickname);
+		return result;
+	}
+	
+	//수지 파티 정원초과 확인
+	public boolean isPartyfull(String seq) throws Exception {
+		boolean result = pdao.isPartyfull(seq);
+		return result;
+	}
+
+	
+	//수지 파티 참가인인지 확인
+	public boolean isPartyParticipant(String seq, String nickname) throws Exception{
+		boolean result = pdao.isPartyParticipant(seq,nickname);
+		return result;
+	}
+
+	
 	// 수지 모임 글 보기 
 	public PartyDTO selectBySeq(int seq) throws Exception {
 		PartyDTO dto = pdao.selectBySeq(seq); // 읽어오기
 		return dto;
 	}
+
 	// 수지 모임 삭제
 	public int delete(String seq) throws Exception{
 		int result=pdao.delete(seq);
 		return result;
 	}
+
 	// 수지 모임 수정
 	public int update(PartyDTO dto) throws Exception{
 		int result= pdao.update(dto);
 		return result;
 	}
+
 	// 태훈 그냥 모임 글 보기
 //	public List<PartyDTO> selectList() throws Exception {
 //		List<PartyDTO> list = pdao.selectList();
@@ -205,7 +229,8 @@ public class PartyService {
 		if(needNext) {sb.append("<li class='page-item'><a class='page-link' href='selectMarkerInfo?cpage="+(endNavi+1)+"'><i class=\"fas fa-chevron-right\"></i></a></li>");}
 		return sb.toString();
 	}
-	// 예지 잘 모르겠음
+	
+	// 수지 모임 종료
 	public int stopRecruit(String seq) throws Exception {
 		return pdao.stopRecruit(seq);
 	}

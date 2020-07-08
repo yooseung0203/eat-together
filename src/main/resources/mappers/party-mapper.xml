@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Party">
-	<select id="getNextval" resultType="int"> select party_seq.nextval from dual </select> 
+	<!-- by 수지 다음 시퀀스  -->
+	<select id="getNextval" resultType="int">
+		 select party_seq.nextval from dual 
+	</select>
 	<!-- by 수지 모집 생성 -->
 	<insert id="insert">
 		insert into party values (#{seq},#{parent_name},
@@ -10,6 +13,11 @@
 		#{gender}, #{age},
 		#{drinking}, #{content},#{status},#{place_id},
 		#{imgaddr})
+	</insert>
+	<!-- by 수지 파티 참가 -->
+	<insert id="partyJoin">
+	insert into partylist values (#{seq},#{nickname},-1)
+	
 	</insert>
 	<!-- by 수지 모임 삭제 -->
 	<delete id="delete">
@@ -30,6 +38,18 @@
 		select * from party where
 		seq = #{value} order by seq desc
 	</select>
+	<!-- by 수지 모임 총정원수 구하기 -->
+	<select id="getPartyCount" resultType="int">
+		select count from party where seq=#{value}
+	</select>
+	<!-- by 수지 모임 현재 참여자수 확인 -->
+	<select id="getParticipantCount" resultType="int">
+		select count(*) from partylist where CHATSEQ_PARENT=#{value}
+	</select>
+	<!-- by 수지 모임 참가자인지 확인 -->
+	<select id="isPartyParticipant" resultType="int">
+		select count(*) from partylist where chatseq_parent=#{seq} and participant = #{nickname}
+	</select>
 	<!-- by 예지 장소 아이디의 별 모임 갯수 -->
 	<select id="getArticleCount" resultType="int">
 		select count(*) from
@@ -43,7 +63,7 @@
 		between #{start}
 		and #{end}
 	</select>
-	<!-- by 예지 잘 모르겠음 -->
+	<!-- by 수지 모집 종료하기 -->
 	<update id="stopRecruit">
 		update party set status = 0 where seq = #{value}
 	</update>
@@ -55,11 +75,11 @@
 	<select id="selectList" resultType="coma.spring.dto.PartyDTO">
 		<!-- select * from party where status = 1 order by seq desc -->
 		select * from (select party.*, row_number() over(order by seq desc) as
-		rnum from party where status=1) where rnum between #{start} and #{end}
+		rnum from party) where rnum between #{start} and #{end}
 	</select>
 	<!--by 태훈 상세 검색 -->
 	<select id="partySearch" resultType="coma.spring.dto.PartyDTO">
-		select * from (select * from party where status =1)
+		select * from party
 		<trim prefixOverrides="or" prefix="where">
 			<if test="address != ''"> parent_address like '%${address}%'</if>
 			<if test="gender != null"> or gender = '${gender}'</if>
@@ -78,7 +98,7 @@
 	</select>
 	<!-- by 태훈 모임 갯수 -->
 	<select id="getListCount" resultType="int">
-		select count(*) from party where status =1
+		select count(*) from party
 	</select>
 	<!-- by 태훈 모임 순위 순 장소 아이디 리스트 -->
 	<select id="PartyCountById" resultType="String">
@@ -93,8 +113,7 @@
 	</select>
 	<!-- by 지은 작성자 별 모임 글 갯수 -->
 	<select id="getMyPageArticleCount" resultType="int">
-		select count(*)
-		from party where writer = #{value}
+		select count(*) from party where writer = #{value}
 	</select>
 	
 </mapper>

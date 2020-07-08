@@ -29,7 +29,7 @@ public class ReviewController {
 	private ReviewService rservice;
 
 	@RequestMapping("write")
-	public String write(ReviewDTO rdto, int place_id, MultipartFile imgFile) throws Exception{
+	public String write(ReviewDTO rdto, String place_id, MultipartFile imgFile) throws Exception{
 		// 아이디 세션값에서 가져오기
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		rdto.setId(mdto.getId());
@@ -52,7 +52,7 @@ public class ReviewController {
 			imgFile.transferTo(targetLoc);
 			rservice.write(rdto,rvdto);
 		}
-		return "redirect:/map/selectMarkerInfo";
+		return "redirect:/map/selectMarkerInfo?place_id="+place_id;
 	}
 	
 	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707

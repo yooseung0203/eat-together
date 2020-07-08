@@ -17,7 +17,7 @@
 		});
 
 		$("#partyDelete").on("click", function() {
-			var ask = confirm("삭제 후에는 복구할 수 없습니다. <br> 정말 삭제하겠습니까?");
+			var ask = confirm("삭제 후에는 복구할 수 없습니다.\n정말 삭제하겠습니까?");
 			if (ask) {
 				location.href = "/party/partydelete?seq=${con.seq}";
 			}
@@ -32,7 +32,7 @@
 		});
 
 		$("#toStopRecruit").on("click", function() {
-			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. <br> 정말 모집을 종료하시겠습니까?");
+			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다.\n정말 모집을 종료하시겠습니까?");
 			if (ask) {
 				location.href = "/party/stopRecruit?seq=${con.seq}";
 			}

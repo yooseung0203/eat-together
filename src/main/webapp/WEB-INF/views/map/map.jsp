@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>지도 생성하기</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asdasdasd'></script>
+<script src='/resources/js/map.js?sadasdasdasd'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -203,7 +203,7 @@
 						<div class="reviewlist">
 							<b>리뷰</b>
 							<form action="/review/write" method="post" id="review_write" enctype='multipart/form-data'>
-								<input type=hidden value="${place_id}">
+								<input type=hidden value="${mapdto.place_id}" name="place_id">
 								<div class="review_comment">
 									<c:choose>
 										<c:when test="${not empty sessionScope.loginInfo.id}">
