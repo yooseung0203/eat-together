@@ -13,7 +13,7 @@
 		var scrolled = false;
 		var viewed;
 		$(".input-area").empty();
-		var ws = new WebSocket("ws://192.168.60.19/chat")
+		var ws = new WebSocket("ws://172.30.1.48/chat")
 		ws.onmessage = function(e) {
 			var some = e.data.split(":");
 			var str = some[1];
