@@ -265,13 +265,6 @@ public class PartyController {
 		List<PartyDTO> partyList = pservice.selectList(cpage);
 		String navi = pservice.getPageNaviTH(cpage);
 		System.out.println(partyList.size());
-
-		List<String> imgList = new ArrayList<>();
-		for(int i=0; i<partyList.size(); i++) {
-
-			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
-			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
-		}
 		
 		Map<String,String> param = pservice.partyCountById();
 		List<MapDTO> top = mapservice.selectTopStroe(param);
@@ -285,7 +278,6 @@ public class PartyController {
 		
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", partyList);
-		request.setAttribute("imglist", imgList);
 		request.setAttribute("top", top);
 		request.setAttribute("imglist2", imgList2);
 		return "/party/party_list";
