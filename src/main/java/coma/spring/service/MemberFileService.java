@@ -17,7 +17,7 @@ public class MemberFileService {
 	@Autowired
 	private MemberFileDAO mfdao;
 
-	//프로필 이미지 변경하기
+	//프로필 이미지 업로드하기
 	public int uploadProfile(MemberFileDTO mfdto)throws Exception {
 		int result = mfdao.uploadProfile(mfdto);
 		return result;
