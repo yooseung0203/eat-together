@@ -71,12 +71,12 @@
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
 							<td class="myinfo_text" id="profile_box">
-								<div id="image_container">
-									<img src="/upload/${loginInfo.id}/${sysname}" width="50"
-										height="50" alt=""
-										onError="this.src='/resources/img/no_img.png'">
-								</div> <input type="button" id="uploadProfile" class="btn btn-light"
-								value="프로필이미지 변경하기">
+								<div class="edit_text">
+									<div id='preview'></div><br>
+									<label class="btn btn-secondary btn-file"> 업로드하기 <input
+										type="file" id="profile" name="profile" style="display: none;">
+									</label>
+								</div>
 							</td>
 						</tr>
 						<tr>
@@ -125,39 +125,32 @@
 	</div>
 	<script>
 		window.onload = function() {
-			//by 지은, 프로필이미지 path를 ajax로 가져와서 img src에 넣어준다_20200707
-			startLoadFile();
+			//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
+			var upload = document.querySelector('#profile');
+			var preview = document.querySelector('#preview');
 
-			function startLoadFile() {
-				$.ajax({
-					url : '/memberfile/getPic',
-					type : 'GET',
-					dataType : 'json',
-					success : function(path) {
-						strDOM += '"<img src="' + path+ '">"';
-						var imageContainer = $("#image_container");
-						imageContainer.append(strDOM);
-					},
-					error : function(request, status, error) {
-						console.log("code:" + request.status + "\n"
-								+ "message:" + request.responseText + "\n"
-								+ "error:" + error);
+			upload.addEventListener('change', function(e) {
+				var get_file = e.target.files;
+				var image = document.createElement('img');
+				var reader = new FileReader();
 
+				reader.onload = (function(aImg) {
+					console.log(1);
+					return function(e) {
+						console.log(3);
+						aImg.src = e.target.result
 					}
-				});
-			}
+				})(image)
 
-			//by지은, 버튼을 누르면 프로필 이미지 수정하는 팝업창 열기_20200707
-			var upload = document.getElementById('uploadProfile');
+				if (get_file) {
+					reader.readAsDataURL(get_file[0]);
+					console.log(2);
+				}
 
-			upload.onclick = function() {
-				location.href = "/memberfile/deleteFileById";
-				window
-						.open('editProfileImage', '프로필이미지 수정하기',
-								'width=430,height=500,location=no,status=no,scrollbars=yes');
+				preview.appendChild(image);
+			})
 
-			}
-
+			//by지은, back버튼 생성_20200708
 			$("#back").on("click", function() {
 				location.replace('/member/mypage_myinfo');
 			})

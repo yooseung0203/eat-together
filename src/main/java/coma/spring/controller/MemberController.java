@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import coma.spring.dto.MemberDTO;
@@ -35,6 +36,9 @@ public class MemberController {
 
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	private MemberFileController mfcon;
 
 	//by지은, try-catch 예외처리 대체할 수 있는 메서드, ExceptionHandler_20200701
 	@ExceptionHandler
@@ -151,14 +155,19 @@ public class MemberController {
 
 	//회원가입하기
 	@RequestMapping("signupProc")
-	public String signUp(MemberDTO mdto)throws Exception {
-
-		int result = mservice.signUp(mdto);
+	public String signUp(MemberDTO mdto, MemberFileDTO mfdto)throws Exception {
+		String realPath = session.getServletContext().getRealPath("upload/"+ mdto.getId() + "/");
+		mfdto = mfcon.uploadProc(mdto, mfdto, realPath);
+		int result = mservice.signUp(mdto, mfdto);
+		if(result>0) {
+			System.out.println("회원가입성공");
+		}else {
+			System.out.println("회원가입실패, 오류확인하기");
+		}
 		//회원가입축하메세지 입니다.
 		int msgresult= msgservice.insertWelcome(mdto.getId());
 		System.out.println("signupProc 비밀번호 : " + mdto.getPw());
 
-		System.out.println("회원가입 성공");
 		return "redirect:/";
 	}
 
