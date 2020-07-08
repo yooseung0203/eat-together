@@ -315,7 +315,7 @@ public class PartyService {
 		}
 		else {
 			// 이미지 소스 없는 가게 에러 해결 위해 추가 - 태훈
-			return "https://tpc.googlesyndication.com/simgad/11554535643826380039?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qnk_Y1zzDS1b6Wu1KYZ-_e0LjecDg";
+			return "/resources/img/admin-logo.png";
 		}
 	}
 

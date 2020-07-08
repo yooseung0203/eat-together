@@ -41,6 +41,11 @@
 		select count(*) from
 		member where id=#{value}
 	</select>
+	<!-- 태훈 임시 닉네임 중복 검사 -->
+	<select id="isNickAvailable" resultType="int">
+		select count(*) from
+		member where nickname=#{value}
+	</select>
 	<update id="editMyInfo">
 		update member set
 		${targetColumn1}=#{targetValue1},

@@ -22,7 +22,12 @@
 				location.href = "/party/partydelete?seq=${con.seq}";
 			}
 		});
-
+		$("#partyReport").on("click", function() {
+			var ask = confirm("무분별한 신고는 신고자 본인에게 불이익이 갈 수 있습니다.\n정말 신고하겠습니까?");
+			if (ask) {
+				location.href = "/re/partydelete?seq=${con.seq}";
+			}
+		});
 		$("#toPartyList").on("click", function() {
 			location.href = "/party/partylist";
 		});
@@ -147,6 +152,9 @@
             </c:choose>
                <button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
                <button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
+            </c:if>
+            <c:if test="${con.writer ne sessionScope.loginInfo.id }">
+            	<button type="button" id="partyReport" class="btn btn-info">신고하기</button>
             </c:if>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">목록으로</button>
 			</div>

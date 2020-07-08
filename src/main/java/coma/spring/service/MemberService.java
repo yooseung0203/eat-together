@@ -86,6 +86,12 @@ public class MemberService {
 		boolean result = mdao.isIdAvailable(id);
 		return result;
 	}
+	
+	// 태훈 임시 닉네임 중복 검사
+		public boolean isNickAvailable(String nickname)throws Exception{
+			boolean result = mdao.isNickAvailable(nickname);
+			return result;
+		}
 
 	//회원탈퇴
 	public int deleteMember(Map<String, String> param) throws Exception{

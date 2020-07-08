@@ -267,7 +267,6 @@ public class PartyController {
 		}
 		List<PartyDTO> partyList = pservice.selectList(cpage);
 		String navi = pservice.getPageNaviTH(cpage);
-		System.out.println(partyList.size());
 		
 		Map<String,String> param = pservice.partyCountById();
 		List<MapDTO> top = mapservice.selectTopStroe(param);
@@ -289,27 +288,20 @@ public class PartyController {
 	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
 	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
 
-		System.out.println(pdto.getSido());
-		System.out.println(pdto.getGugun());
-		System.out.println(pdto.getGender());
-		System.out.println(pdto.getAge());
-		System.out.println(pdto.getDrinking());
-		System.out.println(pdto.getText());
-		System.out.println(pdto.getSearch());
-
 		List<PartyDTO> partyList = pservice.partySearch(pdto);
-		System.out.println(partyList.size());
-		List<String> imgList = new ArrayList<>();
-		for(int i=0; i<partyList.size(); i++) {
 
-			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
-			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
-			System.out.println();
+		Map<String,String> param = pservice.partyCountById();
+		List<MapDTO> top = mapservice.selectTopStroe(param);
+		
+		List<String> imgList2 = new ArrayList<>();
+		for(int i=0; i<top.size(); i++) {
+			imgList2.add(pservice.clew(top.get(i).getName()));
 		}
 
-		System.out.println(partyList);
+		//request.setAttribute("navi", navi);
 		request.setAttribute("list", partyList);
-		request.setAttribute("imglist", imgList);
+		request.setAttribute("top", top);
+		request.setAttribute("imglist2", imgList2);
 		return "/party/party_list";
 	}
 	// 태훈 모임 내용 모달 창
@@ -379,7 +371,7 @@ public class PartyController {
 		return "/party/party_content";
 		
 	}
-	// 예지 잘 모르겠음
+	// 수지 모임 끝?
 	@RequestMapping("stopRecruit")
 	public String stopRecruit(String seq) throws Exception {
 		pservice.stopRecruit(seq);

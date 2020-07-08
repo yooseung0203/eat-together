@@ -181,6 +181,16 @@ public class MemberController {
 		System.out.println("아이디 중복체크 결과 : " + result);
 		return String.valueOf(result);
 	}
+	// 태훈 임시 닉네임 중복 검사
+	@RequestMapping("isNickAvailable")
+	@ResponseBody
+	public String isNickAvailable(String nickname)throws Exception {
+		boolean result=true;
+
+		result = mservice.isNickAvailable(nickname);
+		System.out.println("닉네임 중복체크 결과 : " + result);
+		return String.valueOf(result);
+	}
 
 	//로그인하기
 	@RequestMapping("login")
