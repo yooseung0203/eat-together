@@ -40,6 +40,7 @@ function btnClick(clicked_id){
 		opener.document.getElementById("lng").value = document.getElementById("lng"+clicked_id).value;
 		opener.document.getElementById("lat").value = document.getElementById("lat"+clicked_id).value;
 		
+		var parent_name = document.getElementById("place_name"+clicked_id).innerHTML;
 		var ct = $('input:radio[name=category]:checked').val();
 		
 		if(ct=='c'){
@@ -50,8 +51,22 @@ function btnClick(clicked_id){
 		opener.document.getElementById("phone").value = document.getElementById("phone"+clicked_id).innerHTML;
 		opener.document.getElementById("place_url").value = document.getElementById("place_url"+clicked_id).value;
 		opener.document.getElementById("address_name").value = document.getElementById("address_name"+clicked_id).value;
+		var addr="";
+		$.ajax({
+			url : "/party/clewimg?parent_name="+parent_name,
+			dataType:"text"
+		}).done(function(resp) {
+			addr = resp;
+			$(opener.document).find("#imgaddr").val(addr);
+			$(opener.document).find("#img-area").html("<img width='300px' id ='storeimg' src=" + resp + ">");
+			window.close();
+		});
+
 		
-	window.close();
+		//$(opener.document).find("#img-area").append("<img id ='storeimg' src=" + resp + ">");
+		
+		
+	//
 };
 
 $(function(){

@@ -3,41 +3,82 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <script>
-$(function(){
-	$("#partyModify").on("click",function(){
-		location.href = "/party/partymodify?seq=${con.seq}";
-	});
 	
-	$("#partyDelete").on("click",function(){
-		var ask = confirm("정말 삭제하겠습니까?");
-		if(ask){
-		location.href = "/party/partydelete?seq=${con.seq}";
-		}
+	$(document).ready(function() {
+		var stime = "${con.sTime}";
+		var time = stime.substr(0, 5);
+		console.log(time);
+		$("#time").html(time);
 	});
-	
-})
 
+	$(function() {
+		$("#partyModify").on("click", function() {
+			location.href = "/party/partymodify?seq=${con.seq}";
+		});
+
+		$("#partyDelete").on("click", function() {
+			var ask = confirm("삭제 후에는 복구할 수 없습니다.\n정말 삭제하겠습니까?");
+			if (ask) {
+				location.href = "/party/partydelete?seq=${con.seq}";
+			}
+		});
+
+		$("#toPartyList").on("click", function() {
+			location.href = "/party/partylist";
+		});
+
+		$("#toChatroom").on("click", function() {
+			location.href = "/chat/"; // 채팅연결 
+		});
+
+		$("#toStopRecruit").on("click", function() {
+			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다.\n정말 모집을 종료하시겠습니까?");
+			if (ask) {
+				location.href = "/party/stopRecruit?seq=${con.seq}";
+			}
+		});
+
+	});
+
+	//페이지 리사이징
+	$(function() {
+		$('.cropping img').each(function(index, item) {
+			if ($(this).height() / $(this).width() < 0.567) {
+				$(this).addClass('landscape').removeClass('portrait');
+			} else {
+				$(this).addClass('portrait').removeClass('landscape');
+			}
+		});
+	});
 </script>
+
 	<div class="container">
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
-				<h2 class="party_headline">${con.title}</h2>
-			</div>
-			<div class="col-sm-12">작성자 : ${con.writer}</div>
-		</div>
+            <h2 class="party_headline">${con.title}</h2>
+            <c:choose>
+               <c:when test="${con.status  eq '1'}"><span class="badge badge-success">멤버 모집중</span></c:when>
+               <c:when test="${con.status  eq '0'}"><span class="badge badge-secondary">모집마감</span></c:when>
+            </c:choose>
+         </div>
+         <div class="col-sm-12">작성자 : ${con.writer}</div>
+      </div>
+
+		<div class="row">
+         <div class="col-sm-5">
+            <div class="featImgWrap">
+               <div class="cropping">
+                  <img src="${img}" id="img">
+               </div>
+            </div>
+         </div>
+      </div>
+		
 		<div class="row mb-1">
-			<div class="col-sm-2 party-titlelabel">상태</div>
-			<div class="col-sm-3">
-				<c:choose>
-					<c:when test="${con.status  eq '1'}">멤버 모집중</c:when>
-					<c:when test="${con.status  eq '0'}">모집마감</c:when>
-				</c:choose>
-			</div>
-		</div>
-		<div class="row mb-1">
-			<div class="col-sm-2 party-titlelabel">상호명</div>
-			<div class="col-sm-3" id="storename"></div>
-		</div>
+         <div class="col-sm-2 party-titlelabel">상호명</div>
+         <div class="col-sm-3">${con.parent_name}</div>
+      </div>
+
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">위치</div>
 			<div class="col-sm-10">${con.parent_address}</div>
@@ -53,9 +94,10 @@ $(function(){
 			<div class="col-lg-2">${con.sDate }</div>
 		</div>
 		<div class="row mb-1">
-			<div class="col-sm-2 party-titlelabel">시간</div>
-			<div class="col-lg-2">${con.sTime }</div>
-		</div>
+         <div class="col-sm-2 party-titlelabel">시간</div>
+         <div class="col-sm-2" id="time"></div>
+      </div>
+
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">인원</div>
 			<div class="col-sm-2">${con.count }</div>
@@ -96,11 +138,16 @@ $(function(){
 			<div class="col-10">${con.content}</div>
 		</div>
 		<div class="row mb-3">
-			<div class="col-12">
-				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
-				<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
-				<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
-				</c:if>
+         <div class="col-12 mb-5">
+               <button type="button" id="toChatroom" class="btn btn-primary">채팅방으로 이동</button>
+            <c:if test="${con.writer eq sessionScope.loginInfo.id }">
+            <c:choose>
+               <c:when test="${con.status  eq '1'}"><button type="button" id="toStopRecruit" class="btn btn-light">모집종료하기</button></c:when>
+               <c:when test="${con.status  eq '0'}"></c:when>
+            </c:choose>
+               <button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
+               <button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
+            </c:if>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">목록으로</button>
 			</div>
 		</div>

@@ -56,7 +56,7 @@ $(document).ready(function(){
 		});
 
 		$("#partyDelete").on("click", function() {
-			var ask = confirm("삭제 후에는 복구할 수 없습니다. <br> 정말 삭제하겠습니까?");
+			var ask = confirm("삭제 후에는 복구할 수 없습니다.\n 정말 삭제하겠습니까?");
 			if (ask) {
 				location.href = "/party/partydelete?seq=${con.seq}";
 			}
@@ -66,12 +66,18 @@ $(document).ready(function(){
 			location.href = "/party/partylist";
 		});
 		
+		$("#toPartyJoin").on("click",function(){ //모임가입
+			location.href="/party/partyJoin?seq=${con.seq}";
+		});
+		
 		$("#toChatroom").on("click", function() {
-			location.href = "/chat/"; // 채팅연결 
+			var openNewWindow = window.open("about:blank");
+			openNewWindow.location.href = "/chat/chatroom?roomNum=${con.seq}"; // 채팅연결 
+			
 		});
 		
 		$("#toStopRecruit").on("click",function(){
-			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. <br> 정말 모집을 종료하시겠습니까?");
+			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
 			if (ask) {
 			location.href= "/party/stopRecruit?seq=${con.seq}";
 			}
@@ -156,7 +162,7 @@ $(document).ready(function(){
 			<div class="col-sm-5">
 				<div class="featImgWrap">
 					<div class="cropping">
-						<img src="${img}" id="img">
+						<img src="${con.imgaddr}" id="img">
 					</div>
 				</div>
 			</div>
@@ -223,8 +229,13 @@ $(document).ready(function(){
 			<div class="col-10">${con.content}</div>
 		</div>
 		<div class="row mb-3">
-			<div class="col-12">
-					<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로 이동</button>
+			<div class="col-12 mb-5">
+					<c:choose>
+					<c:when test="${partyFullCheck eq false && partyParticipantCheck eq false}"><button type="button" id="toPartyJoin" class="btn btn-success">모임참가하기</button></c:when>
+					<c:when test="${partyParticipantCheck  eq true}"><button type="button" id="toChatroom" class="btn btn-primary">채팅방으로 이동</button></c:when>
+				</c:choose>
+					
+			
 				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
 				<c:choose>
 					<c:when test="${con.status  eq '1'}"><button type="button" id="toStopRecruit" class="btn btn-light">모집종료하기</button></c:when>

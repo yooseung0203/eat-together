@@ -58,11 +58,6 @@
 		$("#list_receiver").on("click", function() {
 			location.href = "msg_list_receiver";
 		})
-		$(".msg_text").hide();
-		$(".msg_title").on("click",function(){
-			$(".msg_text").show();
-		})
-		
 	})
 </script>
 
@@ -79,6 +74,7 @@ function msgWritePopUp(){
 }
 function msgViewPopUp(msg_seq){
 	var name=msg_seq;
+	var msg_receiver = msg_receiver;
 	var option = "width=500,height=400 location=no";
 	window.open("msgView?msg_seq="+msg_seq,msg_seq,option);
 }

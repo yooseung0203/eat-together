@@ -13,3 +13,7 @@ form {
 	font-family: 'Noto Sans KR', sans-serif;
 	weight: 400;
 }
+
+#img-area > img {
+	width:200px;	
+}

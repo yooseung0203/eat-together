@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.MsgDTO;
@@ -34,12 +35,13 @@ public class MsgController {
 		return "member/loginview";
 	}
 	
-	
+	//받은쪽지함
 	@RequestMapping("msg_list_sender")
 	public String msglist_sender(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 받은 쪽지함");
+		//새로운 메세지 카운트
 		int newMsg=msgservice.newmsg(msg_receiver);
 		
 		if(session.getAttribute("msgcpage")==null) {
@@ -125,11 +127,14 @@ public class MsgController {
 	public String msgView(HttpServletRequest request,int msg_seq)throws Exception{
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
-
+		String msg_receiver=msgDTO.getMsg_receiver();
 		//읽음처리되는것
 		int result = msgservice.updateView(msg_seq);
-
+		int newmsg = msgservice.newmsg(msg_receiver);
 		request.setAttribute("msgView", msgDTO);
+		//읽음처리 수정중
+		request.setAttribute("newMsg", newmsg);
+		System.out.println(newmsg);
 		return "msg/msgView";
 	}
 	//보낸쪽지함에서 눌러볼때
@@ -142,7 +147,6 @@ public class MsgController {
 	}
 	
 	//받은쪽지함 삭제
-	
 	@RequestMapping("msgReceiverDel")
 	public String ReceiverDel(int msg_seq)throws Exception{
 		int result = msgservice.receiver_del(msg_seq);
@@ -158,5 +162,7 @@ public class MsgController {
 
 		return "redirect:msg_list_receiver";
 	}
+	
+
 }
 

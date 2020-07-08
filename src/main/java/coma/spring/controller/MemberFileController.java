@@ -4,6 +4,7 @@ import java.awt.List;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 //import javax.annotation.Resource;
@@ -42,79 +43,44 @@ public class MemberFileController {
 	@Autowired
 	private HttpSession session;
 
-	//프로필사진 업로드
-	@RequestMapping(value="uploadProc",  method=RequestMethod.POST, headers = ("content-type=multipart/*"))
-	public String uploadProc(MemberFileDTO mfdto, MultipartFile file)throws Exception {
-		System.out.println("파일업로드 Proc 접속하기");
-
-		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getId();
-
-		System.out.println("프로필 이미지 변경하는 아이디 : "+ id);
-		String filePath = session.getServletContext().getRealPath("upload/" +id+"/" );
-
-		File tempFilePath = new File(filePath);
-
-		if(!tempFilePath.exists()) {
-			tempFilePath.mkdirs();
-		}
-
-		UUID uuid = UUID.randomUUID();
-		String sysname = uuid.toString()+"_"+ file.getOriginalFilename();
-		String oriname = file.getOriginalFilename();
-		System.out.println(sysname);
-
-		File targetLoc = new File(filePath + "/" + sysname);
-		file.transferTo(targetLoc);
-		System.out.println(filePath);
-
-		mfdto.setOriname(oriname);
-		mfdto.setSysname(sysname);
-		mfdto.setParent_id(id);
-
-		int uploadResult = mfservice.uploadProfile(mfdto);
-		System.out.println("파일업로드 성공1 실패0 :" + uploadResult);
-
-		System.out.println("oriName : " + oriname);
-		System.out.println("sysName : " + sysname);
-		
+	//프로필 사진 변경하는 팝업창 열기
+	@RequestMapping("editProfileImage")
+	public String getEditProfileImageView() {
 		return "member/editprofileimage";
 	}
 
-	// 프로필 사진 삭제하기
-	@RequestMapping("deleteFileById")
-	public String deleteFileById()throws Exception{
-		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getId();
-		String filepath = session.getServletContext().getRealPath("upload/" +id+"/" );
+	//프로필사진 업로드_20200708 수정
+	public MemberFileDTO uploadProc(MemberDTO mdto, MemberFileDTO mfdto, String realPath)throws Exception {
+		System.out.println("파일업로드 Proc 접속하기");
 		
-		File deleteFile = new File(filepath);
+		MultipartFile profile = mdto.getProfile();
+		String parent_id = mdto.getId();
 		
-		System.out.println("삭제할 파일 : " + deleteFile);
-		if(deleteFile.exists() == true){
-			deleteFile.delete();
-			System.out.println("파일 삭제 완료");
-			int deleteResult = mfservice.deleteFilebyId(id); //DB상에서 파일 삭제하는 코드
-			System.out.println("db상 삭제된 파일 개수 : " + deleteResult);
-			//서버 상에서 파일 삭제하는 코드
-		}else {
-			System.out.println("파일이 존재하지 않습니다.");
+		System.out.println("realPath 전달받았는지 : " + realPath);
+		
+		File filePath = new File(realPath);
+
+		if(!filePath.exists()) {
+			filePath.mkdirs();
 		}
-		return "member/editmyinfo";
 
-
-	}
-
-	//아이디로 파일 찾기
-	@RequestMapping("getFileById")
-	public ModelAndView getFileById(String id)throws Exception{
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("member/editmyinfo");
-
-		String parent_id = id;
-		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-
-		mav.addObject("mfdto", mfdto);
-		return mav;
+		//by지은 현재시각으로 sysname 조립하는 과정_20200708
+		String join_date = new SimpleDateFormat("YYYY-MM-dd-ss").format(System.currentTimeMillis());
+		String sysname = join_date + "_" + profile.getOriginalFilename();
+		
+		// 하드디스크에 파일 업로드
+		mfdto.setOriname(profile.getOriginalFilename());
+		mfdto.setSysname(sysname);
+		mfdto.setRealpath(realPath + mfdto.getSysname());
+		mfdto.setParent_id(parent_id);
+		
+		//파일을 저장하기 위한 파일 객체 생성
+		File fileDownload = new File(realPath + sysname);
+		profile.transferTo(fileDownload);
+	
+		//파일저장
+		mdto.setProfile(profile);
+		
+		return mfdto;
 	}
 }

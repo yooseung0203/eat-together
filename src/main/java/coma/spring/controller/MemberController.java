@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import coma.spring.dto.MemberDTO;
@@ -35,6 +36,9 @@ public class MemberController {
 
 	@Autowired
 	private HttpSession session;
+	
+	@Autowired
+	private MemberFileController mfcon;
 
 	//by지은, try-catch 예외처리 대체할 수 있는 메서드, ExceptionHandler_20200701
 	@ExceptionHandler
@@ -67,18 +71,11 @@ public class MemberController {
 	public ModelAndView getMyInfoView() throws Exception{
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
-
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
+
 		mdto = mservice.selectMyInfo(id);
-		//로그인한 회원 정보 view로 이동
 		mav.addObject("mdto", mdto);
-
-		String parent_id = id;
-		//프로필 이미지 view로 이동
-		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-		mav.addObject("mfdto",mfdto);
-
 		return mav;
 	}
 
@@ -120,17 +117,12 @@ public class MemberController {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 
-		//로그인한 회원정보 view로 보내기
 		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
-
-		String parent_id = id;
-		//프로필이미지 view로 보내기
-		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-		mav.addObject("mfdto",mfdto);
-
 		return mav;
+
 	}
+
 
 	//아이디 찾기 팝업 열기
 	@RequestMapping("findid")
@@ -160,22 +152,22 @@ public class MemberController {
 			return "redirect:/";
 		}
 	}
-	//프로필 사진 변경하는 팝업창 열기
-	@RequestMapping("editProfileImage")
-	public String getEditProfileImageView() {
-		return "member/editprofileimage";
-	}
 
 	//회원가입하기
 	@RequestMapping("signupProc")
-	public String signUp(MemberDTO mdto)throws Exception {
-
-		int result = mservice.signUp(mdto);
+	public String signUp(MemberDTO mdto, MemberFileDTO mfdto)throws Exception {
+		String realPath = session.getServletContext().getRealPath("upload/"+ mdto.getId() + "/");
+		mfdto = mfcon.uploadProc(mdto, mfdto, realPath);
+		int result = mservice.signUp(mdto, mfdto);
+		if(result>0) {
+			System.out.println("회원가입성공");
+		}else {
+			System.out.println("회원가입실패, 오류확인하기");
+		}
 		//회원가입축하메세지 입니다.
 		int msgresult= msgservice.insertWelcome(mdto.getId());
 		System.out.println("signupProc 비밀번호 : " + mdto.getPw());
 
-		System.out.println("회원가입 성공");
 		return "redirect:/";
 	}
 
@@ -203,7 +195,7 @@ public class MemberController {
 		param.put("targetValue1", id);
 		param.put("targetColumn2", "pw");
 		param.put("targetValue2", protectedpw);
-
+		
 		boolean result = mservice.logIn(param);
 
 		System.out.println("loginResult 결과 : "+ result);
@@ -213,6 +205,7 @@ public class MemberController {
 			MemberDTO mdto = mservice.selectMyInfo(id);
 			String msg_receiver=mdto.getId();
 			System.out.println("아이디는"+msg_receiver);
+			//새로운 메세지확인
 			int newmsg = msgservice.newmsg(msg_receiver);
 			System.out.println("새로운메세지"+newmsg);
 			session.setAttribute("loginInfo", mdto);
@@ -228,7 +221,7 @@ public class MemberController {
 		}
 
 	}
-	
+
 	//로그인 시 유효성 검사
 	@RequestMapping("isPwCorrect")
 	@ResponseBody
@@ -361,13 +354,11 @@ public class MemberController {
 		mdto.setAccount_email(account_email);
 		session.setAttribute("loginInfo", mdto);
 
-		String parent_id = id;
-		MemberFileDTO mfdto = mfservice.getFilebyId(parent_id);
-
+		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
-		mav.addObject("mfdto", mfdto);
-
 		return mav;
+
+
 	}
 
 
