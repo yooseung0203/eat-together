@@ -61,7 +61,7 @@
 		<div id=contents>
 			<form action="/member/editMyInfoProc" method="post"
 				enctype="multipart/form-data">
-				<table class="table">
+				<table class="table" id="mypage_table">
 					<thead class="thead-dark">
 						<tr>
 							<th scope="col" colspan=12>My Information</th>
@@ -72,9 +72,10 @@
 							<th scope="row">PROFILE IMAGE</th>
 							<td class="myinfo_text" id="profile_box">
 								<div class="edit_text">
-									<div id='preview'></div><br>
-									<label class="btn btn-secondary btn-file"> 업로드하기 <input
-										type="file" id="profile" name="profile" style="display: none;">
+									<div id='preview'></div>
+									<br> <label class="btn btn-secondary btn-file">
+										업로드하기 <input type="file" id="profile" name="profile"
+										style="display: none;">
 									</label>
 								</div>
 							</td>
@@ -99,6 +100,15 @@
 							<td class="edit_text"><input type="text"
 								class="form-control" id="birth" name="birth"
 								value="${mdto.birth}"></td>
+						</tr>
+						<tr>
+							<th scope="row">GENDER</th>
+							<td class="edit_text">
+								<div class="edit_text">
+									<input type="radio" id="gender_1" name="gender" value="1"><label for="gender_1" id="gender_text">남</label>
+									<input type="radio" id="gender_2" name="gender" value="2"><label for="gender_2" id="gender_text">여</label> 
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<th scope="row">EMAIL</th>

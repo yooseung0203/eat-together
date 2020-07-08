@@ -9,7 +9,8 @@
 
 <!-- by 지은, 파일업로드를 위해서 db에는 profile컬럼을 생성하였으나 dto에는 임의로 sysname이라는 맴버필드를 생성하여 프로필파일 경로를 가져옴-->
 <!-- 따라서 db상의 profile컬럼 값을 dto의 sysname으로 String 형태로 가져오겠다는 의미이다_20200708 -->
-	<resultMap id="MemberProfile"
+	
+	<resultMap id="MemberFile"
 		type="coma.spring.dto.MemberDTO">
 		<result property="sysname" column="profile" />
 	</resultMap>
@@ -27,7 +28,7 @@
 		${targetColumn2}=#{targetValue2}
 	</select>
 
-	<select id="selectMyInfo" resultType="coma.spring.dto.MemberDTO">
+	<select id="selectMyInfo" resultType="coma.spring.dto.MemberDTO" resultMap="MemberFile">
 		select * from member where
 		id=#{value}
 	</select>

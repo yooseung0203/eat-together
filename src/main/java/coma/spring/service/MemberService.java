@@ -93,8 +93,19 @@ public class MemberService {
 		return result;
 	}
 	//내정보수정하기
-	public int editMyInfo(Map<String, String> param) throws Exception{
-		int result = mdao.editMyInfo(param);
+	public int editMyInfo(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
+		
+		Map<String, Object> editParam = new HashMap<>();
+		editParam.put("targetColumn1", "birth");
+		editParam.put("targetValue1", mdto.getBirth());
+		editParam.put("targetColumn2", "account_email");
+		editParam.put("targetValue2", mdto.getAccount_email());
+		editParam.put("targetColumn3", "gender");
+		editParam.put("targetValue3", mdto.getGender());
+		editParam.put("targetColumn4", "id");
+		editParam.put("targetValue4", mdto.getId());
+		
+		int result = mdao.editMyInfo(editParam);
 		return result;
 	}
 	//비밀번호 수정하기

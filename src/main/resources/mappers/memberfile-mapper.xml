@@ -5,4 +5,5 @@
 		insert into memberfile
 		values(memberfile_seq.nextval,#{sysname},#{oriname},#{parent_id},#{realpath})
 	</insert>
+
 </mapper>
