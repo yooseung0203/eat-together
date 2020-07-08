@@ -58,6 +58,12 @@ public class PartyController {
 	public String toPartyNew(HttpServletRequest request) {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+			String userid= account.getId();
+			int myPartyCount = pservice.getMadePartyCount(userid);
+			if(myPartyCount>4) {
+				return "/error/partyfullError";
+			}
+			
 			String age = account.getBirth();
 			request.setAttribute("age", age);
 		}catch(Exception e) {}
@@ -80,6 +86,9 @@ public class PartyController {
 		dto.setMeetdate(meetdate);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String userid= account.getId();
+		
+		
+		
 		dto.setWriter(userid);
 		dto.setStatus("1");
 		//

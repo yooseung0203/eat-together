@@ -29,6 +29,10 @@ public class PartyDAO {
 	public int insert(PartyDTO dto) {
 		return mybatis.insert("Party.insert",dto);
 	}
+	// 수지 계정당 모임 생성수 확인
+	public int getMadePartyCount(String writer) throws Exception{
+		return mybatis.selectOne("Party.getMadePartyCount",writer);
+	}
 	// 수지 파티 참가
 	public int partyJoin(String seq, String nickname) throws Exception{
 		Map<String, String> param = new HashMap<>();
