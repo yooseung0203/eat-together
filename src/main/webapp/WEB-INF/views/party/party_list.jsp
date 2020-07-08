@@ -172,17 +172,6 @@
 			<div class="col-12 jumbotron">
 				<span class="listtitle">이번주 인기 맛집 Top 5!</span>
 				<div class="row ingi">
-					<!-- <div class="col-12 col-sm-4 col-md-2">
-						<div class="card">
-							<img src="/resources/img/itsearth.jpg" class="card-img-top"
-								alt="...">
-							<div class="card-body">
-								<h3 class="card-title">지구당</h3>
-								<p class="card-text">가성비 좋은 텐동 맛집. 곱배기로 시키면 추가 금액 없이 밥이 곱배기.</p>
-								<a href="#" class="btn btn-primary btn-sm">모집하러 가기</a>
-							</div>
-						</div>
-					</div> -->
 					<c:forEach var="top" items="${top}" varStatus="status">
 						<div class="col-sm-12 col-md-3">
 							<div class="card partylist">
@@ -251,10 +240,10 @@
 							</div>
 						</c:when>
 						<c:otherwise>
-							<c:forEach var="partyList" items="${list}" varStatus="status">
+							<c:forEach var="partyList" items="${list}" >
 								<div class="col-sm-12 col-md-3">
 									<div class="card partylist">
-										<img src="${imglist[status.index]}" class="card-img-top">
+										<img src="${partyList.imgaddr}" class="card-img-top">
 										<div class="card-body">
 											<h5 class="card-title">${partyList.parent_name }</h5>
 											<p class="card-text">

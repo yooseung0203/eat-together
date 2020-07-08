@@ -195,7 +195,7 @@ public class MemberController {
 		param.put("targetValue1", id);
 		param.put("targetColumn2", "pw");
 		param.put("targetValue2", protectedpw);
-
+		
 		boolean result = mservice.logIn(param);
 
 		System.out.println("loginResult 결과 : "+ result);
@@ -205,6 +205,7 @@ public class MemberController {
 			MemberDTO mdto = mservice.selectMyInfo(id);
 			String msg_receiver=mdto.getId();
 			System.out.println("아이디는"+msg_receiver);
+			//새로운 메세지확인
 			int newmsg = msgservice.newmsg(msg_receiver);
 			System.out.println("새로운메세지"+newmsg);
 			session.setAttribute("loginInfo", mdto);

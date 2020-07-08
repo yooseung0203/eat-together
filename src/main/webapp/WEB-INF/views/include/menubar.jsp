@@ -16,4 +16,7 @@
 	<div class="menu">
 		<a href="/review/selectById?mcpage=0" class="menubar-list">내 리뷰</a>
 	</div>
+	<div class="menu">
+		<a href="/question/question_list" class="menubar-list">1:1 문의</a>
+	</div>
 </div>
