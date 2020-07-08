@@ -70,9 +70,7 @@
 					<tbody>
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
-							<td class="myinfo_text" id="profile_box"><img
-								src="/upload/${loginInfo.id}/${mfdto.sysname}" alt=""
-								onError="this.src='/resources/img/no_img.png'"><br>
+							<td class="myinfo_text" id="profile_box"><br>
 								<div class="edit_text">
 									<div id='preview'></div>
 									<br> <label class="btn btn-secondary btn-file">
