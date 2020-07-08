@@ -96,14 +96,8 @@ public class MemberService {
 	public int editMyInfo(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
 		
 		Map<String, Object> editParam = new HashMap<>();
-		editParam.put("targetColumn1", "birth");
-		editParam.put("targetValue1", mdto.getBirth());
-		editParam.put("targetColumn2", "account_email");
-		editParam.put("targetValue2", mdto.getAccount_email());
-		editParam.put("targetColumn3", "gender");
-		editParam.put("targetValue3", mdto.getGender());
-		editParam.put("targetColumn4", "id");
-		editParam.put("targetValue4", mdto.getId());
+		editParam.put("mdto", mdto);
+		editParam.put("mfdto", mfdto);
 		
 		int result = mdao.editMyInfo(editParam);
 		return result;

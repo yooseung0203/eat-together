@@ -329,23 +329,25 @@ public class MemberController {
 
 	//내정보 수정하기
 	@RequestMapping("editMyInfoProc")
-	public ModelAndView editMyInfoProc(MultipartFile profile, int gender, String accont_email, String birth, MemberFileDTO mfdto) throws Exception {
+	public ModelAndView editMyInfoProc(MultipartFile profile, int gender, String account_email, String birth, MemberFileDTO mfdto) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
+		
+		mdto.setGender(gender);
+		mdto.setProfile(profile);
+		mdto.setAccount_email(account_email);
+		mdto.setBirth(birth);
 
 		String realPath = session.getServletContext().getRealPath("upload/"+id+"/");
 		mfdto = mfcon.uploadProc(mdto, mfdto, realPath);
-
-		int result = mservice.editMyInfo(editParam);
+		int result = mservice.editMyInfo(mdto, mfdto);
+		
 		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
-
-		mdto.setBirth(birth);
-		mdto.setAccount_email(account_email);
 		session.setAttribute("loginInfo", mdto);
-
+		
 		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
 		return mav;

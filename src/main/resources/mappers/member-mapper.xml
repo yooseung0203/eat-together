@@ -42,11 +42,10 @@
 		select count(*) from
 		member where id=#{value}
 	</select>
+	
+	<!--by지은, 회원가입 정보가 수정됨에 따라서 회원정보수정 sql문 수정_20200708 -->
 	<update id="editMyInfo">
-		update member set
-		${targetColumn1}=#{targetValue1},
-		${targetColumn2}=#{targetValue2} where
-		${targetColumn3}=#{targetValue3}
+		update member set birth=#{mdto.birth}, account_email=#{mdto.account_email}, profile=#{mfdto.sysname}, gender=#{mdto.gender} where id=#{mdto.id}
 	</update>
 
 	<update id="editPw">
