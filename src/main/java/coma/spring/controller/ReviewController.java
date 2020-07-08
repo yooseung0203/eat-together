@@ -11,9 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import coma.spring.dto.MemberDTO;
-import coma.spring.dto.PartyDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.dto.ReviewFileDTO;
 import coma.spring.service.ReviewService;
@@ -29,7 +29,7 @@ public class ReviewController {
 	private ReviewService rservice;
 
 	@RequestMapping("write")
-	public String write(ReviewDTO rdto, MultipartFile imgFile) throws Exception{
+	public String write(ReviewDTO rdto, int place_id, MultipartFile imgFile) throws Exception{
 		// 아이디 세션값에서 가져오기
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		rdto.setId(mdto.getId());
@@ -52,7 +52,7 @@ public class ReviewController {
 			imgFile.transferTo(targetLoc);
 			rservice.write(rdto,rvdto);
 		}
-		return "redirect:/map/toMap";
+		return "redirect:/map/selectMarkerInfo";
 	}
 	
 	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707

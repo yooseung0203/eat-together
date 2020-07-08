@@ -1,4 +1,5 @@
 $(function(){
+		/****************** 스타일 관련 영역 ******************/
 		$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
 	    $('.cropping img').each(function (index, item) {
 	        if ($(this).height() / $(this).width() < 0.567) {
@@ -7,8 +8,7 @@ $(function(){
 	            $(this).addClass('portrait').removeClass('landscape');
 	        }
 	    });
-	    
-	    
+		/****************** 카카오맵 영역 ******************/
 		// MakrerImage 객체를 생성하여 반환하는 함수입니다
 		function createMarkerImage(markerSize, offset, markerImageSrc) {
 		    var markerImage = new kakao.maps.MarkerImage(
@@ -20,8 +20,6 @@ $(function(){
 		    );
 		    return markerImage;
 		}
-
-	    
 	    function addMarker(po) {
 			var markerSize = new kakao.maps.Size(10, 10),
 				markerOffset = new kakao.maps.Point(0, 0);
@@ -32,25 +30,34 @@ $(function(){
 	        	hoverImage = createMarkerImage(markerSize, markerOffset, hoverImageSrc);
 	        var marker = new kakao.maps.Marker({
 	            map: map,
-	            position: po,
+	            position: po.latlng,
 	            image: normalImage
 	        });
 
-		    var iwRemoveable = true;
-		    var infowindow = new kakao.maps.InfoWindow({
-		        content: po.content, 
-		        removable : iwRemoveable
-		    });
+	        var customOverlay = new kakao.maps.CustomOverlay({
+	            position: po.latlng,
+	            content: po.content
+	        });
+	        // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+			function infoOverSet(map) {
+			    customOverlay.setMap(map);
+			    customOverlay.setZIndex(3);
+			}
+			// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+			function infoOverClose() {
+			    customOverlay.setMap(null);
+			    customOverlay.setZIndex(1);
+			}
 	        marker.normalImage = normalImage;
 	        kakao.maps.event.addListener(marker, 'mouseover', function() {
 	                marker.setImage(hoverImage);
-	                marker.setZIndex(1);
-			        infowindow.open(marker.getMap(), marker);
+	                marker.setZIndex(3);
+	                infoOverSet(marker.getMap());
 	        });
 	        kakao.maps.event.addListener(marker, 'mouseout', function() {
 	                marker.setImage(normalImage);
 	                marker.setZIndex(1);
-			        infowindow.close();
+	                infoOverClose();
 	        });
 	        return marker;
 	    }
@@ -71,7 +78,7 @@ $(function(){
 				}
 			});
 		    for (var i = 0; i < positions.length; i ++) {
-			    var marker = addMarker(positions[i].latlng);
+			    var marker = addMarker(positions[i]);
 			    kakaoCafeMarkers.push({marker:marker});
 			}
 		});
@@ -90,24 +97,12 @@ $(function(){
 				}
 			});
 		    for (var i = 0; i < positions.length; i ++) {
-		    	var marker = addMarker(positions[i].latlng);
+		    	var marker = addMarker(positions[i]);
 			    kakaoFoodMarkers.push({marker:marker});
 			}
 		});*/
 		
 
-		// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
-		function makeOverListener(map, marker, infowindow) {
-		    return function() {
-		        infowindow.open(map, marker);
-		    };
-		}
-		// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
-		function makeOutListener(infowindow) {
-		    return function() {
-		        infowindow.close();
-		    };
-		}
 		
 		function createMapTableMarker(positions, image){
 			var markers = [];
@@ -117,15 +112,29 @@ $(function(){
 			        position: pos.latlng,
 			        image: image
 			    });
-			    var iwRemoveable = true;
-			    var infowindow = new kakao.maps.InfoWindow({
-			        content: pos.content, 
-			        removable : iwRemoveable
-			    });
+				var customOverlay = new kakao.maps.CustomOverlay({
+		            position: pos.latlng,
+		            content: pos.content
+		        });
+				function infoOverSet(map) {
+					customOverlay.setMap(map);
+				    customOverlay.setZIndex(3);
+				}
+				function infoOverClose() {
+					customOverlay.setMap(null);
+				    customOverlay.setZIndex(1);
+				}
 			    kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {        
 			        location.href = "/map/selectMarkerInfo?place_id="+pos.place_id;
 			    });
-                marker.setZIndex(3);
+				kakao.maps.event.addListener(marker, 'mouseover', function() {
+	                infoOverSet(marker.getMap());
+	                marker.setZIndex(3);
+		        });
+		        kakao.maps.event.addListener(marker, 'mouseout', function() {
+		            infoOverClose();
+	                marker.setZIndex(1);
+		        });
                 markers.push({
 	    	        marker: marker
 	    		})
@@ -137,13 +146,10 @@ $(function(){
 		var foodMarkers = null;
 		var cafePartyMarkers = null;
 		var foodPartyMarkers = null;
-		
-		/*function createMapDataMarker(){
-			
-		}*/
+		var cafeTopMarkers = null;
+		var foodTopMarkers = null;
 		
 		$.get("/resources/json/mapData.json",function(data){
-			console.log(data);
 			var cafePositions = [];
 			var foodPositions = [];
 			var cafePartyPositions = [];
@@ -167,43 +173,81 @@ $(function(){
 		    var topFoodImage = new kakao.maps.MarkerImage(topFoodImageSrc, baseImageSize, baseImageOption);
 			
 			$.each(data, function(i, item) { 
-				if(item.top!=undefined && item.category =='카페'){
-					cafeTopPositions.push({
-						content: '<div>'+ item.name +'</div>', 
-						latlng: new kakao.maps.LatLng(item.lat, item.lng),
-						place_id: item.place_id
-					})
-				}else if(item.top!=undefined && item.category =='음식점'){
-					foodTopPositions.push({
-						content: '<div>'+ item.name +'</div>', 
-						latlng: new kakao.maps.LatLng(item.lat, item.lng),
-						place_id: item.place_id
-					})
+				if(item.top!=undefined){
+					if(item.category == '카페'){
+						cafeTopPositions.push({
+							content: '<div class="mapcustomoverlay">' +
+			    	        '  <a href="'+item.place_url+'" target="_blank">' +
+			    	        '    <span class="category">'+ item.category +'</span>' +
+			    	        '    <span class="title">'+ item.name +'</span>' +
+			    	        '    <span class="address">'+ item.address +'</span>' +
+			    	        '  </a>' +
+			    	        '</div>', 
+							latlng: new kakao.maps.LatLng(item.lat, item.lng),
+							place_id: item.place_id
+						})
+					}else{
+						foodTopPositions.push({
+							content: '<div class="mapcustomoverlay">' +
+			    	        '  <a href="'+item.place_url+'" target="_blank">' +
+			    	        '    <span class="category">'+ item.category +'</span>' +
+			    	        '    <span class="title">'+ item.name +'</span>' +
+			    	        '    <span class="address">'+ item.address +'</span>' +
+			    	        '  </a>' +
+			    	        '</div>', 
+							latlng: new kakao.maps.LatLng(item.lat, item.lng),
+							place_id: item.place_id
+						})
+					}
 				}else{
 					if(item.category == '카페'){
 						if(item.partyOn > 0){
-							cafePositions.push({
-								content: '<div>'+ item.name +'</div>', 
-								latlng: new kakao.maps.LatLng(item.lat, item.lng),
-								place_id: item.place_id
-							});						
-						}else if(item.partyOn == 0){
 							cafePartyPositions.push({
-								content: '<div>'+ item.name +'</div>', 
+								content: '<div class="mapcustomoverlay">' +
+				    	        '  <a href="'+item.place_url+'" target="_blank">' +
+				    	        '    <span class="category">'+ item.category +'</span>' +
+				    	        '    <span class="title">'+ item.name +'</span>' +
+				    	        '    <span class="address">'+ item.address +'</span>' +
+				    	        '  </a>' +
+				    	        '</div>', 
 								latlng: new kakao.maps.LatLng(item.lat, item.lng),
 								place_id: item.place_id
-							});
+							});				
+						}else if(item.partyOn == 0){
+							cafePositions.push({
+								content: '<div class="mapcustomoverlay">' +
+				    	        '  <a href="'+item.place_url+'" target="_blank">' +
+				    	        '    <span class="category">'+item.category +'</span>' +
+				    	        '    <span class="title">'+ item.name +'</span>' +
+				    	        '    <span class="address">'+ item.address +'</span>' +
+				    	        '  </a>' +
+				    	        '</div>', 
+								latlng: new kakao.maps.LatLng(item.lat, item.lng),
+								place_id: item.place_id
+							});		
 						}
 					}else if(item.category == '음식점'){
 						if(item.partyOn > 0){
 							foodPartyPositions.push({
-								content: '<div>'+ item.name +'</div>', 
+								content: '<div class="mapcustomoverlay">' +
+				    	        '  <a href="'+item.place_url+'" target="_blank">' +
+				    	        '    <span class="category">'+ item.category +'</span>' +
+				    	        '    <span class="title">'+ item.name +'</span>' +
+				    	        '    <span class="address">'+ item.address +'</span>' +
+				    	        '  </a>' +
+				    	        '</div>', 
 								latlng: new kakao.maps.LatLng(item.lat, item.lng),
 								place_id: item.place_id
 							});
 						}else if(item.partyOn == 0){
 							foodPositions.push({
-								content: '<div>'+ item.name +'</div>', 
+								content: '<div class="mapcustomoverlay">' +
+				    	        '  <a href="'+item.place_url+'" target="_blank">' +
+				    	        '    <span class="category">'+ item.category +'</span>' +
+				    	        '    <span class="title">'+ item.name +'</span>' +
+				    	        '    <span class="address">'+ item.address +'</span>' +
+				    	        '  </a>' +
+				    	        '</div>', 
 								latlng: new kakao.maps.LatLng(item.lat, item.lng),
 								place_id: item.place_id
 							});
@@ -440,16 +484,6 @@ $(function(){
         		    });
         		    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
         		}
-        		function makeOverListener(map, marker, infowindow) {
-        		    return function() {
-        		        infowindow.open(map, marker);
-        		    };
-        		}
-        		function makeOutListener(infowindow) {
-        		    return function() {
-        		        infowindow.close();
-        		    };
-        		}
         	}).fail(function(error1,error2){
         		console.log(error1);
         		console.log(error2);
@@ -533,37 +567,44 @@ $(function(){
 		})
 			
 		var positions = [];
+		// 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+		function infoOverSet(customOverlay,map) {
+			customOverlay.setMap(map);
+		    customOverlay.setZIndex(3);
+		}
+		// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+		function infoOverClose(customOverlay) {
+			customOverlay.setMap(null);
+		    customOverlay.setZIndex(1);
+		}
+		var customOverlayArray = [];
+		var searchResultArray = [];
+		var markers = [];
 		$("#search").on("click",function(){ // 키워드 검색
 			$.ajax({
 				url:"/map/search",
 				data:{keyword:$("#keyword").val()},
 				dataType:"JSON"
 			}).done(function(resp){
+				$.each(customOverlayArray, function(i, item) {
+					infoOverClose(item.customOverlay);
+				});
 				/* markers 초기화 */
-				cafeMarkers.forEach(function(item) {
-					item.marker.setVisible(false);
-				});
-				foodMarkers.forEach(function(item) {
-					item.marker.setVisible(false);
-				});
-				cafeTopMarkers.forEach(function(item) {
-					item.marker.setVisible(false);
-				});
-				foodTopMarkers.forEach(function(item) {
-					item.marker.setVisible(false);
-				});
-				cafePartyMarkers.forEach(function(item) {
-					item.marker.setVisible(false);
-				});
-				foodPartyMarkers.forEach(function(item) {
-					item.marker.setVisible(false);
-				});
-				kakaoFoodMarkers.forEach(function(item){
-					item.marker.setVisible(false);
-				});
-				kakaoCafeMarkers.forEach(function(item){
-					item.marker.setVisible(false);
-				});
+				cafeMarkers.forEach(function(item) {item.marker.setVisible(false);});
+				foodMarkers.forEach(function(item) {item.marker.setVisible(false);});
+				cafeTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
+				foodTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
+				cafePartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
+				foodPartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
+				kakaoFoodMarkers.forEach(function(item){item.marker.setVisible(false);});
+				kakaoCafeMarkers.forEach(function(item){item.marker.setVisible(false);});
+				positions= [];
+				if(markers.length != 0){
+					$.each(markers,function(i, item){
+						item.marker.setVisible(false);
+					});
+					//markers.forEach(function(item){item.marker.setVisible(false);});
+				}
 				
 				$(".choose_info").html("");
 				$(".search_result").html("");
@@ -571,6 +612,8 @@ $(function(){
 				var foodPositions = [];
 				var cafePartyPositions = [];
 				var foodPartyPositions = [];
+				var cafeTopPositions = [];
+				var foodTopPositions = [];
 				var count = resp.map_list.length + resp.cafe_list.length + resp.food_list.length;
 				if(count == 0){
 					$(".search_result").append("<div class='search_count'><b>장소</b> "+count+"</div>");
@@ -580,49 +623,109 @@ $(function(){
 					$(".search_result").append("<div class='search_count'><b>장소</b> "+count+"</div>");
 					$(".search_result").css('height','80vh');
 					
-					var normalCafeImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset6.png', 
+				    var normalCafeImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset6.png', 
 					normalFoodImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset5.png'
 					partyCafeImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset3.png',
-					partyFoodImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset4.png',   
+					partyFoodImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset4.png', 
+					topCafeImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset2.png',
+					topFoodImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset1.png',  
 				    baseImageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
 				    baseImageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 				    var normalCafeImage = new kakao.maps.MarkerImage(normalCafeImageSrc, baseImageSize, baseImageOption);
 				    var normalFoodImage = new kakao.maps.MarkerImage(normalFoodImageSrc, baseImageSize, baseImageOption);
 				    var partyCafeImage = new kakao.maps.MarkerImage(partyCafeImageSrc, baseImageSize, baseImageOption);
 				    var partyFoodImage = new kakao.maps.MarkerImage(partyFoodImageSrc, baseImageSize, baseImageOption);
-					
-				    console.log(resp);
-					$.each(resp.map_list, function(i, item) { 
-						if(item.category == '카페' && item.partyOn == 0){
-							cafePositions.push({
-				    	        content: '<div>'+ item.name +'</div>', 
-				    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
-				    	        place_id: item.place_id
-				    		});
-						}else if(item.category == '음식점' && item.partyOn == 0){
-							foodPositions.push({
-				    	        content: '<div>'+ item.name +'</div>', 
-				    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
-				    	        place_id: item.place_id
-				    		});
-						}else if(item.category == '카페' && item.partyOn > 0){
-							cafePartyPositions.push({
-				    	        content: '<div>'+ item.name +'</div>', 
-				    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
-				    	        place_id: item.place_id
-				    		});
-						}else if(item.category == '음식점' && item.partyOn > 0){
-							foodPartyPositions.push({
-				    	        content: '<div>'+ item.name +'</div>', 
-				    	        latlng: new kakao.maps.LatLng(item.lat, item.lng),
-				    	        place_id: item.place_id
-				    		});
+				    var topCafeImage = new kakao.maps.MarkerImage(topCafeImageSrc, baseImageSize, baseImageOption);
+				    var topFoodImage = new kakao.maps.MarkerImage(topFoodImageSrc, baseImageSize, baseImageOption);
+				    $.each(resp.map_list, function(i, item) { 
+						if(item.top!=undefined){
+							if(item.category == '카페'){
+								cafeTopPositions.push({
+									content: '<div class="mapcustomoverlay">' +
+					    	        '  <a href="'+item.place_url+'" target="_blank">' +
+					    	        '    <span class="category">'+ item.category +'</span>' +
+					    	        '    <span class="title">'+ item.name +'</span>' +
+					    	        '    <span class="address">'+ item.address +'</span>' +
+					    	        '  </a>' +
+					    	        '</div>', 
+									latlng: new kakao.maps.LatLng(item.lat, item.lng),
+									place_id: item.place_id
+								})
+							}else{
+								foodTopPositions.push({
+									content: '<div class="mapcustomoverlay">' +
+					    	        '  <a href="'+item.place_url+'" target="_blank">' +
+					    	        '    <span class="category">'+ item.category +'</span>' +
+					    	        '    <span class="title">'+ item.name +'</span>' +
+					    	        '    <span class="address">'+ item.address +'</span>' +
+					    	        '  </a>' +
+					    	        '</div>', 
+									latlng: new kakao.maps.LatLng(item.lat, item.lng),
+									place_id: item.place_id
+								})
+							}
+						}else{
+							if(item.category == '카페'){
+								if(item.partyOn > 0){
+									cafePartyPositions.push({
+										content: '<div class="mapcustomoverlay">' +
+						    	        '  <a href="'+item.place_url+'" target="_blank">' +
+						    	        '    <span class="category">'+ item.category +'</span>' +
+						    	        '    <span class="title">'+ item.name +'</span>' +
+						    	        '    <span class="address">'+ item.address +'</span>' +
+						    	        '  </a>' +
+						    	        '</div>', 
+										latlng: new kakao.maps.LatLng(item.lat, item.lng),
+										place_id: item.place_id
+									});				
+								}else if(item.partyOn == 0){
+									cafePositions.push({
+										content: '<div class="mapcustomoverlay">' +
+						    	        '  <a href="'+item.place_url+'" target="_blank">' +
+						    	        '    <span class="category">'+ item.category +'</span>' +
+						    	        '    <span class="title">'+ item.name +'</span>' +
+						    	        '    <span class="address">'+ item.address +'</span>' +
+						    	        '  </a>' +
+						    	        '</div>', 
+										latlng: new kakao.maps.LatLng(item.lat, item.lng),
+										place_id: item.place_id
+									});		
+								}
+							}else if(item.category == '음식점'){
+								if(item.partyOn > 0){
+									foodPartyPositions.push({
+										content: '<div class="mapcustomoverlay">' +
+						    	        '  <a href="'+item.place_url+'" target="_blank">' +
+						    	        '    <span class="category">'+ item.category +'</span>' +
+						    	        '    <span class="title">'+ item.name +'</span>' +
+						    	        '    <span class="address">'+ item.address +'</span>' +
+						    	        '  </a>' +
+						    	        '</div>', 
+										latlng: new kakao.maps.LatLng(item.lat, item.lng),
+										place_id: item.place_id
+									});
+								}else if(item.partyOn == 0){
+									foodPositions.push({
+										content: '<div class="mapcustomoverlay">' +
+						    	        '  <a href="'+item.place_url+'" target="_blank">' +
+						    	        '    <span class="category">'+ item.category +'</span>' +
+						    	        '    <span class="title">'+ item.name +'</span>' +
+						    	        '    <span class="address">'+ item.address +'</span>' +
+						    	        '  </a>' +
+						    	        '</div>', 
+										latlng: new kakao.maps.LatLng(item.lat, item.lng),
+										place_id: item.place_id
+									});
+								}
+							}					
 						}
 					});
 					cafeMarkers = createMapTableMarker(cafePositions, normalCafeImage); // 일반 카페
 					foodMarkers = createMapTableMarker(foodPositions, normalFoodImage); // 일반 음식점
 					cafePartyMarkers = createMapTableMarker(cafePartyPositions, partyCafeImage); // 모임 모집중인 카페
 					foodPartyMarkers = createMapTableMarker(foodPartyPositions, partyFoodImage); // 모임 모집중인 음식점
+					cafeTopMarkers = createMapTableMarker(cafeTopPositions, topCafeImage); // 리뷰 평균 Top 카페
+					foodTopMarkers = createMapTableMarker(foodTopPositions, topFoodImage); // 리뷰 평균 Top 음식점
 					
 					var line = $("<div class='search_list'></div>");
 					for(var i = 0; i < resp.map_list.length; i++){
@@ -646,7 +749,11 @@ $(function(){
 						cafe.append("<div class='phone'>"+resp.cafe_list[i].phone+"</div>");
 						line.append(cafe);	
 						positions.push({
-			    	        content: '<div>'+ resp.cafe_list[i].place_name +'</div>', 
+			    	        content: '<div class="cafecustomoverlay">' +
+			    	        '  <div>' +
+			    	        '    <span class="title">'+ resp.cafe_list[i].place_name +'</span>' +
+			    	        '  </div>' +
+			    	        '</div>', 
 			    	        latlng: new kakao.maps.LatLng(resp.cafe_list[i].y, resp.cafe_list[i].x)
 						});
 					}
@@ -659,7 +766,11 @@ $(function(){
 						food.append("<div class='phone'>"+resp.food_list[i].phone+"</div>");
 						line.append(food);	
 						positions.push({
-			    	        content: '<div>'+ resp.food_list[i].place_name +'</div>', 
+			    	        content: '<div class="foodcustomoverlay">' +
+			    	        '  <div>' +
+			    	        '    <span class="title">'+ resp.food_list[i].place_name +'</span>' +
+			    	        '  </div>' +
+			    	        '</div>', 
 			    	        latlng: new kakao.maps.LatLng(resp.food_list[i].y, resp.food_list[i].x)
 						});			
 					}
@@ -667,9 +778,10 @@ $(function(){
 					var lat = resp.map_list[0].lat,
 					lng = resp.map_list[0].lng;
 					map.setCenter(new kakao.maps.LatLng(lat, lng));
-				    for (var i = 0; i < positions.length; i ++) {
-					    addMarker(positions[i]);
-					}
+					$.each(positions,function(i, item){
+						var marker = addMarker(item);
+						markers.push({marker:marker});
+					});
 					/* cafe_list, food_list 에 대한 marker 정보만 표시 */
 				}
 				
@@ -749,6 +861,81 @@ $(function(){
 				console.log(resp);
 			})
 		})
+		$(document).on("click",".map_info",function(){
+			console.log($(this).find(".place_id").text());
+			$.ajax({
+				url:'/map/chooseMapInfo',
+				type:"get",
+				data:{place_id:$(this).find(".place_id").text()},
+				dataType:"JSON"
+			}).done(function(resp){
+			    map.setCenter(new kakao.maps.LatLng(resp[0].lat, resp[0].lng));
+				$.each(customOverlayArray, function(i, item) {
+					infoOverClose(item.customOverlay);
+				});
+			    customOverlay = new kakao.maps.CustomOverlay({
+		            position: map.getCenter(),
+		            content: '<div class="mapcustomoverlay">' +
+	    	        '  <a href="'+resp[0].place_url+'" target="_blank">' +
+	    	        '    <span class="category">'+ resp[0].category +'</span>' +
+	    	        '    <span class="title">'+ resp[0].name +'</span>' +
+	    	        '    <span class="address">'+ resp[0].address +'</span>' +
+	    	        '  </a>' +
+	    	        '</div>'
+		        });
+				customOverlayArray.push({customOverlay : customOverlay});
+		        infoOverSet(customOverlay,map);
+			})
+		})
+		$(document).on("click",".cafe_info",function(){
+			console.log($(this).find(".place_id").text());
+			$.ajax({
+				url:'/map/chooseCafeInfo',
+				type:"get",
+				data:{place_id:$(this).find(".place_id").text()},
+				dataType:"JSON"
+			}).done(function(resp){
+			    map.setCenter(new kakao.maps.LatLng(resp.result.cafe.y, resp.result.cafe.x));
+				$.each(customOverlayArray, function(i, item) {
+					infoOverClose(item.customOverlay);
+				});
+			    customOverlay = new kakao.maps.CustomOverlay({
+		            position: map.getCenter(),
+		            content: '<div class="cafecustomoverlay">' +
+	    	        '  <div>' +
+	    	        '    <span class="title">'+ resp.result.cafe.place_name +'</span>' +
+	    	        '  </div>' +
+	    	        '</div>'
+		        });
+				customOverlayArray.push({customOverlay : customOverlay});
+		        infoOverSet(customOverlay,map);
+			})
+		})
+		$(document).on("click",".food_info",function(){
+			console.log($(this).find(".place_id").text());
+			$.ajax({
+				url:'/map/chooseFoodInfo',
+				type:"get",
+				data:{place_id:$(this).find(".place_id").text()},
+				dataType:"JSON"
+			}).done(function(resp){
+			    map.setCenter(new kakao.maps.LatLng(resp.result.food.y, resp.result.food.x));
+				$.each(customOverlayArray, function(i, item) {
+					infoOverClose(item.customOverlay);
+				});
+			    customOverlay = new kakao.maps.CustomOverlay({
+		            position: map.getCenter(),
+		            content: '<div class="foodcustomoverlay">' +
+	    	        '  <div>' +
+	    	        '    <span class="title">'+ resp.result.food.place_name +'</span>' +
+	    	        '  </div>' +
+	    	        '</div>'
+		        });
+				customOverlayArray.push({customOverlay : customOverlay});
+		        infoOverSet(customOverlay,map);
+			})
+		})
+		/****************** 리뷰 및 기타 영역 ******************/		
 		$("#review_write").on("submit",function(){
 			var result = false;
 			if($(".reviewlist .writer b").text()==""){
@@ -787,39 +974,6 @@ $(function(){
 		})
 		$(".toSignUp").on("click",function(){
 			location.href = "/member/signup_check";
-		})
-		$(document).on("click",".map_info",function(){
-			console.log($(this).find(".place_id").text());
-			$.ajax({
-				url:'/map/chooseMapInfo',
-				type:"get",
-				data:{place_id:$(this).find(".place_id").text()},
-				dataType:"JSON"
-			}).done(function(resp){
-			    map.setCenter(new kakao.maps.LatLng(resp[0].lat, resp[0].lng));
-			})
-		})
-		$(document).on("click",".cafe_info",function(){
-			console.log($(this).find(".place_id").text());
-			$.ajax({
-				url:'/map/chooseCafeInfo',
-				type:"get",
-				data:{place_id:$(this).find(".place_id").text()},
-				dataType:"JSON"
-			}).done(function(resp){
-			    map.setCenter(new kakao.maps.LatLng(resp.result.cafe.y, resp.result.cafe.x));
-			})
-		})
-		$(document).on("click",".food_info",function(){
-			console.log($(this).find(".place_name").text());
-			var selectedFood = $(this).find(".place_name").text();
-			$.each(positions,function (index, item) {
-				if(item.content=='<div>'+selectedFood+'</div>'){
-					$("#centerLat").text(item.latlng.Ha);
-				    $("#centerLng").text(item.latlng.Ga);
-				    map.setCenter(new kakao.maps.LatLng(item.latlng.Ha, item.latlng.Ga));
-				}
-			});
 		})
 	})
 	.ajaxStart(function(){

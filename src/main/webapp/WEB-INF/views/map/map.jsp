@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>지도 생성하기</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asd'></script>
+<script src='/resources/js/map.js?asdasdasd'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asdddadsd">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asdddadsccasdd">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -203,6 +203,7 @@
 						<div class="reviewlist">
 							<b>리뷰</b>
 							<form action="/review/write" method="post" id="review_write" enctype='multipart/form-data'>
+								<input type=hidden value="${place_id}">
 								<div class="review_comment">
 									<c:choose>
 										<c:when test="${not empty sessionScope.loginInfo.id}">

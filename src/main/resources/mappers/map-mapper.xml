@@ -31,4 +31,7 @@
 	<select id="selectTop5" resultType="coma.spring.dto.MapDTO">
 		select * from (select * from map order by rating_avg desc) <![CDATA[where rownum <= 5]]>
 	</select>
+	<select id="topStore" resultType="coma.spring.dto.MapDTO">
+      select * from map where place_id in (#{top1},#{top2},#{top3},#{top4},#{top5})
+	</select>
 </mapper>

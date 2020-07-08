@@ -1,6 +1,7 @@
 package coma.spring.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,6 @@ public class MapDAO {
 	public List<MapDTO> searchByCategory(String category) throws Exception{
 		return mybatis.selectList("Map.searchByCategory",category);
 	}
-	
 	public int updateRatingAvg(int seq) throws Exception{
 		return mybatis.update("Map.updateRatingAvg",seq);
 	}
@@ -57,5 +57,9 @@ public class MapDAO {
 			}
 		}
 		return list;
+	}
+	// 태훈 순위 맛집 찾기
+	public List<MapDTO> selectTopStore(Map<String, String> param){	
+		return mybatis.selectList("Map.topStore", param);
 	}
 }

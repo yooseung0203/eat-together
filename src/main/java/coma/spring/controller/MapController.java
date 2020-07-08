@@ -26,6 +26,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -83,6 +84,7 @@ public class MapController {
 		try{place_id = Integer.parseInt(request.getParameter("place_id"));}catch(Exception e) {}
 		String object = gson.toJson(list);
 		String jsonPath = sc.getRealPath("resources/json/mapData.json");
+		System.out.println(jsonPath);
 		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
 		JsonArray arr = gson.fromJson(object, JsonArray.class);
@@ -551,6 +553,29 @@ public class MapController {
 			for(JsonElement ele : arr) {
 				JsonObject obj = ele.getAsJsonObject();
 				int id = obj.get("cafe").getAsJsonObject().get("id").getAsInt();
+				if(id == place_id) {
+					respObj.add("result", obj);
+				}
+			}
+		}
+		String respBody = gson.toJson(respObj);
+		System.out.println(respBody);
+		return respBody;
+	}
+	@ResponseBody
+	@RequestMapping(value="chooseFoodInfo",produces="application/json;charset=utf8")
+	public String chooseFoodInfo(int place_id) throws Exception{
+		String foodPath = sc.getRealPath("resources/json/food.json");
+		Gson gson = new Gson();
+		JsonObject respObj = new JsonObject();
+		File foodFile = new File(foodPath);
+		if(foodFile.exists()) {
+			Reader reader = new FileReader(foodPath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("food_list");
+			for(JsonElement ele : arr) {
+				JsonObject obj = ele.getAsJsonObject();
+				int id = obj.get("food").getAsJsonObject().get("id").getAsInt();
 				if(id == place_id) {
 					respObj.add("result", obj);
 				}
