@@ -20,6 +20,19 @@ $(function(){
 		    );
 		    return markerImage;
 		}
+	    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+	    function makeOverListener(map, marker, infowindow) {
+	        return function() {
+	            infowindow.open(map, marker);
+	        };
+	    }
+
+	    // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+	    function makeOutListener(infowindow) {
+	        return function() {
+	            infowindow.close();
+	        };
+	    }
 	    function addMarker(po) {
 			var markerSize = new kakao.maps.Size(10, 10),
 				markerOffset = new kakao.maps.Point(0, 0);
