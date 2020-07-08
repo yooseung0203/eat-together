@@ -1,13 +1,11 @@
 package coma.spring.dto;
 
-import org.springframework.web.multipart.MultipartFile;
-
 public class MemberFileDTO {
 	private int seq;
 	private String sysname;
 	private String oriname;
 	private String parent_id;
-	private MultipartFile file;
+	private String realpath;
 	
 	public int getSeq() {
 		return seq;
@@ -33,19 +31,21 @@ public class MemberFileDTO {
 	public void setParent_id(String parent_id) {
 		this.parent_id = parent_id;
 	}
-	public MultipartFile getFile() {
-		return file;
+	
+	public String getRealpath() {
+		return realpath;
 	}
-	public void setFile(MultipartFile file) {
-		this.file = file;
+	public void setRealpath(String realpath) {
+		this.realpath = realpath;
 	}
-	public MemberFileDTO(int seq, String sysname, String oriname, String parent_id, MultipartFile file) {
+	
+	public MemberFileDTO(int seq, String sysname, String oriname, String parent_id, String realpath) {
 		super();
 		this.seq = seq;
 		this.sysname = sysname;
 		this.oriname = oriname;
 		this.parent_id = parent_id;
-		this.file = file;
+		this.realpath = realpath;
 	}
 	public MemberFileDTO() {
 		super();

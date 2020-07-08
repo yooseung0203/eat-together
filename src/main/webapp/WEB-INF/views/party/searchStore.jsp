@@ -51,24 +51,22 @@ function btnClick(clicked_id){
 		opener.document.getElementById("phone").value = document.getElementById("phone"+clicked_id).innerHTML;
 		opener.document.getElementById("place_url").value = document.getElementById("place_url"+clicked_id).value;
 		opener.document.getElementById("address_name").value = document.getElementById("address_name"+clicked_id).value;
-		var imgaddr="";
+		var addr="";
 		$.ajax({
 			url : "/party/clewimg?parent_name="+parent_name,
-			type : "get"
+			dataType:"text"
 		}).done(function(resp) {
-			alert(resp);
-			opener.document.getElementById("imgaddr").value = ""+resp;
-			opener.document.getElementById("img-area").insertAdjacentHTML("");
-			var src = '<img src ='+resp+'>';
-			opener.document.getElementById("img-area").insertAdjacentHTML('afterend', src);
-
+			addr = resp;
+			$(opener.document).find("#imgaddr").val(addr);
+			$(opener.document).find("#img-area").html("<img width='300px' id ='storeimg' src=" + resp + ">");
+			window.close();
 		});
-		
-		
 
 		
+		//$(opener.document).find("#img-area").append("<img id ='storeimg' src=" + resp + ">");
 		
-	window.close();
+		
+	//
 };
 
 $(function(){

@@ -83,6 +83,8 @@ public class PartyController {
 		dto.setWriter(userid);
 		dto.setStatus("1");
 		//
+		
+		
 		int count = dto.getCount();
 		System.out.println("카운트="+count);
 		//		
@@ -111,6 +113,8 @@ public class PartyController {
 
 		int myseq = pservice.partyInsert(dto);   // 글번호
 		//채팅 insert (생성)  cservice.insert(seq);
+		String nickname = account.getNickname();
+		pservice.partyJoin(Integer.toString(myseq),nickname);
 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
@@ -118,8 +122,7 @@ public class PartyController {
 		//PartyDTO content=pservice.selectBySeq(myseq);
 
 		redirectAttributes.addAttribute("seq", myseq);
-		//		request.setAttribute("con", content);
-		//		request.setAttribute("seq", myseq);
+
 		System.out.println("파티 이동!!1");
 		return "redirect:/party/party_content";
 	}
@@ -322,14 +325,59 @@ public class PartyController {
 		return "/include/party_content_include";
 		//return "/include/party_content_include2";
 	}
-	// 예지 모임 글 보기
+	// 수지 모임 글 보기
 	@RequestMapping(value="party_content")
 	public String party_content(String seq, HttpServletRequest request) throws Exception {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		String img = pservice.clew(content.getParent_name());
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = account.getNickname();
+		boolean partyFullCheck = pservice.isPartyfull(seq);
+		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
+		
+//		if(partyParticipantCheck) {
+//			request.setAttribute("participant", 1);
+//		}
+
 		request.setAttribute("img", img);
 		request.setAttribute("con",content);
+		request.setAttribute("partyFullCheck", partyFullCheck);
+		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/party/party_content";
+	}
+	// 수지 모임  참여
+	@RequestMapping(value="partyJoin")
+	public String partyJoin(String seq, HttpServletRequest request) throws Exception {
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = mdto.getNickname();
+		
+		System.out.println(seq);
+		System.out.println(nickname);
+		
+		boolean partyFullCheck = pservice.isPartyfull(seq);
+		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
+		
+		//모임 참여
+		if(!partyFullCheck && !partyParticipantCheck) {
+			pservice.partyJoin(seq, nickname);
+		}else {
+			return "/error/partyJoin";
+		}
+		
+		//모임참여 후 참가인원수 확인
+		boolean AfterpartyFullCheck = pservice.isPartyfull(seq);
+		//참가인원이 다 차면 모집종료처리
+		if(AfterpartyFullCheck) {
+			pservice.stopRecruit(seq);
+		}
+		boolean AfterpartyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
+		
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		request.setAttribute("con",content);
+		request.setAttribute("partyFullCheck", AfterpartyFullCheck);
+		request.setAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
+		return "/party/party_content";
+		
 	}
 	// 예지 잘 모르겠음
 	@RequestMapping("stopRecruit")
@@ -360,11 +408,11 @@ public class PartyController {
 	}
 	// 이미지 클롤링
 	@ResponseBody
-	@RequestMapping(value="clewimg", method=RequestMethod.GET, produces="text/plain;charset=utf8")
+	@RequestMapping(value="clewimg", produces="text/plain;charset=UTF-8")
 	public String clewimg(String parent_name)  throws Exception {
 		System.out.println("상점이름" + parent_name);
 		String imgaddr = pservice.clew(parent_name);
 		System.out.println("이미지 주소 " + imgaddr);
-		return String.valueOf(imgaddr);
+		return imgaddr;
 	}
 }

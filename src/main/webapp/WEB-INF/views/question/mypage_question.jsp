@@ -39,6 +39,13 @@
 <!-- menubar용 css  -->
 <link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
 <!-- ******************* -->
+<script>
+function questionWritePopUp(){
+	var name = "qpop.test";
+	var option = "width=500,height=400 location=no";
+	window.open("question_write",name,option);
+}
+</script>
 <meta charset="UTF-8">
 <title>내 정보</title>
 </head>
@@ -53,63 +60,55 @@
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
-			<table class="table" id="mypage_table">
+			<table class="table">
 				<thead class="thead-dark">
 					<tr>
-						<th scope="col" colspan=12>My Information</th>
+						<th scope="col" colspan=12>1:1문의</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<th scope="row">PROFILE IMAGE</th>
-						<td class="myinfo_text" id=profile_box><img
-                        src="/upload/${loginInfo.id}/${mfdto.sysname}"
-                        alt="" onError="this.src='/resources/img/no_img.png'"></td>
-
+						<th scope="col">제목</th>
+						<th scope="col">날짜</th>
+						<th scope="col">답변여부</th>
+						<th scope="col">삭제</th>
 					</tr>
+					<c:if test="${empty list}">
+						<tr>
+							<td>1:1 문의가 없습니다.</td>
+						</tr>
+					</c:if>
+					<c:forEach var="i" items="${list}" varStatus="status">
+						<tr>
+							<td>${i.msg_title}</td>
+							<td>${i.msg_date}</td>
+							<td><c:choose>
+									<c:when test="${i.msg_view==0}">
+										답변중	 	
+								 	</c:when>
+									<c:otherwise>
+								 		답변완료
+								 	</c:otherwise>
+								</c:choose></td>
+							<td><button>삭제</button></td>
+						</tr>
+					</c:forEach>
 					<tr>
-						<th scope="row">ID</th>
-						<td class="myinfo_text">${mdto.id}</td>
-					</tr>
-					<tr>
-						<th scope="row">NICKNAME</th>
-						<td class="myinfo_text">${mdto.nickname}</td>
-					</tr>
-					<tr>
-						<th scope="row">BIRTH</th>
-						<td class="myinfo_text">${mdto.birth}</td>
-					</tr>
-					<tr>
-						<th scope="row">EMAIL</th>
-						<td class="myinfo_text">${mdto.account_email}</td>
-					</tr>
-					<tr>
-						<th scope="row"></th>
-						<td class="myinfo_text">
-							<button type="button" class="btn btn-warning" id="editMyInfo">내정보
-								수정</button>
-							<button type=button class="btn btn-light" id="withdraw">회원탈퇴</button>
+						<td scope="col" colspan=12 align="center">
+						<button type="button" class="btn btn-warning" id="question">문의하기</button>
 						</td>
 					</tr>
+					<tr>
+						<td scope="col" colspan=12>${navi}</td>
+					</tr>
+
+
+
 				</tbody>
 			</table>
 		</div>
 	</div>
-	<script>
-		$("#withdraw").on("click", function() {
-			var result = confirm("정말로 회원탈퇴를 진행하시겠습니까?");
-			console.log(result);
-			if (result) {
-				location.replace('/member/withdrawView');
-			} else {
-				location.replace('/member/mypage_myinfo')
-			}
 
-		})
-		$("#editMyInfo").on("click", function() {
-			location.replace('/member/editMyInfo');
-		})
-	</script>
 
 	<!-- ******************* -->
 	<!-- footer  -->
@@ -118,5 +117,10 @@
 	</div>
 	<!-- footer  -->
 	<!-- ******************* -->
+	<script>
+		$("#question").on("click",function(){
+			location.href="javascript:questionWritePopUp()";
+		})
+	</script>
 </body>
 </html>

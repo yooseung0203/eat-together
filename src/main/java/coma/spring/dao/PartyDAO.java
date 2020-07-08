@@ -29,6 +29,38 @@ public class PartyDAO {
 	public int insert(PartyDTO dto) {
 		return mybatis.insert("Party.insert",dto);
 	}
+	// 수지 파티 참가
+	public int partyJoin(String seq, String nickname) throws Exception{
+		Map<String, String> param = new HashMap<>();
+			      param.put("seq", seq);
+			      param.put("nickname", nickname);
+		return mybatis.insert("Party.partyJoin",param);
+	}
+	//수지 파티 정원초과 확인
+	public Boolean isPartyfull(String seq) throws Exception {
+		int limit = mybatis.selectOne("Party.getPartyCount",seq);
+		int nowCount= mybatis.selectOne("Party.getParticipantCount",seq);
+		
+		if(nowCount<limit) {
+			return false;
+		}else {
+			return true;
+		}
+	}
+	//수지 파티 참가인인지 확인
+	public Boolean isPartyParticipant(String seq, String nickname) throws Exception{
+		Map<String, String> param = new HashMap<>();
+	      param.put("seq", seq);
+	      param.put("nickname", nickname);
+	      int check = mybatis.selectOne("Party.isPartyParticipant",param);
+	      
+	      if(check>0) {
+	    	  return true;
+	      }else {
+	    	  return false;
+	      }
+	}
+	
 	// 수지 모임 삭제
 	public int delete(String seq) throws Exception{
 		return mybatis.delete("Party.delete",seq);
