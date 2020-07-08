@@ -133,7 +133,7 @@ public class MsgController {
 		int newmsg = msgservice.newmsg(msg_receiver);
 		request.setAttribute("msgView", msgDTO);
 		//읽음처리 수정중
-		request.setAttribute("newMsg", newmsg);
+		session.setAttribute("newMsg", newmsg);
 		System.out.println(newmsg);
 		return "msg/msgView";
 	}
@@ -163,6 +163,15 @@ public class MsgController {
 		return "redirect:msg_list_receiver";
 	}
 	
+	@RequestMapping("newmsg")
+	@ResponseBody
+	public int newmsg(HttpServletRequest request)throws Exception{
+		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
+		String msg_receiver=mdto.getId();
+		int newmsg = msgservice.newmsg(msg_receiver);
+		session.setAttribute("newMsg", newmsg);
+		return newmsg;
+	}
 
 }
 

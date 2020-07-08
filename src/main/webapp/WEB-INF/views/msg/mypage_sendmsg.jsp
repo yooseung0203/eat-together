@@ -58,6 +58,17 @@
 		$("#list_receiver").on("click", function() {
 			location.href = "msg_list_receiver";
 		})
+		
+		$(".newMsg").on("click",function(){
+			$.ajax({
+				url:'newmsg',
+				dataType : 'json',
+				success : function(resp){
+					console.log(resp);
+					location.reload();
+				}
+			})
+		})
 	})
 </script>
 
@@ -69,7 +80,7 @@ function msgReceiverDel(msg_seq){
 }
 function msgWritePopUp(){
 	var name = "popup.test";
-	var option ="width=500,height=400 location=no,top=200,left=600";
+	var option ="width=500,height=430 location=no,top=200,left=600";
 	window.open("msgWrite",name,option);
 }
 function msgViewPopUp(msg_seq){
@@ -142,7 +153,7 @@ function msgViewPopUp(msg_seq){
 						
 						</div>
 						<div class="col-4 msg_title" id="msg_title">
-							<a href="javascript:msgViewPopUp(${i.msg_seq})"><c:out
+							<a href="javascript:msgViewPopUp(${i.msg_seq})" class="newMsg"><c:out
 									value="${i.msg_title}" /></a>
 						</div>
 						<div class="col-2">${i.msg_date}</div>
