@@ -20,16 +20,20 @@ public class HomeController {
 	private MsgService msgservice;
 	
 	@RequestMapping("/")
-	public String home() throws Exception{
-		
-
+	public String home(){
 		
 		if(session.getAttribute("loginInfo")==null) {
 			return "home";
 		}else {
 			MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-			int newMsg =msgservice.newmsg(mdto.getId());
-			session.setAttribute("newMsg", newMsg);
+			
+				try {
+					int newMsg =msgservice.newmsg(mdto.getId());
+					session.setAttribute("newMsg", newMsg);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return "error";
+				}
 			return "home";
 		}
 		

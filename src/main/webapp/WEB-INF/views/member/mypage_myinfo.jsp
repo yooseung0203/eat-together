@@ -53,7 +53,7 @@
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
-			<table class="table">
+			<table class="table" id="mypage_table">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col" colspan=12>My Information</th>
@@ -63,7 +63,7 @@
 					<tr>
 						<th scope="row">PROFILE IMAGE</th>
 						<td class="myinfo_text" id=profile_box><img
-                        src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
+                        src="/upload/${loginInfo.id}/${mfdto.sysname}"
                         alt="" onError="this.src='/resources/img/no_img.png'"></td>
 
 					</tr>
