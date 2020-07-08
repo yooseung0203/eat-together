@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>지도 생성하기</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js'></script>
+<script src='/resources/js/map.js?asda'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asd">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asdddd">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -48,6 +48,14 @@
 	<div class="container-fluid all">
 		<div id="header"><jsp:include
 				page="/WEB-INF/views/include/header.jsp" /></div>
+		<c:if test="${empty sessionScope.loginInfo}">
+			<div class="loginPlease">
+				<p class="loginMsg">현재 진행중인 모임 ${partyCount}개<br>
+					<button type="button" class="btn btn-primary toLogin">로그인</button>
+					<button type="button" class="btn btn-primary toSignUp">회원가입</button>
+				</p>
+			</div>
+		</c:if>
 		<div id="sideBar">
 			<div class="search_area">
 				<div class="category_search_btns mx-auto">
@@ -185,8 +193,7 @@
 					  	</c:if>
 								</ul>
 							</nav>
-							<button type="button" class="btn btn-primary" id="recruit">내가
-								직접 모집하기</button>
+							<button type="button" class="btn btn-primary" id="recruit">내가 직접 모집하기</button>
 						</div>
 					</c:if>
 					<c:if test="${not empty markerlat}">
@@ -194,30 +201,39 @@
 							<b>리뷰</b>
 							<form action="/review/write" method="post" id="review_write" enctype='multipart/form-data'>
 								<div class="review_comment">
-									<div class="writer">
-										<b>${sessionScope.loginInfo.id}</b>님
-									</div>
-									<div contenteditable="true" class="input_content"></div>
-									<input type="text" name="content" style="display: none;"
-										id="review_content">
-									<div class="filebox">
-										<label for="imgFile"><i class="fas fa-images"></i></label>
-										<input type="file" id="imgFile" name="imgFile" accept="image/*">
-									</div>
-									<div class="rating">
-										<input type="radio" id="star5" name="rating" value="5" /><label
-											for="star5" title="매우 만족스러움">5 stars</label> <input
-											type="radio" id="star4" name="rating" value="4" /><label
-											for="star4" title="조금 만족스러움">4 stars</label> <input
-											type="radio" id="star3" name="rating" value="3" /><label
-											for="star3" title="보통이에요">3 stars</label> <input type="radio"
-											id="star2" name="rating" value="2" /><label for="star2"
-											title="조금 별로">2 stars</label> <input type="radio" id="star1"
-											name="rating" value="1" /><label for="star1" title="매우 별로">1
-											star</label>
-									</div>
-									<input type="text" name="parent_seq" style="display:none;" value="${parent_seq}">
-									<input type=submit class="btn-sm btn-primary" value="작성">
+									<c:choose>
+										<c:when test="${not empty sessionScope.loginInfo.id}">
+											<div class="writer">
+												<b>${sessionScope.loginInfo.id}</b>님
+											</div>
+											<div contenteditable="true" class="input_content"></div>
+											<input type="text" name="content" style="display: none;"
+												id="review_content">
+											<div class="filebox">
+												<label for="imgFile"><i class="fas fa-images"></i></label>
+												<input type="file" id="imgFile" name="imgFile" accept="image/*">
+											</div>
+											<div class="rating">
+												<input type="radio" id="star5" name="rating" value="5" /><label
+													for="star5" title="매우 만족스러움">5 stars</label> <input
+													type="radio" id="star4" name="rating" value="4" /><label
+													for="star4" title="조금 만족스러움">4 stars</label> <input
+													type="radio" id="star3" name="rating" value="3" /><label
+													for="star3" title="보통이에요">3 stars</label> <input type="radio"
+													id="star2" name="rating" value="2" /><label for="star2"
+													title="조금 별로">2 stars</label> <input type="radio" id="star1"
+													name="rating" value="1" /><label for="star1" title="매우 별로">1
+													star</label>
+											</div>
+											<input type="text" name="parent_seq" style="display:none;" value="${parent_seq}">
+											<input type=submit class="btn-sm btn-primary" value="작성">
+										</c:when>
+										<c:otherwise>
+											<div style="font-size:10pt;">
+												리뷰를 작성하려면 로그인하세요.
+											</div>
+										</c:otherwise>
+									</c:choose>
 								</div>
 							</form>
 							<c:forEach var="i" items="${reviewMap}" varStatus="status">
