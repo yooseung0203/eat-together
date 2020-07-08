@@ -44,7 +44,7 @@
 	</select>
 	<!-- by 수지 계정당 모임 생성수 구하기 -->
 	<select id="getMadePartyCount" resultType="int">
-		select count(*) from party where writer=#{value}
+		select count(*) from party where writer=#{value} and status=1
 	</select>
 	<!-- by 수지 모임 현재 참여자수 확인 -->
 	<select id="getParticipantCount" resultType="int">
