@@ -71,22 +71,29 @@
 			</div>
 			<c:if test="${loginInfo.id == null}">
 				<div class="col-sm-1">
-					<span class="main-login"> <a href="/member/loginview">로그인
-					</a> / <a href="/member/signup_check">회원가입</a></span>
+					<span class="main-login"> 
+						<a href="/member/loginview"> 로그인 </a> / 
+						<a href="/member/signup_check">회원가입</a>
+					</span>
 				</div>
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
 				<c:choose>
 					<c:when test="${loginInfo.id == 'administrator'}">
 						<div class="col-sm-1">
-							<span class="main-login"> 관리자님, 환영합니다. </a> / <a
-								href="/member/logoutProc" id="logout">로그아웃</a></span>
+							<span class="main-login"> 
+								관리자님, 환영합니다. / 
+								<a href="/member/logoutProc" id="logout">로그아웃</a>
+							</span>
 						</div>
 					</c:when>
 					<c:otherwise>
 						<div class="col-sm-1">
-							<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> / <a
-								href="/member/logoutProc" id="logout">로그아웃</a></span>
+							<span class="main-login"> 
+								${loginInfo.id}님, 환영합니다. / 
+								<a href="/member/logoutProc" id="logout">로그아웃</a>
+								<a href="/member/logoutProc" id="Report">신고하기</a>
+							</span>
 						</div>
 					</c:otherwise>
 				</c:choose>
