@@ -42,16 +42,22 @@ public class MemberFileController {
 	@Autowired
 	private HttpSession session;
 
+	//프로필 사진 변경하는 팝업창 열기
+	@RequestMapping("editProfileImage")
+	public String getEditProfileImageView() {
+		return "member/editprofileimage";
+	}
+
 	//프로필사진 업로드
 	@RequestMapping(value="uploadProc",  method=RequestMethod.POST, headers = ("content-type=multipart/*"))
 	public String uploadProc(MemberFileDTO mfdto, MultipartFile file)throws Exception {
 		System.out.println("파일업로드 Proc 접속하기");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getId();
+		String parent_id = mdto.getId();
 
-		System.out.println("프로필 이미지 변경하는 아이디 : "+ id);
-		String filePath = session.getServletContext().getRealPath("upload/" +id+"/" );
+		System.out.println("프로필 이미지 변경하는 아이디 : "+ parent_id);
+		String filePath = session.getServletContext().getRealPath("upload/" +parent_id+"/" );
 
 		File tempFilePath = new File(filePath);
 
@@ -62,22 +68,27 @@ public class MemberFileController {
 		UUID uuid = UUID.randomUUID();
 		String sysname = uuid.toString()+"_"+ file.getOriginalFilename();
 		String oriname = file.getOriginalFilename();
-		System.out.println(sysname);
+		System.out.println("Oriname: " + oriname);
+		System.out.println("Sysname: "+sysname);
+		System.out.println("====파일 이름 얻기 =====");
 
 		File targetLoc = new File(filePath + "/" + sysname);
 		file.transferTo(targetLoc);
-		System.out.println(filePath);
+		System.out.println("파일경로 : " + filePath);
 
 		mfdto.setOriname(oriname);
 		mfdto.setSysname(sysname);
-		mfdto.setParent_id(id);
+		mfdto.setParent_id(parent_id);
+		System.out.println("====파일 mfdto에 저장하기=====");
+		System.out.println(mfdto.getOriname() + ":"+ mfdto.getSysname() + ":"+ mfdto.getParent_id());
+		
 
 		int uploadResult = mfservice.uploadProfile(mfdto);
 		System.out.println("파일업로드 성공1 실패0 :" + uploadResult);
 
 		System.out.println("oriName : " + oriname);
 		System.out.println("sysName : " + sysname);
-		
+
 		return "member/editprofileimage";
 	}
 
@@ -87,9 +98,9 @@ public class MemberFileController {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
 		String filepath = session.getServletContext().getRealPath("upload/" +id+"/" );
-		
+
 		File deleteFile = new File(filepath);
-		
+
 		System.out.println("삭제할 파일 : " + deleteFile);
 		if(deleteFile.exists() == true){
 			deleteFile.delete();
@@ -100,10 +111,26 @@ public class MemberFileController {
 		}else {
 			System.out.println("파일이 존재하지 않습니다.");
 		}
-		return "member/editmyinfo";
+		return "member/editprofileimage";
 
 
 	}
+	//by지은, 이미지가 업로드되어있는 경로 가져오기
+	@RequestMapping(value = "/getPic", method = RequestMethod.GET)
+	@ResponseBody
+	public String getPic(String id, HttpServletRequest request)throws Exception {
+
+		MemberFileDTO mfdto = new MemberFileDTO();
+		String parent_id = id;
+		mfdto = mfservice.getFilebyId(parent_id);          // 이미지 정보 가져오기
+		String sysname = mfdto.getSysname();
+		System.out.println("getPic에서 찾아온 sysname: " + sysname);
+		String path = session.getServletContext().getRealPath("upload/" +id+"/"+ sysname);   // 이미지 경로
+
+		return path;
+	}
+
+
 
 	//아이디로 파일 찾기
 	@RequestMapping("getFileById")
