@@ -50,5 +50,8 @@ public class QuestionController {
 		
 		return "question/mypage_question";
 	}
-	
+	@RequestMapping("question_write")
+	public String question_write() {
+		return "question/writeQuestion";
+	}
 }

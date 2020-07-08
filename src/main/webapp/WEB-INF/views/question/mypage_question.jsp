@@ -39,6 +39,13 @@
 <!-- menubar용 css  -->
 <link rel="stylesheet" type="text/css" href="/resources/css/menubar.css">
 <!-- ******************* -->
+<script>
+function questionWritePopUp(){
+	var name = "qpop.test";
+	var option = "width=500,height=400 location=no";
+	window.open("question_write",name,option);
+}
+</script>
 <meta charset="UTF-8">
 <title>내 정보</title>
 </head>
@@ -64,7 +71,7 @@
 						<th scope="col">제목</th>
 						<th scope="col">날짜</th>
 						<th scope="col">답변여부</th>
-						<th scope="col">삭제</th>	
+						<th scope="col">삭제</th>
 					</tr>
 					<c:if test="${empty list}">
 						<tr>
@@ -75,15 +82,27 @@
 						<tr>
 							<td>${i.msg_title}</td>
 							<td>${i.msg_date}</td>
-							<td>${i.msg_view}</td>
-							<td><button>삭제</button></td>					
+							<td><c:choose>
+									<c:when test="${i.msg_view==0}">
+										답변중	 	
+								 	</c:when>
+									<c:otherwise>
+								 		답변완료
+								 	</c:otherwise>
+								</c:choose></td>
+							<td><button>삭제</button></td>
 						</tr>
 					</c:forEach>
 					<tr>
-						<td>${navi}</td>
+						<td scope="col" colspan=12 align="center">
+						<button type="button" class="btn btn-warning" id="question">문의하기</button>
+						</td>
 					</tr>
-					
-					
+					<tr>
+						<td scope="col" colspan=12>${navi}</td>
+					</tr>
+
+
 
 				</tbody>
 			</table>
@@ -98,5 +117,10 @@
 	</div>
 	<!-- footer  -->
 	<!-- ******************* -->
+	<script>
+		$("#question").on("click",function(){
+			location.href="javascript:questionWritePopUp()";
+		})
+	</script>
 </body>
 </html>

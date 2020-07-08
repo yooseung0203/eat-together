@@ -58,25 +58,27 @@
 		$("#list_receiver").on("click", function() {
 			location.href = "msg_list_receiver";
 		})
+		$(".msg_text").hide();
+		$(".msg_title").on("click",function(){
+			$(".msg_text").show();
+		})
+		
 	})
 </script>
-
-
 <script>
-function msgReceiverDel(msg_seq){
-	location.href="msgReceiverDel?msg_seq="+msg_seq;
+function msgSenderDel(msg_seq){
+	location.href="msgSenderDel?msg_seq="+msg_seq;
 		alert("삭제성공");
 }
 function msgWritePopUp(){
 	var name = "popup.test";
-	var option ="width=500,height=400 location=no,top=200,left=600";
+	var option ="width=500,height=400 location=no";
 	window.open("msgWrite",name,option);
 }
 function msgViewPopUp(msg_seq){
 	var name=msg_seq;
-	var msg_receiver = msg_receiver;
 	var option = "width=500,height=400 location=no";
-	window.open("msgView?msg_seq="+msg_seq,msg_seq,option);
+	window.open("msgViewSend?msg_seq="+msg_seq,msg_seq,option);
 }
 </script>
 </head>
@@ -101,7 +103,7 @@ function msgViewPopUp(msg_seq){
 				</div>
 				<div class="row" align="center">
 					<div class="col-2">읽음</div>
-					<div class="col-2">보낸사람</div>
+					<div class="col-2">받는사람</div>
 					<div class="col-4">제목</div>
 					<div class="col-2">날짜</div>
 					<div class="col-2">삭제</div>
@@ -134,13 +136,7 @@ function msgViewPopUp(msg_seq){
 						</div>
 
 
-						<div class="col-2">
-						<c:choose>
-							<c:when test="${i.msg_sender eq 'administrator'}">관리자</c:when>
-							<c:otherwise>${i.msg_sender}</c:otherwise>
-						</c:choose>
-						
-						</div>
+						<div class="col-2">${i.msg_receiver}</div>
 						<div class="col-4 msg_title" id="msg_title">
 							<a href="javascript:msgViewPopUp(${i.msg_seq})"><c:out
 									value="${i.msg_title}" /></a>
@@ -148,14 +144,16 @@ function msgViewPopUp(msg_seq){
 						<div class="col-2">${i.msg_date}</div>
 						<div class="col-2">
 							<button type="button"
-								onclick="location.href='javascript:msgReceiverDel(${i.msg_seq})'">삭제</button>
+								onclick="location.href='javascript:msgSenderDel(${i.msg_seq})'">삭제</button>
 
 						</div>
 
 					</c:forEach>
 				</div>
 				<div class="row">
-					<div class="col-12">${navi}</div>
+				<div class="col-12">
+					${navi}
+				</div>
 				</div>
 				<div class="row">
 					<div class="col-12" align="center">
