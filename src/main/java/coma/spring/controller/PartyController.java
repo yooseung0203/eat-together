@@ -59,6 +59,7 @@ public class PartyController {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 			String userid= account.getId();
+			int gender = account.getGender();
 			
 			//계정당 활성화된 모임 체크
 			int myPartyCount = pservice.getMadePartyCount(userid);
@@ -67,6 +68,7 @@ public class PartyController {
 			}
 			
 			String age = account.getBirth();
+			request.setAttribute("gender", gender);
 			request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_new";

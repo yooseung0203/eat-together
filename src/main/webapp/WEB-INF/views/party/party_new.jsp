@@ -15,6 +15,7 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <!-- BootStrap4 End-->
 
 <!-- google font -->
@@ -38,6 +39,7 @@
 	href="/resources/css/party-css.css">
 <link rel="stylesheet" type="text/css"
 	href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <script>
 	//유효성 - 미성년자 음주불가
 	$("#drinking1").attr('disabled', true);
@@ -60,6 +62,32 @@
 			minDate : 0,
 			dayNamesShort : [ "일", "월", "화", "수", "목", "금", "토" ],
 
+		});
+		
+		var d = new Date($("#party_date"));
+		var now = new Date();
+		
+		if(now==d){
+		var hour = d.getHours()+"";
+		var minute = d.getMinutes()+"";
+		}else{
+			
+		}
+		
+		console.log(hour);
+		console.log(minute);
+		
+		$('#party_time').timepicker({
+		    timeFormat: 'h:mm p',
+		    interval: 5,
+		    minHour: hour,
+		    minMinutes : minute,
+		    maxTime: '11:55pm',
+		    defaultTime: 'now',
+		    startTime: '10:00',
+		    dynamic: true,
+		    dropdown: true,
+		    scrollbar: true
 		});
 
 		var birthday = "${age}";
@@ -92,8 +120,17 @@
 			$("input:checkbox[id='age1']").prop("checked", true);
 			$("input:checkbox[id='age1']").attr("disabled", true);
 			agech = "age1";
-		}
-		;
+		};
+		
+		var gender = "${gender}";
+		console.log(gender);
+		if(gender==1){
+			$('input:radio[id=gender1]').attr("disabled", false);
+			$('input:radio[id=gender2]').attr("disabled", true);
+		}else{
+			$('input:radio[id=gender1]').attr("disabled", true);
+			$('input:radio[id=gender2]').attr("disabled", false);
+		};
 
 		$("#search_parent_name")
 				.on(
@@ -249,7 +286,7 @@
 			action="/party/party_New_Proc">
 			<div class="container">
 				<div class="row">
-					<div class="col-12 col-sm-7 formdiv">
+					<div class="col-12 col-sm-8 formdiv">
 						<div class="row mb-3">
 							<div class="col-sm-12">
 								<h2 class="party_headline">모임 모집하기</h2>
@@ -258,7 +295,7 @@
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">상호명</div>
-							<div class="col-sm-3">
+							<div class="col-sm-7">
 								<input type="text" class="form-control" name="parent_name"
 									id="parent_name" readonly>
 							</div>
@@ -269,7 +306,7 @@
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">위치</div>
-							<div class="col-sm-6">
+							<div class="col-sm-8">
 								<input type="text" class="form-control" name="parent_address"
 									id="parent_address" readonly> <input type="hidden"
 									name="place_id" id="place_id"> <input type="hidden"
@@ -285,28 +322,28 @@
 
 						<div class="row mb-1">
 							<div class="col-sm-2">제목</div>
-							<div class="col-sm-6">
+							<div class="col-sm-10">
 								<input class="form-control" type="text" name="title"
 									id="party_title">
 							</div>
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">모임날짜</div>
-							<div class="col-sm-4">
+							<div class="col-sm-8">
 								<input class="form-control" type="text" name="date"
 									id="party_date">
 							</div>
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">시간</div>
-							<div class="col-sm-4">
-								<input class="form-control" type="time" step="300" name="time"
+							<div class="col-sm-8">
+								<input class="form-control" type="text" name="time"
 									id="party_time">
 							</div>
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">인원</div>
-							<div class="col-sm-4">
+							<div class="col-sm-5">
 								<input class="form-control" type="number" name="count" min=2
 									max=4 id="party_count" aria-describedby="countHelpInline">
 							</div>
@@ -387,7 +424,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-5" id="img-area"></div>
+					<div class="col-12 col-sm-4" id="img-area"></div>
 				</div>
 			</div>
 			<div class="container formdiv">
