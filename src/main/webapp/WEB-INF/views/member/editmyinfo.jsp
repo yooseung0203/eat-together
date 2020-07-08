@@ -137,12 +137,12 @@
 	<script>
 		window.onload = function() {
 			
-			//이메일을 수정했을 경우 인증이 필요하다
+			//by 지은, 이메일을 수정했을 경우 인증이 필요하다_20200708
 			$("#account_email").keydown(function() {
 				$("#isEmailEdited").val("");
 			})
 
-			// form submit 전 체크하는 사항
+			//by 지은, form submit 전 체크하는 사항_20200708
 			$("#editBtn").on("click", function() {
 				if ($("#nickname").val() != "") {
 					if ($("#isEmailEdited").val() != "") {

@@ -70,8 +70,9 @@
 			<br>
 
 			<div class="signup_text">
-				<label for="profile" class="signup_text">프로필 이미지</label><br> <label
-					class="btn btn-secondary btn-file"> 업로드하기 <input
+				<label for="profile" class="signup_text">프로필 이미지</label><br>
+				<div id='preview'></div>
+				<br> <label class="btn btn-secondary btn-file"> 업로드하기 <input
 					type="file" id="profile" name="profile" style="display: none;">
 				</label>
 			</div>
@@ -122,6 +123,31 @@
 	</form>
 
 	<script>
+		//by 지은, 이미지를 첨부할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
+		var upload = document.querySelector('#profile');
+		var preview = document.querySelector('#preview');
+
+		upload.addEventListener('change', function(e) {
+			var get_file = e.target.files;
+			var image = document.createElement('img');
+			var reader = new FileReader();
+
+			reader.onload = (function(aImg) {
+				console.log(1);
+				return function(e) {
+					console.log(3);
+					aImg.src = e.target.result
+				}
+			})(image)
+
+			if (get_file) {
+				reader.readAsDataURL(get_file[0]);
+				console.log(2);
+			}
+
+			preview.appendChild(image);
+		})
+
 		// form submit 전 체크하는 사항
 		$("#btn").on(
 				"click",
