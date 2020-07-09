@@ -147,7 +147,7 @@ public class PartyDAO {
 	
 	//블랙리스트유저차단
 	public int userBlockedConfirm(Map<String , Object> map) {
-	      return mybatis.selectOne("userBlockedConfirm", map);
+	      return mybatis.selectOne("Party.userBlockedConfirm", map);
 	   }
 
 }
