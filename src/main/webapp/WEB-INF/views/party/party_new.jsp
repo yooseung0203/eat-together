@@ -19,6 +19,12 @@
 	src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <!-- BootStrap4 End-->
 
+<!--  datetimepicekr CDN -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
+
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
@@ -42,9 +48,6 @@
 	href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet"
 	href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
-<link rel="stylesheet" type="text/css"
-	href="/resources/css/datetimepicker.css">
-
 <script>
 	//유효성 - 미성년자 음주불가
 	$("#drinking1").attr('disabled', true);
@@ -64,7 +67,7 @@
 	/**
 	 *  yyyyMMdd 포맷으로 반환
 	 */
-	/* function getFormatDate(date) {
+	function getFormatDate(date) {
 		var year = date.getFullYear(); //yyyy
 		var month = (1 + date.getMonth()); //M
 		month = month >= 10 ? month : '0' + month; //month 두자리로 저장
@@ -72,14 +75,9 @@
 		day = day >= 10 ? day : '0' + day; //day 두자리로 저장
 		return year + '' + month + '' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 	}
-	*/
-	
-	
-	
+
 	$(function() {
-		
-	/*
-		$("#party_date").datepicker({
+	/* 	$("#party_date").datepicker({
 			dateFormat : 'yy-mm-dd',
 			minDate : 0,
 			dayNamesShort : [ "일", "월", "화", "수", "목", "금", "토" ],
@@ -122,10 +120,23 @@
 		
 		console.log(hour);
 		console.log(minute);
-		}); */
+		});
 
-	
-
+	 */
+	 $("#party_date").on("blur", function(){
+		 var d = new Date($("#party_date").val());
+		 var d_format = getFormatDate(d);
+		 var now = new Date();
+		 var now_format = getFormatDate(now);
+		 
+		 console.log(d_format);
+		 console.log(now_format);
+		  
+		 if (now_format>d_format) {
+			 alert("과거의 시간을 선택하셨습니다.");
+			 $("#party_date").val("");
+		 };
+	 });
 		
 
 		var birthday = "${age}";
@@ -298,44 +309,16 @@
 			let tdate = today.getDate(); // 날짜
 			let tday = today.getDay(); // 요일
 
-			/* if (today > date) {
+			if (today > date) {
 				alert('선택된 날짜가 과거입니다.');
 				return false;
-			} */
+			}
 
 			document.form.submit();
 
 		});
 	});
 </script>
-<!-- DateTimePicker JS & CSS -->
-<!-- ----------------- -->
-<!-- jquery JS -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
-<!-- Popper JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-
-<!-- Bootstrap js -->
-<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-<!-- Propeller textfield js --> 
-<script type="text/javascript" src="dist/js/propeller.min.js"></script>
-
-<!-- Datepicker moment with locales -->
-<script type="text/javascript" language="javascript" src="datetimepicker/js/moment-with-locales.js"></script>
-
-<!-- Propeller Bootstrap datetimepicker -->
-<script type="text/javascript" language="javascript" src="datetimepicker/js/bootstrap-datetimepicker.js"></script>
-
-<script>
-	// Datepicker in popup
-	$('#datepicker-popup-inline').datetimepicker({
-		inline: true
-	});
-</script>
-
-
 </head>
 <body>
 	<!-- ******************* -->
@@ -381,8 +364,8 @@
 									name="lng" id="lng"> <input type="hidden" name="lat"
 									id="lat"> <input type="hidden" name="category"
 									id="category"> <input type="hidden" name="phone"
-									id="phone"> <input type="hidden" name="address_name"
-									id="address_name"> <input type="hidden"
+									id="phone"> <input type="hidden" name="road_address_name"
+									id="road_address_name"> <input type="hidden"
 									name="place_url" id="place_url"> <input type="hidden"
 									name="imgaddr" id="imgaddr">
 							</div>
@@ -395,37 +378,30 @@
 									id="party_title">
 							</div>
 						</div>
-						<div class="row mb-1">
-							<div class="col-sm-2">모임일시</div>
-							<div class="col-sm-8">
-								<!--Date and Time picker in popup -->
-								<div
-									class="form-group pmd-textfield pmd-textfield-floating-label">
-									<label for="regular1" class="control-label">모임 날짜와 시간을 선택해주세요.</label> <input id="party_date" type="text" data-datepicker-popup="true"
-										data-datepicker="datepicker-popup-inline" class="form-control"
-										data-target="#datepicker-dialog" data-toggle="modal" />
-								</div>
-
-								<!-- Dialog Simple datepicker-->
-								<div tabindex="-1" class="modal fade" id="datepicker-dialog"
-									style="display: none;" aria-hidden="true">
-									<div class="modal-dialog modal-sm">
-										<div class="modal-content">
-											<!-- Inline popup datepicker start -->
-											<div id="datepicker-popup-inline"></div>
-											<!-- Inline popup datepicker end -->
-											<div class="modal-footer">
-												<button type="button"
-													class="btn pmd-ripple-effect btn-light" aria-hidden="true"
-													data-dismiss="modal">Cancel</button>
-												<button type="button"
-													class="btn pmd-ripple-effect btn-primary">Select</button>
-											</div>
-										</div>
-									</div>
+							<div class="row mb-1">
+								<div class="col-sm-2">모임날짜와 시간</div>
+								<div class="col-sm-8">
+									 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+	                    <input type="text" id="party_date" name="date" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
+	                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+	                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+	                    </div>
+	                </div>
+	                <script type="text/javascript">
+	            $(function () {
+	                $('#datetimepicker1').datetimepicker({
+	                		pickDate: true,
+	                	    pickTime: true,
+	                	    useSeconds: false,
+	                	    startDate: 'd',
+	                	    format: 'YYYY-MM-DD H:mm',
+	                	    stepping: 5 
+	                
+	                }); //datepicker end
+	            });
+	        </script>
 								</div>
 							</div>
-						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">인원</div>
 							<div class="col-sm-5">
@@ -514,8 +490,8 @@
 			</div>
 			<div class="container formdiv">
 				<div class="row mb-1">
-					<div class="col-2">소개</div>
-					<div class="col-10">
+					<div class="col-1">소개</div>
+					<div class="col-11 px-5">
 						<textarea class="form-control " id="content" name="content"
 							placeholder="소개를 입력해주세요" rows="10"></textarea>
 					</div>
