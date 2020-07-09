@@ -20,7 +20,21 @@
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
-
+$(function(){
+	$("#container").find("#msg_text").keyup(function(){
+		var word = $(this).val();
+		var wordSize = word.length;
+		console.log(wordSize);
+		if(wordSize <=2000){
+			$(".current").text(wordSize);
+		}else{
+			word=word.substr(0,2000);
+			$(".current").text(word.length);
+			$(this).val(word);
+			alert("쪽지는 2000자 이하로 작성해주세요");
+		}
+	})
+})
 </script>
 <title>Insert title here</title>
 </head>
@@ -47,10 +61,17 @@
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12><textarea placeholder="내용을 입력해주세요"
-							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;"></textarea></td>
+							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;" id="msg_text"></textarea></td>
+				</tr>
+				<tr>
+
+					<td scope="col" colspan=12 id="wordcheck" align="right"><span
+						class="current">0</span>/2000자</td>
 				</tr>
 				<tr align="center">
-					<td scope="col" colspan=12><button>전송</button></td>
+					<td scope="col" colspan=12>
+					<button type="button" class="btn btn-secondary">문의하기</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>

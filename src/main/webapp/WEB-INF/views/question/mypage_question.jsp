@@ -42,7 +42,7 @@
 <script>
 function questionWritePopUp(){
 	var name = "qpop.test";
-	var option = "width=500,height=430 location=no";
+	var option = "width=500,height=480 location=no";
 	window.open("question_write",name,option);
 }
 </script>
@@ -60,7 +60,7 @@ function questionWritePopUp(){
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
-			<table class="table">
+			<table class="table" id="mypage_table">
 				<thead class="thead-dark">
 					<tr>
 						<th scope="col" colspan=12>1:1문의</th>
