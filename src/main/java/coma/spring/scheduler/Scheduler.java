@@ -34,6 +34,7 @@ public class Scheduler {
 			ChatStatics.chats2.clear();			
 		}
 		long end = System.currentTimeMillis();
-		//System.out.println(end-start);
+
+		System.out.println(end-start);
 	}
 }

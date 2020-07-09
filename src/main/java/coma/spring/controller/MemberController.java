@@ -217,6 +217,7 @@ public class MemberController {
 			System.out.println("아이디는"+msg_receiver);
 			//새로운 메세지확인
 			int newmsg = msgservice.newmsg(msg_receiver);
+			
 			System.out.println("새로운메세지"+newmsg);
 			session.setAttribute("loginInfo", mdto);
 			//새로운메세지 확인
