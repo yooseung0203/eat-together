@@ -39,6 +39,7 @@ import coma.spring.dto.PartySearchListDTO;
 import coma.spring.service.ChatService;
 import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
+import coma.spring.service.ReviewService;
 
 @Controller
 @RequestMapping("/party/")
@@ -49,6 +50,9 @@ public class PartyController {
 
 	@Autowired
 	private MapService mapservice;
+	
+	@Autowired
+	private ReviewService rservice;
 
 	@Autowired
 	private HttpSession session;
@@ -259,17 +263,7 @@ public class PartyController {
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
 		
-		int cpage=1;
-		try {
-			cpage = Integer.parseInt(request.getParameter("cpage"));
-		}catch(Exception e) {
-
-		}
-		List<PartyDTO> partyList = pservice.selectList(cpage);
-		String navi = pservice.getPageNaviTH(cpage);
-		
-		Map<String,String> param = pservice.partyCountById();
-		List<MapDTO> top = mapservice.selectTopStroe(param);
+		List<MapDTO> top = this.topFive();
 		
 		List<String> imgList2 = new ArrayList<>();
 		for(int i=0; i<top.size(); i++) {
@@ -278,6 +272,15 @@ public class PartyController {
 			System.out.println(top.get(i).getName());
 		}
 		
+		int cpage=1;
+		try {
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
+
+		}
+		List<PartyDTO> partyList = pservice.selectList(cpage);
+		String navi = pservice.getPageNaviTH(cpage);
+
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", partyList);
 		request.setAttribute("top", top);
@@ -290,8 +293,7 @@ public class PartyController {
 
 		List<PartyDTO> partyList = pservice.partySearch(pdto);
 
-		Map<String,String> param = pservice.partyCountById();
-		List<MapDTO> top = mapservice.selectTopStroe(param);
+		List<MapDTO> top = this.topFive();
 		
 		List<String> imgList2 = new ArrayList<>();
 		for(int i=0; i<top.size(); i++) {
@@ -303,6 +305,11 @@ public class PartyController {
 		request.setAttribute("top", top);
 		request.setAttribute("imglist2", imgList2);
 		return "/party/party_list";
+	}
+	// 태훈 top5 음식점 리스트
+	public List<MapDTO> topFive() throws Exception {
+		List<MapDTO> top = mapservice.selectTopStore();
+		return top;
 	}
 	// 태훈 모임 내용 모달 창
 	//@RequestMapping(value="party_content_include2")

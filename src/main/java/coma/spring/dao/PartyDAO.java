@@ -128,10 +128,6 @@ public class PartyDAO {
 	public List<PartyDTO> partySearch(Map<String, Object> param){	
 		return mybatis.selectList("Party.partySearch", param);
 	}
-	// 태훈 모임 순위순 장소 아이디 리스트
-	public List<String> partyCountById() {
-		return mybatis.selectList("Party.PartyCountById");
-	}
 	// 지은 작성자 별 모임 리스트
 	public List<PartyDTO> selectByWriterPage(Map<String, Object> param)throws Exception{
 		return mybatis.selectList("Party.selectByWriterPage", param);

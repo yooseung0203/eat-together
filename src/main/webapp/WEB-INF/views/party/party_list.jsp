@@ -29,6 +29,11 @@
 	rel="stylesheet">
 <!-- google font end-->
 
+<!-- aos -->
+<link href="/resources/css/aos.css">
+<script src="/resources/js/aos.js"></script>
+<!-- aos -->
+
 <!-- ******************* -->
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
@@ -37,9 +42,20 @@
 <!-- ******************* -->
 <title>모임 리스트</title>
 <style>
+@media screen and (max-width: 768px) {
+  [data-aos-delay] {
+    transition-delay: 0 !important;
+  }
+}
+
 .aa {
 	width: 80%;
 	margin: auto;
+	
+}
+
+.jumbotron{
+	background-color: white;
 }
 
 .listtitle {
@@ -167,13 +183,13 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<div class="container-fluid">
+	<div class="container-fluid aos-init aos-animate" data-aos="fade-up">
 		<div class="row aa">
 			<div class="col-12 jumbotron">
 				<span class="listtitle">이번주 인기 맛집 Top 5!</span>
 				<div class="row ingi">
 					<c:forEach var="top" items="${top}" varStatus="status">
-						<div class="col-sm-12 col-md-3">
+						<div class="col-sm-12 col-md-3 card-deck">
 							<div class="card partylist">
 								<img src="${imglist2[status.index]}" class="card-img-top">
 								<div class="card-body">
@@ -241,21 +257,19 @@
 						</c:when>
 						<c:otherwise>
 							<c:forEach var="partyList" items="${list}" >
-								<div class="col-sm-12 col-md-3">
-								<div class="featImgWrap">
-									<div class="card partylist cropping">
-										<img src="${partyList.imgaddr}" class="card-img-top img">
+								<div class="col-sm-12 col-md-3 card-deck">
+									<div class="card partylist icon-box">
+										<img src="${partyList.imgaddr}" class="card-img-top">
 										<div class="card-body">
 											<h5 class="card-title">${partyList.parent_name }</h5>
 											<p class="card-text">
-												날짜 : ${partyList.meetdate}<br>인원 : ${partyList.count }
+												날짜 : ${partyList.sDate}<br>지역 : ${partyList.parent_address }
 											</p>
 											<input type="hidden" class="party_seq"
 												value="${partyList.seq}">
 											<button type="button" class="btn btn-info btn-lg myBtn">상세
 												보기</button>
 										</div>
-									</div>
 									</div>
 								</div>
 							</c:forEach>

@@ -184,15 +184,6 @@ public class PartyService {
 
 		return param;
 	}
-	// 태훈 맛집 top5 장소 아이디 리스트
-	public Map<String,String> partyCountById(){
-		List<String> list =  pdao.partyCountById();
-		Map<String, String> param = new HashMap<>();
-		for (int i=0; i<5; i++) {
-			param.put("top"+(i+1),list.get(i));
-		}
-		return param;
-	}
 	// 예지 장소 아이디 별 모임 리스트
 	public List<PartyDTO> selectByPageNo(int cpage, int place_id) throws Exception{
 		return pdao.selectByPageNo(cpage, place_id);

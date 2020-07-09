@@ -43,7 +43,7 @@ public class MapService {
 	public List<MapDTO> selectTop5() throws Exception{
 		return mapdao.selectTop5();
 	}
-	public List<MapDTO> selectTopStroe(Map<String, String> param) throws Exception{
-		return mapdao.selectTopStore(param);
+	public List<MapDTO> selectTopStore() throws Exception{
+		return mapdao.selectTopStore();
 	}
 }

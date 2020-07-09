@@ -100,11 +100,6 @@
 	<select id="getListCount" resultType="int">
 		select count(*) from party
 	</select>
-	<!-- by 태훈 모임 순위 순 장소 아이디 리스트 -->
-	<select id="PartyCountById" resultType="String">
-		select place_id from
-		party group by place_id order by count(*) desc
-	</select>
 	<!-- by 지은 작성자 별 모집 리스트 -->
 	<select id="selectByWriterPage" resultType="coma.spring.dto.PartyDTO">
 		select * from (select party.*, row_number() over(order by
