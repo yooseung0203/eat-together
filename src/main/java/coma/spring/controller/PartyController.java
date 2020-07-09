@@ -58,7 +58,17 @@ public class PartyController {
 	public String toPartyNew(HttpServletRequest request) {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+			String userid= account.getId();
+			int gender = account.getGender();
+			
+			//계정당 활성화된 모임 체크
+			int myPartyCount = pservice.getMadePartyCount(userid);
+			if(myPartyCount>4) {
+				return "/error/partyfull";
+			}
+			
 			String age = account.getBirth();
+			request.setAttribute("gender", gender);
 			request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_new";
@@ -73,13 +83,16 @@ public class PartyController {
 		//		String title = dto.getTitle();
 
 		String date = dto.getDate();
-		String time = dto.getTime();
-		String dateAndtime = date + " "+time+":00.0";
+		//String time = dto.getTime();
+		String dateAndtime = date + ":00.0";
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String userid= account.getId();
+		
+		
+		
 		dto.setWriter(userid);
 		dto.setStatus("1");
 		//
@@ -118,11 +131,8 @@ public class PartyController {
 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
-		//모임 등록 후 등록된 페이지로 이동 
-		//PartyDTO content=pservice.selectBySeq(myseq);
-
 		redirectAttributes.addAttribute("seq", myseq);
-
+		//모임 등록 후 등록된 페이지로 이동 
 		System.out.println("파티 이동!!1");
 		return "redirect:/party/party_content";
 	}
@@ -210,15 +220,16 @@ public class PartyController {
 	@RequestMapping("party_modifyProc")
 	public String partymodifyProc(PartyDTO dto, HttpServletRequest request) throws Exception{
 		String date = dto.getDate();
-		String time = dto.getTime();
+//		String time = dto.getTime();
 		String dateAndtime = "";
-		if(time.length()==8) {
-			dateAndtime = date + " "+time+".0";
-		}else {
-			dateAndtime = date + " "+time+":00.0";
-		}
+//		if(time.length()==8) {
+//			dateAndtime = date + " "+time+".0";
+//		}else {
+//			dateAndtime = date + " "+time+":00.0";
+//		}
+		dateAndtime = date+":00.0";
 		System.out.println(date);
-		System.out.println(time);
+	//	System.out.println(time);
 		System.out.println(dateAndtime);
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
@@ -351,6 +362,13 @@ public class PartyController {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String nickname = mdto.getNickname();
 		
+		
+		int block=pservice.userBlockedConfirm(nickname, Integer.parseInt(seq));
+		
+		if(block>0) {
+			return "/error/BlockJoin";
+		}
+
 		System.out.println(seq);
 		System.out.println(nickname);
 		

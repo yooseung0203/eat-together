@@ -18,7 +18,7 @@
 		var viewed = 0;
 		$(".input-area").empty();
 		var ws = new WebSocket("ws://192.168.60.19/chat/chatroom")
-
+		
 		ws.onmessage = function(e) {
 			var some = e.data.split(":");
 			if (some[0] == "z8qTA0JCIruhIhmCAQyHRBpIqUKjS3VBT2oJndv61od6") {

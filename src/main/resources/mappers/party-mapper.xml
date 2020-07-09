@@ -42,6 +42,10 @@
 	<select id="getPartyCount" resultType="int">
 		select count from party where seq=#{value}
 	</select>
+	<!-- by 수지 계정당 모임 생성수 구하기 -->
+	<select id="getMadePartyCount" resultType="int">
+		select count(*) from party where writer=#{value} and status=1
+	</select>
 	<!-- by 수지 모임 현재 참여자수 확인 -->
 	<select id="getParticipantCount" resultType="int">
 		select count(*) from partylist where CHATSEQ_PARENT=#{value}
@@ -115,5 +119,10 @@
 	<select id="getMyPageArticleCount" resultType="int">
 		select count(*) from party where seq in (select chatSeq_parent from partylist where participant = #{value})
 	</select>
+	
+	<!-- by 블랙리스트유저차단  -->
+	<select id="userBlockedConfirm" resultType="int">
+      select count(*) from blacklist where chatSeq_parent= #{seq} and blocked = #{name}
+   </select>
 	
 </mapper>
