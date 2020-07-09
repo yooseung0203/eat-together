@@ -45,20 +45,13 @@ public class ReviewService {
 		return rfdao.selectFileByPseq(parent_seq);
 	}
 	
-	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
-	public List<ReviewDTO> selectById(String id, int mcpage)throws Exception{
-		int start = mcpage * Configuration.recordCountPerPage-(Configuration.recordCountPerPage-1);
-		int end = start + (Configuration.recordCountPerPage-1);
-		
-		Map<String, Object> param = new HashMap<>();
-		param.put("start", start);
-		param.put("end", end);
-		param.put("id", id);
-		
-		List<ReviewDTO> reviewList = rdao.selectById(param);
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 수정_20200709
+	public List<ReviewDTO> selectById(String id)throws Exception{		
+		List<ReviewDTO> reviewList = rdao.selectById(id);
 		return reviewList;
 	}
 	
+
 	//by지은, 마이페이지 - 내 리뷰리스트 출력을 위한 네비바 생성_20200707
 	public String getMyPageNav(int mcpage, String id) throws Exception{
 		int recordTotalCount = rdao.getMyPageArticleCount(id); // 총 개시물의 개수
@@ -122,4 +115,5 @@ public class ReviewService {
 		}
 		return review;
 	}
+
 }

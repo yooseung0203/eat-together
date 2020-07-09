@@ -118,8 +118,8 @@ public class PartyController {
 		if(mapservice.insertPossible(place_url)) {
 			MapDTO mdto = new MapDTO();
 			mdto.setName(dto.getParent_name());
-			mdto.setAddress((String)request.getParameter("address_name"));
-			mdto.setRoad_address(dto.getParent_address());
+			mdto.setAddress(dto.getParent_address());
+			mdto.setRoad_address((String)request.getParameter("road_address_name"));
 			mdto.setCategory((String)request.getParameter("category"));
 			Double lat = Double.parseDouble((String)request.getParameter("lat")); mdto.setLat(lat);
 			Double lng = Double.parseDouble((String)request.getParameter("lng")); mdto.setLng(lng);
@@ -413,9 +413,9 @@ public class PartyController {
 		}
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String writer = mdto.getId();
-		List<PartyDTO> partyList = pservice.selectByWriterPage(writer, mcpage);
-		String navi = pservice.getMyPageNav(mcpage, writer);
+		String nickname = mdto.getNickname();
+		List<PartyDTO> partyList = pservice.selectByWriterPage(nickname, mcpage);
+		String navi = pservice.getMyPageNav(mcpage, nickname);
 		System.out.println("내 모임 개수 : " + partyList.size());
 		mav.addObject("partyList", partyList);
 		mav.addObject("navi", navi);

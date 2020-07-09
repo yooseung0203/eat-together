@@ -48,7 +48,11 @@ body {
 <script>
 	$(function() {
 		$("#toJoinBtn").on("click", function() {
+			if("${loginInfo.id}"==""){
 			location.href = "/member/signup_check";
+			}else{
+				alert("${loginInfo.id}님, 횐영합니다.");
+			}
 		});
 	})
 </script>

@@ -28,15 +28,12 @@ public class MemberController {
 	@Autowired
 	private MemberService mservice;
 
-	@Autowired 
-	private MemberFileService mfservice;
-
 	@Autowired
 	private MsgService msgservice;	
 
 	@Autowired
 	private HttpSession session;
-	
+
 	@Autowired
 	private MemberFileController mfcon;
 
@@ -205,7 +202,7 @@ public class MemberController {
 		param.put("targetValue1", id);
 		param.put("targetColumn2", "pw");
 		param.put("targetValue2", protectedpw);
-		
+
 		boolean result = mservice.logIn(param);
 
 		System.out.println("loginResult 결과 : "+ result);
@@ -217,7 +214,7 @@ public class MemberController {
 			System.out.println("아이디는"+msg_receiver);
 			//새로운 메세지확인
 			int newmsg = msgservice.newmsg(msg_receiver);
-			
+
 			System.out.println("새로운메세지"+newmsg);
 			session.setAttribute("loginInfo", mdto);
 			//새로운메세지 확인
@@ -306,19 +303,26 @@ public class MemberController {
 		}
 	}
 
-	//비밀번호 수정하기
+	//by 지은, 비밀번호 수정하기 ajax로 수정했음_20200709
 	@RequestMapping("editPwProc")
 	@ResponseBody
-	public String editPwProc(String pw)throws Exception {
+	public String editPwProc(@RequestParam String id, @RequestParam String pw)throws Exception {
 		System.out.println("컨트롤러로 값 전달 성공");
-		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getId();
+		MemberDTO mdto = new MemberDTO();
+
+		if(session.getAttribute("loginInfo")!=null) {
+			mdto = (MemberDTO) session.getAttribute("loginInfo");
+			id = mdto.getId();
+		}else {
+			mdto = mservice.selectMyInfo(id);
+		}
+
 		String oriprotectedpw = mdto.getPw(); 
 		String newprotectedpw = mservice.getSha512(pw);
 
 		if(oriprotectedpw.contentEquals(newprotectedpw)) {
 			System.out.println("수정하려는 비밀번호가 기존과 일치하여 에러 발생");
-			return "error";
+			return "0";
 		}else {
 			Map<String, String> param = new HashMap<>();
 			param.put("targetColumn1", "pw");
@@ -328,13 +332,19 @@ public class MemberController {
 
 			int result = mservice.editPw(param);
 			System.out.println("비밀번호 수정 성공 :" + result);
-			mdto.setPw(newprotectedpw);
-			session.setAttribute("loginInfo", mdto);
 
-			return "/member/editMyInfo";
+			//by지은, 비밀번호를 수정한 후에는 재로그인을 요구한다_20200709
+			//By지은, 카카오톡 로그인의 경우 access_Token 로그아웃이 필요하다_20200705
+			if(session.getAttribute("access_Token")!=null) {
+				mservice.kakaoLogout((String)session.getAttribute("access_Token"));
+				session.invalidate();
+				return "success";
+				//카카오톡 로그인이 아닌 경우
+			}else {
+				session.invalidate();
+				return "success";
+			}
 		}
-
-
 	}
 
 
@@ -346,7 +356,7 @@ public class MemberController {
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
-		
+
 		mdto.setGender(gender);
 		mdto.setProfile(profile);
 		mdto.setAccount_email(account_email);
@@ -355,10 +365,10 @@ public class MemberController {
 		String realPath = session.getServletContext().getRealPath("upload/"+id+"/");
 		mfdto = mfcon.uploadProc(mdto, mfdto, realPath);
 		int result = mservice.editMyInfo(mdto, mfdto);
-		
+
 		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
 		session.setAttribute("loginInfo", mdto);
-		
+
 		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
 		return mav;
