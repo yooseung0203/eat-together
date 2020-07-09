@@ -63,7 +63,7 @@
 					<tr>
 						<th scope="row">PROFILE IMAGE</th>
 						<td class="myinfo_text" id=profile_box><img
-							src="/upload/${loginInfo.id}/${mdto.sysname}"></td>
+							src="/upload/${loginInfo.id}/${mdto.sysname}" onError="this.src='/resources/img/no_img.png'" alt=""></td>
 
 					</tr>
 					<tr>
