@@ -120,4 +120,9 @@
 		select count(*) from party where writer = #{value}
 	</select>
 	
+	<!-- by 블랙리스트유저차단  -->
+	<select id="userBlockedConfirm" resultType="int">
+      select count(*) from blacklist where chatSeq_parent= #{seq} and blocked = #{name}
+   </select>
+	
 </mapper>
