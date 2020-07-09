@@ -47,15 +47,16 @@
     transition-delay: 0 !important;
   }
 }
-
+div{
+	border: 1px solid black;
+}
+.afg{
+	align-item:center;
+}
 .aa {
-	width: 80%;
+	width: 100%;
 	margin: auto;
 	
-}
-
-.jumbotron{
-	background-color: white;
 }
 
 .listtitle {
@@ -183,116 +184,140 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<div class="container-fluid aos-init aos-animate" data-aos="fade-up">
+	<div class="container-fluid aos-init aos-animate afg"
+		data-aos="fade-up">
 		<div class="row aa">
-			<div class="col-12 jumbotron">
-				<span class="listtitle">이번주 인기 맛집 Top 5!</span>
-				<div class="row ingi">
-					<c:forEach var="top" items="${top}" varStatus="status">
-						<div class="col-sm-12 col-md-3 card-deck">
-							<div class="card partylist">
-								<img src="${imglist2[status.index]}" class="card-img-top">
-								<div class="card-body">
-									<h5 class="card-title">${top.name }</h5>
-									<p class="card-text">
-										내용.
-									</p>
-									<input type="hidden" class="store_seq" value="${top.seq}">
-									<button type="button" class="btn btn-info btn-lg topBtn">모집하러 가기</button>
-								</div>
+			<span class="listtitle">인기 맛집 Top 5!</span>
+			<div class="row ingi">
+				<c:forEach var="top" items="${top}" varStatus="status">
+					<div class="col-sm-12 col-md-2 card-deck">
+						<div class="card partylist">
+							<img src="${imglist2[status.index]}" class="card-img-top">
+							<div class="card-body">
+								<h5 class="card-title">${top.name }</h5>
+								<p class="card-text">
+									${review[top.seq].content }
+									<c:if test="${empty review[top.seq].content }">
+										${top.address }
+									</c:if>
+								</p>
+								<input type="hidden" class="store_seq" value="${top.seq}">
+								<button type="button" class="btn btn-info btn-lg topBtn">모집하러
+									가기</button>
 							</div>
 						</div>
-					</c:forEach>
+					</div>
+				</c:forEach>
+			</div>
+		</div>
+
+
+		<div class="row aa">
+			<form action="/party/partysearch" method="post">
+				<span class="listtitle">통합 검색</span>
+				<div id="areacheck">
+					지역: <select name="sido" id="sido"></select> <select name="gugun"
+						id="gugun"></select>
 				</div>
-			</div>
+				<div id="gendercheck">
+					성별 : <input type="radio" name="gender" value="m" />남자만 <input
+						type="radio" name="gender" value="f" />여자만 <input type="radio"
+						name="gender" value="a" />남녀무관
+				</div>
+				<div id="agecheck">
+					연령 : <input type="checkbox" name="age" value="10" />10대 <input
+						type="checkbox" name="age" value="20" />20대 <input
+						type="checkbox" name="age" value="30" />30대 <input
+						type="checkbox" name="age" value="40" />40대 <input
+						type="checkbox" name="age" value="50" />50대 이상
+				</div>
+
+				<div id="drinkingcheck">
+					음주 : <input type="radio" name="drinking" value="0" />불가능 <input
+						type="radio" name="drinking" value="1" />가능 <input type="hidden"
+						name="drinking" value="2" />
+				</div>
+
+				<div>
+					<select name="text">
+						<option value="title">제목</option>
+						<option value="writer">작성자</option>
+						<option value="content">내용</option>
+						<option value="both">제목 + 내용</option>
+					</select> <input type="text" name="search"> <input type="submit"
+						value="검색">
+				</div>
+
+			</form>
 		</div>
+		
 		<div class="row aa">
-			<div class="col-12 jumbotron">
-				<form action="/party/partysearch" method="post">
-					<span class="listtitle">통합 검색</span>
-					<div id="areacheck">
-						지역: <select name="sido" id="sido"></select> <select name="gugun"
-							id="gugun"></select>
-					</div>
-					<div id="gendercheck">
-						성별 : <input type="radio" name="gender" value="m" />남자만 <input
-							type="radio" name="gender" value="f" />여자만 <input type="radio"
-							name="gender" value="a" />남녀무관
-					</div>
-					<div id="agecheck">
-						연령 : <input type="checkbox" name="age" value="10" />10대 <input
-							type="checkbox" name="age" value="20" />20대 <input
-							type="checkbox" name="age" value="30" />30대 <input
-							type="checkbox" name="age" value="40" />40대 <input
-							type="checkbox" name="age" value="50" />50대 이상
-					</div>
-
-					<div id="drinkingcheck">
-						음주 : <input type="radio" name="drinking" value="0" />불가능 <input
-							type="radio" name="drinking" value="1" />가능 <input type="hidden"
-							name="drinking" value="2" />
-					</div>
-
-					<div>
-						<select name="text">
-							<option value="title">제목</option>
-							<option value="writer">작성자</option>
-							<option value="content">내용</option>
-							<option value="both">제목 + 내용</option>
-						</select> <input type="text" name="search"> <input type="submit"
-							value="검색">
-					</div>
-
-				</form>
-			</div>
-		</div>
-		<div class="row aa">
-			<div class="col-12 jumbotron">
-				<div class="row">
-					<c:choose>
-						<c:when test="${empty list}">
-							<div class="col-sm-12 col-md-3">
-								<span>검색 된 내용이 없습니다.</span>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<c:forEach var="partyList" items="${list}" >
-								<div class="col-sm-12 col-md-3 card-deck">
-									<div class="card partylist icon-box">
-										<img src="${partyList.imgaddr}" class="card-img-top">
-										<div class="card-body">
-											<h5 class="card-title">${partyList.parent_name }</h5>
-											<p class="card-text">
-												날짜 : ${partyList.sDate}<br>지역 : ${partyList.parent_address }
-											</p>
-											<input type="hidden" class="party_seq"
-												value="${partyList.seq}">
-											<button type="button" class="btn btn-info btn-lg myBtn">상세
-												보기</button>
-										</div>
+				<c:choose>
+					<c:when test="${empty list}">
+						<div class="col-sm-12 col-md-3">
+							<span>검색 된 내용이 없습니다.</span>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="partyList" items="${list}">
+							<div class="col-sm-12 col-md-3 card-deck">
+								<div class="card partylist icon-box">
+									<img src="${partyList.imgaddr}" class="card-img-top">
+									<div class="card-body">
+										<h5 class="card-title">${partyList.parent_name }</h5>
+										<p class="card-text">
+											날짜 : ${partyList.sDate}<br>지역 :
+											${partyList.parent_address }
+										</p>
+										<input type="hidden" class="party_seq"
+											value="${partyList.seq}">
+										<button type="button" class="btn btn-info btn-lg myBtn">상세
+											보기</button>
 									</div>
 								</div>
-							</c:forEach>
-						</c:otherwise>
-					</c:choose>
-				</div>
-				<nav aria-label="Page navigation example">
-				  <ul class="pagination justify-content-center">
-				  	${navi}
-				  </ul>
-				</nav>
-			</div>
+							</div>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+					${navi}
+				</ul>
+			</nav>
 		</div>
 	</div>
-	<!-- <div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-xl modal-dialog-centered"
-			role="document">
-			<div class="modal-content" id="aaa">
-			</div>
-		</div>
-	</div>
-	 -->
+	
+	<!-- ======= Team Section ======= -->
+	<!-- <section id="team" class="team">
+      <div class="container" data-aos="fade-up">
+        <div class="section-title">
+          <h2>Team</h2>
+          <p>Check our Team</p>
+        </div>
+        <div class="row">
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
+            <div class="member" data-aos="fade-up" data-aos-delay="100">
+              <div class="member-img">
+                <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
+                <div class="social">
+                  <a href=""><i class="icofont-twitter"></i></a>
+                  <a href=""><i class="icofont-facebook"></i></a>
+                  <a href=""><i class="icofont-instagram"></i></a>
+                  <a href=""><i class="icofont-linkedin"></i></a>
+                </div>
+              </div>
+              <div class="member-info">
+                <h4>Walter White</h4>
+                <span>Chief Executive Officer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+    <!-- End Team Section -->
+     
+    
 	<div class="modal fade" id="mymodal" role="dialog">
 		<div class="modal-dialog modal-xl">
 			<!-- Modal content-->

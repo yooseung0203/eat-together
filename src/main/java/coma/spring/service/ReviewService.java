@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import coma.spring.dao.MapDAO;
 import coma.spring.dao.ReviewDAO;
 import coma.spring.dao.ReviewFileDAO;
+import coma.spring.dto.MapDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.dto.ReviewFileDTO;
+import coma.spring.dto.TopFiveStoreDTO;
 import coma.spring.statics.Configuration;
 
 @Service
@@ -110,5 +112,14 @@ public class ReviewService {
 		}		
 		sb.append("</ul></nav>");
 		return sb.toString();
+	}
+	// 태훈 리뷰 긁어고기
+	public Map<Integer, Object> getReview(List<MapDTO> top){
+		List<TopFiveStoreDTO> reviewList = rdao.getReview(top);
+		Map<Integer, Object> review = new HashMap<Integer, Object>();
+		for(int i=0; i<reviewList.size(); i++) {
+			review.put(reviewList.get(i).getParent_seq(), reviewList.get(i));
+		}
+		return review;
 	}
 }

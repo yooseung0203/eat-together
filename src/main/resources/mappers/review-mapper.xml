@@ -26,8 +26,11 @@
 	select count(*) from review where id=#{value}
 	</select>
 	<!-- by지은, 마이페이지 내부 내리뷰리스트 출력을 위한 select문 작성_20200707 -->
+	
 	<!-- 태훈 top5 음식점 소개할 리뷰 고르기 -->
-	<select id="top5review" resultType="coma.spring.dto.ReviewDTO">
-		select * from review where rating=(select max(rating) from review where parent_seq=#{parent_seq}) and parent_seq=#{parent_seq}
+	<select id="top5review" resultType="coma.spring.dto.TopFiveStoreDTO">
+		select id, parent_seq,(select name from map where seq = parent_seq), content 
+		from (select parent_seq, content, id, row_number() over(partition by parent_seq order by rating desc,length(content) desc) rank 
+		from review where parent_seq in (#{top1},#{top2},#{top3},#{top4},#{top5})) where rank = 1 order by parent_seq desc
 	</select>
 </mapper>

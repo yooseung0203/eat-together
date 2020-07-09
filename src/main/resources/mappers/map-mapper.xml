@@ -32,7 +32,7 @@
 		select * from (select * from map order by rating_avg desc) <![CDATA[where rownum <= 5]]>
 	</select>
 	<select id="topStore" resultType="coma.spring.dto.MapDTO">
-		select * from map where map.place_id in (select place_id from (select place_id, count(*) from party group by place_id order by COUNT(*) desc) <![CDATA[ where rownum <= 5 ]]>) 
+		select * from map where map.place_id in (select place_id from (select place_id, count(*) from party group by place_id order by COUNT(*) desc) <![CDATA[ where rownum <= 5 ]]>) order by seq desc
 	</select>
 	<!-- 
 	<select id="topStore" resultType="coma.spring.dto.MapDTO">

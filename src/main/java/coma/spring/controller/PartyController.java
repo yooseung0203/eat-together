@@ -36,6 +36,7 @@ import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.PartySearchListDTO;
+import coma.spring.dto.TopFiveStoreDTO;
 import coma.spring.service.ChatService;
 import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
@@ -274,10 +275,13 @@ public class PartyController {
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
 		
-		List<MapDTO> top = this.topFive();
-		
+		List<MapDTO> top = mapservice.selectTopStore();
+		Map<Integer, Object> reviews = rservice.getReview(top);
+	
+		System.out.println(reviews.size());
 		List<String> imgList2 = new ArrayList<>();
 		for(int i=0; i<top.size(); i++) {
+			
 			imgList2.add(pservice.clew(top.get(i).getName()));
 			System.out.println(i + " : " + top.get(i).getSeq() + " : "+imgList2.get(i));
 			System.out.println(top.get(i).getName());
@@ -292,10 +296,12 @@ public class PartyController {
 		List<PartyDTO> partyList = pservice.selectList(cpage);
 		String navi = pservice.getPageNaviTH(cpage);
 
-		request.setAttribute("navi", navi);
-		request.setAttribute("list", partyList);
+		
 		request.setAttribute("top", top);
 		request.setAttribute("imglist2", imgList2);
+		request.setAttribute("review", reviews);
+		request.setAttribute("list", partyList);
+		request.setAttribute("navi", navi);
 		return "/party/party_list";
 	}
 	// 태훈 모임 상세 검색
@@ -304,7 +310,7 @@ public class PartyController {
 
 		List<PartyDTO> partyList = pservice.partySearch(pdto);
 
-		List<MapDTO> top = this.topFive();
+		List<MapDTO> top = mapservice.selectTopStore();
 		
 		List<String> imgList2 = new ArrayList<>();
 		for(int i=0; i<top.size(); i++) {
@@ -317,13 +323,7 @@ public class PartyController {
 		request.setAttribute("imglist2", imgList2);
 		return "/party/party_list";
 	}
-	// 태훈 top5 음식점 리스트
-	public List<MapDTO> topFive() throws Exception {
-		List<MapDTO> top = mapservice.selectTopStore();
-		return top;
-	}
 	// 태훈 모임 내용 모달 창
-	//@RequestMapping(value="party_content_include2")
 	@RequestMapping(value="party_content_include")
 	public String party_content_include(HttpServletRequest request) throws Exception {
 		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
@@ -333,7 +333,6 @@ public class PartyController {
 		request.setAttribute("img", img);
 		
 		return "/include/party_content_include";
-		//return "/include/party_content_include2";
 	}
 	// 수지 모임 글 보기
 	@RequestMapping(value="party_content")
