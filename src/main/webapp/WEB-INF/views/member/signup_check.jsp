@@ -125,7 +125,7 @@
 			</div>
 			<div class="signup_text" id=checkbox_area>
 				<input type="checkbox" id="check_yn" name=check_yn class="signup_text">
-				<div id=checkbox_text>사이트 이용약관 및 개인정보 이용약관에 동의합니다.</div>
+				<div id=checkbox_text><label for="check_yn">사이트 이용약관 및 개인정보 이용약관에 동의합니다.</label></div>
 				<button type="submit" id="loginBtn" class="btn btn-warning">Next</button>
 			</div>
 		</form>

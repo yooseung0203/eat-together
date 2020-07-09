@@ -59,7 +59,7 @@
 		select count(*) from
 		party where place_id = #{place_id}
 	</select>
-	<!-- by 예지 장소 아이디별 모임 리스트 -->
+	<!-- by 예지 장소 아이디별 모임 리스트 : 페이지별 리스트 -->
 	<select id="selectByPageNo" resultType="coma.spring.dto.PartyDTO">
 		select * from (select party.*, row_number() over(order by
 		seq desc) as rnum
