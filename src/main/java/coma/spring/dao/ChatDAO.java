@@ -1,6 +1,7 @@
 package coma.spring.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,11 @@ public class ChatDAO {
 	}
 	public int chatViewedSave(PartyMemberDTO pmdto) {
 		return mybatis.update("chatViewedSave", pmdto);
+	}
+	public String selectWriter(int seq) {
+		return mybatis.selectOne("selectWriter" , seq);
+	}
+	public int addBlacklist(Map<String, Object> map) {
+		return mybatis.insert("addBlacklist" , map);
 	}
 }

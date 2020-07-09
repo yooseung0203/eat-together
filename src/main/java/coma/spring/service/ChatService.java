@@ -1,6 +1,8 @@
 package coma.spring.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +40,14 @@ public class ChatService {
 
 		PartyMemberDTO pmdto = new PartyMemberDTO(chatSeq_parent, participant,viewed_seq);
 		return cdao.chatViewedSave(pmdto);
+	}
+	public String selectWriter(int seq) {
+		return cdao.selectWriter(seq);
+	}
+	public int addBlacklist(String name , int seq) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name" , name);
+		map.put("seq" , seq);
+		return cdao.addBlacklist(map);
 	}
 }
