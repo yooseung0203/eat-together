@@ -55,7 +55,7 @@ public class ReviewController {
 		return "redirect:/map/selectMarkerInfo?place_id="+place_id;
 	}
 	
-	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 수정_20200709
 	@RequestMapping("selectById")
 	public ModelAndView selectById() throws Exception{
 		

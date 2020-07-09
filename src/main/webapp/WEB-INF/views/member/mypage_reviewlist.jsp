@@ -78,6 +78,7 @@
 									onclick="location.href='/party/partylist'">모임 검색하기</button></td>
 						</tr>
 					</c:if>
+					<!--by 지은, 별점 표시를 위한 코드 수정_20200709 -->
 					<c:if test="${!empty reviewList}">
 						<c:forEach var="i" items="${reviewList}">
 							<tr>

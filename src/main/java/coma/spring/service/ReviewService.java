@@ -43,7 +43,7 @@ public class ReviewService {
 		return rfdao.selectFileByPseq(parent_seq);
 	}
 	
-	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 수정_20200709
 	public List<ReviewDTO> selectById(String id)throws Exception{		
 		List<ReviewDTO> reviewList = rdao.selectById(id);
 		return reviewList;
