@@ -22,11 +22,7 @@ public class ReviewDAO {
 	}
 	
 	//by지은, 마이페이지 내리뷰리스트 출력을 위한 select문_20200707
-	public List<ReviewDTO> selectById(Map<String, Object >param)throws Exception{
-		return mybatis.selectList("Review.selectById", param);
-	}
-	//by지은, 마이페이지 내리뷰리스트 출력을 위한 네비바_20200707
-	public int getMyPageArticleCount(String id)throws Exception{
-		return mybatis.selectOne("Review.getMyPageArticleCount", id);
+	public List<ReviewDTO> selectById(String id)throws Exception{
+		return mybatis.selectList("Review.selectById", id);
 	}
 }
