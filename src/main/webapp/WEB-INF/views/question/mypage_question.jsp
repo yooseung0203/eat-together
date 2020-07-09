@@ -42,7 +42,7 @@
 <script>
 function questionWritePopUp(){
 	var name = "qpop.test";
-	var option = "width=500,height=400 location=no";
+	var option = "width=500,height=430 location=no";
 	window.open("question_write",name,option);
 }
 </script>
@@ -94,16 +94,13 @@ function questionWritePopUp(){
 						</tr>
 					</c:forEach>
 					<tr>
-						<td scope="col" colspan=12 align="center">
-						<button type="button" class="btn btn-warning" id="question">문의하기</button>
-						</td>
-					</tr>
-					<tr>
 						<td scope="col" colspan=12>${navi}</td>
 					</tr>
-
-
-
+					<tr>
+						<td scope="col" colspan=12 align="center">
+							<button type="button" class="btn btn-warning" id="question">문의하기</button>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
