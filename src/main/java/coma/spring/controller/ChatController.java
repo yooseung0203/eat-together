@@ -74,13 +74,23 @@ public class ChatController {
 			if(list.get(i).getExist() == null) {
 				list.get(i).setExist("noexist");
 			}
+			System.out.println(list.get(i).getParticipant()+list.get(i).getExist());
 		}
-		
+		String writer = cservice.selectWriter(roomNum);
+		System.out.println("작성자----------------------" + writer );
 		// 방번호와 맴버값을 초기화
 		request.setAttribute("roomNum", roomNum);
 		request.setAttribute("memberList", list);
+		request.setAttribute("writer", writer);
+		
 		return "/chat/chatroom";
 	}		
+	@RequestMapping("kick")
+	public String kick(int seq , String name) {
+		cservice.addBlacklist(name, seq);
+		cservice.exitChatRoom(name, seq);
+		return "home";
+	}
 	@RequestMapping("exit")
 	public String chat(int roomNum) {
 		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
