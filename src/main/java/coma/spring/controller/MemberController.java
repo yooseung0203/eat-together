@@ -329,31 +329,25 @@ public class MemberController {
 
 	//내정보 수정하기
 	@RequestMapping("editMyInfoProc")
-	public ModelAndView editMyInfoProc(String nickname, String birth, String account_email) throws Exception {
+	public ModelAndView editMyInfoProc(MultipartFile profile, int gender, String account_email, String birth, MemberFileDTO mfdto) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
-		System.out.println("수정할 아이디 : " + id);
-		System.out.println("수정할 생년월일 : " + birth);
-		System.out.println("수정할 이메일 : " + account_email);
-
-		Map<String, String> param = new HashMap<>();
-		param.put("targetColumn1", "birth");
-		param.put("targetValue1", birth);
-		param.put("targetColumn2", "account_email");
-		param.put("targetValue2", account_email);
-		param.put("targetColumn3", "id");
-		param.put("targetValue3", id);
-
-		int result = mservice.editMyInfo(param);
-		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
-
-		mdto.setBirth(birth);
+		
+		mdto.setGender(gender);
+		mdto.setProfile(profile);
 		mdto.setAccount_email(account_email);
-		session.setAttribute("loginInfo", mdto);
+		mdto.setBirth(birth);
 
+		String realPath = session.getServletContext().getRealPath("upload/"+id+"/");
+		mfdto = mfcon.uploadProc(mdto, mfdto, realPath);
+		int result = mservice.editMyInfo(mdto, mfdto);
+		
+		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
+		session.setAttribute("loginInfo", mdto);
+		
 		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
 		return mav;
