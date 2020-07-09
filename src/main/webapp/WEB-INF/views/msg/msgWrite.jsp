@@ -19,10 +19,25 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<title>Insert title here</title>
+<title>쪽지보내기</title>
 
 <script>
 	$(function() {
+		$(".container").find("#msg_text").keyup(function(){
+			var word = $(this).val();
+			var wordSize = word.length;
+			console.log(wordSize);
+			if(wordSize <=2000){
+				$(".current").text(wordSize);
+			}else{
+				word=word.substr(0,2000);
+				$(".current").text(word.length);
+				$(this).val(word);
+				alert("쪽지는 2000자 이하로 작성해주세요");
+			}
+		})
+		
+		
 		$("#idcheck").on("click", function() {
 			var id = $("#msg_receiver").val();
 			$.ajax({
@@ -52,8 +67,8 @@
 	<div class="container" align="center">
 		<form action="msgSend" method="post">
 			<table class="table">
-				<thead class="thead-dark">
-					<tr align="center">
+				<thead>
+					<tr class="table-success" align="center">
 						<th scope="col" colspan=12>쪽지보내기</th>
 					</tr>
 				</thead>
@@ -61,9 +76,9 @@
 					<tr align="center">
 						<th scope="col" colspan=4>닉네임</th>
 						<td scope="col" colspan=8><input type="text"
-							name="msg_receiver" id="msg_receiver" style="width:70%;"> <input
-							type="button" id="idcheck" value="확인" style="width:13%;">
-							<input type="button" value="검색" style="width:13%;"></td>
+							name="msg_receiver" id="msg_receiver" style="width: 70%;">
+							<input type="button" id="idcheck" value="확인" style="width: 13%;">
+							<input type="button" value="검색" style="width: 13%;"></td>
 					</tr>
 					<tr align="center">
 						<th scope="col" colspan=4>제목</th>
@@ -76,23 +91,25 @@
 					<tr align="center">
 						<td scope="col" colspan=12><textarea placeholder="내용을 입력해주세요"
 								style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;"
-								name="msg_text" id="msg_text">
-						</textarea></td>
+								name="msg_text" id="msg_text"></textarea></td>
+					</tr>
+					<tr>
+					<td scope="col" colspan=12 id="wordcheck" align="right">
+						<span class="current">0</span>/2000자
+						</td>
 					</tr>
 					<tr align="center">
 						<td scope="col" colspan=12>
-							<button type="submit" id="submit">보내기</button>
-							<button type="button" id="cancel">취소</button>
+							<button type="submit" id="submit" class="btn btn-success">보내기</button>
+							<button type="button" id="close" class="btn btn-light">취소</button>
 						</td>
 					</tr>
-
-
 				</tbody>
 			</table>
 		</form>
 	</div>
 	<script>
-		$("#cancle").on("click", function() {
+		$("#close").on("click", function() {
 			window.close();
 		})
 

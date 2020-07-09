@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.MsgDTO;
+import coma.spring.service.MemberService;
 import coma.spring.service.MsgService;
 
 @Controller
@@ -20,6 +21,8 @@ import coma.spring.service.MsgService;
 public class MsgController {
 	//@Autowired
 	//private MsgDAO msgdao;
+	@Autowired
+	private MemberService mservice;
 	
 	@Autowired
 	private MsgService msgservice;
@@ -66,16 +69,16 @@ public class MsgController {
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 관리자 쪽지함");
 		
-		if(session.getAttribute("msgcpage")==null) {
-			session.setAttribute("msgcpage", 1);
+		if(session.getAttribute("msgAcpage")==null) {
+			session.setAttribute("msgAcpage", 1);
 		}
 		try { 
-			session.setAttribute("msgcpage", Integer.parseInt(request.getParameter("msgcpage")));
+			session.setAttribute("msgAcpage", Integer.parseInt(request.getParameter("msgcpage")));
 		} catch (Exception e) {}
-		int msgcpage=(int)session.getAttribute("msgcpage");
+		int msgAcpage=(int)session.getAttribute("msgAcpage");
 
-		List<MsgDTO> dto = msgservice.selectByAdmin(msgcpage,msg_receiver);
-		String navi = msgservice.Adminnavi(msgcpage, msg_receiver);
+		List<MsgDTO> dto = msgservice.selectByAdmin(msgAcpage,msg_receiver);
+		String navi = msgservice.Adminnavi(msgAcpage, msg_receiver);
 		
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
@@ -90,17 +93,17 @@ public class MsgController {
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 보낸 쪽지함");
 		
-		if(session.getAttribute("msgcpage")==null) {
-			session.setAttribute("msgcpage", 1);
+		if(session.getAttribute("msgRcpage")==null) {
+			session.setAttribute("msgRcpage", 1);
 		}
 		try { 
-			session.setAttribute("msgcpage", Integer.parseInt(request.getParameter("msgcpage")));
+			session.setAttribute("msgRcpage", Integer.parseInt(request.getParameter("msgcpage")));
 		} catch (Exception e) {}
 		
-		int msgcpage=(int)session.getAttribute("msgcpage");
+		int msgRcpage=(int)session.getAttribute("msgRcpage");
 		
-		List<MsgDTO> dto = msgservice.selectByReceiver(msgcpage,msg_receiver);
-		String navi =msgservice.Receivenavi(msgcpage, msg_receiver);
+		List<MsgDTO> dto = msgservice.selectByReceiver(msgRcpage,msg_receiver);
+		String navi =msgservice.Receivenavi(msgRcpage, msg_receiver);
 		
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
@@ -127,10 +130,13 @@ public class MsgController {
 	public String msgView(HttpServletRequest request,int msg_seq)throws Exception{
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
+		String sender = msgDTO.getMsg_sender();
+		MemberDTO mdto = mservice.selectMyInfo(sender);
 		String msg_receiver=msgDTO.getMsg_receiver();
 		//읽음처리되는것
 		int result = msgservice.updateView(msg_seq);
 		int newmsg = msgservice.newmsg(msg_receiver);
+		request.setAttribute("mdto", mdto);
 		request.setAttribute("msgView", msgDTO);
 		//읽음처리 수정중
 		session.setAttribute("newMsg", newmsg);
@@ -140,10 +146,12 @@ public class MsgController {
 	//보낸쪽지함에서 눌러볼때
 	@RequestMapping("msgViewSend")
 	public String msgViewSend(HttpServletRequest request,int msg_seq)throws Exception{
+		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
 		request.setAttribute("msgView", msgDTO);
-		return "msg/msgView";
+		request.setAttribute("mdto", mdto);
+		return "msg/msgViewSend";
 	}
 	
 	//받은쪽지함 삭제
