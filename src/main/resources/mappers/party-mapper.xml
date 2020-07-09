@@ -119,5 +119,4 @@
 	<select id="getMyPageArticleCount" resultType="int">
 		select count(*) from party where writer = #{value}
 	</select>
-	
 </mapper>

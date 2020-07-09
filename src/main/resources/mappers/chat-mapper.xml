@@ -27,4 +27,11 @@
 	<update id="chatViewedSave">
 		update partylist set viewed_seq = #{viewed_seq} where participant=#{participant} and chatSeq_parent = #{chatSeq_parent}
 	</update>
+	<select id="selectWriter" resultType="String">
+		select writer from party where seq = #{value}
+	</select>
+	
+	<insert id="addBlacklist">
+		insert into blacklist values (#{seq} , #{name})
+	</insert>
 </mapper>
