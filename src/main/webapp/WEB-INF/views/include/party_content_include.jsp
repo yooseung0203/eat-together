@@ -73,7 +73,7 @@
          <div class="col-sm-5">
             <div class="featImgWrap">
                <div class="cropping">
-                  <img src="${img}" id="img">
+                  <img src="${img}" class="img">
                </div>
             </div>
          </div>

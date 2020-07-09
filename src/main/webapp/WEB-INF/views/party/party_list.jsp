@@ -179,7 +179,7 @@
 								<div class="card-body">
 									<h5 class="card-title">${top.name }</h5>
 									<p class="card-text">
-										
+										내용.
 									</p>
 									<input type="hidden" class="store_seq" value="${top.seq}">
 									<button type="button" class="btn btn-info btn-lg topBtn">모집하러 가기</button>
@@ -242,8 +242,9 @@
 						<c:otherwise>
 							<c:forEach var="partyList" items="${list}" >
 								<div class="col-sm-12 col-md-3">
-									<div class="card partylist">
-										<img src="${partyList.imgaddr}" class="card-img-top">
+								<div class="featImgWrap">
+									<div class="card partylist cropping">
+										<img src="${partyList.imgaddr}" class="card-img-top img">
 										<div class="card-body">
 											<h5 class="card-title">${partyList.parent_name }</h5>
 											<p class="card-text">
@@ -254,6 +255,7 @@
 											<button type="button" class="btn btn-info btn-lg myBtn">상세
 												보기</button>
 										</div>
+									</div>
 									</div>
 								</div>
 							</c:forEach>
