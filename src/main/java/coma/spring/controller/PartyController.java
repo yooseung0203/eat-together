@@ -113,8 +113,8 @@ public class PartyController {
 		if(mapservice.insertPossible(place_url)) {
 			MapDTO mdto = new MapDTO();
 			mdto.setName(dto.getParent_name());
-			mdto.setAddress((String)request.getParameter("address_name"));
-			mdto.setRoad_address(dto.getParent_address());
+			mdto.setAddress(dto.getParent_address());
+			mdto.setRoad_address((String)request.getParameter("road_address_name"));
 			mdto.setCategory((String)request.getParameter("category"));
 			Double lat = Double.parseDouble((String)request.getParameter("lat")); mdto.setLat(lat);
 			Double lng = Double.parseDouble((String)request.getParameter("lng")); mdto.setLng(lng);
