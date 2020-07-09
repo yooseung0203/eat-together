@@ -26,6 +26,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -82,16 +83,21 @@ public class MapController {
 		int place_id = 0;
 		try{place_id = Integer.parseInt(request.getParameter("place_id"));}catch(Exception e) {}
 		String object = gson.toJson(list);
-		//request.setAttribute("json", object);
 		String jsonPath = sc.getRealPath("resources/json/mapData.json");
-		//InputStream jsonStream = new FileInputStream(jsonPath);
+		System.out.println(jsonPath);
 		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
 		JsonArray arr = gson.fromJson(object, JsonArray.class);
+		List<MapDTO> toplist = mapservice.selectTop5();
 		for(JsonElement ele : arr) {
 			JsonObject obj = ele.getAsJsonObject();
 			int result = mapservice.selectPartyOn(obj.get("place_id").getAsInt());
 			obj.addProperty("partyOn", result);
+			for(MapDTO mapdto : toplist) {
+				if(obj.get("place_id").getAsInt() == mapdto.getPlace_id()) {
+					obj.addProperty("top", 1);
+				}
+			}
 		}
 		fw.write(arr.toString());
 		fw.flush();
@@ -99,7 +105,7 @@ public class MapController {
 		response.setHeader("cache-control","no-cache,no-store");
 		if(session.getAttribute("loginInfo")==null) {
 			int count = pservice.selectAllCount();
-			request.setAttribute("partyCount", count);
+			request.setAttribute("partyAllCount", count);
 		}
 		return "/map/map";
 	}
@@ -484,14 +490,15 @@ public class MapController {
 	}
 
 	@RequestMapping(value="selectMarkerInfo",method=RequestMethod.GET)
-	public String selectMarkerInfo(int place_id, HttpServletRequest request) throws Exception{
+	public String selectMarkerInfo(String place_id, HttpServletRequest request) throws Exception{
 		int cpage = 1;
 		try {cpage = Integer.parseInt(request.getParameter("cpage"));}catch(Exception e) {}
-		MapDTO mapdto = mapservice.selectOne(place_id);
+		int id = Integer.parseInt(place_id);
+		MapDTO mapdto = mapservice.selectOne(id);
 		// 진행중인 모임이 있다면 모임도 같이 보내준다.
-		int pcount = mapservice.selectPartyOn(place_id);
-		List<PartyDTO> plist = pservice.selectByPageNo(cpage, place_id);
-		String navi = pservice.getPageNavi(cpage, place_id);
+		int pcount = mapservice.selectPartyOn(id);
+		List<PartyDTO> plist = pservice.selectByPageNo(cpage, id);
+		String navi = pservice.getPageNavi(cpage, id);
 		// request
 		request.setAttribute("mapdto", mapdto);
 		request.setAttribute("partyCount", pcount);
@@ -512,7 +519,9 @@ public class MapController {
 		}
 		request.setAttribute("reviewMap", rmap);
 		// 리뷰 사진
-		
+		if(session.getAttribute("loginInfo")==null) {
+			request.setAttribute("partyAllCount", pservice.selectAllCount());
+		}
 		return "map/map";
 	}
 
@@ -523,5 +532,58 @@ public class MapController {
 		return pdto;
 	}
 
-
+	@ResponseBody
+	@RequestMapping(value="chooseMapInfo",produces="application/json;charset=utf8")
+	public String chooseMapInfo(int place_id) throws Exception{
+		List<MapDTO> mapdto = mapservice.searchByPlace_id(place_id);
+		Gson gson = new Gson();
+		return gson.toJson(mapdto);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="chooseCafeInfo",produces="application/json;charset=utf8")
+	public String chooseCafeInfo(int place_id) throws Exception{
+		String cafePath = sc.getRealPath("resources/json/cafe.json");
+		Gson gson = new Gson();
+		JsonObject respObj = new JsonObject();
+		File cafeFile = new File(cafePath);
+		if(cafeFile.exists()) {
+			Reader reader = new FileReader(cafePath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("cafe_list");
+			for(JsonElement ele : arr) {
+				JsonObject obj = ele.getAsJsonObject();
+				int id = obj.get("cafe").getAsJsonObject().get("id").getAsInt();
+				if(id == place_id) {
+					respObj.add("result", obj);
+				}
+			}
+		}
+		String respBody = gson.toJson(respObj);
+		System.out.println(respBody);
+		return respBody;
+	}
+	@ResponseBody
+	@RequestMapping(value="chooseFoodInfo",produces="application/json;charset=utf8")
+	public String chooseFoodInfo(int place_id) throws Exception{
+		String foodPath = sc.getRealPath("resources/json/food.json");
+		Gson gson = new Gson();
+		JsonObject respObj = new JsonObject();
+		File foodFile = new File(foodPath);
+		if(foodFile.exists()) {
+			Reader reader = new FileReader(foodPath);
+			JsonObject readObj = gson.fromJson(reader, JsonObject.class);
+			JsonArray arr = (JsonArray)readObj.get("food_list");
+			for(JsonElement ele : arr) {
+				JsonObject obj = ele.getAsJsonObject();
+				int id = obj.get("food").getAsJsonObject().get("id").getAsInt();
+				if(id == place_id) {
+					respObj.add("result", obj);
+				}
+			}
+		}
+		String respBody = gson.toJson(respObj);
+		System.out.println(respBody);
+		return respBody;
+	}
 }
