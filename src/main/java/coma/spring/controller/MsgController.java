@@ -114,7 +114,7 @@ public class MsgController {
 	public String msgWrite() {
 		return "msg/msgWrite";
 	}
-	
+	//쪽지보내기
 	@RequestMapping("msgSend")
 	public String msgSend(MsgDTO msgdto)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
@@ -122,7 +122,19 @@ public class MsgController {
 		msgdto.setMsg_sender(msg_sender);
 		//메세지 보낸사람 넣기
 		int result = msgservice.insert(msgdto);
-		return "msg/msgWriteResult";
+		if(result==1) {
+			return "msg/msgWriteResult";	
+		}else {
+			return "error";
+		}
+		
+	}
+	//답장하기 버튼 눌렀을때
+	@RequestMapping("msgResponse")
+	public String msgResponse(HttpServletRequest request,String msg_receiver)throws Exception{
+		//받은사람을 보낼사람에 넣어줍니다
+		request.setAttribute("msg_receiver", msg_receiver);
+		return "msg/msgWriteResponse";
 	}
 	
 	//받은쪽지함에서 눌러볼때

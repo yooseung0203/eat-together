@@ -75,7 +75,7 @@ function questionWritePopUp(){
 					</tr>
 					<c:if test="${empty list}">
 						<tr>
-							<td>1:1 문의가 없습니다.</td>
+							<td scope="col" colspan=12 align="center">1:1 문의가 없습니다.</td>
 						</tr>
 					</c:if>
 					<c:forEach var="i" items="${list}" varStatus="status">
