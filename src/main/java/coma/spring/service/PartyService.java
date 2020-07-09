@@ -39,6 +39,10 @@ public class PartyService {
 		int result = pdao.partyJoin(seq,nickname);
 		return result;
 	}
+	// 수지 계정당 모임 생성수 확인
+	public int getMadePartyCount(String writer) throws Exception{
+		return pdao.getMadePartyCount(writer);
+	}
 	
 	//수지 파티 정원초과 확인
 	public boolean isPartyfull(String seq) throws Exception {
@@ -318,5 +322,4 @@ public class PartyService {
 			return "https://tpc.googlesyndication.com/simgad/11554535643826380039?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qnk_Y1zzDS1b6Wu1KYZ-_e0LjecDg";
 		}
 	}
-
 }

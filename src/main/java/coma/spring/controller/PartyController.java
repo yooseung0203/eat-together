@@ -58,7 +58,17 @@ public class PartyController {
 	public String toPartyNew(HttpServletRequest request) {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+			String userid= account.getId();
+			int gender = account.getGender();
+			
+			//계정당 활성화된 모임 체크
+			int myPartyCount = pservice.getMadePartyCount(userid);
+			if(myPartyCount>4) {
+				return "/error/partyfull";
+			}
+			
 			String age = account.getBirth();
+			request.setAttribute("gender", gender);
 			request.setAttribute("age", age);
 		}catch(Exception e) {}
 		return "/party/party_new";
@@ -80,6 +90,9 @@ public class PartyController {
 		dto.setMeetdate(meetdate);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String userid= account.getId();
+		
+		
+		
 		dto.setWriter(userid);
 		dto.setStatus("1");
 		//
@@ -118,11 +131,8 @@ public class PartyController {
 
 		// 모임 등록 작업 수행
 		System.out.println(myseq);
-		//모임 등록 후 등록된 페이지로 이동 
-		//PartyDTO content=pservice.selectBySeq(myseq);
-
 		redirectAttributes.addAttribute("seq", myseq);
-
+		//모임 등록 후 등록된 페이지로 이동 
 		System.out.println("파티 이동!!1");
 		return "redirect:/party/party_content";
 	}

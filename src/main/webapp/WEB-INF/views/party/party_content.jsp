@@ -41,13 +41,18 @@
 	href="/resources/css/party-css.css">
 </head>
 <script>
+
+function toChatroom(num){
+    var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"
+    window.open("/chat/chatroom?roomNum="+num, num, option);
+}
+
+
 $(document).ready(function(){
 	var stime = "${con.sTime}";
 	var time = stime.substr(0,5);
 	console.log(time);
 	$("#time").html(time);
-	 
-
 });
 
 	$(function() {
@@ -71,10 +76,9 @@ $(document).ready(function(){
 		});
 		
 		$("#toChatroom").on("click", function() {
-			var openNewWindow = window.open("about:blank");
-			openNewWindow.location.href = "/chat/chatroom?roomNum=${con.seq}"; // 채팅연결 
-			
+			toChatroom(${con.seq});
 		});
+        
 		
 		$("#toStopRecruit").on("click",function(){
 			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
