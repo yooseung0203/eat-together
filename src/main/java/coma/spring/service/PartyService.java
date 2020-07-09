@@ -39,6 +39,10 @@ public class PartyService {
 		int result = pdao.partyJoin(seq,nickname);
 		return result;
 	}
+	// 수지 계정당 모임 생성수 확인
+	public int getMadePartyCount(String writer) throws Exception{
+		return pdao.getMadePartyCount(writer);
+	}
 	
 	//수지 파티 정원초과 확인
 	public boolean isPartyfull(String seq) throws Exception {
@@ -309,5 +313,12 @@ public class PartyService {
 			return "/resources/img/admin-logo.png";
 		}
 	}
-
+	
+	//블랙리스트유저 차단
+	public int userBlockedConfirm(String name , int seq) {
+	      Map<String , Object> map = new HashMap<String, Object>();
+	      map.put("name",name);
+	      map.put("seq" , seq);
+	      return pdao.userBlockedConfirm(map);
+	}
 }
