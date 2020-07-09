@@ -243,21 +243,21 @@ public class PartyService {
 		return pdao.selectAllCount();
 	}
 	// 지은 작성자 별 모임 리스트
-	public List<PartyDTO> selectByWriterPage(String writer, int mcpage)throws Exception{
+	public List<PartyDTO> selectByWriterPage(String nickname, int mcpage)throws Exception{
 		int start = mcpage * Configuration.recordCountPerPage-(Configuration.recordCountPerPage-1);
 		int end = start + (Configuration.recordCountPerPage-1);
 
 		Map<String, Object> param = new HashMap<>();
 		param.put("start", start);
 		param.put("end", end);
-		param.put("writer", writer);
+		param.put("nickname", nickname);
 
 		List<PartyDTO> partyList = pdao.selectByWriterPage(param);
 		return partyList;
 	}
 	// 지은 페이지 네비
-	public String getMyPageNav(int mcpage, String writer) throws Exception{
-		int recordTotalCount = pdao.getMyPageArticleCount(writer); // 총 개시물의 개수
+	public String getMyPageNav(int mcpage, String nickname) throws Exception{
+		int recordTotalCount = pdao.getMyPageArticleCount(nickname); // 총 개시물의 개수
 		int pageTotalCount = 0; // 전체 페이지의 개수
 
 		if( recordTotalCount % Configuration.recordCountPerPage > 0) {
