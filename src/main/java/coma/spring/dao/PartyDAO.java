@@ -29,6 +29,10 @@ public class PartyDAO {
 	public int insert(PartyDTO dto) {
 		return mybatis.insert("Party.insert",dto);
 	}
+	// 수지 계정당 모임 생성수 확인
+	public int getMadePartyCount(String writer) throws Exception{
+		return mybatis.selectOne("Party.getMadePartyCount",writer);
+	}
 	// 수지 파티 참가
 	public int partyJoin(String seq, String nickname) throws Exception{
 		Map<String, String> param = new HashMap<>();
@@ -137,8 +141,13 @@ public class PartyDAO {
 		return mybatis.selectList("Party.selectByWriterPage", param);
 	}
 	// 지은 작성자 별 모임 갯수
-	public int getMyPageArticleCount(String writer) throws Exception{
-		return mybatis.selectOne("Party.getMyPageArticleCount", writer);
+	public int getMyPageArticleCount(String nickname) throws Exception{
+		return mybatis.selectOne("Party.getMyPageArticleCount", nickname);
 	}
+	
+	//블랙리스트유저차단
+	public int userBlockedConfirm(Map<String , Object> map) {
+	      return mybatis.selectOne("userBlockedConfirm", map);
+	   }
 
 }

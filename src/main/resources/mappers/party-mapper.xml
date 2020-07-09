@@ -42,6 +42,10 @@
 	<select id="getPartyCount" resultType="int">
 		select count from party where seq=#{value}
 	</select>
+	<!-- by 수지 계정당 모임 생성수 구하기 -->
+	<select id="getMadePartyCount" resultType="int">
+		select count(*) from party where writer=#{value} and status=1
+	</select>
 	<!-- by 수지 모임 현재 참여자수 확인 -->
 	<select id="getParticipantCount" resultType="int">
 		select count(*) from partylist where CHATSEQ_PARENT=#{value}
@@ -105,15 +109,14 @@
 		select place_id from
 		party group by place_id order by count(*) desc
 	</select>
-	<!-- by 지은 작성자 별 모집 리스트 -->
+	<!-- by 지은 작성자 별 모집 리스트 쿼리문 수정: 반장인 방과 아닌 방을 구분하기 위해서 채팅방에 참여중인 모든 리스트를 출력하는 것으로 수정함_20200708 -->
 	<select id="selectByWriterPage" resultType="coma.spring.dto.PartyDTO">
 		select * from (select party.*, row_number() over(order by
-		seq desc) rnum from party where writer=#{writer}) where rnum between
+		seq desc) rnum from party where seq in (select chatSeq_parent from partylist where participant = #{nickname})) where rnum between
 		#{start} and #{end}
 	</select>
 	<!-- by 지은 작성자 별 모임 글 갯수 -->
 	<select id="getMyPageArticleCount" resultType="int">
-		select count(*) from party where writer = #{value}
+		select count(*) from party where seq in (select chatSeq_parent from partylist where participant = #{value})
 	</select>
-	
 </mapper>
