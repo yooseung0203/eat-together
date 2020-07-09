@@ -9,12 +9,12 @@
             </div> 
             <div class="row menubtn">
                 <div class="col">
-                    <a href="">Home</a>
+                    <a href="/admin/toAdmin">Home</a>
                 </div>
             </div> 
             <div class="row menubtn">
                 <div class="col">
-                    <a href="">회원관리</a>
+                    <a href="/admin/toAdmin_member">회원관리</a>
                 </div>
             </div> 
             <div class="row menubtn">
@@ -35,6 +35,11 @@
             <div class="row menubtn">
                 <div class="col">
                     <a href="">1:1문의</a>
+                </div>
+            </div> 
+            <div class="row menubtn">
+                <div class="col">
+                    <a href="">FAQ관리</a>
                 </div>
             </div> 
             <div class="row menubtn">

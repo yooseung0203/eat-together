@@ -20,11 +20,22 @@ public class AdminController {
 	
 	@RequestMapping("toAdmin")
 	public String toAdmin() {
-
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		String adminCheck = loginInfo.getId();
 		if(adminCheck.contentEquals("administrator")) {
 			return "/admin/admin_main";
+		}
+		else {
+			return "error";
+		}
+	}
+	
+	@RequestMapping("toAdmin_member")
+	public String toAdmin_member() {
+		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
+		String adminCheck = loginInfo.getId();
+		if(adminCheck.contentEquals("administrator")) {
+			return "/admin/admin_member";
 		}
 		else {
 			return "error";
