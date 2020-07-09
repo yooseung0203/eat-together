@@ -7,6 +7,33 @@
 <meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+<meta content="" name="descriptison">
+        <meta content="" name="keywords">
+
+        <!-- Favicons -->
+        <link href="/resources/assets/img/favicon.png" rel="icon">
+        <link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+        <!-- Google Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900" rel="stylesheet">
+
+        <!-- Vendor CSS Files -->
+        <link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/resources/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+        <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+        <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="/resources/assets/vendor/nivo-slider/css/nivo-slider.css" rel="stylesheet">
+        <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+        <link href="/resources/assets/vendor/venobox/venobox.css" rel="stylesheet">
+
+        <!-- Template Main CSS File -->
+        <link href="/resources/assets/css/style.css" rel="stylesheet">	
+	
+	
+	
+	
+	
 <!-- BootStrap4 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -48,7 +75,7 @@
   }
 }
 div{
-	border: 1px solid black;
+	border: 0px solid black;
 }
 .afg{
 	align-item:center;
@@ -247,7 +274,9 @@ div{
 
 			</form>
 		</div>
-
+	</div>
+	 
+	<!-- <div class="container">
 		<div class="row aa">
 			<c:choose>
 				<c:when test="${empty list}">
@@ -275,44 +304,75 @@ div{
 					</c:forEach>
 				</c:otherwise>
 			</c:choose>
+
 			<nav aria-label="Page navigation example">
 				<ul class="pagination justify-content-center">${navi}
 				</ul>
 			</nav>
 		</div>
-	</div>
+	</div>-->
+	<main id="main">
+		<!-- ======= Team Section ======= -->
+		<div id="team" class="our-team-area area-padding">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="section-headline text-center">
+							<h2>Our special Team</h2>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<c:choose>
+						<c:when test="${empty list}">
+							<div class="col-sm-12 col-md-3">
+								<span>검색 된 내용이 없습니다.</span>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<!-- start column -->
+							<c:forEach var="partyList" items="${list}">
+								<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+									<div class="single-team-member">
+										<div class="team-img">
+											<a href="#"> <img src="${partyList.imgaddr}" alt="">
+											</a>
+											<div class="team-social-icon text-center">
+												<ul>
+													<li><a href="#"> <i class="fa fa-facebook"></i>
+													</a></li>
+													<li><a href="#"> <i class="fa fa-twitter"></i>
+													</a></li>
+													<li><a href="#"> <i class="fa fa-instagram"></i>
+													</a></li>
+												</ul>
+											</div>
+										</div>
+										<div class="team-content text-center">
+											<h4>${partyList.parent_name }</h4>
+											<p>
+												날짜 : ${partyList.sDate}<br>지역 :
+												${partyList.parent_address }
+											</p>
+											<input type="hidden" class="party_seq"
+												value="${partyList.seq}">
+										</div>
+									</div>
+								</div>
+							</c:forEach>
+							<!-- End column -->
+						</c:otherwise>
+					</c:choose>
+				</div>
+			</div>
+		</div>
+		<!-- End Team Section -->
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">${navi}</ul>
+		</nav>
+	</main>
 
-	<!-- ======= Team Section ======= -->
-	<!-- <section id="team" class="team">
-      <div class="container" data-aos="fade-up">
-        <div class="section-title">
-          <h2>Team</h2>
-          <p>Check our Team</p>
-        </div>
-        <div class="row">
-          <div class="col-lg-3 col-md-6 d-flex align-items-stretch">
-            <div class="member" data-aos="fade-up" data-aos-delay="100">
-              <div class="member-img">
-                <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                <div class="social">
-                  <a href=""><i class="icofont-twitter"></i></a>
-                  <a href=""><i class="icofont-facebook"></i></a>
-                  <a href=""><i class="icofont-instagram"></i></a>
-                  <a href=""><i class="icofont-linkedin"></i></a>
-                </div>
-              </div>
-              <div class="member-info">
-                <h4>Walter White</h4>
-                <span>Chief Executive Officer</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-    <!-- End Team Section -->
-     
-    
+
 	<div class="modal fade" id="mymodal" role="dialog">
 		<div class="modal-dialog modal-xl">
 			<!-- Modal content-->
@@ -327,6 +387,22 @@ div{
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 	<!-- footer  -->
 	<!-- ******************* -->
+	 <!-- Vendor JS Files -->
+        <script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
+        <script src="/resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="/resources/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+        <script src="/resources/assets/vendor/php-email-form/validate.js"></script>
+        <script src="/resources/assets/vendor/appear/jquery.appear.js"></script>
+        <script src="/resources/assets/vendor/knob/jquery.knob.js"></script>
+        <script src="/resources/assets/vendor/parallax/parallax.js"></script>
+        <script src="/resources/assets/vendor/wow/wow.min.js"></script>
+        <script src="/resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+        <script src="/resources/assets/vendor/nivo-slider/js/jquery.nivo.slider.js"></script>
+        <script src="/resources/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+        <script src="/resources/assets/vendor/venobox/venobox.min.js"></script>
+
+        <!-- Template Main JS File -->
+        <script src="assets/js/main.js"></script>
 </body>
 <script>
 	$(".myBtn").on("click", function() {
