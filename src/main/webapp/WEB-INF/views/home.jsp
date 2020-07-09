@@ -55,7 +55,7 @@
 	<!-- ******************* -->
 
 	<!--contents-->
-	<a href="/chat/chatroom?roomNum=3">채팅하기</a>
+	<a href="/chat/chatroom?roomNum=90">채팅하기</a>
 	<div class="container-fluid ">
 		<!-- 슬라이드 -->
 		<div class="row slide-area ">

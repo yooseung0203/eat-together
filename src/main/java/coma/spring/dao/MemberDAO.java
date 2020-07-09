@@ -60,8 +60,8 @@ public class MemberDAO {
 		return mybatis.delete("Member.deleteMember", param);
 	}
 	//회원정보수정
-	public int editMyInfo(Map<String, String> param)throws Exception{
-		return mybatis.update("Member.editMyInfo", param);
+	public int editMyInfo(Map<String, Object> editParam)throws Exception{
+		return mybatis.update("Member.editMyInfo", editParam);
 	}
 	//비밀번호 수정
 	public int editPw(Map<String, String> param) throws Exception{
