@@ -177,38 +177,35 @@ div{
 	});
 </script>
 </head>
-<body>
+<body data-spy="scroll" data-target="#navbar-example">
 	<!-- ******************* -->
 	<!-- header  -->
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<div class="container-fluid aos-init aos-animate afg"
-		data-aos="fade-up">
-		<div class="row aa">
-			<span class="listtitle">인기 맛집 Top 5!</span>
-			<div class="row ingi">
-				<c:forEach var="top" items="${top}" varStatus="status">
-					<div class="col-sm-12 col-md-2 card-deck">
-						<div class="card partylist">
-							<img src="${imglist2[status.index]}" class="card-img-top">
-							<div class="card-body">
-								<h5 class="card-title">${top.name }</h5>
-								<p class="card-text">
-									${review[top.seq].content }
-									<c:if test="${empty review[top.seq].content }">
+	<div class="container-fluid">
+		<div class="row row-cols-1 row-cols-md-4 aa">
+			<!-- <span class="col-12 listtitle">인기 맛집 Top 5!</span> -->
+			<c:forEach var="top" items="${top}" varStatus="status">
+				<div class="col mb-3 card-deck">
+					<div class="card partylist">
+						<img src="${imglist2[status.index]}" class="card-img-top">
+						<div class="card-body cardedit">
+							<h5 class="card-title">${top.name }</h5>
+							<p class="card-text">
+								${review[top.seq].content }
+								<c:if test="${empty review[top.seq].content }">
 										${top.address }
 									</c:if>
-								</p>
-								<input type="hidden" class="store_seq" value="${top.seq}">
-								<button type="button" class="btn btn-info btn-lg topBtn">모집하러
-									가기</button>
-							</div>
+							</p>
+							<input type="hidden" class="store_seq" value="${top.seq}">
+							<button type="button" class="btn btn-info btn-lg topBtn">모집하러
+								가기</button>
 						</div>
 					</div>
-				</c:forEach>
-			</div>
+				</div>
+			</c:forEach>
 		</div>
 
 
@@ -250,43 +247,41 @@ div{
 
 			</form>
 		</div>
-		
+
 		<div class="row aa">
-				<c:choose>
-					<c:when test="${empty list}">
-						<div class="col-sm-12 col-md-3">
-							<span>검색 된 내용이 없습니다.</span>
-						</div>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="partyList" items="${list}">
-							<div class="col-sm-12 col-md-3 card-deck">
-								<div class="card partylist icon-box">
-									<img src="${partyList.imgaddr}" class="card-img-top">
-									<div class="card-body">
-										<h5 class="card-title">${partyList.parent_name }</h5>
-										<p class="card-text">
-											날짜 : ${partyList.sDate}<br>지역 :
-											${partyList.parent_address }
-										</p>
-										<input type="hidden" class="party_seq"
-											value="${partyList.seq}">
-										<button type="button" class="btn btn-info btn-lg myBtn">상세
-											보기</button>
-									</div>
+			<c:choose>
+				<c:when test="${empty list}">
+					<div class="col-sm-12 col-md-3">
+						<span>검색 된 내용이 없습니다.</span>
+					</div>
+				</c:when>
+				<c:otherwise>
+					<c:forEach var="partyList" items="${list}">
+						<div class="col-sm-12 col-md-3 card-deck">
+							<div class="card partylist icon-box">
+								<img src="${partyList.imgaddr}" class="card-img-top">
+								<div class="card-body">
+									<h5 class="card-title">${partyList.parent_name }</h5>
+									<p class="card-text">
+										날짜 : ${partyList.sDate}<br>지역 :
+										${partyList.parent_address }
+									</p>
+									<input type="hidden" class="party_seq" value="${partyList.seq}">
+									<button type="button" class="btn btn-info btn-lg myBtn">상세
+										보기</button>
 								</div>
 							</div>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
+						</div>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>
 			<nav aria-label="Page navigation example">
-				<ul class="pagination justify-content-center">
-					${navi}
+				<ul class="pagination justify-content-center">${navi}
 				</ul>
 			</nav>
 		</div>
 	</div>
-	
+
 	<!-- ======= Team Section ======= -->
 	<!-- <section id="team" class="team">
       <div class="container" data-aos="fade-up">

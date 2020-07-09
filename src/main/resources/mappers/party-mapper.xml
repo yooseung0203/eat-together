@@ -92,6 +92,8 @@
 					'%${aa}%'
 				</foreach>
 			</if>
+			
+			
 			<if test="drinking != 2">or drinking = ${drinking}</if>
 			<if test="title != ''">or title like '%${title}%'</if>
 			<if test="writer != ''">or writer like '%${writer}%'</if>
