@@ -322,15 +322,4 @@ public class PartyService {
 			return "https://tpc.googlesyndication.com/simgad/11554535643826380039?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qnk_Y1zzDS1b6Wu1KYZ-_e0LjecDg";
 		}
 	}
-
-<<<<<<< HEAD
-	public int stopRecruit(String seq) throws Exception {
-		return pdao.stopRecruit(seq);
-	}
-
-	public int selectAllCount() throws Exception{
-		return pdao.selectAllCount();
-	}
-=======
->>>>>>> 9f0ec55a61916c5a302230ac3bc74832e92bffb2
 }
