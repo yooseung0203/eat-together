@@ -73,6 +73,8 @@ $(document).ready(function(){
 		
 		$("#toPartyJoin").on("click",function(){ //모임가입
 			location.href="/party/partyJoin?seq=${con.seq}";
+			
+			
 		});
 		
 		$("#toChatroom").on("click", function() {

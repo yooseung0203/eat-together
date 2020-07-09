@@ -55,24 +55,19 @@ public class ReviewController {
 		return "redirect:/map/selectMarkerInfo?place_id="+place_id;
 	}
 	
-	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 작성_20200707
+	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 수정_20200709
 	@RequestMapping("selectById")
-	public ModelAndView selectById(int mcpage) throws Exception{
+	public ModelAndView selectById() throws Exception{
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_reviewlist");
-		
-		if(mcpage==0) {
-			mcpage=1;
-		}
-		
+
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
-		List<ReviewDTO> reviewList = rservice.selectById(id, mcpage);
-		String navi = rservice.getMyPageNav(mcpage, id);
+		
+		List<ReviewDTO> reviewList = rservice.selectById(id);
 		System.out.println("내 리뷰 개수 : " + reviewList.size());
 		mav.addObject("reviewList", reviewList);
-		mav.addObject("navi", navi);
 		
 		return mav;
 	}

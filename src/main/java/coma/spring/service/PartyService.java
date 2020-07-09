@@ -322,4 +322,12 @@ public class PartyService {
 			return "https://tpc.googlesyndication.com/simgad/11554535643826380039?sqp=4sqPyQQ7QjkqNxABHQAAtEIgASgBMAk4A0DwkwlYAWBfcAKAAQGIAQGdAQAAgD-oAQGwAYCt4gS4AV_FAS2ynT4&rs=AOga4qnk_Y1zzDS1b6Wu1KYZ-_e0LjecDg";
 		}
 	}
+	
+	//블랙리스트유저 차단
+	public int userBlockedConfirm(String name , int seq) {
+	      Map<String , Object> map = new HashMap<String, Object>();
+	      map.put("name",name);
+	      map.put("seq" , seq);
+	      return pdao.userBlockedConfirm(map);
+	}
 }

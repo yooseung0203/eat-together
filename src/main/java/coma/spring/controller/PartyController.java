@@ -83,8 +83,8 @@ public class PartyController {
 		//		String title = dto.getTitle();
 
 		String date = dto.getDate();
-		String time = dto.getTime();
-		String dateAndtime = date + " "+time+":00.0";
+		//String time = dto.getTime();
+		String dateAndtime = date + ":00.0";
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
@@ -220,15 +220,16 @@ public class PartyController {
 	@RequestMapping("party_modifyProc")
 	public String partymodifyProc(PartyDTO dto, HttpServletRequest request) throws Exception{
 		String date = dto.getDate();
-		String time = dto.getTime();
+//		String time = dto.getTime();
 		String dateAndtime = "";
-		if(time.length()==8) {
-			dateAndtime = date + " "+time+".0";
-		}else {
-			dateAndtime = date + " "+time+":00.0";
-		}
+//		if(time.length()==8) {
+//			dateAndtime = date + " "+time+".0";
+//		}else {
+//			dateAndtime = date + " "+time+":00.0";
+//		}
+		dateAndtime = date+":00.0";
 		System.out.println(date);
-		System.out.println(time);
+	//	System.out.println(time);
 		System.out.println(dateAndtime);
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
@@ -361,6 +362,13 @@ public class PartyController {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String nickname = mdto.getNickname();
 		
+		
+		int block=pservice.userBlockedConfirm(nickname, Integer.parseInt(seq));
+		
+		if(block>0) {
+			return "/error/BlockJoin";
+		}
+
 		System.out.println(seq);
 		System.out.println(nickname);
 		

@@ -11,6 +11,14 @@
 	height: 100%;
 }
 
+#review_contents{
+    display: inline-block;
+	float: left;
+	width: 80%;
+	height: 750px;
+    overflow:auto;
+}
+
 .myinfo_text {
 	font-family: 'Noto Sans KR', sans-serif;
 }
@@ -22,4 +30,9 @@
 #mypage_table{
 	margin:20px;
     width: 90%;
+}
+
+.rating ~ label {
+    color: gold;
+    text-shadow:1px 1px #c60, 2px 2px #940, .1em .1em .2em rgba(0,0,0,.5);
 }

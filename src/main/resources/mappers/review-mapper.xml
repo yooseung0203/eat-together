@@ -17,13 +17,10 @@
 		resultType="coma.spring.dto.ReviewFileDTO">
 		select * from review_file where parent_seq = #{parent_seq}
 	</select>
-	<!-- by지은, 마이페이지 내부 내리뷰리스트 출력을 위한 select문 작성_20200707 -->
+	<!-- by지은, 마이페이지 내부 내리뷰리스트 출력을 위한 select문 수정_20200709 -->
 	<select id="selectById" resultType="coma.spring.dto.ReviewDTO">
-	select * from (select review.*, row_number() over(order by 1 desc) rnum from review where id=#{id}) where rnum between #{start} and #{end}
+        select review.*, map.name from review, map where review.parent_seq = map.seq and review.id = #{value}
 	</select>
-	
-	<select id="getMyPageArticleCount" resultType="int">
-	select count(*) from review where id=#{value}
-	</select>
+
 	<!-- by지은, 마이페이지 내부 내리뷰리스트 출력을 위한 select문 작성_20200707 -->
 </mapper>
