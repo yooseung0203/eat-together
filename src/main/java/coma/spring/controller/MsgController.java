@@ -146,10 +146,12 @@ public class MsgController {
 	//보낸쪽지함에서 눌러볼때
 	@RequestMapping("msgViewSend")
 	public String msgViewSend(HttpServletRequest request,int msg_seq)throws Exception{
+		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
 		request.setAttribute("msgView", msgDTO);
-		return "msg/msgView";
+		request.setAttribute("mdto", mdto);
+		return "msg/msgViewSend";
 	}
 	
 	//받은쪽지함 삭제
