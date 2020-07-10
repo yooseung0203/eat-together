@@ -23,12 +23,12 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col-12">
+		<div class="row" style="margin-top: 200px;">
+			<div class="col-12" align="center">
 				쪽지를 전송하였습니다.
 			</div>
-			<div class="col-12">
-				<button id="close">닫기</button>
+			<div class="col-12" align="center">
+				<button type="button" id="close" class="btn btn-light">닫기</button>
 			</div>
 		</div>
 	
