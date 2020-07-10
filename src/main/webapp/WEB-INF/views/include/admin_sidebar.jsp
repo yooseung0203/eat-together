@@ -39,7 +39,7 @@
             </div> 
             <div class="row menubtn">
                 <div class="col">
-                    <a href="">FAQ관리</a>
+                    <a href="/admin/toAdmin_faq">FAQ관리</a>
                 </div>
             </div> 
             <div class="row menubtn">
