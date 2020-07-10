@@ -51,7 +51,7 @@
 			<div class="signup_text">
 				<label for="id" class="signup_text">아이디</label> <input type="text"
 					class="form-control" id="id" name="id" placeholder="영문+숫자 4~10글자"><br>
-				<button type=button id=dublCheck class="btn btn-secondary">중복확인</button>
+				<button type=button id=dublCheckforId class="btn btn-secondary">중복확인</button>
 				<div id=id_text style="display: none;"></div>
 			</div>
 			<br>
@@ -81,7 +81,9 @@
 			<div class="signup_text">
 				<label for="nickname" class="signup_text">닉네임</label> <input
 					type="text" class="form-control" id="nickname" name="nickname"
-					placeholder="한글 2~6자 /수정 불가능하므로 신중하게 선택해주세요.">
+					placeholder="한글 2~6자 /수정 불가능하므로 신중하게 선택해주세요."><br>
+				<button type=button id=dublCheckforNick class="btn btn-secondary">중복확인</button>
+				<div id=nickname_text style="display: none;"></div>
 			</div>
 			<br>
 
@@ -154,7 +156,7 @@
 				function() {
 					if ($("#id_text").html() == "사용가능한 id입니다.") {
 						if ($("#pw_text").html() == "비밀번호가 일치합니다.") {
-							if ($("#nickname").val() != "") {
+							if ($("#nickname_text").html() == "사용가능한 닉네임입니다.") {
 								if ($("#mail_text").val() != "") {
 									if ($("#birth").val() != "") {
 										if ($('input:radio[name=gender]').is(
@@ -171,7 +173,7 @@
 									alert("이메일 인증을 해주세요.");
 								}
 							} else {
-								alert("닉네임을 입력해주세요");
+								alert("닉네임을 중복체크를 진행해주세요");
 							}
 						} else {
 							alert("비밀번호를 확인해주세요.");
@@ -245,11 +247,11 @@
 		//nickname regex
 		$("#nickname").focusout(function() {
 			var nickname = $("#nickname").val();
-			var nicknameregex = /^[가-힣]{2,6}$/;
+			var nicknameregex = /^[가-힣0-9]{6,10}$/;
 			if ($("#nickname").val() != "") {
 				if (!nicknameregex.test(nickname)) {
 					$("#nickname").val("");
-					alert("한글 2~6글자를 입력하세요.");
+					alert("한글 + 숫자 6~10글자를 입력하세요.");
 					$("#nickname").focus();
 				}
 			}
@@ -292,7 +294,7 @@
 						})
 
 		//아이디 중복체크
-		$("#dublCheck").on("click", function() {
+		$("#dublCheckforId").on("click", function() {
 			if ($("#id").val() != "") {
 				$.ajax({
 					url : "/member/isIdAvailable",
@@ -324,6 +326,42 @@
 		$("#id").keydown(function() {
 			if ($("#id_text").html() != "") {
 				$("#id_text").html("");
+			}
+		})
+
+		//by지은, 닉네임 중복체크_20200710
+		$("#dublCheckforNick").on("click", function() {
+			if ($("#nickname").val() != "") {
+				$.ajax({
+					url : "/member/isNickAvailable",
+					type : "post",
+					data : {
+						nickname : $("#nickname").val()
+					}
+				}).done(function(resp) {
+					$("#nickname_text").css("display", "block");
+					if (resp == "true") {
+						$("#nickname_text").css("color", "blue");
+						$("#nickname_text").html("사용가능한 닉네임입니다.");
+					} else if (resp == "false") {
+						$("#nickname_text").css("color", "red");
+						$("#nickname_text").html("사용 불가능한 닉네임입니다.");
+						$("#nickname").val("");
+					}
+				}).fail(function(error1, error2) {
+					console.log(error1);
+					console.log(error2);
+				})
+			} else {
+				alert("닉네임을 입력해주세요.");
+			}
+
+		})
+
+		//닉네임 중복체크 후 수정 시 중복체크 다시 하도록 설정_20200710
+		$("#nickname").keydown(function() {
+			if ($("#nickname_text").html() != "") {
+				$("#nickname_text").html("");
 			}
 		})
 
