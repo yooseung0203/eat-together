@@ -395,6 +395,7 @@ public class PartyController {
 		boolean AfterpartyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
 		
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		
 		redirectAttributes.addAttribute("con",content);
 		redirectAttributes.addAttribute("partyFullCheck", AfterpartyFullCheck);
 		redirectAttributes.addAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
@@ -414,6 +415,10 @@ public class PartyController {
 		String nickname = account.getNickname();
 		
 		cservice.exitChatRoom(nickname, Integer.parseInt(seq));
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		if(nickname == content.getWriter()) {
+			this.partydelete(seq);
+		}
 		
 		return "redirect:/party/partylist";
 		

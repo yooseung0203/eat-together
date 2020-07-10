@@ -235,17 +235,7 @@
 			var content = $("#content").val();
 			var isCheckGender = $('input:radio[name=gender]').is(':checked');
 			var isCheckAge = $('input:checkbox[name=age]').is(':checked');
-			if (agech == "age5") {
-				$("input:checkbox[id=age5]").attr("disabled", false);
-			} else if (agech == "age4") {
-				$("input:checkbox[id=age4]").attr("disabled", false);
-			} else if (agech == "age3") {
-				$("input:checkbox[id=age3]").attr("disabled", false);
-			} else if (agech == "age2") {
-				$("input:checkbox[id=age2]").attr("disabled", false);
-			} else if (agech == "age1") {
-				$("input:checkbox[id=age1]").attr("disabled", false);
-			}
+			
 
 			console.log(title);
 			console.log(date);
@@ -326,6 +316,18 @@
 			if (today > date) {
 				alert('선택된 날짜가 과거입니다.');
 				return false;
+			}
+			
+			if (agech == "age5") {
+				$("input:checkbox[id=age5]").attr("disabled", false);
+			} else if (agech == "age4") {
+				$("input:checkbox[id=age4]").attr("disabled", false);
+			} else if (agech == "age3") {
+				$("input:checkbox[id=age3]").attr("disabled", false);
+			} else if (agech == "age2") {
+				$("input:checkbox[id=age2]").attr("disabled", false);
+			} else if (agech == "age1") {
+				$("input:checkbox[id=age1]").attr("disabled", false);
 			}
 
 			document.form.submit();

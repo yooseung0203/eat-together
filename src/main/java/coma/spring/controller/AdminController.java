@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import coma.spring.dto.FaqDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.service.AdminService;
 
@@ -39,6 +40,31 @@ public class AdminController {
 	
 	@RequestMapping("toAdmin_member")
 	public String toAdmin_member(HttpServletRequest request)  throws Exception {
+		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
+		String adminCheck = loginInfo.getId();
+		if(adminCheck.contentEquals("administrator")) {
+			
+			int cpage=1;
+			try {
+				cpage = Integer.parseInt(request.getParameter("cpage"));
+			}catch(Exception e) {
+
+			}
+			
+			List<FaqDTO> contents = aservice.faqList(cpage);
+			String navi = aservice.getMemberPageNav(cpage);
+			
+			request.setAttribute("contents", contents);
+			request.setAttribute("navi", navi);
+			return "/admin/admin_faq";
+		}
+		else {
+			return "error";
+		}
+	}
+	
+	@RequestMapping("toAdmin_faq")
+	public String toAdmin_faq(HttpServletRequest request)  throws Exception {
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		String adminCheck = loginInfo.getId();
 		if(adminCheck.contentEquals("administrator")) {
