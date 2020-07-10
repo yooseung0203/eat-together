@@ -42,6 +42,20 @@ public class FaqController {
 		return "redirect:/faq/list";
 	}
 	
+	@RequestMapping("toWriteInAdmin")
+	public String toWriteInAdmin() {
+		return "/admin/faq_write";
+	}
+	
+	@RequestMapping("writeProcInAdmin")
+	public String writeProcInAdmin(FaqDTO dto) throws Exception{
+		System.out.println(dto.getTitle());
+		fservice.insert(dto);
+		
+		
+		return "redirect:/admin/toAdmin_faq";
+	}
+	
 	
 	
 	@RequestMapping("list")
@@ -64,20 +78,20 @@ public class FaqController {
 	@RequestMapping("delete")
 	public String delete(String seq) throws Exception{
 		fservice.delete(seq);
-		return "redirect:list";
+		return "redirect:/admin/toAdmin_faq";
 	}
 
 	@RequestMapping("modify")
 	public String toModify(int seq, HttpServletRequest request) throws Exception {
 		FaqDTO dto = fservice.selectBySeq(seq);
 		request.setAttribute("contents", dto);
-		return "notice/notice_modify";
+		return "/faq/faq_modify";
 	}
 	
 	@RequestMapping("modifyProc")
 	public String Modify(FaqDTO dto) throws Exception {
 		fservice.update(dto);
-		return "redirect:contents?seq="+dto.getSeq();
+		return "redirect:/admin/toAdmin_faq";
 	}
 
 	
