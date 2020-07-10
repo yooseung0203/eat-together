@@ -444,7 +444,7 @@ public class PartyController {
 	// 파티리스트로 이동
 	@RequestMapping("toPartylist")
 	public String toPartylist() throws Exception{
-		return "/party/partylist";
+		return "redirect:/party/partylist";
 	}
 	// 이미지 클롤링
 	@ResponseBody
