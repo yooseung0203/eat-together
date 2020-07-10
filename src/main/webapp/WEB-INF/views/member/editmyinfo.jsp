@@ -50,12 +50,6 @@
 	<!-- header  -->
 	<!-- ******************* -->
 
-	<!-- contextpath 변수 정의-->
-	<c:set var="contextPath" value="<%=request.getContextPath()%>"></c:set>
-
-	<!-- contextpath 변수정의 -->
-
-
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
@@ -115,7 +109,8 @@
 							<th scope="row">EMAIL</th>
 							<td class="edit_text"><input type=text id="account_email"
 								name="account_email" value="${mdto.account_email}"> <input
-								type=button id=mail value="인증하기"><input type=text id="isEmailEdited" style="display: none;" value="0"><br>
+								type=button id=mail value="인증하기"><input type=text
+								id="isEmailEdited" style="display: none;" value="0"><br>
 								<div id=mail_div style="display: none;">
 									인증번호 : <input type=text id=mail_text>
 									<button type=button id=mail_accept>인증</button>
@@ -136,7 +131,11 @@
 	</div>
 	<script>
 		window.onload = function() {
-			
+			//by 지은, 성별 라디오박스에서 내정보 수정 시 체크값이 유지되도록 한다_20200710
+			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("checked", true);
+			//by 지은, 회원정보 중 성별정보가 유효한 회원의 경우 성별 수정을 불가능하도록 한다_20200710
+			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("disabled", true);
+
 			//by 지은, 이메일을 수정했을 경우 인증이 필요하다_20200708
 			$("#account_email").keydown(function() {
 				$("#isEmailEdited").val("");

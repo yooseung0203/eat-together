@@ -3,6 +3,7 @@ package coma.spring.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +58,15 @@ public class MemberController {
 		return "member/signup_check";
 	}
 
-	//회원가입, 약관동의 후 정보입력 페이지로 이동
+	//by 지은 회원가입, 약관동의 후 정보입력 페이지로 이동, 체크박스 값 가져오기 수정_20200710
 	@RequestMapping("signup_info")
-	public String getSignupInfoView() {
+	public String getSignupInfoView(String check_yn) {
+		System.out.println(check_yn);
+		if(check_yn.contentEquals("on")) {
 		return "member/signup_info";
+		}else {
+			return "redirect:/";
+		}
 	}
 
 	//by지은, 마이페이지에서 내정보view로 이동_20200704
@@ -105,8 +111,8 @@ public class MemberController {
 		return "member/editpw";
 	}
 
-	//By지은,  내정보 수정 페이지로 이동하기_20200704
-	@RequestMapping("editMyInfo")
+	//By지은,  내정보 수정 페이지로 이동하기_20200710
+	@RequestMapping("editMyInfoView")
 	public ModelAndView getEditMyInfoView()throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/editmyinfo");
@@ -176,6 +182,17 @@ public class MemberController {
 
 		result = mservice.isIdAvailable(id);
 		System.out.println("아이디 중복체크 결과 : " + result);
+		return String.valueOf(result);
+	}
+	
+	//by 지은, 회원가입시 닉네임 중복체크_20200710
+	@RequestMapping("isNickAvailable")
+	@ResponseBody
+	public String isNickAvailable(String nickname)throws Exception {
+		boolean result=true;
+
+		result = mservice.isNickAvailable(nickname);
+		System.out.println("닉네임 중복체크 결과 : " + result);
 		return String.valueOf(result);
 	}
 
