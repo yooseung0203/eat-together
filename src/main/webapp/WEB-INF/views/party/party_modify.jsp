@@ -155,6 +155,8 @@
 	});
 
 	$(function() {
+		
+		
 		$("#party_date").on("blur", function() {
 			var d = new Date($("#party_date").val());
 			var d_format = getFormatDate(d);
@@ -284,6 +286,11 @@
 				return false;
 			}
 			;
+			
+			if(count>4 || count < 2){
+				alert("모임인원은 2~4명 사이로 지정해주세요");
+				return false;
+			};
 
 			if (!isCheckGender) {
 				alert('멤버구성을 선택해주세요');

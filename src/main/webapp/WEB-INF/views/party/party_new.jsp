@@ -77,6 +77,9 @@
 	}
 
 	$(function() {
+		//$('input[name=date]').attr("readonly",true);
+		
+		
 	/* 	$("#party_date").datepicker({
 			dateFormat : 'yy-mm-dd',
 			minDate : 0,
@@ -281,6 +284,12 @@
 				return false;
 			}
 			;
+			
+			if(count>4 || count < 2){
+				alert("모임인원은 2~4명 사이로 지정해주세요");
+				return false;
+			};
+			
 
 			if (!isCheckGender) {
 				alert('멤버구성을 선택해주세요');
@@ -428,7 +437,8 @@
 	                	    useSeconds: false,
 	                	    startDate: 'd',
 	                	    format: 'YYYY-MM-DD H:mm',
-	                	    stepping: 5 
+	                	    stepping: 5,
+	                	    showOn: "both"
 	                
 	                }); //datepicker end
 	            });
