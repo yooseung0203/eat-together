@@ -18,7 +18,11 @@ public class QuestionService {
 		List<QuestionDTO> qdto = qdao.selectByQuestion(cpage, msg_receiver);
 		return qdto;
 	}
-	
+	//1:1문의 보내기
+	public int insertQuestion(QuestionDTO qdto)throws Exception{
+		int result = qdao.insertQuestion(qdto);
+		return result;
+	}
 	//1:1문의 네비
 	public String QuestionNavi(int cpage,String msg_receiver)throws Exception{
 		String navi = qdao.getQuestionPageNav(cpage, msg_receiver);

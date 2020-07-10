@@ -50,13 +50,13 @@
 <script>
 	$(function() {
 		$("#list_admin").on("click", function() {
-			location.href = "msg_list_admin";
+			location.href = "msg_list_admin?msgAcpage=1";
 		})
 		$("#list_sender").on("click", function() {
-			location.href = "msg_list_sender";
+			location.href = "msg_list_sender?msgcpage=1";
 		})
 		$("#list_receiver").on("click", function() {
-			location.href = "msg_list_receiver";
+			location.href = "msg_list_receivermsgRcpage=1";
 		})
 		$(".msg_text").hide();
 		$(".msg_title").on("click", function() {

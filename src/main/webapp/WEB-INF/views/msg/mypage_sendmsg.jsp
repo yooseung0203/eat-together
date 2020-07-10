@@ -80,7 +80,7 @@
 	}
 	function msgWritePopUp() {
 		var name = "popup.test";
-		var option = "width=500,height=545 location=no,toolbar=no,menubar=no,top=200,left=600";
+		var option = "width=500,height=550 location=no,scrollbar=no,menubar=no,top=200,left=600";
 		window.open("msgWrite", name, option);
 	}
 	function msgViewPopUp(msg_seq) {

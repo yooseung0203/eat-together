@@ -42,7 +42,7 @@
 <script>
 function questionWritePopUp(){
 	var name = "qpop.test";
-	var option = "width=500,height=480 location=no";
+	var option = "width=500,height=550 location=no";
 	window.open("question_write",name,option);
 }
 </script>

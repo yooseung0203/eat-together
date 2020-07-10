@@ -117,29 +117,17 @@
 			console.log(msg_receiver);
 			$("#hidden").val(msg_receiver);
 			
-			$.ajax({
-				url : '../member/isIdAvailable?id='+msg_receiver,
-				dataType : 'json',
-				success : function(resp) {
-					console.log(resp);
-					if (resp == false) {
-						if ($("#msg_title").val() != "") {
-							if ($("msg_text").val() != "") {
-								return true;
-							} else {
-								alert("내용을 입력하세요");
-								return false;
-							}
-						} else {
-							alert("제목을 입력하세요");
-							return false;
-						}
-					} else {
-						alert("어떻게 들어오셨나요?");
-						alert("쪽지 보내는 방법이 옳바르지 않습니다.");
-					}
+			if ($("#msg_title").val() != "") {
+				if ($("msg_text").val() != "") {
+					return true;
+				} else {
+					alert("내용을 입력하세요");
+					return false;
 				}
-			})
+			} else {
+				alert("제목을 입력하세요");
+				return false;
+			}
 			
 		})
 	</script>

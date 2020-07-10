@@ -73,7 +73,7 @@ public class MsgController {
 			session.setAttribute("msgAcpage", 1);
 		}
 		try { 
-			session.setAttribute("msgAcpage", Integer.parseInt(request.getParameter("msgcpage")));
+			session.setAttribute("msgAcpage", Integer.parseInt(request.getParameter("msgAcpage")));
 		} catch (Exception e) {}
 		int msgAcpage=(int)session.getAttribute("msgAcpage");
 
@@ -97,7 +97,7 @@ public class MsgController {
 			session.setAttribute("msgRcpage", 1);
 		}
 		try { 
-			session.setAttribute("msgRcpage", Integer.parseInt(request.getParameter("msgcpage")));
+			session.setAttribute("msgRcpage", Integer.parseInt(request.getParameter("msgRcpage")));
 		} catch (Exception e) {}
 		
 		int msgRcpage=(int)session.getAttribute("msgRcpage");
@@ -133,8 +133,15 @@ public class MsgController {
 	@RequestMapping("msgResponse")
 	public String msgResponse(HttpServletRequest request,String msg_receiver)throws Exception{
 		//받은사람을 보낼사람에 넣어줍니다
+		boolean check = mservice.isIdAvailable(msg_receiver);
+		//아이디가 있는 아이디인지 체크
+		System.out.println(check);
+		if(check) {
+			return "/chat/error";
+		}else {
 		request.setAttribute("msg_receiver", msg_receiver);
 		return "msg/msgWriteResponse";
+		}
 	}
 	
 	//받은쪽지함에서 눌러볼때

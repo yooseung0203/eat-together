@@ -15,7 +15,7 @@ import coma.spring.statics.Configuration;
 public class QuestionDAO {
 	@Autowired
 	private SqlSessionTemplate mybatis;
-	
+	//나의 1:1 문의 리스트
 	public List<QuestionDTO> selectByQuestion(int cpage,String msg_receiver)throws Exception{
 		int start = cpage*Configuration.recordMsgCountPerPage - (Configuration.recordMsgCountPerPage - 1);
 		int end = start + (Configuration.recordMsgCountPerPage - 1);
@@ -27,7 +27,10 @@ public class QuestionDAO {
 		
 		return mybatis.selectList("question.selectByQuestion",param);
 	}
-	
+	//1:1문의하기
+	public int insertQuestion(QuestionDTO qdto)throws Exception{
+		return mybatis.insert("question.insertQuestion",qdto);
+	}
 	//1:1문의 네비 카운트
 	public int getQuestionCount(String msg_receiver) throws Exception{
 		return mybatis.selectOne("question.getQuestionCount",msg_receiver);
@@ -68,20 +71,20 @@ public class QuestionDAO {
 			StringBuilder sb = new StringBuilder("<nav aria-label='Page navigation'><ul class='pagination justify-content-center'>");
 			
 			if(needPrev) {
-				sb.append("<li class='page-item'><a class='page-link' href='question_list?msgpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
+				sb.append("<li class='page-item'><a class='page-link' href='question_list?qcpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
 			}
 
 			for(int i=startNav; i<=endNav; i++) {
 				if(currentPage == i) {
-					sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='question_list?msgpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+					sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='question_list?qcpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 					//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 				}else {
-					sb.append("<li class='page-item'><a class='page-link' href='question_list?msgpage="+i+"'>"+i+"</a></li>");
+					sb.append("<li class='page-item'><a class='page-link' href='question_list?qcpage="+i+"'>"+i+"</a></li>");
 				}
 			}
 
 			if(needNext) {
-				sb.append("<li class=page-item><a class=page-link href='question_list?msgpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
+				sb.append("<li class=page-item><a class=page-link href='question_list?qcpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
 			}		
 			sb.append("</ul></nav>");
 			return sb.toString();
