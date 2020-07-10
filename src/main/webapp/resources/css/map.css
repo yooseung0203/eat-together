@@ -57,13 +57,18 @@
 	    border-radius: 5px;
 	    padding: 10px;
     }
-    .side{overflow-x: hidden;overflow-y:auto;}
+    .side{overflow-x: hidden;overflow-y:auto;max-height:700px;}
     .search_count{padding: 20px;}
     .search_result .map_info{
     	align:center;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
 	    font-size:10pt;
+    }
+    .search_result .info{
+    	align:center;
+	    border-bottom:1px solid #ededed;
+	    padding: 20px;
     }
     .search_result .cafe_info{
     	align:center;
@@ -143,7 +148,15 @@
     	border:0px;
     	font-size:10pt;
     }
-    #recruit{
+    .partylist .endParty{
+    	position:absolute;
+    	right:5px;
+    	background-color:#ededed;
+    	border:0px;
+    	font-size:10pt;
+    	color:black;
+    }
+    #recruit,#mapRecruit{
     	background-color:#ff9900;
     	border:0px;
     	font-size:10pt;
@@ -154,7 +167,6 @@
     	border:0px;}
     .reviewlist{
     	align:center;
-	    height: 200px;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
 	    margin-bottom:20px;
@@ -238,6 +250,8 @@
     #centerAddr {display:block;margin-top:2px;font-weight: normal;}
     .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
     .badge-light{background-color:#ff9900;color:white;}
+    #partyModal tbody tr:first-child th{padding-top:0px; padding-bottom:0px;font-size:10pt;}
+    #partyModal tbody tr:first-child td{padding:0px;font-size:10pt;}
     #partyModal table td{border:0px;}
     #partyModal table th{border:0px;}
     #partyModal .content{font-size:10pt;}
