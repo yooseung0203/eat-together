@@ -120,5 +120,6 @@
 	$("#newMsg").on("click",function(){
 		location.href="/msg/msg_list_sender";
 	})
+
 </script>
 

@@ -47,12 +47,12 @@
 
 
 	<div class="jumbotron jumbotron-fluid">
-		<div class="container" id="withdraw-container">
-			<h1 class="display-4">${loginInfo.id}
-				님이 참여한 모임 00개로<br>00명의 새로운 맛집 친구를 만났습니다.
+		<div class="container withdraw_text">
+			<h1 class="display-4" class="withdraw_text">${loginInfo.id}
+				님이 참여한 모임 00개로<br>수많은 새로운 맛집 친구를 만났습니다.
 			</h1>
 			<br>
-			<p class="lead">
+			<p class="lead withdraw_text">
 				앞으로 더 많은 맛집 친구들이 기다리고 있습니다.<br>정말로 탈퇴하시겠습니까?
 			</p>
 		</div>
@@ -67,8 +67,8 @@
 				type="password" class="form-control" id="pwCorrection">
 			<div id="pw_text" style="display: none;"></div>
 		</div>
-		<button type=submit class="btn btn-light" id="withdraw">탈퇴하기</button>
-		<button type="button" class="btn btn-warning" id="back">되돌아가기</button>
+		<button type=submit class="btn btn-light withdraw_text" id="withdraw">탈퇴하기</button>
+		<button type="button" class="btn btn-warning withdraw_text" id="back">되돌아가기</button>
 	</form>
 
 	<script>

@@ -110,8 +110,8 @@ $(document).ready(function(){
 			}
 		});
 
-		$("#toPartyList").on("click", function() {
-			location.href = "/party/partylist";
+		$("#toPartylist").on("click", function() {
+			location.href = "/party/toPartylist";
 		});
 		
 		$("#toPartyJoin").on("click",function(){ //모임가입
@@ -122,6 +122,10 @@ $(document).ready(function(){
 		
 		$("#toChatroom").on("click", function() {
 			toChatroom(${con.seq});
+		});
+		
+		$("#toExitParty").on("click",function(){
+			toExitParty(${con.seq});
 		});
         
 		
@@ -199,7 +203,7 @@ $(document).ready(function(){
 	<div class="container">
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
-				<h2 class="party_headline">${con.title}</h2>
+				<h2 class="party_headline"><c:out value='${con.title}' /></h2>
 				<c:choose>
 					<c:when test="${con.status  eq '1'}">
 						<span class="badge badge-success">멤버 모집중</span>
@@ -279,7 +283,7 @@ $(document).ready(function(){
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">소개</div>
-			<div class="col-10">${con.content}</div>
+			<div class="col-10"> <c:out value='${con.content}' /></div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">SNS공유</div>
@@ -309,6 +313,7 @@ $(document).ready(function(){
 					<c:when test="${partyParticipantCheck  eq true}">
 						<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 							이동</button>
+						<button type="button" id="toExitParty" class="btn btn-primary">모임 나가기</button>
 					</c:when>
 				</c:choose>
 
@@ -323,7 +328,7 @@ $(document).ready(function(){
 					<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 					<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
 				</c:if>
-				<button type="button" id="toPartyList" class="btn btn-secondary">목록으로</button>
+				<button type="button" id="toPartylist" class="btn btn-secondary">목록으로</button>
 
 			</div>
 

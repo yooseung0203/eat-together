@@ -17,11 +17,11 @@ public class AdminDAO {
 	private SqlSessionTemplate mybatis;
 	
 	public List<MemberDTO> memberList(){
-		return mybatis.selectList("memberList");
+		return mybatis.selectList("Admin.memberList");
 	}
 	
 	public int getAllMemberCount() {
-		return mybatis.selectOne("getAllMemberCount");
+		return mybatis.selectOne("Admin.getAllMemberCount");
 	}
 	
 }

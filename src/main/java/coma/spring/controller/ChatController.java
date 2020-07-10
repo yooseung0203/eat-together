@@ -25,7 +25,7 @@ public class ChatController {
 
 	@Autowired
 	private ChatService cservice;
-	
+
 	@RequestMapping("chatroom")
 	public String chatroom(int roomNum , HttpServletRequest request) {
 
@@ -34,7 +34,7 @@ public class ChatController {
 		if(cservice.chatParted(roomNum, name) == 0) {
 			return "/chat/error";
 		}
-		
+
 		// 방번호를 받음 : 웹소켓에서 삭제됨
 		this.session.setAttribute("roomNum", roomNum);
 		// 방번호의 저장된 채팅이 있는지 검색 
@@ -60,14 +60,15 @@ public class ChatController {
 					}
 				}
 			}
-			
+
 		}catch(Exception e) {
 
 		}
-		
+
 		//존재하지 않으면 존재하지 않는다고 초기화
 		for(int i = 0 ; i < list.size() ; i++) {
 			if(list.get(i).getParticipant().contentEquals(name)) {
+				list.get(i).setExist("exist");
 				this.session.setAttribute("viewed", list.get(i).getViewed_seq());
 				System.out.println(list.get(i).getViewed_seq());
 			}
@@ -82,7 +83,7 @@ public class ChatController {
 		request.setAttribute("roomNum", roomNum);
 		request.setAttribute("memberList", list);
 		request.setAttribute("writer", writer);
-		
+
 		return "/chat/chatroom";
 	}		
 	@RequestMapping("kick")
@@ -94,12 +95,17 @@ public class ChatController {
 	@RequestMapping("exit")
 	public String chat(int roomNum) {
 		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
-		cservice.exitChatRoom(name, roomNum);
+		if(name.contentEquals(cservice.selectWriter(roomNum))){
+			cservice.exitAllChatRoom(roomNum);
+			cservice.deleteChatRoom(roomNum);
+		}else {
+			cservice.exitChatRoom(name, roomNum);
+		}
 		return "redirect:/";
 	}
 	@RequestMapping("hacker")
 	public String asd() {
 		return "/chat/error2";
 	}
-	
+
 }

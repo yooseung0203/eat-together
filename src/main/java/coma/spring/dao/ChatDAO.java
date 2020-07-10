@@ -17,26 +17,29 @@ public class ChatDAO {
 	
 	// roomNum 방번호의 채팅 내용을 전부 가져옴
 	public List<ChatDTO> selectChats(int roomNum){
-		return mybatis.selectList("selectChats", roomNum);
+		return mybatis.selectList("Chats.selectChats", roomNum);
 	}
 
-	public int exitChatRoom(PartyMemberDTO pmdto) {
-		return mybatis.delete("exitChatRoom",pmdto);
+	public int exitChatRoom(Map<String, Object> map) {
+		return mybatis.delete("Chats.exitChatRoom",map);
 	}
 	
 	public List<PartyMemberDTO> selectChatMembers(int roomNum) {
-		return mybatis.selectList("selectChatMembers",roomNum);
+		return mybatis.selectList("Chats.selectChatMembers",roomNum);
 	}
 	public int chatParted(PartyMemberDTO pmdto) {
-		return mybatis.selectOne("chatParted", pmdto);
+		return mybatis.selectOne("Chats.chatParted", pmdto);
 	}
 	public int chatViewedSave(PartyMemberDTO pmdto) {
-		return mybatis.update("chatViewedSave", pmdto);
+		return mybatis.update("Chats.chatViewedSave", pmdto);
 	}
 	public String selectWriter(int seq) {
-		return mybatis.selectOne("selectWriter" , seq);
+		return mybatis.selectOne("Chats.selectWriter" , seq);
 	}
 	public int addBlacklist(Map<String, Object> map) {
-		return mybatis.insert("addBlacklist" , map);
+		return mybatis.insert("Chats.addBlacklist" , map);
+	}
+	public int deleteChatRoom(int roomNum) {
+		return mybatis.delete("Chats.deleteChatRoom" , roomNum);
 	}
 }

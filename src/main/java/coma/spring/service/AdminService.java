@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import coma.spring.dao.AdminDAO;
+import coma.spring.dao.FaqDAO;
+import coma.spring.dto.FaqDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.statics.Configuration;
 
@@ -13,6 +15,9 @@ import coma.spring.statics.Configuration;
 public class AdminService {
 	@Autowired
 	AdminDAO adao;
+	
+
+
 	
 	
 	public List<MemberDTO> memberList(int cpage){
@@ -81,4 +86,5 @@ public class AdminService {
 		String navi = this.getMemberPageNav(cpage);
 		return navi;
 	}
+	
 }

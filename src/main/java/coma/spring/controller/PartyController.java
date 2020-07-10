@@ -45,7 +45,9 @@ import coma.spring.service.ReviewService;
 @Controller
 @RequestMapping("/party/")
 public class PartyController {
-
+	@Autowired
+	private ChatService cservice;
+	
 	@Autowired
 	private PartyService pservice;
 
@@ -64,10 +66,11 @@ public class PartyController {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 			String userid= account.getId();
+			String nickname = account.getNickname();
 			int gender = account.getGender();
 			
 			//계정당 활성화된 모임 체크
-			int myPartyCount = pservice.getMadePartyCount(userid);
+			int myPartyCount = pservice.getMadePartyCount(nickname);
 			if(myPartyCount>4) {
 				return "/error/partyfull";
 			}
@@ -95,10 +98,11 @@ public class PartyController {
 		dto.setMeetdate(meetdate);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String userid= account.getId();
+		String nickname = account.getNickname();
 		
 		
 		
-		dto.setWriter(userid);
+		dto.setWriter(nickname);
 		dto.setStatus("1");
 		//
 		
@@ -131,7 +135,7 @@ public class PartyController {
 
 		int myseq = pservice.partyInsert(dto);   // 글번호
 		//채팅 insert (생성)  cservice.insert(seq);
-		String nickname = account.getNickname();
+		
 		pservice.partyJoin(Integer.toString(myseq),nickname);
 
 		// 모임 등록 작업 수행
@@ -361,7 +365,7 @@ public class PartyController {
 	}
 	// 수지 모임  참여
 	@RequestMapping(value="partyJoin")
-	public String partyJoin(String seq, HttpServletRequest request) throws Exception {
+	public String partyJoin(String seq, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String nickname = mdto.getNickname();
 		
@@ -394,18 +398,36 @@ public class PartyController {
 		boolean AfterpartyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
 		
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
-		request.setAttribute("con",content);
-		request.setAttribute("partyFullCheck", AfterpartyFullCheck);
-		request.setAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
-		return "/party/party_content";
+		
+		//redirectAttributes.addAttribute("con",content);
+		redirectAttributes.addAttribute("partyFullCheck", AfterpartyFullCheck);
+		redirectAttributes.addAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
+		return "redirect:/party/party_content?seq=" + content.getSeq();
 		
 	}
-	// 수지 모임 끝?
+
+	// 수지 모집종료 기능
 	@RequestMapping("stopRecruit")
 	public String stopRecruit(String seq) throws Exception {
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
 	}
+	// 수지 모임 나가기 기능
+	@RequestMapping("toExitParty")
+	public String exitParty(String seq) throws Exception{
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = account.getNickname();
+		
+		cservice.exitChatRoom(nickname, Integer.parseInt(seq));
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		if(nickname == content.getWriter()) {
+			this.partydelete(seq);
+		}
+		
+		return "redirect:/party/partylist";
+		
+	}
+	
 	// 지은 작성자 별 모임 리스트
 	@RequestMapping("selectByWriter")
 	public ModelAndView selectByWriter(int mcpage) throws Exception{
@@ -426,6 +448,12 @@ public class PartyController {
 		mav.addObject("navi", navi);
 
 		return mav;
+	}
+	
+	// 파티리스트로 이동
+	@RequestMapping("toPartylist")
+	public String toPartylist() throws Exception{
+		return "redirect:/party/partylist";
 	}
 	// 이미지 클롤링
 	@ResponseBody

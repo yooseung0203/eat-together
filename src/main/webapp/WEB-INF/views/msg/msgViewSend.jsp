@@ -35,13 +35,12 @@
 		<table class="table">
 			<thead>
 				<tr class="table-success">
-					<th scope="col" colspan=12>${msgView.msg_receiver}님으로쪽지가
-						도착하였습니다.</th>
+					<th scope="col" colspan=12>${msgView.msg_receiver}님에게 보낸쪽지</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td scope="col" colspan=12>보낸 사람 : ${msgView.msg_sender}
+					<td scope="col" colspan=12>받는 사람 : ${msgView.msg_receiver}
 						(${msgView.msg_date})</td>
 				</tr>
 				<tr>
@@ -62,7 +61,6 @@
 
 		<div class="row" align="center">
 			<div class="col-12" align="center">
-				<button type="button" id="msgResponse" class="btn btn-warning">답장</button>
                <button type="button" id="close" class="btn btn-light">닫기</button>
 			</div>
 		</div>
