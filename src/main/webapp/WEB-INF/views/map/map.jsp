@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>지도 생성하기</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?sadasdasdasasdasdd'></script>
+<script src='/resources/js/map.js?sadasdaadsasdsadsdasasdasdd'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -92,6 +92,7 @@
 								</div>
 							</div>
 							<div class="category">${mapdto.category}</div>
+							<div class="place_id" style="display:none;">${mapdto.place_id}</div>
 							<div class="name">${mapdto.name}</div>
 							<div class="address">${mapdto.address}</div>
 							<div class="road_address">${mapdto.road_address}</div>
