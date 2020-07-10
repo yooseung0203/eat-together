@@ -43,16 +43,15 @@
 		$("#toWriteBtn").on("click", function() {
 			location.href = "/faq/toWrite";
 		});
-		
-		$("#faq-delete").on("click",function(){
+
+		$("#faq-delete").on("click", function() {
 			var ask = confirm("정말 삭제하시겠습니까?");
-			if(!ask){
+			if (!ask) {
 				return false;
-			};
+			}
+			;
 		});
 	});
-	
-
 </script>
 </head>
 <body>
@@ -62,7 +61,62 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
+	<section class="accordion-section clearfix mt-3"
+		aria-label="Question Accordions">
+		<div class="container">
 
+			<h2>FAQ - 자주하는 질문</h2>
+			<div class="row">
+				<div class="col-12 mt-3 mb-3">
+					<div class="row">
+						<div class="col-12 col-sm-12">
+							<button type="button" class="btn btn-outline-primary">전체</button>
+							<button type="button" class="btn btn-outline-warning">회원/정보관련</button>
+							<button type="button" class="btn btn-outline-info">사이트이용관련</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel-group" id="accordion" role="tablist"
+				aria-multiselectable="true">
+				<c:forEach var="i" items="${list}" varStatus="status">
+					<div class="panel panel-default">
+						<div class="panel-heading p-3 mb-3" role="tab"
+							id="heading${status.index}">
+							<h5 class="panel-title">
+								<a class="collapsed" role="button" title=""
+									data-toggle="collapse" data-parent="#accordion"
+									href="#collapse${status.index}" aria-expanded="true"
+									aria-controls="collapse${status.index}"> ${i.title}  </a>
+							</h5>
+						</div>
+						<div id="collapse${status.index}" class="panel-collapse collapse"
+							role="tabpanel" aria-labelledby="heading${status.index}">
+							<div class="panel-body px-3 mb-4">
+								<p>${i.contents}</p>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
+			</div>
+
+			<div class="row mb-5">
+				<div class="col-2"></div>
+				<div class="col-8">${navi}</div>
+				<div class="col-2">
+					<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
+						<button class="btn btn-primary" id="toWriteBtn">글쓰기</button>
+					</c:if>
+				</div>
+			</div>
+
+
+		</div>
+	</section>
+
+
+
+	<%-- 
 	<div class="container">
 		<div class="row">
 			<div class="col-12 mt-3 mb-3">
@@ -89,7 +143,7 @@
 							<div class="col-12 col-sm-12">
 								<img src="/resources/img/question.png" /> ${i.title}
 							</div>
-							
+
 						</div>
 					</div>
 
@@ -112,6 +166,11 @@
 			</div>
 		</div>
 	</div>
+
+
+	 --%>
+
+
 
 
 	<!-- ******************* -->

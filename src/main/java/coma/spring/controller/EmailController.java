@@ -195,17 +195,18 @@ public class EmailController {
 		
 		if(mdto == null) {
 			System.out.println("입력한 이메일과 동일한 회원정보가 존재하지 않음");
-			resp = "";
+			resp = "0";
 			return resp;
 			
 		}else if(!(mdto.getId().contentEquals(inputId))) {
 			System.out.println("아이디와 인증된 이메일의 불일치");
-			resp = "";
+			resp = "0";
 			return resp;
 			
 		}else {
 			System.out.println("아이디와 인증된 이메일 일치");
 			String dice = this.getRandomString();
+			resp = dice;
 			System.out.println("랜덤문자열 : " + dice);
 
 			String recipient = account_email;
@@ -236,7 +237,7 @@ public class EmailController {
 				message.setSubject(subject);
 				message.setText(body);
 				Transport.send(message);
-				resp = dice;
+
 
 				System.out.println("Email Sending OK");
 			} catch (MessagingException e) {

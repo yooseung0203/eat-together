@@ -146,7 +146,7 @@ body {
 						<p class="deprt-name">Developer</p> 
 						<p class="work">스크롤로 만들고 시파다아아아아</p>
 						<p class="contact">&#128231; sj3821@gmail.com</p>
-						
+						<p class="contact">&#127968; https://github.com/sj3821</p>
 					</div>
 					<div class="col-12 col-sm-4 text-center">
 						<p class="team-name">신예지</p>
@@ -185,6 +185,7 @@ body {
 						<p class="team-name">차유승</p>
 						<p class="deprt-name">Developer</p> 
 							<p class="work">스크롤로 만들고 시파다아아아아</p>
+						<p class="contact">&#128231; chayooseung@gmail.com</p>
 						<p class="contact">&#127968; blog.naver.com/uououoi</p>
 					</div>
 					<div class="col-12 col-sm-4 text-center">

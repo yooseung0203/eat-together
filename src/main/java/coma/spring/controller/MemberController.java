@@ -3,6 +3,7 @@ package coma.spring.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +29,12 @@ public class MemberController {
 	@Autowired
 	private MemberService mservice;
 
-	@Autowired 
-	private MemberFileService mfservice;
-
 	@Autowired
 	private MsgService msgservice;	
 
 	@Autowired
 	private HttpSession session;
-	
+
 	@Autowired
 	private MemberFileController mfcon;
 
@@ -60,10 +58,15 @@ public class MemberController {
 		return "member/signup_check";
 	}
 
-	//회원가입, 약관동의 후 정보입력 페이지로 이동
+	//by 지은 회원가입, 약관동의 후 정보입력 페이지로 이동, 체크박스 값 가져오기 수정_20200710
 	@RequestMapping("signup_info")
-	public String getSignupInfoView() {
+	public String getSignupInfoView(String check_yn) {
+		System.out.println(check_yn);
+		if(check_yn.contentEquals("on")) {
 		return "member/signup_info";
+		}else {
+			return "redirect:/";
+		}
 	}
 
 	//by지은, 마이페이지에서 내정보view로 이동_20200704
@@ -108,8 +111,8 @@ public class MemberController {
 		return "member/editpw";
 	}
 
-	//By지은,  내정보 수정 페이지로 이동하기_20200704
-	@RequestMapping("editMyInfo")
+	//By지은,  내정보 수정 페이지로 이동하기_20200710
+	@RequestMapping("editMyInfoView")
 	public ModelAndView getEditMyInfoView()throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/editmyinfo");
@@ -181,6 +184,17 @@ public class MemberController {
 		System.out.println("아이디 중복체크 결과 : " + result);
 		return String.valueOf(result);
 	}
+	
+	//by 지은, 회원가입시 닉네임 중복체크_20200710
+	@RequestMapping("isNickAvailable")
+	@ResponseBody
+	public String isNickAvailable(String nickname)throws Exception {
+		boolean result=true;
+
+		result = mservice.isNickAvailable(nickname);
+		System.out.println("닉네임 중복체크 결과 : " + result);
+		return String.valueOf(result);
+	}
 
 	//로그인하기
 	@RequestMapping("login")
@@ -205,7 +219,9 @@ public class MemberController {
 			MemberDTO mdto = mservice.selectMyInfo(id);
 			String msg_receiver=mdto.getId();
 			System.out.println("아이디는"+msg_receiver);
+			//새로운 메세지확인
 			int newmsg = msgservice.newmsg(msg_receiver);
+
 			System.out.println("새로운메세지"+newmsg);
 			session.setAttribute("loginInfo", mdto);
 			//새로운메세지 확인
@@ -294,19 +310,26 @@ public class MemberController {
 		}
 	}
 
-	//비밀번호 수정하기
+	//by 지은, 비밀번호 수정하기 ajax로 수정했음_20200709
 	@RequestMapping("editPwProc")
 	@ResponseBody
-	public String editPwProc(String pw)throws Exception {
+	public String editPwProc(@RequestParam String id, @RequestParam String pw)throws Exception {
 		System.out.println("컨트롤러로 값 전달 성공");
-		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getId();
+		MemberDTO mdto = new MemberDTO();
+
+		if(session.getAttribute("loginInfo")!=null) {
+			mdto = (MemberDTO) session.getAttribute("loginInfo");
+			id = mdto.getId();
+		}else {
+			mdto = mservice.selectMyInfo(id);
+		}
+
 		String oriprotectedpw = mdto.getPw(); 
 		String newprotectedpw = mservice.getSha512(pw);
 
 		if(oriprotectedpw.contentEquals(newprotectedpw)) {
 			System.out.println("수정하려는 비밀번호가 기존과 일치하여 에러 발생");
-			return "error";
+			return "0";
 		}else {
 			Map<String, String> param = new HashMap<>();
 			param.put("targetColumn1", "pw");
@@ -316,41 +339,41 @@ public class MemberController {
 
 			int result = mservice.editPw(param);
 			System.out.println("비밀번호 수정 성공 :" + result);
-			mdto.setPw(newprotectedpw);
-			session.setAttribute("loginInfo", mdto);
 
-			return "/member/editMyInfo";
+			//by지은, 비밀번호를 수정한 후에는 재로그인을 요구한다_20200709
+			//By지은, 카카오톡 로그인의 경우 access_Token 로그아웃이 필요하다_20200705
+			if(session.getAttribute("access_Token")!=null) {
+				mservice.kakaoLogout((String)session.getAttribute("access_Token"));
+				session.invalidate();
+				return "success";
+				//카카오톡 로그인이 아닌 경우
+			}else {
+				session.invalidate();
+				return "success";
+			}
 		}
-
-
 	}
 
 
 	//내정보 수정하기
 	@RequestMapping("editMyInfoProc")
-	public ModelAndView editMyInfoProc(String nickname, String birth, String account_email) throws Exception {
+	public ModelAndView editMyInfoProc(MultipartFile profile, int gender, String account_email, String birth, MemberFileDTO mfdto) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("member/mypage_myinfo");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
-		System.out.println("수정할 아이디 : " + id);
-		System.out.println("수정할 생년월일 : " + birth);
-		System.out.println("수정할 이메일 : " + account_email);
 
-		Map<String, String> param = new HashMap<>();
-		param.put("targetColumn1", "birth");
-		param.put("targetValue1", birth);
-		param.put("targetColumn2", "account_email");
-		param.put("targetValue2", account_email);
-		param.put("targetColumn3", "id");
-		param.put("targetValue3", id);
-
-		int result = mservice.editMyInfo(param);
-		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
-
-		mdto.setBirth(birth);
+		mdto.setGender(gender);
+		mdto.setProfile(profile);
 		mdto.setAccount_email(account_email);
+		mdto.setBirth(birth);
+
+		String realPath = session.getServletContext().getRealPath("upload/"+id+"/");
+		mfdto = mfcon.uploadProc(mdto, mfdto, realPath);
+		int result = mservice.editMyInfo(mdto, mfdto);
+
+		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
 		session.setAttribute("loginInfo", mdto);
 
 		mdto = mservice.selectMyInfo(id);

@@ -45,40 +45,47 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<form action="/member/signupProc" method="post" id="signupProc" enctype="multipart/form-data">
+	<form action="/member/signupProc" method="post" id="signupProc"
+		enctype="multipart/form-data">
 		<div class="article container">
 			<div class="signup_text">
 				<label for="id" class="signup_text">아이디</label> <input type="text"
 					class="form-control" id="id" name="id" placeholder="영문+숫자 4~10글자"><br>
-				<button type=button id=dublCheck class="btn btn-secondary">중복확인</button>
+				<button type=button id=dublCheckforId class="btn btn-secondary">중복확인</button>
 				<div id=id_text style="display: none;"></div>
-			</div><br>
-			
+			</div>
+			<br>
+
 			<div class="signup_text">
 				<label for="pw" class="signup_text">비밀번호</label> <input
 					type="password" class="form-control" id="pw" name="pw"
 					placeholder="특수문자+숫자+영문 6~12글자">
 			</div>
-			
+
 			<div class="signup_text">
 				<label for="pw" class="signup_text">비밀번호 확인</label> <input
 					type="password" class="form-control" id="pwCorrection">
 				<div id="pw_text" style="display: none;"></div>
-			</div><br>
-			
+			</div>
+			<br>
+
 			<div class="signup_text">
 				<label for="profile" class="signup_text">프로필 이미지</label><br>
-				<label
-					class="btn btn-secondary btn-file"> 업로드하기 <input type="file" id="profile" name="profile"
-					style="display: none;">
+				<div id='preview'></div>
+				<br> <label class="btn btn-secondary btn-file"> 업로드하기 <input
+					type="file" id="profile" name="profile" style="display: none;">
 				</label>
-			</div><br>
+			</div>
+			<br>
 
 			<div class="signup_text">
 				<label for="nickname" class="signup_text">닉네임</label> <input
 					type="text" class="form-control" id="nickname" name="nickname"
-					placeholder="한글 2~6자 /수정 불가능하므로 신중하게 선택해주세요.">
-			</div><br>
+					placeholder="한글 2~6자 /수정 불가능하므로 신중하게 선택해주세요."><br>
+				<button type=button id=dublCheckforNick class="btn btn-secondary">중복확인</button>
+				<div id=nickname_text style="display: none;"></div>
+			</div>
+			<br>
 
 			<div class="signup_text">
 				<label for="account_email" class="signup_text">이메일</label> <input
@@ -90,58 +97,93 @@
 					인증번호 : <input type=text id=mail_text>
 					<button type=button id=mail_accept class="btn btn-secondary">인증</button>
 				</div>
-				
-			</div><br>
+
+			</div>
+			<br>
 			<div class="signup_text">
 				<label for="gender" class="signup_text">성별</label> <input
-					type="radio" name="gender" value="1">남 <input
-					type="radio" name="gender" value="2">여
-			</div><br>
-			
+					type="radio" name="gender" value="1">남 <input type="radio"
+					name="gender" value="2">여
+			</div>
+			<br>
+
 			<div class="signup_text">
 				<label for="birth" class="signup_text">생년월일</label> <input
 					type="text" class="form-control" id="birth" name="birth"
 					placeholder="ex)19941122">
-			</div><br>
+			</div>
+			<br>
 
 
 			<div align=center>
 				<button type=submit id=btn class="btn btn-warning signup_text">가입하기</button>
 				<button type=reset class="btn btn-light signup_text"
 					style="margin-left: 5px;">다시 작성하기</button>
-			</div><br>
+			</div>
+			<br>
 		</div>
 	</form>
 
 	<script>
-		// form submit 전 체크하는 사항
-		$("#btn").on("click", function() {
-			if ($("#id_text").html() == "사용가능한 id입니다.") {
-				if ($("#pw_text").html() == "비밀번호가 일치합니다.") {
-					if ($("#nickname").val() != "") {
-						if ($("#mail_text").val() != "") {
-							if ($("#birth").val() != "") {
-								alert("맛집갔다갈래 회원이 되신 것을 환영합니다!");
-								return true;
+		//by 지은, 이미지를 첨부할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
+		var upload = document.querySelector('#profile');
+		var preview = document.querySelector('#preview');
 
-							} else {
-								alert("생년월일을 입력해주세요.");
-							}
-						} else {
-							alert("이메일 인증을 해주세요.");
-						}
-					} else {
-						alert("닉네임을 입력해주세요");
-					}
-				} else {
-					alert("비밀번호를 확인해주세요.");
+		upload.addEventListener('change', function(e) {
+			var get_file = e.target.files;
+			var image = document.createElement('img');
+			var reader = new FileReader();
+
+			reader.onload = (function(aImg) {
+				console.log(1);
+				return function(e) {
+					console.log(3);
+					aImg.src = e.target.result
 				}
-			} else {
-				alert("아이디 중복체크를 진행해주세요.");
+			})(image)
+
+			if (get_file) {
+				reader.readAsDataURL(get_file[0]);
+				console.log(2);
 			}
 
-			return false;
+			preview.appendChild(image);
 		})
+
+		// form submit 전 체크하는 사항
+		$("#btn").on(
+				"click",
+				function() {
+					if ($("#id_text").html() == "사용가능한 id입니다.") {
+						if ($("#pw_text").html() == "비밀번호가 일치합니다.") {
+							if ($("#nickname_text").html() == "사용가능한 닉네임입니다.") {
+								if ($("#mail_text").val() != "") {
+									if ($("#birth").val() != "") {
+										if ($('input:radio[name=gender]').is(
+												':checked')) {
+											alert("맛집갔다갈래 회원이 되신 것을 환영합니다!");
+											return true;
+										} else {
+											alert("성별을 입력해주세요.");
+										}
+									} else {
+										alert("생년월일을 입력해주세요.");
+									}
+								} else {
+									alert("이메일 인증을 해주세요.");
+								}
+							} else {
+								alert("닉네임을 중복체크를 진행해주세요");
+							}
+						} else {
+							alert("비밀번호를 확인해주세요.");
+						}
+					} else {
+						alert("아이디 중복체크를 진행해주세요.");
+					}
+
+					return false;
+				})
 
 		//다시작성 버튼
 		$("#reset").on("click", function() {
@@ -163,13 +205,6 @@
 					alert("아이디 조건을 확인하세요.");
 					$("#id").val("");
 				}
-			}
-		})
-
-		//id 중복체크 후 수정 시 중복체크 다시 하도록 설정
-		$("#id").keydown(function() {
-			if ($("#id_text").html() != "") {
-				$("#id_text").html("");
 			}
 		})
 
@@ -212,11 +247,11 @@
 		//nickname regex
 		$("#nickname").focusout(function() {
 			var nickname = $("#nickname").val();
-			var nicknameregex = /^[가-힣]{2,6}$/;
+			var nicknameregex = /^[가-힣0-9]{6,10}$/;
 			if ($("#nickname").val() != "") {
 				if (!nicknameregex.test(nickname)) {
 					$("#nickname").val("");
-					alert("한글 2~6글자를 입력하세요.");
+					alert("한글 + 숫자 6~10글자를 입력하세요.");
 					$("#nickname").focus();
 				}
 			}
@@ -259,7 +294,7 @@
 						})
 
 		//아이디 중복체크
-		$("#dublCheck").on("click", function() {
+		$("#dublCheckforId").on("click", function() {
 			if ($("#id").val() != "") {
 				$.ajax({
 					url : "/member/isIdAvailable",
@@ -285,6 +320,49 @@
 				alert("아이디를 입력해주세요.");
 			}
 
+		})
+
+		//id 중복체크 후 수정 시 중복체크 다시 하도록 설정
+		$("#id").keydown(function() {
+			if ($("#id_text").html() != "") {
+				$("#id_text").html("");
+			}
+		})
+
+		//by지은, 닉네임 중복체크_20200710
+		$("#dublCheckforNick").on("click", function() {
+			if ($("#nickname").val() != "") {
+				$.ajax({
+					url : "/member/isNickAvailable",
+					type : "post",
+					data : {
+						nickname : $("#nickname").val()
+					}
+				}).done(function(resp) {
+					$("#nickname_text").css("display", "block");
+					if (resp == "true") {
+						$("#nickname_text").css("color", "blue");
+						$("#nickname_text").html("사용가능한 닉네임입니다.");
+					} else if (resp == "false") {
+						$("#nickname_text").css("color", "red");
+						$("#nickname_text").html("사용 불가능한 닉네임입니다.");
+						$("#nickname").val("");
+					}
+				}).fail(function(error1, error2) {
+					console.log(error1);
+					console.log(error2);
+				})
+			} else {
+				alert("닉네임을 입력해주세요.");
+			}
+
+		})
+
+		//닉네임 중복체크 후 수정 시 중복체크 다시 하도록 설정_20200710
+		$("#nickname").keydown(function() {
+			if ($("#nickname_text").html() != "") {
+				$("#nickname_text").html("");
+			}
 		})
 
 		//메일 인증 

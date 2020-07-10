@@ -34,18 +34,18 @@
 </head>
 <body>
 
-	<fieldset class = "findid_text">
+	<fieldset class="findid_text">
 		<legend>아이디 찾기</legend>
 		<div class="findid_text">
 			<label for="account_email" class="findid_text">이메일</label> <input
 				type="text" class="form-control" id="account_email"
-				name="account_email" placeholder="ex)eat-together@naver.com"> <input
-				type=button id=mail value="인증하기" class="btn btn-warning"><br>
+				name="account_email" placeholder="ex)eat-together@naver.com">
+			<input type=button id=mail value="인증하기" class="btn btn-warning"><br>
 			<div id=mail_div style="display: none;">
 				인증번호 : <input type=text id=mail_text>
 				<button type=button id=mail_accept class="btn btn-light">인증</button>
 			</div>
-			<div id=findid_result style="display:none;"></div>
+			<div id=findid_result style="display: none;"></div>
 		</div>
 	</fieldset>
 

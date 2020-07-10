@@ -12,6 +12,7 @@ import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,6 +87,12 @@ public class MemberService {
 		boolean result = mdao.isIdAvailable(id);
 		return result;
 	}
+	
+	//회원가입시 닉네임 중복검사
+	public boolean isNickAvailable(String nickname)throws Exception{
+		boolean result = mdao.isNickAvailable(nickname);
+		return result;
+	}
 
 	//회원탈퇴
 	public int deleteMember(Map<String, String> param) throws Exception{
@@ -93,8 +100,13 @@ public class MemberService {
 		return result;
 	}
 	//내정보수정하기
-	public int editMyInfo(Map<String, String> param) throws Exception{
-		int result = mdao.editMyInfo(param);
+	public int editMyInfo(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
+		
+		Map<String, Object> editParam = new HashMap<>();
+		editParam.put("mdto", mdto);
+		editParam.put("mfdto", mfdto);
+		
+		int result = mdao.editMyInfo(editParam);
 		return result;
 	}
 	//비밀번호 수정하기
@@ -196,18 +208,23 @@ public class MemberService {
 			JsonElement element = JsonParser.parseString(result);
 
 			String id = element.getAsJsonObject().get("id").getAsString();
-			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject(); 
 			JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 
+			Random randomGenerator = new Random();
+			int randomInteger = randomGenerator.nextInt(1000);
+			
 			if(mdao.selectMyInfo(id)==null) {
 				mdto.setId(id);
-				mdto.setNickname(nickname);
 				mdto.setPw("");
+				mdto.setNickname(nickname + randomInteger);
 				mdto.setBirth("1999-12-31");
 				mdto.setAccount_email("need@eat-together.com");
+				mdto.setGender(0);
 
+				
 				int kakaoSignUpResult = mdao.signUpKakao(mdto);
 				System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
 			}else {

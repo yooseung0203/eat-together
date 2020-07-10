@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Party">
-	<!-- 수지 모임 번호 생성 -->
-	<select id="getNextval" resultType="int"> 
-		select party_seq.nextval from dual 
+	<!-- by 수지 다음 시퀀스  -->
+	<select id="getNextval" resultType="int">
+		 select party_seq.nextval from dual 
 	</select>
 	<!-- by 수지 모집 생성 -->
 	<insert id="insert">
@@ -42,6 +42,10 @@
 	<select id="getPartyCount" resultType="int">
 		select count from party where seq=#{value}
 	</select>
+	<!-- by 수지 계정당 모임 생성수 구하기 -->
+	<select id="getMadePartyCount" resultType="int">
+		select count(*) from party where writer=#{value} and status=1
+	</select>
 	<!-- by 수지 모임 현재 참여자수 확인 -->
 	<select id="getParticipantCount" resultType="int">
 		select count(*) from partylist where CHATSEQ_PARENT=#{value}
@@ -55,7 +59,7 @@
 		select count(*) from
 		party where place_id = #{place_id}
 	</select>
-	<!-- by 예지 장소 아이디별 모임 리스트 -->
+	<!-- by 예지 장소 아이디별 모임 리스트 : 페이지별 리스트 -->
 	<select id="selectByPageNo" resultType="coma.spring.dto.PartyDTO">
 		select * from (select party.*, row_number() over(order by
 		seq desc) as rnum
@@ -75,11 +79,11 @@
 	<select id="selectList" resultType="coma.spring.dto.PartyDTO">
 		<!-- select * from party where status = 1 order by seq desc -->
 		select * from (select party.*, row_number() over(order by seq desc) as
-		rnum from party where status=1) where rnum between #{start} and #{end}
+		rnum from party) where rnum between #{start} and #{end}
 	</select>
 	<!--by 태훈 상세 검색 -->
 	<select id="partySearch" resultType="coma.spring.dto.PartyDTO">
-		select * from (select * from party where status =1)
+		select * from party
 		<trim prefixOverrides="or" prefix="where">
 			<if test="address != ''"> parent_address like '%${address}%'</if>
 			<if test="gender != null"> or gender = '${gender}'</if>
@@ -98,23 +102,26 @@
 	</select>
 	<!-- by 태훈 모임 갯수 -->
 	<select id="getListCount" resultType="int">
-		select count(*) from party where status =1
+		select count(*) from party
 	</select>
 	<!-- by 태훈 모임 순위 순 장소 아이디 리스트 -->
 	<select id="PartyCountById" resultType="String">
 		select place_id from
 		party group by place_id order by count(*) desc
 	</select>
-	<!-- by 지은 작성자 별 모집 리스트 -->
+	<!-- by 지은 작성자 별 모집 리스트 쿼리문 수정: 반장인 방과 아닌 방을 구분하기 위해서 채팅방에 참여중인 모든 리스트를 출력하는 것으로 수정함_20200708 -->
 	<select id="selectByWriterPage" resultType="coma.spring.dto.PartyDTO">
 		select * from (select party.*, row_number() over(order by
-		seq desc) rnum from party where writer=#{writer}) where rnum between
+		seq desc) rnum from party where seq in (select chatSeq_parent from partylist where participant = #{nickname})) where rnum between
 		#{start} and #{end}
 	</select>
 	<!-- by 지은 작성자 별 모임 글 갯수 -->
 	<select id="getMyPageArticleCount" resultType="int">
-		select count(*)
-		from party where writer = #{value}
+		select count(*) from party where seq in (select chatSeq_parent from partylist where participant = #{value})
 	</select>
 	
+	<!--  by 수지 블랙리스트 체크 -->
+	<select id="userBlockedConfirm" resultType="int">
+      select count(*) from blacklist where chatSeq_parent= #{seq} and blocked = #{name}
+   </select>
 </mapper>
