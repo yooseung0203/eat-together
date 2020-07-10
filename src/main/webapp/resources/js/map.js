@@ -114,14 +114,19 @@ $(function(){
 	    $(document).on("click","#recruit",function(){
 	    	alert($(this).closest(".info").find(".place_name b").text());
 	    	alert($(this).closest(".info").find(".address_name").text());
-	    	location.href = "/map/toParty_New?parent_name="+$(this).closest(".info").find(".place_name b").text()+"&parent_address="+$(this).closest(".info").find(".address_name").text();
+	    	location.href = "/map/toParty_New?parent_name="+$(this).closest(".info").find(".place_name b").text()
+	    									+"&parent_address="+$(this).closest(".info").find(".address_name").text()
+	    									+"&place_id="+$(this).closest(".info").find(".place_id").text()
+	    									+"&category="+$(this).closest(".info").find(".category_name").text();
 	    })
 	    $("#mapRecruit").on("click",function(){
 	    	alert($(this).closest(".partylist").siblings(".store_info").find(".name").text());
 	    	alert($(this).closest(".partylist").siblings(".store_info").find(".address").text());
-	    	location.href = "/map/toParty_New?parent_name="+$(this).closest(".partylist").siblings(".store_info").find(".name").text()
+	    	location.href = "/map/mapToParty_New?parent_name="+$(this).closest(".partylist").siblings(".store_info").find(".name").text()
 								    						+"&parent_address="+$(this).closest(".partylist").siblings(".store_info").find(".address").text()
-								    						+"&img="+$(this).closest(".partylist").siblings(".store_info").find("img").attr("src");
+								    						+"&img="+$(this).closest(".partylist").siblings(".store_info").find("img").attr("src")
+								    						+"&place_id="+$(this).closest(".partylist").siblings(".store_info").find(".place_id").text()
+								    						+"&category="+$(this).closest(".partylist").siblings(".store_info").find(".category").text();
 	    })
 
 	    var kakaoCafeMarkers = [];
