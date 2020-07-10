@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import coma.spring.dto.FaqDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.service.AdminService;
+import coma.spring.service.FaqService;
 
 
 
@@ -25,6 +26,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService aservice;
+	
+	@Autowired
+	FaqService fservice;
 	
 	@RequestMapping("toAdmin")
 	public String toAdmin() {
@@ -51,12 +55,12 @@ public class AdminController {
 
 			}
 			
-			List<FaqDTO> contents = aservice.faqList(cpage);
+			List<MemberDTO> contents = aservice.memberList(cpage);
 			String navi = aservice.getMemberPageNav(cpage);
 			
 			request.setAttribute("contents", contents);
 			request.setAttribute("navi", navi);
-			return "/admin/admin_faq";
+			return "/admin/admin_member";
 		}
 		else {
 			return "error";
@@ -76,14 +80,12 @@ public class AdminController {
 
 			}
 			
-			List<MemberDTO> members = aservice.memberList(cpage);
-			int mCount = aservice.getAllMemberCount();
-			String navi = aservice.getMemberPageNav(cpage);
+			List<FaqDTO> list = fservice.selectByPage(cpage);
+			String navi = fservice.navi(cpage);
 			
-			request.setAttribute("members", members);
-			request.setAttribute("count", mCount);
+			request.setAttribute("list", list);
 			request.setAttribute("navi", navi);
-			return "/admin/admin_member";
+			return "/admin/admin_faq";
 		}
 		else {
 			return "error";

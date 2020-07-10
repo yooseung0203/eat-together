@@ -396,10 +396,10 @@ public class PartyController {
 		
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		
-		redirectAttributes.addAttribute("con",content);
+		//redirectAttributes.addAttribute("con",content);
 		redirectAttributes.addAttribute("partyFullCheck", AfterpartyFullCheck);
 		redirectAttributes.addAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
-		return "redirect:/party/party_content";
+		return "redirect:/party/party_content?seq=" + content.getSeq();
 		
 	}
 	// 수지 모집종료 기능
