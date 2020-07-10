@@ -326,12 +326,17 @@ public class PartyController {
 	// 태훈 모임 내용 모달 창
 	@RequestMapping(value="party_content_include")
 	public String party_content_include(HttpServletRequest request) throws Exception {
-		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));
-		String img = pservice.clew(content.getParent_name());
+		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));		
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = account.getNickname();
+		boolean partyFullCheck = pservice.isPartyfull(request.getParameter("seq"));
+		boolean partyParticipantCheck= pservice.isPartyParticipant(request.getParameter("seq"), nickname);
+		//String img = pservice.clew(content.getParent_name());
 		
+		//request.setAttribute("img", img);
 		request.setAttribute("con",content);
-		request.setAttribute("img", img);
-		
+		request.setAttribute("partyFullCheck", partyFullCheck);
+		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/include/party_content_include";
 	}
 	// 수지 모임 글 보기
