@@ -32,10 +32,12 @@
 					var useradd = $("<li>");
 					useradd.append("<div class=thum><img src= alt=>");
 					useradd.append("<div id="+some[1]+" class=exist>"+some[1]);
-					var btns = $("<div class=chatBtns><button type=button>쪽지</button>");
-					if(${writer eq loginInfo.id }){
-						if(${item.participant != loginInfo.nickname }){
-							btns.append("<button type=button id=kick>강퇴</button>");
+					if(${item.participant != loginInfo.nickname }){
+						var btns = $("<div class=chatBtns><div>쪽지</div>");
+						if(${writer == loginInfo.nickname }){
+							if(${item.participant != loginInfo.nickname }){
+								btns.append("<div id=kick>강퇴</div>");
+							}
 						}
 					}
 					useradd.append(btns);
@@ -86,6 +88,8 @@
 				if (scrolled) {
 					$('.message-area').scrollTop(
 							$('.message-area')[0].scrollHeight);
+
+					$(".newMsg>div").remove();
 				} else {
 					if ($(".newMsg>div").text() == "") {
 						var newMsg = $("<div>");
@@ -178,19 +182,20 @@
 				<ul class="memNow">
 					<c:if test="${!empty memberList }">
 						<c:forEach var="item" items="${memberList }">
-							<li id="${item.participant}">
+							<li id="${item.participant}"  class="${item.exist}">
 								<div class="thum">
 									<img src="" alt="">
 								</div>
-								<div id="${item.participant}" class="${item.exist}">${item.participant}</div>
-								<div class="chatBtns">
-									<c:if test="${writer == loginInfo.id }">
-										<c:if test="${item.participant != loginInfo.nickname }">
+								<div id="${item.participant}">${item.participant}</div>
+								<c:if test="${item.participant != loginInfo.nickname }">
+									<div class="chatBtns">
+										<c:if test="${writer == loginInfo.nickname }">
 											<div id="kick">강퇴</div>
 										</c:if>
-									</c:if>
-									<div>쪽지</div>
-								</div>
+										<div id="postNote">쪽지</div>
+									</div>
+
+								</c:if>
 							</li>
 						</c:forEach>
 					</c:if>

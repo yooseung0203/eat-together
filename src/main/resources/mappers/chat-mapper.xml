@@ -22,7 +22,13 @@
 		select count(*) from partylist where participant=#{participant} and chatSeq_parent = #{chatSeq_parent}
 	</select>
 	<delete id="exitChatRoom">
-		delete from partylist where chatSeq_parent = #{chatSeq_parent} and participant = #{participant}
+		delete from partylist where chatSeq_parent = #{seq}
+			<if test="name != null">
+		 		and participant = #{name}
+			</if>
+	</delete>
+	<delete id="deleteChatRoom">
+		delete from party where seq = #{value}
 	</delete>
 	<update id="chatViewedSave">
 		update partylist set viewed_seq = #{viewed_seq} where participant=#{participant} and chatSeq_parent = #{chatSeq_parent}
