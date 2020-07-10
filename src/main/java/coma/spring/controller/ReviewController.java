@@ -33,6 +33,7 @@ public class ReviewController {
 		// 아이디 세션값에서 가져오기
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		rdto.setId(mdto.getId());
+		System.out.println(imgFile);
 		System.out.println(rdto.getId() + " : " + rdto.getContent() + " : " + rdto.getRating() + " : " + rdto.getParent_seq());
 
 		// 파일 작업
@@ -44,13 +45,14 @@ public class ReviewController {
 			System.out.println("첨부 파일이 비어있습니다.");
 			rservice.write(rdto);
 		}else { // 파일을 첨부한 경우
-			ReviewFileDTO rvdto = new ReviewFileDTO();
+			ReviewFileDTO rfdto = new ReviewFileDTO();
 			System.out.println(realPath);
-			rvdto.setOriname(imgFile.getOriginalFilename());
-			rvdto.setSysname(uuid+"_"+imgFile.getOriginalFilename());
-			File targetLoc = new File(realPath + "/" + rvdto.getSysname());
+			System.out.println("이미지 파일 이름 :" + imgFile.getOriginalFilename());
+			rfdto.setOriname(imgFile.getOriginalFilename());
+			rfdto.setSysname(uuid+"_"+imgFile.getOriginalFilename());
+			File targetLoc = new File(realPath + "/" + rfdto.getSysname());
 			imgFile.transferTo(targetLoc);
-			rservice.write(rdto,rvdto);
+			rservice.write(rdto,rfdto);
 		}
 		return "redirect:/map/selectMarkerInfo?place_id="+place_id;
 	}

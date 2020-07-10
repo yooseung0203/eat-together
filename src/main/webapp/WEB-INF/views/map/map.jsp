@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>지도 생성하기</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?sadasdaadsasdsadsdasasdasdd'></script>
+<script src='/resources/js/map.js?'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asddasddadsasdccassadsdadd">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -38,11 +38,8 @@
 <body>
 	<!-- 로그인 인포 가져오기 -->
 	<c:if test="${not empty sessionScope.loginInfo}">
-		<div style="display:none;" id="loginInfo_id">${sessionScope.loginInfo.id}</div>
+		<div style="display:none;" id="loginInfo_nickname">${sessionScope.loginInfo.nickname}</div>
 	</c:if>
-	<!-- 상세정보 버튼을 누른 핀 좌표 -->
-	<div style="display: none;" id="selectedLat"></div>
-	<div style="display: none;" id="selectedLng"></div>
 	<!-- 사용자가 보고 있는 중심 좌표 -->
 	<div style="display: none;" id="centerLat"></div>
 	<div style="display: none;" id="centerLng"></div>
@@ -66,6 +63,7 @@
 		<div id="sideBar">
 			<div class="search_area">
 				<div class="category_search_btns mx-auto">
+					<button type="button" id="backMap"><i class="fas fa-map-marked-alt"></i></button>
 					<div class="search_btn" id="foodBtn">
 						<img src="/resources/img/fork.png" style="height: 20px;">
 					</div>
@@ -82,7 +80,13 @@
 				</div>
 			</div>
 			<div class="side">
-				<div class="search_result"></div>
+				<div class="search_result">
+					<c:if test="${empty mapdto}">
+						<div class="map_approach">
+							지도에서 핀을 선택해 맛집 정보를 확인해주세요.
+						</div>
+					</c:if>
+				</div>
 				<div class="choose_info">
 					<c:if test="${not empty mapdto}">
 						<div class="store_info mx-auto">
@@ -281,82 +285,9 @@
 
 		</div>
 		<div id="map"></div>
-		<div class="foodInsert text-center">FD6</div>
-		<div class="cafeInsert text-center">CE7</div>
-		<div class="food text-center">
-			<i class="fas fa-hamburger"></i>
-		</div>
-		<div class="cafe text-center">
-			<i class="fas fa-coffee"></i>
-		</div>
-		<!-- <div class="map_add text-center" data-toggle="modal"
-			data-target="#exampleModal">
-			<i class="fas fa-plus"></i>
-		</div> -->
-
-		<!-- Modal -->
-		<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-			aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">일반 맛집 추가하기</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">선택한 맛집 정보</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">도로명 주소</th>
-									<td class="road_address"></td>
-								</tr>
-								<tr>
-									<th scope="row">지번 주소</th>
-									<td class="address"></td>
-								</tr>
-								<tr>
-									<th scope="row">위도</th>
-									<td class="lat"></td>
-								</tr>
-								<tr>
-									<th scope="row">경도</th>
-									<td class="lng"></td>
-								</tr>
-								<tr>
-									<th scope="row">가게명</th>
-									<td class="name"><input type="text"
-										class="form-control form-control-sm"
-										placeholder="가게명을 입력해주세요."></td>
-								</tr>
-								<tr>
-									<th scope="row">카테고리</th>
-									<td class="category"><select
-										class="form-control form-control-sm">
-											<option value="음식점">음식점</option>
-											<option value="카페">카페</option>
-									</select></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">등록</button>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
+		<div class="foodInsert text-center"><i class="fas fa-hamburger"></i></div>
+		<div class="cafeInsert text-center"><i class="fas fa-coffee"></i></div>
+		
 		<!-- 맛집 참가 modal -->
 		<div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">

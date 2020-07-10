@@ -12,6 +12,15 @@ function toStopRecruit(seq){
 	location.href= "/party/stopRecruit?seq="+seq;
 	}
 }
+function partyModify(seq){
+	location.href = "/party/partymodify?seq="+seq;
+}
+function partyDelete(seq){
+	var ask = confirm("삭제 후에는 복구할 수 없습니다.\n 정말 삭제하겠습니까?");
+	if (ask) {
+		location.href = "/party/partydelete?seq="+seq;
+	}
+}
 $(function(){
 		/****************** 스타일 관련 영역 ******************/
 		$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
@@ -98,10 +107,14 @@ $(function(){
 					$(".choose_info").html("");
 					$(".search_result").html("");
 					var info = $("<div class='info'></div>");
-					info.append("<div class='category_name' style='font-size:10pt;'>"+resp.result.category_group_name+"</div>");
+					info.append("<div class='category' style='font-size:10pt;'>"+resp.result.category_group_name+"</div>");
 					info.append("<div class='place_name' style='font-size:12pt;'><b>"+resp.result.place_name+"</b></div>");
 					info.append("<div class='place_id' style='display:none;'>"+resp.result.id+"</div>");
-					info.append("<div class='address_name' style='font-size:10pt;'>"+resp.result.address_name+"</div>");
+					info.append("<div class='lat' style='display:none;'>"+resp.result.y+"</div>");
+					info.append("<div class='lng' style='display:none;'>"+resp.result.x+"</div>");
+					info.append("<div class='road_address' style='display:none;'>"+resp.result.road_address_name+"</div>");
+					info.append("<div class='place_url' style='display:none;'>"+resp.result.place_url+"</div>");
+					info.append("<div class='address' style='font-size:10pt;'>"+resp.result.address_name+"</div>");
 					info.append("<div class='phone' style='font-size:10pt;'>"+resp.result.phone+"</div><br>");
 					info.append("<h style='font-size:10pt;'>아직 등록되지 않은 맛집입니다.<br>모임을 모집해 맛집으로 등록해보세요!</h>");
 					info.append("<button type='button' class='btn btn-primary' id='recruit' style='margin-top:10px;'>내가 직접 모집하기</button>")
@@ -114,10 +127,15 @@ $(function(){
 	    $(document).on("click","#recruit",function(){
 	    	alert($(this).closest(".info").find(".place_name b").text());
 	    	alert($(this).closest(".info").find(".address_name").text());
-	    	location.href = "/map/toParty_New?parent_name="+$(this).closest(".info").find(".place_name b").text()
-	    									+"&parent_address="+$(this).closest(".info").find(".address_name").text()
-	    									+"&place_id="+$(this).closest(".info").find(".place_id").text()
-	    									+"&category="+$(this).closest(".info").find(".category_name").text();
+	    	location.href = "/map/toParty_New?name="+$(this).closest(".info").find(".place_name b").text()
+	    									+"&address="+$(this).closest(".info").find(".address").text()
+	    									+"&road_address="+$(this).closest(".info").find(".road_address").text()
+	    									+"&category="+$(this).closest(".info").find(".category").text()
+	    									+"&lat="+$(this).closest(".info").find(".lat").text()
+	    									+"&lng="+$(this).closest(".info").find(".lng").text()
+	    									+"&phone="+$(this).closest(".info").find(".phone").text()
+	    									+"&place_url="+$(this).closest(".info").find(".place_url").text()
+	    									+"&place_id="+$(this).closest(".info").find(".place_id").text();
 	    })
 	    $("#mapRecruit").on("click",function(){
 	    	alert($(this).closest(".partylist").siblings(".store_info").find(".name").text());
@@ -339,9 +357,6 @@ $(function(){
 		$("#centerLat").text(map.getCenter().getLat());
 	    $("#centerLng").text(map.getCenter().getLng());
 		
-	    if($("#markerLat").text()!=""){
-			map.setCenter(new kakao.maps.LatLng($("#markerLat").text(), $("#markerLng").text()));
-	    }
 	    
 		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
 		var zoomControl = new kakao.maps.ZoomControl();
@@ -362,36 +377,6 @@ $(function(){
 		// 주소-좌표 변환 객체를 생성합니다
 		var geocoder = new kakao.maps.services.Geocoder();
 
-		var marker = new kakao.maps.Marker(), // 클릭한 위치를 표시할 마커입니다
-		infowindow = new kakao.maps.InfoWindow({zindex:30}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
-
-		// 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-		searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-
-		// 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
-		kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-		    searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
-		        if (status === kakao.maps.services.Status.OK) {
-		            var detailAddr = !!result[0].road_address ? '<div class="selectedRoad">도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
-		            detailAddr += '<div class="selectedAddress">지번 주소 : ' + result[0].address.address_name + '</div>';
-		            
-		            var content = '<div class="bAddr">' +
-		                            '<span class="title">주소정보</span>' + 
-		                            detailAddr + 
-		                        '</div>';
-
-		            // 마커를 클릭한 위치에 표시합니다 
-		            marker.setPosition(mouseEvent.latLng);
-		            marker.setMap(map);
-
-		            // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
-		            infowindow.setContent(content);
-		            infowindow.open(map, marker);
-		            $(".lat").html(mouseEvent.latLng.getLat());
-		            $(".lng").html(mouseEvent.latLng.getLng());
-		        }   
-		    });
-		});
 		// 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
 		kakao.maps.event.addListener(map, 'idle', function() {
 		    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
@@ -423,141 +408,7 @@ $(function(){
 		        }
 		    }    
 		}
-		$(".map_add").on("click",function(){
-			var selectedRoad = $(".selectedRoad").text().split(" : ")[1];
-			var selectedAddress = $(".selectedAddress").text().split(" : ")[1];
-			$(".modal-body .road_address").html(selectedRoad);
-			$(".modal-body .address").html(selectedAddress);
-		})
-		
         var positions = [];
-		$(".food").on("click",function(){
-        	$.ajax({
-        		url:"/map/food",
-        		type:"get",
-        		data:{
-        			lat:$("#centerLat").text(),
-        			lng:$("#centerLng").text()},
-        		dataType:"JSON"
-        	}).done(function(resp){
-        		console.log(resp.documents.length);
-        		for(var i = 0;i < resp.documents.length;i++){
-            		//console.log(resp.documents[i].place_name);
-            		//console.log(resp.documents[i].x + " : " + resp.documents[i].y);
-            		//console.log(resp.documents[i].place_url);
-            		// 마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다 
-            		positions.push({
-            		        content: '<form action="/map/insert" method="get" id="inputForm"><div style="padding:5px;">'
-            		        			+'<div><input type=text readonly name="name" value="'+resp.documents[i].place_name+'"></div>'
-            		        			+'<div><input type=text readonly name="address" value="'+resp.documents[i].address_name+'"></div>'
-            		        			+'<div><input type=text readonly name="road_address" value="'+resp.documents[i].road_address_name+'"></div>'
-            		        			+'<div><input type=text readonly name="category" value="'+resp.documents[i].category_group_name+'"></div>'
-            		        			+'<div><input type=text readonly name="lat" value="'+resp.documents[i].y+'"></div>'
-            		        			+'<div><input type=text readonly name="lng" value="'+resp.documents[i].x+'"></div>'
-            		        			+'<div><input type=text readonly name="phone" value="'+resp.documents[i].phone+'"></div>'
-            		        			+'<div><input type=text readonly name="place_url" value="'+resp.documents[i].place_url+'"></div>'
-            		        			+'<div><input type=text readonly name="detail_category" value="'+resp.documents[i].category_name+'"></div>'
-            		        			+'<div><input type=text readonly name="place_id" value="'+resp.documents[i].id+'"></div>'
-            		        			+'<button type="submit" id="detail">맛집 등록</button></div></form>', 
-            		        latlng: new kakao.maps.LatLng(resp.documents[i].y, resp.documents[i].x),
-			    	        place_id:resp.documents[i].id,
-			    	        category:resp.documents[i].category_group_name
-            		});
-        		}
-        		
-        	    var imageSrc = 'https://i.imgur.com/rzDIRIP.png', // 마커이미지의 주소입니다    
-        	    imageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
-        	    imageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-        	    
-        		// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-        		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-        		
-        		for (var i = 0; i < positions.length; i ++) {
-        		    // 마커를 생성합니다
-        		    var marker = new kakao.maps.Marker({
-        		        map: map, // 마커를 표시할 지도
-        		        position: positions[i].latlng, // 마커의 위치
-        		        image: markerImage // 마커이미지 설정 
-        		    });
-        		    
-        		    var iwRemoveable = true;
-        		    // 마커에 표시할 인포윈도우를 생성합니다 
-        		    var infowindow = new kakao.maps.InfoWindow({
-        		        content: positions[i].content, // 인포윈도우에 표시할 내용
-        		        removable : iwRemoveable
-        		    });
-
-        		    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-        		    // 이벤트 리스너로는 클로저를 만들어 등록합니다
-        		 	// 마커에 클릭이벤트를 등록합니다
-        		 	
-        		    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
-        		}
-        	}).fail(function(error1,error2){
-        		console.log(error1);
-        		console.log(error2);
-        	})
-		})
-		$(".cafe").on("click",function(){ // 카페
-        	$.ajax({
-        		url:"/map/cafe",
-        		type:"get",
-        		data:{
-        			lat:$("#centerLat").text(),
-        			lng:$("#centerLng").text()},
-        		dataType:"JSON"
-        	}).done(function(resp){
-        		console.log(resp.documents.length);
-        		var positions = [];
-        		for(var i = 0;i < resp.documents.length;i++){
-            		console.log(resp.documents[i].id);
-            		//console.log(resp.documents[i].place_name);
-            		//console.log(resp.documents[i].x + " : " + resp.documents[i].y);
-            		//console.log(resp.documents[i].place_url);
-            		positions.push({
-        		        content: '<form action="/map/insert" method="get" id="inputForm"><div style="padding:5px;">'
-        		        			+'<div><input type=text readonly name="name" value="'+resp.documents[i].place_name+'"></div>'
-        		        			+'<div><input type=text readonly name="address" value="'+resp.documents[i].address_name+'"></div>'
-        		        			+'<div><input type=text readonly name="road_address" value="'+resp.documents[i].road_address_name+'"></div>'
-        		        			+'<div><input type=text readonly name="category" value="'+resp.documents[i].category_group_name+'"></div>'
-        		        			+'<div><input type=text readonly name="lat" value="'+resp.documents[i].y+'"></div>'
-        		        			+'<div><input type=text readonly name="lng" value="'+resp.documents[i].x+'"></div>'
-        		        			+'<div><input type=text readonly name="phone" value="'+resp.documents[i].phone+'"></div>'
-        		        			+'<div><input type=text readonly name="place_url" value="'+resp.documents[i].place_url+'"></div>'
-        		        			+'<div><input type=text readonly name="detail_category" value="'+resp.documents[i].category_name+'"></div>'
-        		        			+'<div><input type=text readonly name="place_id" value="'+resp.documents[i].id+'"></div>'
-        		        			+'<button type="submit" id="detail">맛집 등록</button></div></form>', 
-        		        latlng: new kakao.maps.LatLng(resp.documents[i].y, resp.documents[i].x),
-		    	        place_id:resp.documents[i].id,
-		    	        category:resp.documents[i].category_group_name
-        			});
-        		}
-        		
-        	    var imageSrc = 'https://i.imgur.com/kKE28hx.png', // 마커이미지의 주소입니다    
-        	    imageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
-        	    imageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-        	    
-        		// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-        		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-        		for (var i = 0; i < positions.length; i ++) {
-        		    var marker = new kakao.maps.Marker({
-        		        map: map, 
-        		        position: positions[i].latlng,
-        		        image: markerImage
-        		    });
-        		    
-        		    var iwRemoveable = true;
-        		    var infowindow = new kakao.maps.InfoWindow({
-        		        content: positions[i].content, 
-        		        removable : iwRemoveable
-        		    });
-        		    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
-        		}
-        	}).fail(function(error1,error2){
-        		console.log(error1);
-        		console.log(error2);
-        	})
-		})
 		$(".foodInsert").on("click",function(){ // 음식점 입력
         	$.ajax({
         		url:"/map/foodInsert",
@@ -642,11 +493,11 @@ $(function(){
 				}else if(resp.partyParticipantCheck == true){
 					$(".modal-footer").append('<button type="button" id="toChatroom" class="btn btn-primary" onClick=\"toChatroom('+resp.pdto.seq+');\">채팅방으로 이동</button>');
 				}
-				if($("#loginInfo_id").text() == resp.pdto.writer){
+				if($("#loginInfo_nickname").text() == resp.pdto.writer){
 					if(resp.pdto.status == 1){
 						$("#partyModal .modal-footer").append('<button type="button" id="toStopRecruit" class="btn btn-light" onClick=\"toStopRecruit('+resp.pdto.seq+');\">모집종료하기</button>');
 					}
-					$("#partyModal .modal-footer").append('<button type="button" id="partyModify" class="btn btn-warning">수정</button><button type="button" id="partyDelete" class="btn btn-danger">삭제</button>');
+					$("#partyModal .modal-footer").append('<button type="button" id="partyModify" class="btn btn-warning" onClick=\"partyModify('+resp.pdto.seq+')\">수정</button><button type="button" id="partyDelete" class="btn btn-danger" onClick=\"partyDelete('+resp.pdto.seq+')\">삭제</button>');
 				}
 			})
 		})
@@ -1268,6 +1119,9 @@ $(function(){
 		        infoOverSet(customOverlay,map);
 			})
 		})
+	    if($("#markerLat").text()!=""){
+			map.setCenter(new kakao.maps.LatLng($("#markerLat").text(), $("#markerLng").text()));
+	    }
 		/****************** 리뷰 및 기타 영역 ******************/		
 		$("#review_write").on("submit",function(){
 			var result = false;
@@ -1293,7 +1147,8 @@ $(function(){
 				$(".filebox i").css('color','none');
 			}
 			else {// 체크를 통과했다면 종료.
-				this.outerHTML = this.outerHTML;
+				console.log("파일 입력");
+				/*this.outerHTML = this.outerHTML;*/
 				$(".filebox i").css('color','#038cfc');
 				return;
 			}
@@ -1307,6 +1162,9 @@ $(function(){
 		})
 		$(".toSignUp").on("click",function(){
 			location.href = "/member/signup_check";
+		})
+		$("#backMap").on("click",function(){
+			location.href = "/map/toMap";
 		})
 	})
 	.ajaxStart(function(){
