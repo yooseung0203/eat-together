@@ -63,7 +63,8 @@
 					<tr>
 						<th scope="row">PROFILE IMAGE</th>
 						<td class="myinfo_text" id=profile_box><img
-							src="/upload/${loginInfo.id}/${mdto.sysname}" onError="this.src='/resources/img/no_img.png'" alt=""></td>
+							src="/upload/${loginInfo.id}/${mdto.sysname}"
+							onError="this.src='/resources/img/no_img.png'" alt=""></td>
 
 					</tr>
 					<tr>
@@ -80,8 +81,10 @@
 					</tr>
 					<tr>
 						<th scope="row">GENDER</th>
-						<td class="myinfo_text"><input type="radio" id="gender" value="${mdto.gender}" checked
-							onclick="return(false);" style="display: none;"> <label for="gender" id="gender_text"></label></td>
+						<td class="myinfo_text"><input type="radio" id="gender"
+							name="gender" value="${mdto.gender}" checked
+							onclick="return(false);" style="display: none;"> <label
+							for="gender" id="gender_text"></label></td>
 					</tr>
 					<tr>
 						<th scope="row">EMAIL</th>
@@ -111,17 +114,16 @@
 
 		})
 		$("#editMyInfo").on("click", function() {
-			location.replace('/member/editMyInfo');
+			location.replace('/member/editMyInfoView');
 		})
-		
+
 		//by 지은, 성별의 int 값을 jsp에서 남여로 출력하는 과정_20200708
 		var gender = $("#gender").val();
-		if(gender==1){
+		if (gender == 1) {
 			$("#gender_text").html("남");
-		}else{
+		} else {
 			$("#gender_text").html("여");
 		}
-		
 	</script>
 
 	<!-- ******************* -->
