@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import coma.spring.dto.FaqDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.service.AdminService;
+import coma.spring.service.FaqService;
 
 
 
@@ -24,6 +26,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminService aservice;
+	
+	@Autowired
+	FaqService fservice;
 	
 	@RequestMapping("toAdmin")
 	public String toAdmin() {
@@ -50,14 +55,37 @@ public class AdminController {
 
 			}
 			
-			List<MemberDTO> members = aservice.memberList(cpage);
-			int mCount = aservice.getAllMemberCount();
+			List<MemberDTO> contents = aservice.memberList(cpage);
 			String navi = aservice.getMemberPageNav(cpage);
 			
-			request.setAttribute("members", members);
-			request.setAttribute("count", mCount);
+			request.setAttribute("contents", contents);
 			request.setAttribute("navi", navi);
 			return "/admin/admin_member";
+		}
+		else {
+			return "error";
+		}
+	}
+	
+	@RequestMapping("toAdmin_faq")
+	public String toAdmin_faq(HttpServletRequest request)  throws Exception {
+		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
+		String adminCheck = loginInfo.getId();
+		if(adminCheck.contentEquals("administrator")) {
+			
+			int cpage=1;
+			try {
+				cpage = Integer.parseInt(request.getParameter("cpage"));
+			}catch(Exception e) {
+
+			}
+			
+			List<FaqDTO> list = fservice.selectByPage(cpage);
+			String navi = fservice.navi(cpage);
+			
+			request.setAttribute("list", list);
+			request.setAttribute("navi", navi);
+			return "/admin/admin_faq";
 		}
 		else {
 			return "error";
