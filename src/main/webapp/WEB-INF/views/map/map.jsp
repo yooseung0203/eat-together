@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>지도 생성하기</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?sadasdasdasasdasdd'></script>
+<script src='/resources/js/map.js?sadasdaadsasdsadsdasasdasdd'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asdddadsccasdd">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asddasddadsasdccassadsdadd">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -36,6 +36,10 @@
 	rel="stylesheet">
 </head>
 <body>
+	<!-- 로그인 인포 가져오기 -->
+	<c:if test="${not empty sessionScope.loginInfo}">
+		<div style="display:none;" id="loginInfo_id">${sessionScope.loginInfo.id}</div>
+	</c:if>
 	<!-- 상세정보 버튼을 누른 핀 좌표 -->
 	<div style="display: none;" id="selectedLat"></div>
 	<div style="display: none;" id="selectedLng"></div>
@@ -88,6 +92,7 @@
 								</div>
 							</div>
 							<div class="category">${mapdto.category}</div>
+							<div class="place_id" style="display:none;">${mapdto.place_id}</div>
 							<div class="name">${mapdto.name}</div>
 							<div class="address">${mapdto.address}</div>
 							<div class="road_address">${mapdto.road_address}</div>
@@ -179,13 +184,20 @@
 					<c:if test="${not empty mapdto}">
 						<div class="partylist">
 							<b>진행중인 모임</b>
-							<c:if test="${not empty partyList}">
-								<c:forEach var="i" items="${partyList}">
+							<c:if test="${not empty partyMap}">
+								<c:forEach var="i" items="${partyMap}">
 									<div class="party">
-										<div class="title">${i.title}</div>
-										<div class="seq" style="display: none;">${i.seq}</div>
-										<button type="button" class="btn btn-primary join"
-											data-toggle="modal" data-target="#partyModal">참가</button>
+										<div class="title">${i.key.title}</div>
+										<div class="seq" style="display: none;">${i.key.seq}</div>
+										<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
+										<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
+										<c:if test="${i.key.status eq 1}">
+											<button type="button" class="btn btn-primary join"
+												data-toggle="modal" data-target="#partyModal">참가</button>										
+										</c:if>
+										<c:if test="${i.key.status eq 0}">
+											<button type="button" class="btn btn-primary endParty" disabled>종료</button>
+										</c:if>
 									</div>
 								</c:forEach>
 							</c:if>
@@ -196,7 +208,7 @@
 					  	</c:if>
 								</ul>
 							</nav>
-							<button type="button" class="btn btn-primary" id="recruit">내가 직접 모집하기</button>
+							<button type="button" class="btn btn-primary" id="mapRecruit">내가 직접 모집하기</button>
 						</div>
 					</c:if>
 					<c:if test="${not empty markerlat}">
@@ -277,13 +289,13 @@
 		<div class="cafe text-center">
 			<i class="fas fa-coffee"></i>
 		</div>
-		<div class="map_add text-center" data-toggle="modal"
+		<!-- <div class="map_add text-center" data-toggle="modal"
 			data-target="#exampleModal">
 			<i class="fas fa-plus"></i>
-		</div>
+		</div> -->
 
 		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+		<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
@@ -343,7 +355,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div> -->
 
 		<!-- 맛집 참가 modal -->
 		<div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
@@ -364,7 +376,11 @@
 						<table class="table">
 							<tbody>
 								<tr>
-									<td class="badges">
+									<th scope="row">작성자</th>
+									<td class="writer"></td>
+								</tr>
+								<tr>
+									<td class="badges" colspan="2">
 										<div>
 											<span class="badge badge-pill badge-light drinking"></span>
 										</div>
@@ -398,11 +414,6 @@
 						</table>
 					</div>
 					<div class="modal-footer">
-						<!-- 수정, 삭제 버튼 : 로그인 세션과 작성자 아이디 비교 필요 -->
-						<button type="button" class="btn btn-primary">수정</button>
-						<button type="button" class="btn btn-primary">삭제</button>
-						<button type="button" class="btn btn-primary" id="joinParty">채팅방
-							입장하기</button>
 					</div>
 				</div>
 			</div>

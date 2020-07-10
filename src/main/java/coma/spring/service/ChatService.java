@@ -24,8 +24,15 @@ public class ChatService {
 		ChatStatics.savedChatsSeq.put(roomNum, list.size());		
 	}
 	public int exitChatRoom(String nickName , int roomNum) {
-		PartyMemberDTO pmdto = new PartyMemberDTO(roomNum , nickName);
-		return cdao.exitChatRoom(pmdto);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name" , nickName);
+		map.put("seq" , roomNum);
+		return cdao.exitChatRoom(map);
+	}
+	public int exitAllChatRoom(int roomNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("seq" , roomNum);
+		return cdao.exitChatRoom(map);
 	}
 
 	public List<PartyMemberDTO> selectChatMembers(int roomNum) {
@@ -49,5 +56,8 @@ public class ChatService {
 		map.put("name" , name);
 		map.put("seq" , seq);
 		return cdao.addBlacklist(map);
+	}
+	public int deleteChatRoom(int roomNum) {
+		return cdao.deleteChatRoom(roomNum);
 	}
 }

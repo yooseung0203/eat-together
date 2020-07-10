@@ -77,6 +77,9 @@
 	}
 
 	$(function() {
+		//$('input[name=date]').attr("readonly",true);
+		
+		
 	/* 	$("#party_date").datepicker({
 			dateFormat : 'yy-mm-dd',
 			minDate : 0,
@@ -281,12 +284,23 @@
 				return false;
 			}
 			;
+			
+			if(count>4 || count < 2){
+				alert("모임인원은 2~4명 사이로 지정해주세요");
+				return false;
+			};
+			
 
 			if (!isCheckGender) {
 				alert('멤버구성을 선택해주세요');
 				return false;
 			}
 			;
+			
+			if(count>4 || count < 2){
+	            alert("모임인원은 2~4명 사이로 지정해주세요");
+	            return false;
+	         };
 
 			if (!isCheckAge) {
 				alert('모집하고자하는 연령대를 선택해주세요');
@@ -327,8 +341,6 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-
-
 	<c:if test="${empty sessionScope.loginInfo }">
 		<h3 class="text-center my-5">로그인 후 이용해주세요.</h3>
 	</c:if>
@@ -348,7 +360,7 @@
 							<div class="col-sm-2">상호명</div>
 							<div class="col-sm-7">
 								<input type="text" class="form-control" name="parent_name"
-									id="parent_name" readonly>
+									id="parent_name" value="${parent_name}" readonly>
 							</div>
 							<div class="col-sm-3">
 								<button id="search_parent_name" class="btn btn-primary"
@@ -358,16 +370,46 @@
 						<div class="row mb-1">
 							<div class="col-sm-2">위치</div>
 							<div class="col-sm-8">
+								<!-- 예지 수정 : 지도형 페이지에서 '내가 직접 모집하기' 버튼으로 접근 / 네비 '모임모집' 버튼으로 접근하는 경우 구분-->
 								<input type="text" class="form-control" name="parent_address"
-									id="parent_address" readonly> <input type="hidden"
-									name="place_id" id="place_id"> <input type="hidden"
-									name="lng" id="lng"> <input type="hidden" name="lat"
-									id="lat"> <input type="hidden" name="category"
-									id="category"> <input type="hidden" name="phone"
-									id="phone"> <input type="hidden" name="road_address_name"
-									id="road_address_name"> <input type="hidden"
-									name="place_url" id="place_url"> <input type="hidden"
-									name="imgaddr" id="imgaddr">
+										id="parent_address" value="${parent_address}" readonly> 
+								<c:choose>
+									<c:when test="${not empty mdto}">
+										<input type="hidden"
+										name="place_id" id="place_id" value="${mdto.place_id}"> <input type="hidden"
+										name="lng" id="lng" value="${mdto.lng}"> <input type="hidden" name="lat"
+										id="lat" value="${mdto.lat}"> <input type="hidden" name="category"
+										id="category" value="${mdto.category}"> <input type="hidden" name="phone"
+										id="phone" value="${mdto.phone}"> <input type="hidden" name="road_address_name"
+										id="road_address_name" value="${mdto.road_address}"> <input type="hidden"
+										name="place_url" id="place_url" value="${mdto.place_url}"> <input type="hidden"
+										name="imgaddr" id="imgaddr" value="${img}">
+									</c:when>
+									<c:when test="${not empty kakaojson}">
+										<c:forEach items="${kakaojson}" var="i" begin="0" end="0" varStatus="status">
+											<input type="hidden"
+											name="place_id" id="place_id" value="${place_id}" > <input type="hidden"
+											name="lng" id="lng" value="${lng}"> <input type="hidden" name="lat"
+											id="lat" value="${lat}"> <input type="hidden" name="category"
+											id="category" value="${category}"> <input type="hidden" name="phone"
+											id="phone" value="${phone}"> <input type="hidden" name="road_address_name"
+											id="road_address_name" value="${road_address}"> <input type="hidden"
+											name="place_url" id="place_url" value="${place_url}"> <input type="hidden"
+											name="imgaddr" id="imgaddr" value="${img}">
+										</c:forEach>
+									</c:when>
+									<c:otherwise>
+										<input type="hidden"
+										name="place_id" id="place_id"> <input type="hidden"
+										name="lng" id="lng"> <input type="hidden" name="lat"
+										id="lat"> <input type="hidden" name="category"
+										id="category"> <input type="hidden" name="phone"
+										id="phone"> <input type="hidden" name="road_address_name"
+										id="road_address_name"> <input type="hidden"
+										name="place_url" id="place_url"> <input type="hidden"
+										name="imgaddr" id="imgaddr">
+									</c:otherwise>
+								</c:choose>
 							</div>
 						</div>
 
@@ -395,7 +437,8 @@
 	                	    useSeconds: false,
 	                	    startDate: 'd',
 	                	    format: 'YYYY-MM-DD H:mm',
-	                	    stepping: 5 
+	                	    stepping: 5,
+	                	    showOn: "both"
 	                
 	                }); //datepicker end
 	            });
@@ -485,7 +528,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-4" id="img-area"></div>
+					<div class="col-12 col-sm-4" id="img-area"><img src="${img}" width="300px" id="storeimg"></div>
 				</div>
 			</div>
 			<div class="container formdiv">

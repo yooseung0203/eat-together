@@ -83,12 +83,12 @@
 					<div class="panel panel-default">
 						<div class="panel-heading p-3 mb-3" role="tab"
 							id="heading${status.index}">
-							<h3 class="panel-title">
+							<h5 class="panel-title">
 								<a class="collapsed" role="button" title=""
 									data-toggle="collapse" data-parent="#accordion"
 									href="#collapse${status.index}" aria-expanded="true"
-									aria-controls="collapse${status.index}"> ${i.title} </a>
-							</h3>
+									aria-controls="collapse${status.index}"> ${i.title}  </a>
+							</h5>
 						</div>
 						<div id="collapse${status.index}" class="panel-collapse collapse"
 							role="tabpanel" aria-labelledby="heading${status.index}">
