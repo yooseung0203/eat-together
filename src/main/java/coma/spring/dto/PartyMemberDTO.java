@@ -10,6 +10,9 @@ public class PartyMemberDTO {
 		this.chatSeq_parent = chatSeq_parent;
 		this.participant = participant;
 	}
+	public PartyMemberDTO(int chatSeq_parent) {
+		this.chatSeq_parent = chatSeq_parent;
+	}
 	
 	public PartyMemberDTO(int chatSeq_parent, String participant, int viewed_seq) {
 		this.chatSeq_parent = chatSeq_parent;
