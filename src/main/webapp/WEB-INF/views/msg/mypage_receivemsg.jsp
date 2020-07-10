@@ -56,7 +56,7 @@
 			location.href = "msg_list_sender?msgcpage=1";
 		})
 		$("#list_receiver").on("click", function() {
-			location.href = "msg_list_receivermsgRcpage=1";
+			location.href = "msg_list_receiver?msgRcpage=1";
 		})
 		$(".msg_text").hide();
 		$(".msg_title").on("click", function() {
