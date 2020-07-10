@@ -327,8 +327,6 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-
-
 	<c:if test="${empty sessionScope.loginInfo }">
 		<h3 class="text-center my-5">로그인 후 이용해주세요.</h3>
 	</c:if>
@@ -348,7 +346,7 @@
 							<div class="col-sm-2">상호명</div>
 							<div class="col-sm-7">
 								<input type="text" class="form-control" name="parent_name"
-									id="parent_name" readonly>
+									id="parent_name" value="${parent_name}" readonly>
 							</div>
 							<div class="col-sm-3">
 								<button id="search_parent_name" class="btn btn-primary"
@@ -359,7 +357,7 @@
 							<div class="col-sm-2">위치</div>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" name="parent_address"
-									id="parent_address" readonly> <input type="hidden"
+									id="parent_address" value="${parent_address}" readonly> <input type="hidden"
 									name="place_id" id="place_id"> <input type="hidden"
 									name="lng" id="lng"> <input type="hidden" name="lat"
 									id="lat"> <input type="hidden" name="category"
@@ -367,7 +365,7 @@
 									id="phone"> <input type="hidden" name="road_address_name"
 									id="road_address_name"> <input type="hidden"
 									name="place_url" id="place_url"> <input type="hidden"
-									name="imgaddr" id="imgaddr">
+									name="imgaddr" id="imgaddr" value="${img}">
 							</div>
 						</div>
 
@@ -485,7 +483,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-4" id="img-area"></div>
+					<div class="col-12 col-sm-4" id="img-area"><img src="${img}" width="300px" id="storeimg"></div>
 				</div>
 			</div>
 			<div class="container formdiv">
