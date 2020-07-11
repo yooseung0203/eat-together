@@ -28,7 +28,7 @@ import coma.spring.statics.ChatStatics;
 public class WebChatSocket {
 	private ChatService cservice = MyApplicationContextAware.getApplicationContext().getBean(ChatService.class);
 	// clients : 현재 접속한 세션이 어떤 방에 접속중인지 방 번호를 저장 
-	private static Map<Session , Integer> clients = Collections.synchronizedMap(new HashMap<>());
+	public static Map<Session , Integer> clients = Collections.synchronizedMap(new HashMap<>());
 	// memebers : 방번호마다 현재 접속하고 있는 멤버의 목록을 저장  
 	public static Map<Integer , Map<Session , String>> members = Collections.synchronizedMap(new HashMap<>());
 	// 세션값
@@ -36,7 +36,7 @@ public class WebChatSocket {
 	// 로그인 정보,들어온 방의 번호 : 세션값을 통해 가져옴
 	private int roomNum;
 	private MemberDTO mdto;
-	
+
 
 	// 채팅방 접속시
 	@OnOpen
@@ -53,7 +53,7 @@ public class WebChatSocket {
 		//clients에 세션정보와 방의 번호를 저장
 		clients.put(client , roomNum);
 
-//		System.out.println(mdto.getNickname() +" 은 여기까지 읽음 " + viewed);
+		//		System.out.println(mdto.getNickname() +" 은 여기까지 읽음 " + viewed);
 		// members 내에 roomNum 방번호가 존재하면 방을 만들지 않음, 존재하지 않으면 방을 만듬
 		boolean memberExist = true;
 		for(int i : members.keySet()) {
@@ -94,7 +94,7 @@ public class WebChatSocket {
 				}
 			}
 		}
-		
+
 		synchronized (members.get(roomNum)) {
 			for(Session member : members.get(roomNum).keySet()) {
 				if(clients.get(member)==roomNum) {
@@ -110,51 +110,53 @@ public class WebChatSocket {
 	//메세지를 보낼 시
 	@OnMessage
 	public void onMessage(Session session , String message) {
-		String msg = message.replaceAll("</\\w+>", "라고 말한 바보입니다. 감히 여러분들을 공격하려다 이렇게 적발이 되었습니다 죄송합니다.").replaceAll("<\\w+>", "저는");
-		// 채팅 저장변수 선언 (방번호,채팅SEQ,메세지,닉네임,현재시간,조회수)
-		ChatDTO c = new ChatDTO(roomNum,
-				ChatStatics.savedChatsSeq.get(roomNum),
-				msg ,
-				mdto.getNickname() ,
-				new Timestamp(System.currentTimeMillis()) ,
-				0);
+		if(members.get(roomNum).keySet().contains(session)) {
+			String msg = message.replaceAll("</\\w+>", "라고 말한 바보입니다. 감히 여러분들을 공격하려다 이렇게 적발이 되었습니다 죄송합니다.").replaceAll("<\\w+>", "저는");
+			// 채팅 저장변수 선언 (방번호,채팅SEQ,메세지,닉네임,현재시간,조회수)
+			ChatDTO c = new ChatDTO(roomNum,
+					ChatStatics.savedChatsSeq.get(roomNum),
+					msg ,
+					mdto.getNickname() ,
+					new Timestamp(System.currentTimeMillis()) ,
+					0);
 
-		// 서버 저장 맵에 해당 채팅 저장
-		if(ChatStatics.savedChat) {ChatStatics.chats1.add(c);}
-		else					 {ChatStatics.chats2.add(c);}
+			// 서버 저장 맵에 해당 채팅 저장
+			if(ChatStatics.savedChat) {ChatStatics.chats1.add(c);}
+			else					 {ChatStatics.chats2.add(c);}
 
-		// 해당 채팅의 seq 넘버 증가
-		ChatStatics.savedChatsSeq.put(roomNum, ChatStatics.savedChatsSeq.get(roomNum)+1);
-		//members 필드 내에 roomNum번호의 리스트의 세션들에서 메세지를 보냄
-		synchronized (members.get(roomNum)) {
-			for(Session client : members.get(roomNum).keySet()) {
-				if(clients.get(client)==roomNum) {
-					Basic basic = client.getBasicRemote();
-					try {
-						if(client.equals(session)) {
-							basic.sendText("나:" + msg);
-						}else {
-							basic.sendText(mdto.getNickname() + ":" +msg);
-						}
-					}catch(Exception e) {	e.printStackTrace();}
+			// 해당 채팅의 seq 넘버 증가
+			ChatStatics.savedChatsSeq.put(roomNum, ChatStatics.savedChatsSeq.get(roomNum)+1);
+			//members 필드 내에 roomNum번호의 리스트의 세션들에서 메세지를 보냄
+			synchronized (members.get(roomNum).keySet()) {
+				for(Session client : members.get(roomNum).keySet()) {
+					if(clients.get(client)==roomNum) {
+						Basic basic = client.getBasicRemote();
+						try {
+							if(client.equals(session)) {
+								basic.sendText("나:" + msg);
+							}else {
+								basic.sendText(mdto.getNickname() + ":" +msg);
+							}
+						}catch(Exception e) {	e.printStackTrace();}
+					}
 				}
-			}
-		}	
+			}	
+		}
 	}
 	//채팅창 닫을시
 	@OnClose
 	public void onClose(Session session) {
-		
-		
-//		System.out.println(roomNum);
-//		System.out.println(mdto.getNickname());
+
+
+		//		System.out.println(roomNum);
+		//		System.out.println(mdto.getNickname());
 		System.out.println("세큐 몇번:" +ChatStatics.savedChatsSeq.get(roomNum));
 		cservice.chatViewedSave(roomNum,
 				mdto.getNickname(),
 				ChatStatics.savedChatsSeq.get(roomNum)-1);
-		
+
 		//member와 client의 정보를 모두 삭제
-			members.get(roomNum).remove(session);
+		members.get(roomNum).remove(session);
 		clients.remove(session);
 		synchronized (members.get(roomNum)) {
 			for(Session member : members.get(roomNum).keySet()) {
