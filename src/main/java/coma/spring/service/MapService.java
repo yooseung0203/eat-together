@@ -1,6 +1,7 @@
 package coma.spring.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,5 +36,14 @@ public class MapService {
 	}
 	public List<MapDTO> searchByCategory(String category) throws Exception{
 		return mapdao.searchByCategory(category);
+	}
+	public int updateRatingAvg(int seq) throws Exception{
+		return mapdao.updateRatingAvg(seq);
+	}
+	public List<MapDTO> selectTop5() throws Exception{
+		return mapdao.selectTop5();
+	}
+	public List<MapDTO> selectTopStore() throws Exception{
+		return mapdao.selectTopStore();
 	}
 }

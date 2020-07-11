@@ -57,27 +57,29 @@
 	    border-radius: 5px;
 	    padding: 10px;
     }
-    .side{overflow-x: hidden;overflow-y:auto;}
+    .side{overflow-x: hidden;overflow-y:auto;max-height:700px;}
     .search_count{padding: 20px;}
     .search_result .map_info{
     	align:center;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
-	    margin-top:10px;
 	    font-size:10pt;
+    }
+    .search_result .info{
+    	align:center;
+	    border-bottom:1px solid #ededed;
+	    padding: 20px;
     }
     .search_result .cafe_info{
     	align:center;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
-	    margin-top:10px;
 	    font-size:10pt;
 	}
     .search_result .food_info{
     	align:center;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
-	    margin-top:10px;
 	    font-size:10pt;
 	}
     .search_input{
@@ -146,7 +148,15 @@
     	border:0px;
     	font-size:10pt;
     }
-    #recruit{
+    .partylist .endParty{
+    	position:absolute;
+    	right:5px;
+    	background-color:#ededed;
+    	border:0px;
+    	font-size:10pt;
+    	color:black;
+    }
+    #recruit,#mapRecruit{
     	background-color:#ff9900;
     	border:0px;
     	font-size:10pt;
@@ -157,7 +167,6 @@
     	border:0px;}
     .reviewlist{
     	align:center;
-	    height: 200px;
 	    border-top:1px solid #ededed;
 	    padding: 20px;
 	    margin-bottom:20px;
@@ -229,8 +238,6 @@
 	    position:relative;
 	}
     .review_comment .writer{font-size:10pt;}
-    .review_comment i{position:absolute;right:10px;top:10px;color:#e2e2e2;}
-    .review_comment i:hover{color:black;}
     .review_comment input[type=submit]{position:absolute;right:10px;bottom:30px;float:left;}
     .map_add{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:10px;right:10px;color:#ff9900;line-height:50px;}
     .foodInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:190px;right:10px;color:#ff9900;line-height:50px;}
@@ -243,6 +250,8 @@
     #centerAddr {display:block;margin-top:2px;font-weight: normal;}
     .bAddr {padding:5px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;}
     .badge-light{background-color:#ff9900;color:white;}
+    #partyModal tbody tr:first-child th{padding-top:0px; padding-bottom:0px;font-size:10pt;}
+    #partyModal tbody tr:first-child td{padding:0px;font-size:10pt;}
     #partyModal table td{border:0px;}
     #partyModal table th{border:0px;}
     #partyModal .content{font-size:10pt;}
@@ -287,3 +296,101 @@
 	  max-height: none;
 	}
 	#partyModal .badges div{float:left;padding-right:5px;}
+	.filebox{position:absolute;right:0px;top:-10px;color:#e2e2e2;}
+	.filebox label { 
+		  display: inline-block;
+		  padding: .5em .75em;
+		  color: #999;
+		  font-size: inherit;
+		  line-height: normal;
+		  vertical-align: middle;
+		  background-color: #fdfdfd;
+		  cursor: pointer;
+		  border-bottom-color: #e2e2e2;
+		  border-radius: .25em;
+	}
+	/* .filebox  */
+	.filebox input[type=file]{ /* 파일 필드 숨기기  */
+		  position: absolute;
+		  width: 1px;
+		  height: 1px;
+		  padding: 0;
+		  margin: -1px;
+		  overflow: hidden;
+		  clip:rect(0,0,0,0);
+		  border: 0;
+	}
+	.attachedImage img{
+		width:100px;
+	}
+	.loginPlease{
+		z-index:100;
+		height:100vh;
+		width:100vw;
+		text-align: center;
+		position:fixed;
+        background-color: rgba( 255, 255, 255, 0.5 );
+        font-size:20pt;
+        font-family: 'GmarketSansBold'; 
+	}
+	.loginPlease p{
+		position:absolute;
+		top:300px;
+		left:45vw;
+		background-color:white;
+		display:inline-block;
+		padding:20px;
+        box-shadow:0 2px 10px -5px black;
+        border-radius:15px;
+	}
+	.loginPlease .btn{
+	    background-color: #ff9900;
+	    border:none;
+	 	width:200px;
+	 	text-align: center; 
+	}
+	#Progress_Loading{
+		position:fixed;
+		height:100vh;
+		width:100vw;
+        background-color: rgba( 255, 255, 255, 0.5 );
+		z-index:100;
+	}
+	#Progress_Loading img{
+		position:absolute;
+		left: 50%;
+		top: 40%;
+	}
+	.map_info:hover{
+		cursor:pointer;
+		background-color:#ededed;
+	}
+	.cafe_info:hover{
+		cursor:pointer;
+		background-color:#ededed;
+	}
+	.food_info:hover{
+		cursor:pointer;
+		background-color:#ededed;
+	}
+.mapcustomoverlay {position:relative;bottom:140px;left:0px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.mapcustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.mapcustomoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;overflow:hidden;background: #ff9900;background: #ff9900 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 10px center;}
+.mapcustomoverlay .category {display:block;text-align:right;background:#fff;margin-right:30px;padding:0px 10px 0px 10px;font-size:10px;height:30px;line-height:30px;}
+.mapcustomoverlay .title {display:block;text-align:left;background:#fff;margin-right:30px;padding:0px 10px 0px 10px;font-size:14px;font-weight:bold;height:30px;line-height:30px;}
+.mapcustomoverlay .address {display:block;text-align:left;background:#fff;margin-right:30px;padding:0px 10px 0px 10px;font-size:14px;height:30px;line-height:30px;}
+.mapcustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+	
+.foodcustomoverlay {position:relative;bottom:35px;left:5px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.foodcustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.foodcustomoverlay div {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/food_white.png) no-repeat right 8px center;}
+.foodcustomoverlay .title {display:block;text-align:center;background:#fff;margin-right:50px;padding:15px;font-size:14px;font-weight:bold;height:50px;}
+.foodcustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+	
+.cafecustomoverlay {position:relative;bottom:35px;left:5px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.cafecustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.cafecustomoverlay div {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/cafe_white.png) no-repeat right 8px center;}
+.cafecustomoverlay .title {display:block;text-align:center;background:#fff;margin-right:50px;padding:15px;font-size:14px;font-weight:bold;height:50px;}
+.cafecustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+	
+@font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }

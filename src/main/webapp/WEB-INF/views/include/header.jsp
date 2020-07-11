@@ -13,7 +13,9 @@
 			<div class="col-sm-10 mb-3">
 				<div class="row navibar h5 text-center">
 					<div class="col-sm-1">
-						<div class="navi-menu">사이트소개</div>
+						<div class="navi-menu">
+							<a href="/info/toIntroduction">사이트소개</a>
+						</div>
 					</div>
 					<div class="col-sm-1">
 						<div class="navi-menu">
@@ -46,11 +48,22 @@
 								<c:when test="${loginInfo.id == 'administrator'}">
 									<a href="#"
 										onclick="window.open('/admin/toAdmin', 'Admin','width=1300, height=800, location=no'); return false">관리자페이지</a>
-									</span>
+
 								</c:when>
 								<c:otherwise>
-									<div id="goToMyPage">마이페이지</div>
+									<a href="#" id="goToMyPage">마이페이지</a>
 								</c:otherwise>
+							</c:choose>
+						</div>
+					</div>
+					<div class="col-sm-1">
+						<div class="navi-menu">
+							<c:choose>
+								<c:when test="${loginInfo.id!=null && newMsg!=0}">
+									<button type="button" class="btn btn-primary" id="newMsg">
+										New<span class="badge badge-light">${newMsg}</span>
+									</button>
+								</c:when>
 							</c:choose>
 						</div>
 					</div>
@@ -58,22 +71,29 @@
 			</div>
 			<c:if test="${loginInfo.id == null}">
 				<div class="col-sm-1">
-					<span class="main-login"> <a href="/member/loginview">로그인
-					</a> / <a href="/member/signup_check">회원가입</a></span>
+					<span class="main-login"> 
+						<a href="/member/loginview"> 로그인 </a> / 
+						<a href="/member/signup_check">회원가입</a>
+					</span>
 				</div>
 			</c:if>
 			<c:if test="${loginInfo.id != null}">
 				<c:choose>
 					<c:when test="${loginInfo.id == 'administrator'}">
 						<div class="col-sm-1">
-							<span class="main-login"> 관리자님, 환영합니다. </a> / <a
-								href="/member/logoutProc" id="logout">로그아웃</a></span>
+							<span class="main-login"> 
+								관리자님, 환영합니다. / 
+								<a href="/member/logoutProc" id="logout">로그아웃</a>
+							</span>
 						</div>
 					</c:when>
 					<c:otherwise>
 						<div class="col-sm-1">
-							<span class="main-login"> ${loginInfo.id}님, 환영합니다. </a> / <a
-								href="/member/logoutProc" id="logout">로그아웃</a></span>
+							<span class="main-login"> 
+								${loginInfo.id}님, 환영합니다. / 
+								<a href="/member/logoutProc" id="logout">로그아웃</a>
+								<a href="#" onclick="window.open('/report/toReport', 'Report','width=600, height=700, location=no'); return false" id="Report">신고하기</a>
+							</span>
 						</div>
 					</c:otherwise>
 				</c:choose>
@@ -91,10 +111,15 @@
 	$("#goToMyPage").on("click", function() {
 		if ("${loginInfo.id}" == "") {
 			alert("로그인 후 이용해주세요");
-			location.replace('/');
+			location.replace('/member/loginview');
 		} else {
 			location.replace('/member/mypage_myinfo');
 		}
 	})
+	
+	$("#newMsg").on("click",function(){
+		location.href="/msg/msg_list_sender";
+	})
+
 </script>
 

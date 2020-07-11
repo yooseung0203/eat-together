@@ -41,35 +41,103 @@
 	href="/resources/css/party-css.css">
 </head>
 <script>
+
+function toChatroom(num){
+    var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"
+    window.open("/chat/chatroom?roomNum="+num, num, option);
+}
+
+
+$(document).ready(function(){
+	
+	 $("a[data-toggle='sns_share']").click(function(e){
+			var option = "width = 500, height = 600, top = 100, left = 200, scrollbars=no";
+			e.preventDefault();
+			var current_url = document.location.href;
+			var _this = $(this);
+			var sns_type = _this.attr('data-service');
+			var href = current_url;
+			var title = _this.attr('data-title');
+			var loc = "";
+			var img = $("meta[name='og:image']").attr('content');
+			
+			if( ! sns_type || !href || !title) return;
+			
+			if( sns_type == 'facebook' ) {
+				loc = '//www.facebook.com/sharer/sharer.php?u='+href+'&t='+title;
+			}
+			else if ( sns_type == 'twitter' ) {
+				loc = '//twitter.com/home?status='+encodeURIComponent(title)+' '+href;
+			}
+			
+			else if ( sns_type == 'pinterest' ) {
+				
+				loc = '//www.pinterest.com/pin/create/button/?url='+href+'&media='+img+'&description='+encodeURIComponent(title);
+			}
+			else if ( sns_type == 'kakaostory') {
+				loc = 'https://story.kakao.com/share?url='+encodeURIComponent(href);
+			}
+			else if ( sns_type == 'band' ) {
+				loc = 'http://www.band.us/plugin/share?body='+encodeURIComponent(title)+'%0A'+encodeURIComponent(href);
+			}
+			else if ( sns_type == 'naver' ) {
+				loc = "http://share.naver.com/web/shareView.nhn?url="+encodeURIComponent(href)+"&title="+encodeURIComponent(title);
+			}
+			else {
+				return false;
+			}
+			
+			window.open(loc,"_blank",option);
+			return false;
+		});
+	
+	
+	var stime = "${con.sTime}";
+	var time = stime.substr(0,5);
+	console.log(time);
+	$("#time").html(time);
+});
+
 	$(function() {
 		$("#partyModify").on("click", function() {
 			location.href = "/party/partymodify?seq=${con.seq}";
 		});
 
 		$("#partyDelete").on("click", function() {
-			var ask = confirm("삭제 후에는 복구할 수 없습니다. <br> 정말 삭제하겠습니까?");
+			var ask = confirm("삭제 후에는 복구할 수 없습니다.\n 정말 삭제하겠습니까?");
 			if (ask) {
 				location.href = "/party/partydelete?seq=${con.seq}";
 			}
 		});
 
-		$("#toPartyList").on("click", function() {
-			location.href = "/party/partylist";
+		$("#toPartylist").on("click", function() {
+			location.href = "/party/toPartylist";
+		});
+		
+		$("#toPartyJoin").on("click",function(){ //모임가입
+			location.href="/party/partyJoin?seq=${con.seq}";
+			
+			
 		});
 		
 		$("#toChatroom").on("click", function() {
-			location.href = "/chat/"; // 채팅연결 
+			toChatroom(${con.seq});
 		});
 		
+		$("#toExitParty").on("click",function(){
+			toExitParty(${con.seq});
+		});
+        
+		
 		$("#toStopRecruit").on("click",function(){
-			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. <br> 정말 모집을 종료하시겠습니까?");
+			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
 			if (ask) {
 			location.href= "/party/stopRecruit?seq=${con.seq}";
 			}
 		});
 
 	});
-
+	
 	//페이지 리사이징
 	$(function() {
 		$('.cropping img').each(function(index, item) {
@@ -135,10 +203,14 @@
 	<div class="container">
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
-				<h2 class="party_headline">${con.title}</h2>
+				<h2 class="party_headline"><c:out value='${con.title}' /></h2>
 				<c:choose>
-					<c:when test="${con.status  eq '1'}"><span class="badge badge-success">멤버 모집중</span></c:when>
-					<c:when test="${con.status  eq '0'}"><span class="badge badge-secondary">모집마감</span></c:when>
+					<c:when test="${con.status  eq '1'}">
+						<span class="badge badge-success">멤버 모집중</span>
+					</c:when>
+					<c:when test="${con.status  eq '0'}">
+						<span class="badge badge-secondary">모집마감</span>
+					</c:when>
 				</c:choose>
 			</div>
 			<div class="col-sm-12">작성자 : ${con.writer}</div>
@@ -147,7 +219,7 @@
 			<div class="col-sm-5">
 				<div class="featImgWrap">
 					<div class="cropping">
-						<img src="${img}" id="img">
+						<img src="${con.imgaddr}" id="img">
 					</div>
 				</div>
 			</div>
@@ -168,11 +240,11 @@
 			</div> --%>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">모임날짜</div>
-			<div class="col-lg-2">${con.sDate }</div>
+			<div class="col-sm-2">${con.sDate }</div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">시간</div>
-			<div class="col-lg-2">${con.sTime }</div>
+			<div class="col-sm-2" id="time"></div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">인원</div>
@@ -211,20 +283,52 @@
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">소개</div>
-			<div class="col-10">${con.content}</div>
+			<div class="col-10"> <c:out value='${con.content}' /></div>
+		</div>
+		<div class="row mb-1">
+			<div class="col-2 party-titlelabel">SNS공유</div>
+			<div class="col-10">
+				<a href="#" data-toggle="sns_share" data-service="naver"
+					data-title="네이버 SNS공유" class="btn btn-default">네이버 SNS 공유하기</a> <a
+					href="#" data-toggle="sns_share" data-service="twitter"
+					data-title="트위터 SNS공유" class="btn btn-default">트위터 SNS 공유하기</a> <a
+					href="#" data-toggle="sns_share" data-service="facebook"
+					data-title="페이스북 SNS공유" class="btn btn-default">페이스북 SNS 공유하기</a> <a
+					href="#" data-toggle="sns_share" data-service="band"
+					data-title="네이버밴드 SNS공유" class="btn btn-default">네이버 밴드 공유하기</a> <a
+					href="#" data-toggle="sns_share" data-service="pinterest"
+					data-title="핀터레스트 SNS공유" class="btn btn-default">핀터레스트 공유하기</a> <a
+					href="#" data-toggle="sns_share" data-service="kakaostory"
+					data-title="카카오스토리 SNS공유" class="btn btn-default">카카오스토리 공유하기</a>
+
+			</div>
 		</div>
 		<div class="row mb-3">
-			<div class="col-12">
-					<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로 이동</button>
-				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+			<div class="col-12 mb-5">
 				<c:choose>
-					<c:when test="${con.status  eq '1'}"><button type="button" id="toStopRecruit" class="btn btn-light">모집종료하기</button></c:when>
-					<c:when test="${con.status  eq '0'}"></c:when>
+					<c:when
+						test="${partyFullCheck eq false && partyParticipantCheck eq false}">
+						<button type="button" id="toPartyJoin" class="btn btn-success">모임참가하기</button>
+					</c:when>
+					<c:when test="${partyParticipantCheck  eq true}">
+						<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
+							이동</button>
+						<button type="button" id="toExitParty" class="btn btn-primary">모임 나가기</button>
+					</c:when>
 				</c:choose>
+
+
+				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+					<c:choose>
+						<c:when test="${con.status  eq '1'}">
+							<button type="button" id="toStopRecruit" class="btn btn-light">모집종료하기</button>
+						</c:when>
+						<c:when test="${con.status  eq '0'}"></c:when>
+					</c:choose>
 					<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 					<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
 				</c:if>
-				<button type="button" id="toPartyList" class="btn btn-secondary">목록으로</button>
+				<button type="button" id="toPartylist" class="btn btn-secondary">목록으로</button>
 
 			</div>
 

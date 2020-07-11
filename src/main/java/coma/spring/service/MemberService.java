@@ -12,22 +12,29 @@ import java.security.MessageDigest;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import coma.spring.dao.MemberDAO;
+import coma.spring.dao.MemberFileDAO;
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.MemberFileDTO;
 
 @Service
 public class MemberService {
 
 	@Autowired
 	private MemberDAO mdao;
+	
+	@Autowired
+	private MemberFileDAO mfdao;
 
 	//비밀번호 암호화하기
 	public String getSha512(String pw) throws Exception{
@@ -41,13 +48,21 @@ public class MemberService {
 	}
 
 	//회원가입하기
-	public int signUp(MemberDTO mdto) throws Exception{
+	@Transactional("txManager")
+	public int signUp(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
 		System.out.println("원래 비밀번호 : " + mdto.getPw());
 		String encPw = this.getSha512(mdto.getPw());
 		mdto.setPw(encPw);
 		System.out.println("암호화된 비밀번호 : " + mdto.getPw());
+		
+		Map<String, Object> signUpParam = new HashMap<>();
+		signUpParam.put("mdto", mdto);
+		signUpParam.put("mfdto", mfdto);
+		
+		int result = mdao.signUp(signUpParam);
+		mfdao.uploadProc(mfdto);
 
-		return mdao.signUp(mdto);
+		return result;
 	}
 
 	//로그인하기
@@ -72,6 +87,12 @@ public class MemberService {
 		boolean result = mdao.isIdAvailable(id);
 		return result;
 	}
+	
+	//회원가입시 닉네임 중복검사
+	public boolean isNickAvailable(String nickname)throws Exception{
+		boolean result = mdao.isNickAvailable(nickname);
+		return result;
+	}
 
 	//회원탈퇴
 	public int deleteMember(Map<String, String> param) throws Exception{
@@ -79,8 +100,13 @@ public class MemberService {
 		return result;
 	}
 	//내정보수정하기
-	public int editMyInfo(Map<String, String> param) throws Exception{
-		int result = mdao.editMyInfo(param);
+	public int editMyInfo(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
+		
+		Map<String, Object> editParam = new HashMap<>();
+		editParam.put("mdto", mdto);
+		editParam.put("mfdto", mfdto);
+		
+		int result = mdao.editMyInfo(editParam);
 		return result;
 	}
 	//비밀번호 수정하기
@@ -182,19 +208,24 @@ public class MemberService {
 			JsonElement element = JsonParser.parseString(result);
 
 			String id = element.getAsJsonObject().get("id").getAsString();
-			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+			JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject(); 
 			JsonObject kakao_account = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 
+			Random randomGenerator = new Random();
+			int randomInteger = randomGenerator.nextInt(1000);
+			
 			if(mdao.selectMyInfo(id)==null) {
 				mdto.setId(id);
-				mdto.setNickname(nickname);
 				mdto.setPw("");
+				mdto.setNickname(nickname + randomInteger);
 				mdto.setBirth("1999-12-31");
 				mdto.setAccount_email("need@eat-together.com");
+				mdto.setGender(0);
 
-				int kakaoSignUpResult = mdao.signUp(mdto);
+				
+				int kakaoSignUpResult = mdao.signUpKakao(mdto);
 				System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
 			}else {
 				System.out.println("이미 회원가입된 카카오계정입니다.");

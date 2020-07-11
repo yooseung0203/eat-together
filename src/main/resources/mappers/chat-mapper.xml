@@ -4,9 +4,9 @@
 	<select id="selectChats" resultType="coma.spring.dto.ChatDTO">
 		select * from chat_messages where chatSeq_parent=#{value} order by seq
 	</select>
-	<insert id="insertChatRoom">
-		insert into chat_list values (chat_list_seq.nextval, #{writer} , #{count} , sysdate ,#{meetdate} ,#{seq}, 1)
-	</insert>
+	<select id="selectChatMembers" resultType="coma.spring.dto.PartyMemberDTO">
+		select * from partylist where chatSeq_parent=#{value}
+	</select>
 	<insert id="insertChat" parameterType="java.util.List">
 		<foreach collection="list" item="item" index="index"
 			open="INSERT ALL " separator=" " close="SELECT * FROM DUAL">
@@ -16,5 +16,28 @@
 			#{item.content}, #{item.writer},SYSDATE,
 			#{item.view_count})
 		</foreach>
+	</insert>
+	
+	<select id="chatParted" resultType="int">
+		select count(*) from partylist where participant=#{participant} and chatSeq_parent = #{chatSeq_parent}
+	</select>
+	<delete id="exitChatRoom">
+		delete from partylist where chatSeq_parent = #{seq}
+			<if test="name != null">
+		 		and participant = #{name}
+			</if>
+	</delete>
+	<delete id="deleteChatRoom">
+		delete from party where seq = #{value}
+	</delete>
+	<update id="chatViewedSave">
+		update partylist set viewed_seq = #{viewed_seq} where participant=#{participant} and chatSeq_parent = #{chatSeq_parent}
+	</update>
+	<select id="selectWriter" resultType="String">
+		select writer from party where seq = #{value}
+	</select>
+	
+	<insert id="addBlacklist">
+		insert into blacklist values (#{seq} , #{name})
 	</insert>
 </mapper>

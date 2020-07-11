@@ -13,7 +13,7 @@
 	insert into faq values (faq_seq.nextval,#{category},#{title},#{contents},sysdate)
 </insert>
 
-<select id="selectBySeq" resultType="coma.spring.dto.NoticeDTO">
+<select id="selectBySeq" resultType="coma.spring.dto.FaqDTO">
 	select * from faq where seq = #{value} order by seq desc
 </select>
 

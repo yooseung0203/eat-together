@@ -2,6 +2,8 @@ package coma.spring.dto;
 
 import java.sql.Timestamp;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class MemberDTO {
 	private String id;
 	private String pw;
@@ -10,7 +12,30 @@ public class MemberDTO {
 	private String account_email;
 	private int report_count;
 	private Timestamp join_date;
+	private MultipartFile profile;
+	private int gender;
 	
+	private String sysname;
+	
+	
+	public String getSysname() {
+		return sysname;
+	}
+	public void setSysname(String sysname) {
+		this.sysname = sysname;
+	}
+	public MultipartFile getProfile() {
+		return profile;
+	}
+	public void setProfile(MultipartFile profile) {
+		this.profile = profile;
+	}
+	public int getGender() {
+		return gender;
+	}
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
 	public String getId() {
 		return id;
 	}
@@ -53,8 +78,10 @@ public class MemberDTO {
 	public void setJoin_date(Timestamp join_date) {
 		this.join_date = join_date;
 	}
+
+	
 	public MemberDTO(String id, String pw, String nickname, String birth, String account_email, int report_count,
-			Timestamp join_date) {
+			Timestamp join_date, MultipartFile profile, int gender, String sysname) {
 		super();
 		this.id = id;
 		this.pw = pw;
@@ -63,6 +90,9 @@ public class MemberDTO {
 		this.account_email = account_email;
 		this.report_count = report_count;
 		this.join_date = join_date;
+		this.profile = profile;
+		this.gender = gender;
+		this.sysname = sysname;
 	}
 	public MemberDTO() {
 		super();

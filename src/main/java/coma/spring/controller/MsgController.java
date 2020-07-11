@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.MsgDTO;
+import coma.spring.service.MemberService;
 import coma.spring.service.MsgService;
 
 @Controller
@@ -19,6 +21,8 @@ import coma.spring.service.MsgService;
 public class MsgController {
 	//@Autowired
 	//private MsgDAO msgdao;
+	@Autowired
+	private MemberService mservice;
 	
 	@Autowired
 	private MsgService msgservice;
@@ -34,14 +38,26 @@ public class MsgController {
 		return "member/loginview";
 	}
 	
-	
+	//받은쪽지함
 	@RequestMapping("msg_list_sender")
 	public String msglist_sender(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 받은 쪽지함");
+		//새로운 메세지 카운트
+		int newMsg=msgservice.newmsg(msg_receiver);
 		
-		List<MsgDTO> dto = msgservice.selectBySender(msg_receiver);
+		if(session.getAttribute("msgcpage")==null) {
+			session.setAttribute("msgcpage", 1);
+		}
+		try { 
+			session.setAttribute("msgcpage", Integer.parseInt(request.getParameter("msgcpage")));
+		} catch (Exception e) {}
+		int msgcpage=(int)session.getAttribute("msgcpage");
+		List<MsgDTO> dto = msgservice.selectBySender(msgcpage,msg_receiver);
+		String navi = msgservice.Sendnavi(msgcpage,msg_receiver);
+		request.setAttribute("newMsg", newMsg);
+		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
 		return "msg/mypage_sendmsg";
 	}
@@ -53,8 +69,20 @@ public class MsgController {
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 관리자 쪽지함");
 		
-		List<MsgDTO> dto = msgservice.selectByAdmin(msg_receiver);
+		if(session.getAttribute("msgAcpage")==null) {
+			session.setAttribute("msgAcpage", 1);
+		}
+		try { 
+			session.setAttribute("msgAcpage", Integer.parseInt(request.getParameter("msgcpage")));
+		} catch (Exception e) {}
+		int msgAcpage=(int)session.getAttribute("msgAcpage");
+
+		List<MsgDTO> dto = msgservice.selectByAdmin(msgAcpage,msg_receiver);
+		String navi = msgservice.Adminnavi(msgAcpage, msg_receiver);
+		
+		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
+		
 		return "msg/mypage_sendmsg";
 	}
 	//보낸쪽지함
@@ -65,7 +93,19 @@ public class MsgController {
 		String msg_receiver = mdto.getId();
 		System.out.println(msg_receiver+"의 보낸 쪽지함");
 		
-		List<MsgDTO> dto = msgservice.selectByReceiver(msg_receiver);
+		if(session.getAttribute("msgRcpage")==null) {
+			session.setAttribute("msgRcpage", 1);
+		}
+		try { 
+			session.setAttribute("msgRcpage", Integer.parseInt(request.getParameter("msgcpage")));
+		} catch (Exception e) {}
+		
+		int msgRcpage=(int)session.getAttribute("msgRcpage");
+		
+		List<MsgDTO> dto = msgservice.selectByReceiver(msgRcpage,msg_receiver);
+		String navi =msgservice.Receivenavi(msgRcpage, msg_receiver);
+		
+		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
 		return "msg/mypage_receivemsg";
 	}
@@ -90,22 +130,31 @@ public class MsgController {
 	public String msgView(HttpServletRequest request,int msg_seq)throws Exception{
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
+		String sender = msgDTO.getMsg_sender();
+		MemberDTO mdto = mservice.selectMyInfo(sender);
+		String msg_receiver=msgDTO.getMsg_receiver();
 		//읽음처리되는것
 		int result = msgservice.updateView(msg_seq);
+		int newmsg = msgservice.newmsg(msg_receiver);
+		request.setAttribute("mdto", mdto);
 		request.setAttribute("msgView", msgDTO);
+		//읽음처리 수정중
+		session.setAttribute("newMsg", newmsg);
+		System.out.println(newmsg);
 		return "msg/msgView";
 	}
 	//보낸쪽지함에서 눌러볼때
 	@RequestMapping("msgViewSend")
 	public String msgViewSend(HttpServletRequest request,int msg_seq)throws Exception{
+		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
 		request.setAttribute("msgView", msgDTO);
-		return "msg/msgView";
+		request.setAttribute("mdto", mdto);
+		return "msg/msgViewSend";
 	}
 	
 	//받은쪽지함 삭제
-	
 	@RequestMapping("msgReceiverDel")
 	public String ReceiverDel(int msg_seq)throws Exception{
 		int result = msgservice.receiver_del(msg_seq);
@@ -121,5 +170,16 @@ public class MsgController {
 
 		return "redirect:msg_list_receiver";
 	}
+	
+	@RequestMapping("newmsg")
+	@ResponseBody
+	public int newmsg(HttpServletRequest request)throws Exception{
+		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
+		String msg_receiver=mdto.getId();
+		int newmsg = msgservice.newmsg(msg_receiver);
+		session.setAttribute("newMsg", newmsg);
+		return newmsg;
+	}
+
 }
 

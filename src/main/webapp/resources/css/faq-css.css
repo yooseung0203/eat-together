@@ -1,4 +1,6 @@
 @charset "UTF-8";
+@font-face { font-family: 'NEXON Lv1 Gothic OTF Bold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Bold.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'NEXON Lv1 Gothic OTF'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff'); font-weight: normal; font-style: normal; }
 .faq-title{
         font-family: 'Noto Sans KR', sans-serif;
         font-weight: 500;
@@ -7,3 +9,44 @@
     .faq-q {cursor:pointer; padding:10px; font-weight:500;}
     .faq-q > img {margin-right:10px;}
     .faq-a { display:none; background:#f6f6f6; padding:10px; font-weight:300;}
+    
+    
+   h2 {
+    font-family: 'NEXON Lv1 Gothic OTF Bold';
+    font-weight: 800;
+    font-size: 2.5rem;
+    color: #091f2f;
+    text-transform: uppercase;
+}
+.accordion-section .container .panel-default > .panel-heading {
+    border: 0;
+    background-color: #f4f4f4;
+    padding: 0;
+}
+.accordion-section .container .panel-default .panel-title a {
+    display: block;
+    font-style: italic;
+    font-size: 1.5rem;
+}
+.accordion-section .container .panel-default .panel-title a:after {
+    font-family: 'NEXON Lv1 Gothic OTF';
+    font-style: normal;
+    font-size: 3rem;
+    content: "\f106";
+    color: #1f7de2;
+    float: right;
+    margin-top: -12px;
+}
+.accordion-section .container .panel-default .panel-title a.collapsed:after {
+    content: "\f107";
+}
+.accordion-section .container .panel-default .panel-body {
+    font-size: 1.2rem;
+}
+
+.panel-heading{
+	border: 0;
+    background: #f4f4f4;
+    padding: 0;
+	
+} 

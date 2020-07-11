@@ -50,13 +50,12 @@
 	<!-- header  -->
 	<!-- ******************* -->
 
-
 	<div id=mypage-container>
 		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
 		<div id=contents>
 			<form action="/member/editMyInfoProc" method="post"
 				enctype="multipart/form-data">
-				<table class="table">
+				<table class="table" id="mypage_table">
 					<thead class="thead-dark">
 						<tr>
 							<th scope="col" colspan=12>My Information</th>
@@ -65,11 +64,14 @@
 					<tbody>
 						<tr>
 							<th scope="row">PROFILE IMAGE</th>
-							<td class="myinfo_text" id="profile_box"><img
-								src="${pageContext.request.contextPath}/upload/${loginInfo.id}/${mfdto.sysname}"
-								alt="" onError="this.src='/resources/img/no_img.png'"> <input
-								type="button" id="uploadProfile" class="btn btn-light"
-								value="프로필이미지 변경하기"></td>
+							<td class="myinfo_text" id="profile_box"><br>
+								<div class="edit_text">
+									<div id='preview'></div>
+									<br> <label class="btn btn-secondary btn-file">
+										업로드하기 <input type="file" id="profile" name="profile"
+										style="display: none;">
+									</label>
+								</div></td>
 						</tr>
 						<tr>
 							<th scope="row">ID</th>
@@ -93,10 +95,22 @@
 								value="${mdto.birth}"></td>
 						</tr>
 						<tr>
+							<th scope="row">GENDER</th>
+							<td class="edit_text">
+								<div class="edit_text">
+									<input type="radio" id="gender_1" name="gender" value="1"><label
+										for="gender_1" id="gender_text">남</label> <input type="radio"
+										id="gender_2" name="gender" value="2"><label
+										for="gender_2" id="gender_text">여</label>
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<th scope="row">EMAIL</th>
 							<td class="edit_text"><input type=text id="account_email"
 								name="account_email" value="${mdto.account_email}"> <input
-								type=button id=mail value="인증하기"> <br>
+								type=button id=mail value="인증하기"><input type=text
+								id="isEmailEdited" style="display: none;" value="0"><br>
 								<div id=mail_div style="display: none;">
 									인증번호 : <input type=text id=mail_text>
 									<button type=button id=mail_accept>인증</button>
@@ -105,7 +119,7 @@
 						<tr>
 							<th scope="row"></th>
 							<td class="edit_text">
-								<button type="submit" class="btn btn-warning" id="editMyInfo">
+								<button type="submit" class="btn btn-warning" id="editBtn">
 									변경사항 저장하기</button>
 								<button type=button class="btn btn-light" id="back">되돌아가기</button>
 							</td>
@@ -117,15 +131,65 @@
 	</div>
 	<script>
 		window.onload = function() {
-			var upload = document.getElementById('uploadProfile');
-			upload.onclick = function() {
-				location.href = "/memberfile/deleteFileById";
-				window
-						.open('/member/editProfileImage', '프로필이미지 수정하기',
-								'width=430,height=500,location=no,status=no,scrollbars=yes');
+			//by 지은, 성별 라디오박스에서 내정보 수정 시 체크값이 유지되도록 한다_20200710
+			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("checked", true);
+			//by 지은, 회원정보 중 성별정보가 유효한 회원의 경우 성별 수정을 불가능하도록 한다_20200710
+			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("disabled", true);
 
-			}
+			//by 지은, 이메일을 수정했을 경우 인증이 필요하다_20200708
+			$("#account_email").keydown(function() {
+				$("#isEmailEdited").val("");
+			})
 
+			//by 지은, form submit 전 체크하는 사항_20200708
+			$("#editBtn").on("click", function() {
+				if ($("#nickname").val() != "") {
+					if ($("#isEmailEdited").val() != "") {
+						if ($("#birth").val() != "") {
+							if ($('input:radio[name=gender]').is(':checked')) {
+								alert("회원정보가 수정되었습니다!");
+								return true;
+							} else {
+								alert("성별을 입력해주세요.");
+							}
+						} else {
+							alert("생년월일을 입력해주세요.");
+						}
+					} else {
+						alert("수정한 이메일 인증을 해주세요.");
+					}
+				} else {
+					alert("닉네임을 입력해주세요");
+				}
+				return false;
+			})
+
+			//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
+			var upload = document.querySelector('#profile');
+			var preview = document.querySelector('#preview');
+
+			upload.addEventListener('change', function(e) {
+				var get_file = e.target.files;
+				var image = document.createElement('img');
+				var reader = new FileReader();
+
+				reader.onload = (function(aImg) {
+					console.log(1);
+					return function(e) {
+						console.log(3);
+						aImg.src = e.target.result
+					}
+				})(image)
+
+				if (get_file) {
+					reader.readAsDataURL(get_file[0]);
+					console.log(2);
+				}
+
+				preview.appendChild(image);
+			})
+
+			//by지은, back버튼 생성_20200708
 			$("#back").on("click", function() {
 				location.replace('/member/mypage_myinfo');
 			})
@@ -147,17 +211,17 @@
 					.focusout(
 							function() {
 								var birth = $("#birth").val();
-								var regex1 = /^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
+								var regex1 = /^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/;
 								if ($("#birth").val() != "") {
 									if (regex1.test(birth)) {
 										birth = birth
 												.replace(
-														/^(19[0-9][0-9]|20\d{2})(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
+														/^(19[0-9][0-9]|200[0-5])(0[0-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])$/,
 														"$1-$2-$3");
 										$("#birth").val(birth);
 									} else {
 										$("#birth").val("");
-										alert("올바른 생년월일을 입력해주세요.");
+										alert("2005년 이전 출생자만 이용가능합니다.\n올바른 생년월일을 입력해주세요.");
 										$("#birth").focus();
 									}
 								}
@@ -200,6 +264,7 @@
 									$("#mail_text").attr("readonly", true);
 									$("#mail_text").css("color", "blue");
 									$("#mail_text").val("인증에 성공하였습니다.");
+									$("#isEmailEdited").val("0");
 								} else {
 									alert("인증문자열을 확인해주세요.");
 									$("#mail_text").val("");
@@ -207,14 +272,14 @@
 								}
 							})
 						} else {
-							alert("이미 사용중인 이메일입니다.");
-							$("#mail_text").val("");
-							$("#mail_text").focus();
+							alert("이메일 변동사항이 없습니다.")
+							$("#isEmailEdited").val("0");
 						}
 
 					})
 				}
 			})
+
 		}
 	</script>
 

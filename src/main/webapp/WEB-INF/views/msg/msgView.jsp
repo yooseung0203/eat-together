@@ -27,29 +27,48 @@
 	rel="stylesheet">
 <!-- google font end-->
 <meta charset="UTF-8">
+
 <title>Insert title here</title>
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col-12" align="center">받은 쪽지</div>
-		</div>
-		<div class="row">
-			<div class="col-4" >보낸사람</div>
-			<div class="col-8">${msgView.msg_sender}</div>
-			<div class="col-4">제목</div>
-			<div class="col-8"><c:out value="${msgView.msg_title}"></c:out></div>
-			<div class="col-12" align="center">내용</div>
-			<div class="col-12" align="center"><c:out value="${msgView.msg_text}"></c:out></div>
-		</div>
+		<table class="table">
+			<thead>
+				<tr class="table-success">
+					<th scope="col" colspan=12>${msgView.msg_receiver}님으로쪽지가
+						도착하였습니다.</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td scope="col" colspan=12>보낸 사람 : ${msgView.msg_sender}
+						(${msgView.msg_date})</td>
+				</tr>
+				<tr>
+					<th scope="col" colspan=3 style="width: 20%">제목</th>
+					<td scope="col" colspan=6 style="width: 50%"><c:out
+							value="${msgView.msg_title}"></c:out></td>
+					<td scope="col" colspan=3 rowspan=2 style="width: 30%"><img
+						src="/upload/${mdto.id}/${mdto.sysname}" style="width: 100%">
+					</td>
+				</tr>
+				<tr>
+					<td scope="col" colspan=9 rowspan=1 >
+						<div style="width: 100%; height:200px; overflow-y:auto;"><c:out value="${msgView.msg_text}"></c:out></div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
 		<div class="row" align="center">
 			<div class="col-12" align="center">
-				<button id="close">닫기</button>
+				<button type="button" id="msgResponse" class="btn btn-warning">답장</button>
+               <button type="button" id="close" class="btn btn-light">닫기</button>
 			</div>
 		</div>
 	</div>
 	<script>
-		$("#close").on("click",function(){
+		$("#close").on("click", function() {
 			window.close();
 		})
 	</script>
