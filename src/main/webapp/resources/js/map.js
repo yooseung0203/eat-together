@@ -32,6 +32,135 @@ $(function(){
 	        }
 	    });
 		/****************** 카카오맵 영역 ******************/
+	    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+	        level: 3 // 지도의 확대 레벨
+	    };
+		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		// 마커 클러스터러 : 맛집으로 등록된 마커는 이것으로 표시!
+	    var clusterer = new kakao.maps.MarkerClusterer({
+	        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+	        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+	        minLevel: 5, // 클러스터 할 최소 지도 레벨 
+	        calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+	        texts: getTexts, // texts는 ['삐약', '꼬꼬', '꼬끼오', '치멘'] 이렇게 배열로도 설정할 수 있다 
+	        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+	                width : '30px', height : '30px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '15px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '31px'
+	            },
+	            {
+	                width : '40px', height : '40px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '20px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '41px'
+	            },
+	            {
+	                width : '50px', height : '50px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '25px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '51px'
+	            },
+	            {
+	                width : '60px', height : '60px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '30px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '61px'
+	            }
+	        ]
+	    });
+	    
+	    // 클러스터 내부에 삽입할 문자열 생성 함수입니다 
+	    function getTexts( count ) {
+
+	      // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다 
+	      if(count < 10) {
+	        return count;        
+	      } else if(count < 30) {
+	        return count;
+	      } else if(count < 50) {
+	        return count;
+	      } else {
+	        return count;
+	      }
+	    }
+	    
+	    var notmapclusterer = new kakao.maps.MarkerClusterer({
+	        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+	        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+	        minLevel: 5, // 클러스터 할 최소 지도 레벨 
+	        calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+	        texts: notmapGetTexts, // texts는 ['삐약', '꼬꼬', '꼬끼오', '치멘'] 이렇게 배열로도 설정할 수 있다 
+	        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+	                width : '30px', height : '30px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '15px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '31px'
+	            },
+	            {
+	                width : '40px', height : '40px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '20px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '41px'
+	            },
+	            {
+	                width : '50px', height : '50px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '25px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '51px'
+	            },
+	            {
+	                width : '60px', height : '60px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '30px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '61px'
+	            }
+	        ]
+	    });
+	    
+	    // 클러스터 내부에 삽입할 문자열 생성 함수입니다 
+	    function notmapGetTexts( count ) {
+	      // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다 
+	      if(count < 10) {
+	        return count;        
+	      } else if(count < 30) {
+	        return count;
+	      } else if(count < 50) {
+	        return count;
+	      } else {
+	        return count;
+	      }
+	    }
+		$("#centerLat").text(map.getCenter().getLat());
+	    $("#centerLng").text(map.getCenter().getLng());
+
 		// MakrerImage 객체를 생성하여 반환하는 함수입니다
 		function createMarkerImage(markerSize, offset, markerImageSrc) {
 		    var markerImage = new kakao.maps.MarkerImage(
@@ -56,7 +185,8 @@ $(function(){
 	            infowindow.close();
 	        };
 	    }
-	    function addMarker(po) {
+	    
+	    function pushMarker(po) {
 			var markerSize = new kakao.maps.Size(10, 10),
 				markerOffset = new kakao.maps.Point(0, 0);
 			var normalImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/img.png';
@@ -69,7 +199,7 @@ $(function(){
 	            position: po.latlng,
 	            image: normalImage
 	        });
-
+	        notmapclusterer.addMarker(marker);
 	        var customOverlay = new kakao.maps.CustomOverlay({
 	            position: po.latlng,
 	            content: po.content
@@ -181,7 +311,8 @@ $(function(){
 		        });
                 markers.push({
 	    	        marker: marker
-	    		})
+	    		});
+	    		clusterer.addMarker(marker);
 			});
 			return markers;
 		}
@@ -193,6 +324,7 @@ $(function(){
 		var cafeTopMarkers = null;
 		var foodTopMarkers = null;
 		
+	    
 		$.get("/resources/json/mapData.json",function(data){
 			var cafePositions = [];
 			var foodPositions = [];
@@ -307,18 +439,6 @@ $(function(){
 			foodTopMarkers = createMapTableMarker(foodTopPositions, topFoodImage); // 리뷰 평균 Top 음식점
 		});
 		
-		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	    mapOption = { 
-	        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-	        level: 3 // 지도의 확대 레벨
-	    };
-		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-		var map = new kakao.maps.Map(mapContainer, mapOption); 
-		
-		$("#centerLat").text(map.getCenter().getLat());
-	    $("#centerLng").text(map.getCenter().getLng());
-		
-	    
 		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
 		var zoomControl = new kakao.maps.ZoomControl();
 		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
@@ -484,18 +604,19 @@ $(function(){
 					infoOverClose(item.customOverlay);
 				});
 				/* markers 초기화 */
-				cafeMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafeTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafePartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodPartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				kakaoFoodMarkers.forEach(function(item){item.marker.setVisible(false);});
-				kakaoCafeMarkers.forEach(function(item){item.marker.setVisible(false);});
+				
+				cafeMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafeTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafePartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodPartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoFoodMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoCafeMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
 				positions= [];
 				if(markers.length != 0){
 					$.each(markers,function(i, item){
-						item.marker.setVisible(false);
+						item.marker.setMap(null);
 					});
 				}
 				
@@ -690,7 +811,7 @@ $(function(){
 					lng = resp.map_list[0].lng;
 					map.setCenter(new kakao.maps.LatLng(lat, lng));
 					$.each(positions,function(i, item){
-						var marker = addMarker(item);
+						var marker = pushMarker(item);
 						markers.push({marker:marker});
 					});
 					/* cafe_list, food_list 에 대한 marker 정보만 표시 */
@@ -707,18 +828,18 @@ $(function(){
 					infoOverClose(item.customOverlay);
 				});
 				/* markers 초기화 */
-				cafeMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafeTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafePartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodPartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				kakaoFoodMarkers.forEach(function(item){item.marker.setVisible(false);});
-				kakaoCafeMarkers.forEach(function(item){item.marker.setVisible(false);});
+				cafeMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafeTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafePartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodPartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoFoodMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoCafeMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
 				positions= [];
 				if(markers.length != 0){
 					$.each(markers,function(i, item){
-						item.marker.setVisible(false);
+						item.marker.setMap(null);
 					});
 				}
 				$(".choose_info").html("");
@@ -851,7 +972,7 @@ $(function(){
 					lng = resp.map_list[0].lng;
 					map.setCenter(new kakao.maps.LatLng(lat, lng));
 					$.each(positions,function(i, item){
-						var marker = addMarker(item);
+						var marker = pushMarker(item);
 						markers.push({marker:marker});
 					});
 					/* cafe_list, food_list 에 대한 marker 정보만 표시 */
@@ -867,20 +988,19 @@ $(function(){
 					infoOverClose(item.customOverlay);
 				});
 				/* markers 초기화 */
-				cafeMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafeTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafePartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodPartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				kakaoFoodMarkers.forEach(function(item){item.marker.setVisible(false);});
-				kakaoCafeMarkers.forEach(function(item){item.marker.setVisible(false);});
+				cafeMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafeTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafePartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodPartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoFoodMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoCafeMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
 				positions= [];
 				if(markers.length != 0){
 					$.each(markers,function(i, item){
-						item.marker.setVisible(false);
+						item.marker.setMap(null);
 					});
-					//markers.forEach(function(item){item.marker.setVisible(false);});
 				}
 				
 				$(".choose_info").html("");
@@ -999,7 +1119,7 @@ $(function(){
 					lng = resp.map_list[0].lng;
 					map.setCenter(new kakao.maps.LatLng(lat, lng));
 					$.each(positions,function(i, item){
-						var marker = addMarker(item);
+						var marker = pushMarker(item);
 						markers.push({marker:marker});
 					});
 				}
