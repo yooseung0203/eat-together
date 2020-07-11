@@ -31,14 +31,18 @@
 		width: 90%;
 	    height: 50px;
 	    border-radius: 5px;
-	    padding: 10px;
+	    padding: 10px 0px 10px 0px;
 	    text-align:right;
 	}
+	#backMap{background-color:#ff9900;float:left;border-radius:30px;border:none;}
+	#backMap:hover{background-color:white;}
+	#backMap:hover i{color: #ff9900;}
+	#backMap i{color: white;}
 	.search_btn{
 	    background-color: white;
-	 	height: 30px; width: 120px;
+	 	height: 30px; width: 60px;
 	 	border-radius: 30px;
-	 	float:left;
+	 	float:right;
 	 	text-align: center; 
 	 	line-height: 25px;
 	 	margin-right: 5px;
@@ -59,6 +63,12 @@
     }
     .side{overflow-x: hidden;overflow-y:auto;max-height:700px;}
     .search_count{padding: 20px;}
+    .search_result .map_approach{
+    	align:center;
+	    border-bottom:1px solid #ededed;
+	    padding: 20px;
+	    font-size:10pt;
+    }
     .search_result .map_info{
     	align:center;
 	    border-top:1px solid #ededed;
@@ -239,11 +249,8 @@
 	}
     .review_comment .writer{font-size:10pt;}
     .review_comment input[type=submit]{position:absolute;right:10px;bottom:30px;float:left;}
-    .map_add{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:10px;right:10px;color:#ff9900;line-height:50px;}
-    .foodInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:190px;right:10px;color:#ff9900;line-height:50px;}
-    .cafeInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:250px;right:10px;color:#ff9900;line-height:50px;}
-    .food{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:70px;right:10px;color:#ff9900;line-height:50px;}
-    .cafe{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:130px;right:10px;color:#ff9900;line-height:50px;}
+    .foodInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:10px;right:10px;color:#ff9900;line-height:50px;}
+    .cafeInsert{width:50px;height:50px;background-color:white;border-radius:50px;z-index:25;position:fixed;bottom:70px;right:10px;color:#ff9900;line-height:50px;}
     .map_wrap {position:relative;width:100%;height:350px;}
     span.title {font-weight:bold;display:block;}
     .hAddr {position:absolute;left:10px;top:10px;border-radius: 2px;background:#fff;background:rgba(255,255,255,0.8);z-index:1;padding:5px;}
@@ -383,13 +390,13 @@
 	
 .foodcustomoverlay {position:relative;bottom:35px;left:5px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
 .foodcustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.foodcustomoverlay div {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/food_white.png) no-repeat right 8px center;}
+.foodcustomoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/food_white.png) no-repeat right 8px center;}
 .foodcustomoverlay .title {display:block;text-align:center;background:#fff;margin-right:50px;padding:15px;font-size:14px;font-weight:bold;height:50px;}
 .foodcustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 	
 .cafecustomoverlay {position:relative;bottom:35px;left:5px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
 .cafecustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.cafecustomoverlay div {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/cafe_white.png) no-repeat right 8px center;}
+.cafecustomoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/cafe_white.png) no-repeat right 8px center;}
 .cafecustomoverlay .title {display:block;text-align:center;background:#fff;margin-right:50px;padding:15px;font-size:14px;font-weight:bold;height:50px;}
 .cafecustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 	

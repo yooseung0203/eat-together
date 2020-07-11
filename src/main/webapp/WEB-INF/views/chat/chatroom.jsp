@@ -131,15 +131,28 @@
 				return false;
 			}
 		})
-		$("#exit")
-				.on(
-						"click",
-						function() {
-							var realExit = confirm("퇴장하시겠습니까?\n진행중인 대화방은 삭제되며 참가중인 모임에서도 퇴장하게 됩니다");
-							if (realExit) {
-								location.href = "/chat/exit?roomNum=" + ${roomNum};
-							}
-						})
+		$("#exit").on("click",function() {
+			var realExit = confirm("퇴장하시겠습니까?\n진행중인 대화방은 삭제되며 참가중인 모임에서도 퇴장하게 됩니다");
+			if (realExit) {
+				$.ajax({
+					type:"POST",
+					url:"/chat/exit",
+					data:{"roomNum" : ${roomNum}},
+					success:function(){
+						window.close();
+					},error:function(){
+						colsole.log("실패");						
+					}
+						
+				})
+			}
+		})
+		$(document).on("click","#postNote", function() {
+			var postMember = $(this).closest("li").attr("id");
+			window.open("/msg/msgResponse?msg_receiver="+postMember, "POST TO "+postMember, 
+					"width = 500, height = 550, top = 100, left = 200, scrollbars=no");
+			
+		})
 		$(document).on("click","#kick", function() {
 			var kickedMember = $(this).closest("li").attr("id");
 
@@ -152,7 +165,8 @@
 					data:{"name" : kickedMember,
 						"seq" : ${roomNum}},
 					success:function(){
-						ws.send(text.trim());
+						//ws.send("강퇴");
+						colsole.log("강퇴 성공");	
 					},error:function(){
 						colsole.log("실패");						
 					}

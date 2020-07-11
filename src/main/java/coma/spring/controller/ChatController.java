@@ -38,12 +38,12 @@ public class ChatController {
 		// 방번호를 받음 : 웹소켓에서 삭제됨
 		this.session.setAttribute("roomNum", roomNum);
 		// 방번호의 저장된 채팅이 있는지 검색 
-		boolean ChatroomExist = true;
-		for(int i : ChatStatics.savedChats.keySet()) {
-			if(i == roomNum) {ChatroomExist = false;}
-		}
+//		boolean ChatroomExist = true;
+//		for(int i : ChatStatics.savedChats.keySet()) {
+//			if(i == roomNum) {ChatroomExist = false;}
+//		}
 		// 없으면 cservice.savedChat를 통해 가져옴 (채팅 리스트 ,채팅수)
-		if(ChatroomExist) {
+		if(!ChatStatics.savedChats.keySet().contains(roomNum)) {
 			cservice.savedChat(roomNum);
 		}
 		// 채팅방 참여 인원의 정보를 가지고옴
@@ -88,6 +88,24 @@ public class ChatController {
 	}		
 	@RequestMapping("kick")
 	public String kick(int seq , String name) {
+		String writer = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
+		
+		if(!writer.contentEquals(cservice.selectWriter(seq))){
+			return "/chat/error";			
+		}		
+		try {
+			Iterator iterator = WebChatSocket.members.get(seq).entrySet().iterator();
+			while(iterator.hasNext()) {
+				Entry entry = (Entry)iterator.next();
+				if(entry.getValue().equals(name)) {
+					WebChatSocket.members.get(seq).remove(entry.getKey());
+					WebChatSocket.clients.remove(entry.getKey());
+					break;
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		cservice.addBlacklist(name, seq);
 		cservice.exitChatRoom(name, seq);
 		return "home";
