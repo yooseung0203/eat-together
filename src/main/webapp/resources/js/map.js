@@ -149,45 +149,6 @@ $(function(){
 
 	    var kakaoCafeMarkers = [];
 	    var kakaoFoodMarkers = [];
-		/*$.get("/resources/json/cafe.json",function(data){
-		
-			console.log(data);
-			var positions = [];
-			
-			$.each(data, function(i, item) {
-				for(var a = 0;a < data.cafe_list.length; a++){
-					positions.push({
-		    	        content: '<div>'+ data.cafe_list[a].cafe.place_name +'</div>', 
-		    	        latlng: new kakao.maps.LatLng(data.cafe_list[a].cafe.y, data.cafe_list[a].cafe.x)
-					});
-				}
-			});
-		    for (var i = 0; i < positions.length; i ++) {
-			    var marker = addMarker(positions[i]);
-			    kakaoCafeMarkers.push({marker:marker});
-			}
-		});
-		
-
-  		$.get("/resources/json/food.json",function(data){
-  			console.log(data);
-			var positions = [];
-
-			$.each(data, function(i, item) {
-				for(var a = 0;a < data.food_list.length; a++){
-					positions.push({
-		    	        content: '<div>'+ data.food_list[a].food.place_name +'</div>', 
-		    	        latlng: new kakao.maps.LatLng(data.food_list[a].food.y, data.food_list[a].food.x)
-					});
-				}
-			});
-		    for (var i = 0; i < positions.length; i ++) {
-		    	var marker = addMarker(positions[i]);
-			    kakaoFoodMarkers.push({marker:marker});
-			}
-		});*/
-		
-
 		
 		function createMapTableMarker(positions, image){
 			var markers = [];
@@ -536,7 +497,6 @@ $(function(){
 					$.each(markers,function(i, item){
 						item.marker.setVisible(false);
 					});
-					//markers.forEach(function(item){item.marker.setVisible(false);});
 				}
 				
 				$(".choose_info").html("");
@@ -694,9 +654,9 @@ $(function(){
 							line.append(cafe);	
 							positions.push({
 				    	        content: '<div class="cafecustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.cafe_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.cafe_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.cafe_list[i].y, resp.cafe_list[i].x),
 				    	        place_id:resp.cafe_list[i].id,
@@ -715,9 +675,9 @@ $(function(){
 							line.append(food);	
 							positions.push({
 				    	        content: '<div class="foodcustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.food_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.food_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.food_list[i].y, resp.food_list[i].x),
 				    	        place_id:resp.food_list[i].id,
@@ -876,9 +836,9 @@ $(function(){
 							line.append(cafe);	
 							positions.push({
 				    	        content: '<div class="cafecustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.cafe_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.cafe_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.cafe_list[i].y, resp.cafe_list[i].x),
 				    	        place_id:resp.cafe_list[i].id,
@@ -1024,9 +984,9 @@ $(function(){
 							line.append(food);	
 							positions.push({
 				    	        content: '<div class="foodcustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.food_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.food_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.food_list[i].y, resp.food_list[i].x),
 				    	        place_id:resp.food_list[i].id,
@@ -1086,9 +1046,9 @@ $(function(){
 			    customOverlay = new kakao.maps.CustomOverlay({
 		            position: map.getCenter(),
 		            content: '<div class="cafecustomoverlay">' +
-	    	        '  <div>' +
+		            '  <a href="'+resp.result.cafe.place_url+'" target="_blank">' +
 	    	        '    <span class="title">'+ resp.result.cafe.place_name +'</span>' +
-	    	        '  </div>' +
+	    	        '  </a>' +
 	    	        '</div>'
 		        });
 				customOverlayArray.push({customOverlay : customOverlay});
@@ -1110,9 +1070,9 @@ $(function(){
 			    customOverlay = new kakao.maps.CustomOverlay({
 		            position: map.getCenter(),
 		            content: '<div class="foodcustomoverlay">' +
-	    	        '  <div>' +
+		            '  <a href="'+resp.result.food.place_url+'" target="_blank">' +
 	    	        '    <span class="title">'+ resp.result.food.place_name +'</span>' +
-	    	        '  </div>' +
+	    	        '  </a>' +
 	    	        '</div>'
 		        });
 				customOverlayArray.push({customOverlay : customOverlay});

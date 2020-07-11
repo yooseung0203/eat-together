@@ -390,13 +390,13 @@
 	
 .foodcustomoverlay {position:relative;bottom:35px;left:5px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
 .foodcustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.foodcustomoverlay div {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/food_white.png) no-repeat right 8px center;}
+.foodcustomoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/food_white.png) no-repeat right 8px center;}
 .foodcustomoverlay .title {display:block;text-align:center;background:#fff;margin-right:50px;padding:15px;font-size:14px;font-weight:bold;height:50px;}
 .foodcustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 	
 .cafecustomoverlay {position:relative;bottom:35px;left:5px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
 .cafecustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
-.cafecustomoverlay div {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/cafe_white.png) no-repeat right 8px center;}
+.cafecustomoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:2px;font-weight:bold;overflow:hidden;height:50px;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/cafe_white.png) no-repeat right 8px center;}
 .cafecustomoverlay .title {display:block;text-align:center;background:#fff;margin-right:50px;padding:15px;font-size:14px;font-weight:bold;height:50px;}
 .cafecustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 	
