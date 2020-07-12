@@ -149,10 +149,8 @@ public class PartyDAO {
 	}
 	// 태훈 모임 게시글 신고
 	public int partyReport(int seq) {
-		return mybatis.selectOne("Party.partyReport", seq);
+		return mybatis.update("Party.partyReport", seq);
 
 	}
-
-
 
 }

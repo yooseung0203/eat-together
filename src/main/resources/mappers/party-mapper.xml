@@ -122,7 +122,7 @@
    </select>
    <!-- by 태훈 모임 글 신고 -->
    <update id="partyReport">
-   		update from party set content = '신고 됨' where seq = #{seq}
+   		update party set report = report+1 where seq = #{seq}
    </update>
    <!--  by 수지 모임별 현재인원수 및 제한인원수 구하기 -->
    <select id="getPartyCounts" resultType="coma.spring.dto.PartyCountDTO">

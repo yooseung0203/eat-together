@@ -1,9 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script type="text/javascript" src='/resources/js/partyList.js?ver=31'></script>
-<!--  kakao api -->
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script type="text/javascript" src='/resources/js/partyList.js?ver=25'></script>
 <!-- SNS Share js start -->
 <script src='/resources/js/sns_share.js'></script>
 <!-- SNS Share js end -->
@@ -12,6 +10,8 @@
 			<div class="col-sm-12 mt-3">
             <h2 class="party_headline">
 					<c:out value='${con.title}' />
+					<input type="hidden" id="party_seq" value="${con.seq }">
+					<input type="hidden" id="party_time" value="${con.sTime }">
 					<input type="hidden" id="sns_share_title"
 						value=" /' ${con.parent_name} /' 에 같이 가자!!! - 맛집동행찾기서비스 맛집갔다갈래">
 					<c:choose>
@@ -159,11 +159,11 @@
 					<c:when test="${partyParticipantCheck  eq true}">
 						<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 							이동</button>
-						<c:if test="${con.writer ne sessionScope.loginInfo.id }">
+						<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 							<button type="button" id="toExitParty" class="btn btn-primary">모임
 								나가기</button>
 						</c:if>
-						<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+						<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
 							<c:choose>
 								<c:when test="${con.status  eq '1'}">
 									<button type="button" id="toStopRecruit" class="btn btn-dark">모집

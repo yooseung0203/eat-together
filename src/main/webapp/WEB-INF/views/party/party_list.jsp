@@ -5,9 +5,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<meta property="fb:app_id" content="APP_ID" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="맛집갔다갈래" />
+<meta property="og:url" content="eat-together.net" />
+<meta property="og:description" content="맛집동행찾기서비스" />
+<meta property="og:image" content="웹 페이지 대표 이미지" />
+
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
 <!-- 태훈 추가 -->
 <meta content="" name="descriptison">
 <meta content="" name="keywords">
@@ -48,6 +55,10 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- BootStrap4 End--> 
 
+<!--  kakao api -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
+
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -60,6 +71,7 @@
 	rel="stylesheet">
 <!-- google font end-->
 
+
 <!-- ******************* -->
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
@@ -68,7 +80,7 @@
 <!-- ******************* -->
 
 <!-- 태훈 css -->
-<link rel="stylesheet" type="text/css" href="/resources/css/party-list.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/party-list.css?aa">
 <!-- 태훈 css -->
 
 <title>모임 리스트</title>
@@ -160,8 +172,17 @@ $(function() {
 			}
 		});
 		/******************* 상세 보기 ************************/
-	});
-
+		
+		/******************* 인기 맛집  모집하러기 ************************/
+		$(".topBtn").on("click",function(){
+			location.href = "/map/mapToParty_New?parent_name="+$(this).siblings(".store_name").html()
+			+"&parent_address="+$(this).siblings(".store_address").val()
+			+"&img="+$(this).parent().siblings().attr("src")
+			+"&place_id="+$(this).siblings(".store_place_id").val()
+			+"&category="+$(this).siblings(".store_category").val();
+		}); 
+		/******************* 인기 맛집  모집하러기 ************************/
+		
 	/*******************   무한 스크롤 ************************/
 	
 	var cpage = 1; //페이징과 같은 방식이라고 생각하면 된다. 
@@ -221,6 +242,7 @@ $(function() {
 	/*******************   무한 스크롤 ************************/
 
 	/*****************************  태훈 party list 스크립 ***********************************************/
+});
 </script>
 </head>
 <!-- <body data-spy="scroll" data-target="#navbar-example"> -->
@@ -244,14 +266,16 @@ $(function() {
 					<div class="card partylist">
 						<img src="${imglist2[status.index]}" class="card-img-top">
 						<div class="card-body cardedit">
-							<h5 class="card-title">${top.name }</h5>
+							<h5 class="card-title store_name">${top.name }</h5>
 							<p class="card-text">
 								<c:out value="${review[top.seq].content }"/>
 								<c:if test="${empty review[top.seq].content }">
 										${top.address }
 								</c:if>
 							</p>
-							<input type="hidden" class="store_seq" value="${top.seq}">
+							<input type="hidden" class="store_place_id" value="${top.place_id}">
+							<input type="hidden" class="store_address" value="${top.address}">
+							<input type="hidden" class="store_category" value="${top.category}">
 							<button type="button" class="btn btn-info btn-lg topBtn">모집하러 가기</button>
 						</div>
 					</div>
@@ -406,7 +430,7 @@ $(function() {
 
   <!-- Template Main JS File -->
   <script src="/resources/assets/js/main.js"></script>
-
+  
 </body>
 </html>
 

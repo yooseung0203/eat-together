@@ -578,10 +578,12 @@ public class MapController {
 	public String toPartyNew(HttpServletRequest request, MapDTO mapdto) {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-			String userid= account.getId();
+			//String userid= account.getId();
+			String nickName = account.getNickname();
 			int gender = account.getGender();
 			//계정당 활성화된 모임 체크
-			int myPartyCount = pservice.getMadePartyCount(userid);
+			//int myPartyCount = pservice.getMadePartyCount(userid);
+			int myPartyCount = pservice.getMadePartyCount(nickName);
 			if(myPartyCount>4) {
 				return "/error/partyfull";
 			}
@@ -622,6 +624,7 @@ public class MapController {
 			request.setAttribute("gender", gender);
 			request.setAttribute("age", age);
 			// 장소명, 지번 주소 값 전달 
+			
 			request.setAttribute("parent_name", parent_name);
 			request.setAttribute("parent_address", parent_address);
 			request.setAttribute("img", img);

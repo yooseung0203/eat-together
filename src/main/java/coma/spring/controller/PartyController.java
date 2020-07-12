@@ -452,12 +452,14 @@ public class PartyController {
 	}
 	// 태훈 모임 신고  ( 현재 신고 접수 되면 모임 내용 수정 됨)
 	@ResponseBody
-	@RequestMapping(value="party_report", method=RequestMethod.POST)
-	public int partyReport(int seq)  throws Exception {
+	@RequestMapping("party_report")
+	public int partyReport(HttpServletRequest request)  throws Exception {
+		int seq = Integer.parseInt(request.getParameter("seq"));
 		System.out.println("seq : " + seq);
 		int result = pservice.partyReport(seq);
 		System.out.println("result : " + result);
 		return result;
 	}
+
 
 }
