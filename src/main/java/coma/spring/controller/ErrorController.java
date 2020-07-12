@@ -12,4 +12,8 @@ public class ErrorController {
 	public String toPartyfull() {
 		return "/error/partyfull";
 	}
+	@RequestMapping("adminpermission")
+	public String toAdminPermission() {
+		return "/error/adminpermission";
+	}
 }

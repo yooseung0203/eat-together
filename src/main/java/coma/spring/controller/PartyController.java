@@ -251,6 +251,12 @@ public class PartyController {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
+	
+	@RequestMapping("partydeleteByAdmin")
+	public String partydeleteByAdmin(String seq)  throws Exception {
+		pservice.delete(seq);
+		return "redirect:/admin/toAdmin_party";
+	}
 	// 태훈 모임 리스트 출력
 //	@RequestMapping("partylist")
 //	public String partyList(HttpServletRequest request) throws Exception {
@@ -346,6 +352,7 @@ public class PartyController {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		String img = pservice.clew(content.getParent_name());
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String id = account.getId();
 		String nickname = account.getNickname();
 		boolean partyFullCheck = pservice.isPartyfull(seq);
 		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
@@ -359,6 +366,7 @@ public class PartyController {
 		request.setAttribute("img", img);
 		request.setAttribute("con",content);
 		request.setAttribute("party", pcdto);
+		request.setAttribute("account", account);
 		request.setAttribute("partyFullCheck", partyFullCheck);
 		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/party/party_content";
@@ -411,6 +419,14 @@ public class PartyController {
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
 	}
+	
+	// 수지 모집 재시작 기능
+	@RequestMapping("restartRecruit")
+	public String restartRecruit(String seq) throws Exception {
+		pservice.restartRecruit(seq);
+		return "redirect:/party/party_content?seq="+seq;
+	}
+	
 	// 수지 모임 나가기 기능
 	@RequestMapping("toExitParty")
 	public String exitParty(String seq) throws Exception{

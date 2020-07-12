@@ -336,5 +336,10 @@ public class PartyService {
 	public PartyCountDTO getPartyCounts(String seq) {
 		return pdao.getPartyCounts(seq);
 	}
+
+	// 수지 모집 재시작 기능
+	public int restartRecruit(String seq) throws Exception {
+		return pdao.restartRecruit(seq);
+	}
 }
 
