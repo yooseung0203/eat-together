@@ -32,7 +32,7 @@ public class MemberService {
 
 	@Autowired
 	private MemberDAO mdao;
-	
+
 	@Autowired
 	private MemberFileDAO mfdao;
 
@@ -54,11 +54,11 @@ public class MemberService {
 		String encPw = this.getSha512(mdto.getPw());
 		mdto.setPw(encPw);
 		System.out.println("암호화된 비밀번호 : " + mdto.getPw());
-		
+
 		Map<String, Object> signUpParam = new HashMap<>();
 		signUpParam.put("mdto", mdto);
 		signUpParam.put("mfdto", mfdto);
-		
+
 		int result = mdao.signUp(signUpParam);
 		mfdao.uploadProc(mfdto);
 
@@ -87,7 +87,7 @@ public class MemberService {
 		boolean result = mdao.isIdAvailable(id);
 		return result;
 	}
-	
+
 	//회원가입시 닉네임 중복검사
 	public boolean isNickAvailable(String nickname)throws Exception{
 		boolean result = mdao.isNickAvailable(nickname);
@@ -101,11 +101,11 @@ public class MemberService {
 	}
 	//내정보수정하기
 	public int editMyInfo(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
-		
+
 		Map<String, Object> editParam = new HashMap<>();
 		editParam.put("mdto", mdto);
 		editParam.put("mfdto", mfdto);
-		
+
 		int result = mdao.editMyInfo(editParam);
 		return result;
 	}
@@ -215,7 +215,7 @@ public class MemberService {
 
 			Random randomGenerator = new Random();
 			int randomInteger = randomGenerator.nextInt(1000);
-			
+
 			if(mdao.selectMyInfo(id)==null) {
 				mdto.setId(id);
 				mdto.setPw("");
@@ -224,7 +224,7 @@ public class MemberService {
 				mdto.setAccount_email("need@eat-together.com");
 				mdto.setGender(0);
 
-				
+
 				int kakaoSignUpResult = mdao.signUpKakao(mdto);
 				System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
 			}else {
@@ -244,6 +244,33 @@ public class MemberService {
 	//카카오톡 로그아웃하기
 	public void kakaoLogout(String access_Token) {
 		String reqURL = "https://kapi.kakao.com/v1/user/logout";
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+			String result = "";
+			String line = "";
+
+			while ((line = br.readLine()) != null) {
+				result += line;
+			}
+			System.out.println(result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	//카카오톡 회원탈퇴하기
+	public void kakaoWithdraw(String access_Token) {
+		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
