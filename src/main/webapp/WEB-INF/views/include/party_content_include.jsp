@@ -47,7 +47,7 @@
 					</c:choose>
 				</h2>
          </div>
-         <div class="col-sm-12">작성자 : ${con.writer}</div>
+         <div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
       </div>
 
 		<div class="row">

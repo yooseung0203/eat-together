@@ -187,7 +187,7 @@ $(document).ready(function(){
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
 				<h2 class="party_headline">
-					<c:out value='${con.title}' />
+					# <c:out value='${con.seq}' /> / <c:out value='${con.title}' />
 					<input type="hidden" id="sns_share_title"
 						value=" /' ${con.parent_name} /' 에 같이 가자!!! - 맛집동행찾기서비스 맛집갔다갈래">
 					<c:choose>
@@ -222,6 +222,30 @@ $(document).ready(function(){
 						</c:when>
 					</c:choose>
 				</h2>
+				<c:if
+									test="${con.report == 0 }">
+									<div class="row  pt-1 mt-2">
+										<div class="col-sm-4 alert alert-success">
+											<h6 class=""><strong>정상모임</strong> : 신고건수  ${con.report} 건</h6>
+										</div>
+									</div>
+								</c:if>
+								<c:if
+									test="${con.report > 0 && con.report < 5 }">
+									<div class="row  pt-1 mt-2">
+										<div class="col-sm-4 alert alert-warning">
+											<h6 class=""><strong>요주의모임</strong> : 신고건수  ${con.report} 건</h6>
+										</div>
+									</div>
+								</c:if>
+								<c:if
+									test="${con.report >= 5}">
+									<div class="row  pt-1 mt-2">
+										<div class="col-sm-4 alert alert-danger">
+											<h6 class=""><strong>위험모임</strong> : 신고건수 ${con.report} 건</h6>
+										</div>
+									</div>
+								</c:if>
 
 			</div>
 			<div class="col-sm-12">작성자 : ${con.writer}</div>

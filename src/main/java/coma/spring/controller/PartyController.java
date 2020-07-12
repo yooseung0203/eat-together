@@ -36,6 +36,7 @@ import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.PartySearchListDTO;
+import coma.spring.dto.ReportDTO;
 import coma.spring.dto.TopFiveStoreDTO;
 import coma.spring.service.ChatService;
 import coma.spring.service.MapService;
@@ -256,6 +257,13 @@ public class PartyController {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
+	// 수지 관리자의 모임 삭제?
+	@RequestMapping("partydeleteByAdmin")
+	public String partydeleteByAdmin(String seq)  throws Exception {
+		pservice.delete(seq);
+		return "redirect:/admin/toAdmin_party";
+	}
+
 	// 태훈 모임 리스트 네비 포함
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
@@ -332,6 +340,7 @@ public class PartyController {
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		String img = pservice.clew(content.getParent_name());
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String id = account.getId();
 		String nickname = account.getNickname();
 		boolean partyFullCheck = pservice.isPartyfull(seq);
 		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
@@ -345,6 +354,7 @@ public class PartyController {
 		request.setAttribute("img", img);
 		request.setAttribute("con",content);
 		request.setAttribute("party", pcdto);
+		request.setAttribute("account", account);
 		request.setAttribute("partyFullCheck", partyFullCheck);
 		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/party/party_content";
@@ -398,6 +408,14 @@ public class PartyController {
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
 	}
+	
+	// 수지 모집 재시작 기능
+	@RequestMapping("restartRecruit")
+	public String restartRecruit(String seq) throws Exception {
+		pservice.restartRecruit(seq);
+		return "redirect:/party/party_content?seq="+seq;
+	}
+	
 	// 수지 모임 나가기 기능
 	@RequestMapping("toExitParty")
 	public String exitParty(String seq) throws Exception{
@@ -450,15 +468,25 @@ public class PartyController {
 		System.out.println("이미지 주소 " + imgaddr);
 		return imgaddr;
 	}
-	// 태훈 모임 신고  ( 현재 신고 접수 되면 모임 내용 수정 됨)
-	@ResponseBody
+	// 태훈 모임 신고
+	//@ResponseBody
+	//@RequestMapping("party_report")
+	//public int partyReport(HttpServletRequest request)  throws Exception {
+		//int seq = Integer.parseInt(request.getParameter("seq"));
+		//System.out.println("seq : " + seq);
+		//int result = pservice.partyReport(seq);
+		//System.out.println("result : " + result);
+		//return result;
+	//}
 	@RequestMapping("party_report")
-	public int partyReport(HttpServletRequest request)  throws Exception {
+	public String partyReport(HttpServletRequest request,RedirectAttributes redirectAttributes)  throws Exception {
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getNickname();
 		int seq = Integer.parseInt(request.getParameter("seq"));
-		System.out.println("seq : " + seq);
-		int result = pservice.partyReport(seq);
-		System.out.println("result : " + result);
-		return result;
+
+		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,request.getParameter("report_id"),null,seq));
+		
+		return "redirect:/report/newReport/";
 	}
 
 

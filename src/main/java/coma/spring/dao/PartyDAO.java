@@ -104,7 +104,7 @@ public class PartyDAO {
 		param.put("place_id", place_id);
 		return mybatis.selectList("Party.selectByPageNo",param);
 	}
-	// 예지 잘 모르겠음
+	// 수지 모집종료 기능
 	public int stopRecruit(String seq) throws Exception {
 		return mybatis.update("Party.stopRecruit",seq);
 	}
@@ -150,7 +150,11 @@ public class PartyDAO {
 	// 태훈 모임 게시글 신고
 	public int partyReport(int seq) {
 		return mybatis.update("Party.partyReport", seq);
+	}
 
+	// 수지 모집 재시작 기능
+	public int restartRecruit(String seq) throws Exception {
+		return mybatis.update("Party.restartRecruit",seq);
 	}
 
 }

@@ -12,7 +12,7 @@
 		#{title}, #{writer}, #{meetdate}, #{count},
 		#{gender}, #{age},
 		#{drinking}, #{content},#{status},#{place_id},
-		#{imgaddr})
+		#{imgaddr},0)
 	</insert>
 	<!-- by 수지 파티 참가 -->
 	<insert id="partyJoin">
@@ -92,8 +92,7 @@
 					'%${aa}%'
 				</foreach>
 			</if>
-			
-			
+
 			<if test="drinking != 2">or drinking = ${drinking}</if>
 			<if test="title != ''">or title like '%${title}%'</if>
 			<if test="writer != ''">or writer like '%${writer}%'</if>
@@ -123,9 +122,13 @@
    <!-- by 태훈 모임 글 신고 -->
    <update id="partyReport">
    		update party set report = report+1 where seq = #{seq}
-   </update>
+   </update> 
    <!--  by 수지 모임별 현재인원수 및 제한인원수 구하기 -->
    <select id="getPartyCounts" resultType="coma.spring.dto.PartyCountDTO">
    		select DISTINCT  p.seq, p.count as pull, (select count(*) from partylist where chatseq_parent = p.seq) as count from party p INNER join partylist l on p.seq = l.chatseq_parent where p.seq=#{value}
    </select>
+   <!-- by 수지 모집 재시작하기 -->
+	<update id="restartRecruit">
+		update party set status = 1 where seq = #{value}
+	</update>
 </mapper>

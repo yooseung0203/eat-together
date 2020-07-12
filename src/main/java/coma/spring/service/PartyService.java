@@ -334,9 +334,15 @@ public class PartyService {
 	public PartyCountDTO getPartyCounts(String seq) {
 		return pdao.getPartyCounts(seq);
 	}
+
 	// 태훈 모임 게시글 신고
 	public int partyReport(int seq) {
 		return pdao.partyReport(seq);
+	}
+	// 수지 모집 재시작 기능
+	public int restartRecruit(String seq) throws Exception {
+		return pdao.restartRecruit(seq);
+
 	}
 }
 
