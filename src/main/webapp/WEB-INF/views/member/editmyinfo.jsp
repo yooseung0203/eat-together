@@ -66,7 +66,7 @@
 							<th scope="row">PROFILE IMAGE</th>
 							<td class="myinfo_text" id="profile_box"><br>
 								<div class="edit_text">
-									<div id='preview'></div>
+									<div id='preview'><img src="#" id="profile_preview" onError="this.src='/resources/img/no_img.png'" alt=""></div>
 									<br> <label class="btn btn-secondary btn-file">
 										업로드하기 <input type="file" id="profile" name="profile"
 										style="display: none;">
@@ -164,30 +164,33 @@
 				return false;
 			})
 
-			//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
-			var upload = document.querySelector('#profile');
-			var preview = document.querySelector('#preview');
+		//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200710
+		var upload = document.querySelector('#profile');
+		var preview = document.querySelector('#preview');
 
-			upload.addEventListener('change', function(e) {
-				var get_file = e.target.files;
-				var image = document.createElement('img');
-				var reader = new FileReader();
+		upload.addEventListener('change', function(e) {
+			var get_file = e.target.files;
+			var image = document.createElement('img');
+			image.setAttribute("id", "profile_preview");
+			var reader = new FileReader();
 
-				reader.onload = (function(aImg) {
-					console.log(1);
-					return function(e) {
-						console.log(3);
-						aImg.src = e.target.result
-					}
-				})(image)
-
-				if (get_file) {
-					reader.readAsDataURL(get_file[0]);
-					console.log(2);
+			reader.onload = (function(aImg) {
+				console.log(1);
+				return function(e) {
+					console.log(3);
+					aImg.src = e.target.result
 				}
+			})(image)
 
-				preview.appendChild(image);
-			})
+			if (get_file) {
+				reader.readAsDataURL(get_file[0]);
+				console.log(2);
+			}
+			//이미 올라간 차일드 지우고 새로운 이미지 업로드시 사진 반영하기_20200712
+			var profile_preview = document.getElementById("profile_preview");
+			document.getElementById("preview").removeChild(profile_preview);
+			preview.appendChild(image);
+		})
 
 			//by지은, back버튼 생성_20200708
 			$("#back").on("click", function() {

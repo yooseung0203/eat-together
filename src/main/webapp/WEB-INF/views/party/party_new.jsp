@@ -14,7 +14,7 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script
 	src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 <!-- BootStrap4 End-->
@@ -45,7 +45,7 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/party-css.css">
 <link rel="stylesheet" type="text/css"
-	href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet"
 	href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <script>
@@ -63,7 +63,6 @@
 		});
 	});
 	//유효성 - 미성년자 음주불가 끝
-
 	/**
 	 *  yyyyMMdd 포맷으로 반환
 	 */
@@ -75,7 +74,6 @@
 		day = day >= 10 ? day : '0' + day; //day 두자리로 저장
 		return year + '' + month + '' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 	}
-
 	$(function() {
 		//$('input[name=date]').attr("readonly",true);
 		
@@ -84,7 +82,6 @@
 			dateFormat : 'yy-mm-dd',
 			minDate : 0,
 			dayNamesShort : [ "일", "월", "화", "수", "목", "금", "토" ],
-
 		});
 		var hour = "";
 		var minute = "";
@@ -124,7 +121,6 @@
 		console.log(hour);
 		console.log(minute);
 		});
-
 	 */
 	 $("#party_date").on("blur", function(){
 		 var d = new Date($("#party_date").val());
@@ -141,12 +137,10 @@
 		 };
 	 });
 		
-
 		var birthday = "${age}";
 		var yyyy = birthday.substr(0, 4);
 		var mm = birthday.substr(5, 2);
 		var dd = birthday.substr(8, 2);
-
 		var ymd = new Date(yyyy, mm - 1, dd);
 		var today = new Date();
 		var years = today.getFullYear() - ymd.getFullYear();
@@ -174,7 +168,6 @@
 			agech = "age1";
 		}
 		;
-
 		var gender = "${gender}";
 		console.log(gender);
 		if (gender == 1) {
@@ -185,7 +178,6 @@
 			$('input:radio[id=gender2]').attr("disabled", false);
 		}
 		;
-
 		$("#search_parent_name")
 				.on(
 						"click",
@@ -195,7 +187,6 @@
 									.open("/party/toSearchStore", "childForm",
 											"width=650, height=600, resizable = no, scrollbars = no");
 						});
-
 		/* $("#toCheckAddr").on("click",function(){
 				var lng = $("#lng").val();
 				var lat = $("#lat").val();
@@ -224,7 +215,6 @@
 			
 			
 		}); */
-
 		$("#submitBtn").on("click", function() {
 			var parent_name = $("#parent_name").val();
 			var parent_address = $("#parent_address").val();
@@ -236,7 +226,6 @@
 			var isCheckGender = $('input:radio[name=gender]').is(':checked');
 			var isCheckAge = $('input:checkbox[name=age]').is(':checked');
 			
-
 			console.log(title);
 			console.log(date);
 			console.log(time);
@@ -244,19 +233,16 @@
 			console.log(content);
 			console.log(isCheckGender);
 			console.log(isCheckAge);
-
 			if ($.trim(parent_name) == '') {
 				alert('상호명 찾기버튼으로 모임장소를 등록해주세요');
 				return false;
 			}
 			;
-
 			if ($.trim(title) == '') {
 				alert('모임 제목을 입력해주세요');
 				return false;
 			}
 			;
-
 			if (!date) {
 				alert('모임날짜를 선택해주세요');
 				return false;
@@ -268,7 +254,6 @@
 				return false;
 			}
 			; */
-
 			if ($.trim(count) == '') {
 				alert("모임인원을 선택해주세요");
 				return false;
@@ -280,7 +265,6 @@
 				return false;
 			};
 			
-
 			if (!isCheckGender) {
 				alert('멤버구성을 선택해주세요');
 				return false;
@@ -291,28 +275,23 @@
 	            alert("모임인원은 2~4명 사이로 지정해주세요");
 	            return false;
 	         };
-
 			if (!isCheckAge) {
 				alert('모집하고자하는 연령대를 선택해주세요');
 				return false;
 			}
 			;
-
 			if ($.trim(content) == '') {
 				alert('모임 소개를 작성해주세요');
 				return false;
 			}
 			;
-
 			let today = new Date();
 			console.log(today);
 			console.log(date);
-
 			let tyear = today.getFullYear(); // 년도
 			let tmonth = today.getMonth() + 1; // 월
 			let tdate = today.getDate(); // 날짜
 			let tday = today.getDay(); // 요일
-
 			if (today > date) {
 				alert('선택된 날짜가 과거입니다.');
 				return false;
@@ -329,9 +308,7 @@
 			} else if (agech == "age1") {
 				$("input:checkbox[id=age1]").attr("disabled", false);
 			}
-
 			document.form.submit();
-
 		});
 	});
 </script>
