@@ -81,7 +81,7 @@
 			<div class="signup_text">
 				<label for="nickname" class="signup_text">닉네임</label> <input
 					type="text" class="form-control" id="nickname" name="nickname"
-					placeholder="한글 2~6자 /수정 불가능하므로 신중하게 선택해주세요."><br>
+					placeholder="한글 +숫자 6~10자 /수정 불가능하므로 신중하게 선택해주세요."><br>
 				<button type=button id=dublCheckforNick class="btn btn-secondary">중복확인</button>
 				<div id=nickname_text style="display: none;"></div>
 			</div>
@@ -381,6 +381,7 @@
 						account_email : $("#account_email").val()
 					}
 				}).done(function(resp) {
+					console.log(resp);
 					if (resp != "") {
 						alert("인증메일이 발송되었습니다.");
 						$("#mail_div").css("display", "block");
@@ -392,7 +393,6 @@
 							} else {
 								alert("인증문자열을 확인해주세요.");
 								$("#mail_text").val("");
-								$("#mail_text").focus();
 							}
 						})
 					} else {

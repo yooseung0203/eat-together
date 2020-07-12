@@ -56,23 +56,46 @@
 				앞으로 더 많은 맛집 친구들이 기다리고 있습니다.<br>정말로 탈퇴하시겠습니까?
 			</p>
 		</div>
-	</div><br>
-	<button type = button id="kakaoWithdrawBtn" class="btn btn-warning" onclick="/member/withdrawProc">카카오톡회원 탈퇴하기</button><br>
-	<form action="/member/withdrawProc" method="post" class="withdraw_text">
-		<div class="withdraw_text">
-			<label for="pw" class="withdraw_text">비밀번호</label> <input
-				type="password" class="form-control" id="pw" name="pw">
+	</div>
+	<br>
+	<div class="contents_container withdraw_text">
+		<div id='forKakao'>
+		<input type=hidden id="memberType" value="${loginInfo.member_type}">
+			<button type=button id="kakaoWithdrawBtn" class="btn btn-warning">카카오톡회원 탈퇴하기</button>
 		</div>
-		<div class="withdraw_text">
-			<label for="pw" class="withdraw_text">비밀번호 확인</label> <input
-				type="password" class="form-control" id="pwCorrection">
-			<div id="pw_text" style="display: none;"></div>
-		</div><br>
-		<button type=submit class="btn btn-light withdraw_text" id="withdraw">탈퇴하기</button>
-		<button type="button" class="btn btn-warning withdraw_text" id="back">되돌아가기</button>
-	</form>
+		<div id='forMember'>
+			<form action="/member/withdrawProc" method="post"
+				class="withdraw_text">
+				<div class="withdraw_text">
+					<label for="pw" class="withdraw_text">비밀번호</label> <input
+						type="password" class="form-control" id="pw" name="pw">
+				</div>
+				<div class="withdraw_text">
+					<label for="pw" class="withdraw_text">비밀번호 확인</label> <input
+						type="password" class="form-control" id="pwCorrection">
+					<div id="pw_text" style="display: none;"></div>
+				</div>
+				<br>
+				<button type=submit class="btn btn-light withdraw_text"
+					id="withdraw">탈퇴하기</button>
+				<button type="button" class="btn btn-warning withdraw_text"
+					id="back">되돌아가기</button>
+			</form>
+		</div>
+	</div>
+
+
 
 	<script>
+	$("#kakaoWithdrawBtn").on("click", function(){
+		var member_type = $("#memberType").val();
+		if(member_type == "kakao"){
+			location.replace("/member/withdrawProc");
+		}else if(member_type =="site"){
+			alert("일반회원탈퇴를 이용해주세요.");
+			$("#pw").focus();
+		}
+	})
 		$("#withdraw").on("click", function() {
 			if ($("#pw").val() == "") {
 				alert("비밀번호를 먼저 입력해주세요.");
@@ -84,7 +107,6 @@
 				alert("비밀번호가 일치하지 않습니다.");
 				return false;
 			} else {
-				alert("탈퇴가 완료되었습니다.\n#See_you_again!");
 				return true;
 			}
 		})

@@ -63,7 +63,7 @@ public class MemberController {
 	public String getSignupInfoView(String check_yn) {
 		System.out.println(check_yn);
 		if(check_yn.contentEquals("on")) {
-		return "member/signup_info";
+			return "member/signup_info";
 		}else {
 			return "redirect:/";
 		}
@@ -173,7 +173,7 @@ public class MemberController {
 
 		return "redirect:/";
 	}
-	
+
 
 	//회원가입시 아이디 중복체크
 	@RequestMapping("isIdAvailable")
@@ -185,7 +185,7 @@ public class MemberController {
 		System.out.println("아이디 중복체크 결과 : " + result);
 		return String.valueOf(result);
 	}
-	
+
 	//by 지은, 회원가입시 닉네임 중복체크_20200710
 	@RequestMapping("isNickAvailable")
 	@ResponseBody
@@ -269,45 +269,50 @@ public class MemberController {
 	//회원탈퇴하기
 	@RequestMapping("withdrawProc")
 	public String withdrawProc(String pw) throws Exception{
-		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getId();
-		String protectedpw = mdto.getPw();
-		String inputpw = mservice.getSha512(pw);
+		//By지은, 카카오톡 로그인의 경우 회원탈퇴 시 어세스토큰 만료 필요하다_20200712
+		if(session.getAttribute("access_Token")!=null) {
+			MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+			String id = mdto.getId();
 
-		System.out.println("회원탈퇴하는 id : " + id);
-		System.out.println("회원탈퇴하는 pw : " + protectedpw);
-		System.out.println("입력한 pw : " + inputpw);
-
-		if(protectedpw.contentEquals(inputpw)) {
 			Map<String, String> param = new HashMap<>();
 			param.put("targetColumn1", "id");
 			param.put("targetValue1", id);
-			param.put("targetColumn2", "pw");
-			param.put("targetValue2", protectedpw);
+			param.put("targetColumn2", "member_type");
+			param.put("targetValue2", "kakao");
 
 			int result = mservice.deleteMember(param);
-			System.out.println("회원 탈퇴 성공 : " + result);
-
-
-			if(result>0) {
-				System.out.println("회원 탈퇴 완료");
-				//By지은, 카카오톡 로그인의 경우 access_Token로그아웃이 필요하다_20200706
-				if(session.getAttribute("access_Token")!=null) {
-					mservice.kakaoLogout((String)session.getAttribute("access_Token"));
-					session.invalidate();
-					return "redirect:/";
-					//카카오톡 로그인이 아닌 경우
-				}else {
-					session.invalidate();
-					return "redirect:/";
-				}
-			}else {
-				System.out.println("회원 탈퇴 실패, 관리자에게 문의하세요.");
-				return "error";
-			}
+			mservice.kakaoLogout((String)session.getAttribute("access_Token"));
+			session.invalidate();
+			System.out.println("회원탈퇴 성공1 실패0" + result);
+			return "redirect:/";
 		}else {
-			System.out.println("비밀번호 불일치");
-			return "error";	
+			//일반 회원탈퇴의 경우 어세스토큰 만료가 필요하지 않다_20200712
+			MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+			String id = mdto.getId();
+			String protectedpw = mdto.getPw();
+			String inputpw = mservice.getSha512(pw);
+
+			System.out.println("회원탈퇴하는 id : " + id);
+			System.out.println("회원탈퇴하는 pw : " + protectedpw);
+			System.out.println("입력한 pw : " + inputpw);
+
+			if(protectedpw.contentEquals(inputpw)) {
+				Map<String, String> param = new HashMap<>();
+				param.put("targetColumn1", "id");
+				param.put("targetValue1", id);
+				param.put("targetColumn2", "pw");
+				param.put("targetValue2", protectedpw);
+
+				int result = mservice.deleteMember(param);
+				System.out.println("회원 탈퇴 성공 : " + result);
+				session.invalidate();
+				return "redirect:/";
+
+			}else {
+				System.out.println("비밀번호 불일치");
+				return "error";	
+			}
+
 		}
 	}
 

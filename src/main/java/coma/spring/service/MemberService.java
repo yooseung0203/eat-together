@@ -223,6 +223,7 @@ public class MemberService {
 				mdto.setBirth("1999-12-31");
 				mdto.setAccount_email("need@eat-together.com");
 				mdto.setGender(0);
+				mdto.setMember_type("kakao");
 
 
 				int kakaoSignUpResult = mdao.signUpKakao(mdto);
