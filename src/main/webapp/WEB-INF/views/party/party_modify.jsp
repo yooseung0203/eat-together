@@ -14,7 +14,7 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!-- BootStrap4 End-->
 
 <!-- google font -->
@@ -44,8 +44,6 @@
 
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/party-css.css">
-<link rel="stylesheet" type="text/css"
-	href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet"
 	href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <script>
@@ -323,14 +321,14 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<c:if test="${con.writer ne sessionScope.loginInfo.id}">
+	<c:if test="${con.writer ne sessionScope.loginInfo.nickname}">
 		<script>
 			alert("작성자만 수정 가능합니다.");
 			location.href("/party/party_content?seq=${con.seq}");
 		</script>
 	</c:if>
 
-	<c:if test="${con.writer eq sessionScope.loginInfo.id}">
+	<c:if test="${con.writer eq sessionScope.loginInfo.nickname}">
 		<form id="form" name="form" method="post"
 			action="/party/party_modifyProc">
 			<div class="container">

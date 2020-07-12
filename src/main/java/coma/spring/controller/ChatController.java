@@ -38,12 +38,12 @@ public class ChatController {
 		// 방번호를 받음 : 웹소켓에서 삭제됨
 		this.session.setAttribute("roomNum", roomNum);
 		// 방번호의 저장된 채팅이 있는지 검색 
-		boolean ChatroomExist = true;
-		for(int i : ChatStatics.savedChats.keySet()) {
-			if(i == roomNum) {ChatroomExist = false;}
-		}
+//		boolean ChatroomExist = true;
+//		for(int i : ChatStatics.savedChats.keySet()) {
+//			if(i == roomNum) {ChatroomExist = false;}
+//		}
 		// 없으면 cservice.savedChat를 통해 가져옴 (채팅 리스트 ,채팅수)
-		if(ChatroomExist) {
+		if(!ChatStatics.savedChats.keySet().contains(roomNum)) {
 			cservice.savedChat(roomNum);
 		}
 		// 채팅방 참여 인원의 정보를 가지고옴
@@ -54,8 +54,10 @@ public class ChatController {
 			while(iterator.hasNext()) {
 				Entry entry = (Entry)iterator.next();
 				for(int i = 0 ; i < list.size() ; i++) {
-					if(entry.getValue().equals(list.get(i).getParticipant())) {
+					if(((MemberDTO)entry.getValue()).getNickname().equals(list.get(i).getParticipant())) {
 						list.get(i).setExist("exist");
+						list.get(i).setId(((MemberDTO)entry.getValue()).getId());
+						list.get(i).setSysname(((MemberDTO)entry.getValue()).getSysname());
 						break;
 					}
 				}
@@ -78,29 +80,53 @@ public class ChatController {
 			System.out.println(list.get(i).getParticipant()+list.get(i).getExist());
 		}
 		String writer = cservice.selectWriter(roomNum);
+		System.out.println();
 		System.out.println("작성자----------------------" + writer );
 		// 방번호와 맴버값을 초기화
+		this.session.setAttribute("writer", writer);
 		request.setAttribute("roomNum", roomNum);
 		request.setAttribute("memberList", list);
-		request.setAttribute("writer", writer);
 
 		return "/chat/chatroom";
 	}		
 	@RequestMapping("kick")
 	public String kick(int seq , String name) {
+		String writer = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
+		
+		if(!writer.contentEquals(cservice.selectWriter(seq))){
+			return "/chat/error";			
+		}		
+		try {
+			Iterator iterator = WebChatSocket.members.get(seq).entrySet().iterator();
+			while(iterator.hasNext()) {
+				Entry entry = (Entry)iterator.next();
+				if(((MemberDTO)entry.getValue()).getNickname().equals(name)) {
+					WebChatSocket.members.get(seq).remove(entry.getKey());
+					WebChatSocket.clients.remove(entry.getKey());
+					break;
+				}
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		cservice.addBlacklist(name, seq);
 		cservice.exitChatRoom(name, seq);
+
+		this.session.setAttribute("kicked", "done");
 		return "home";
 	}
 	@RequestMapping("exit")
 	public String chat(int roomNum) {
 		String name = ((MemberDTO)this.session.getAttribute("loginInfo")).getNickname();
+		
 		if(name.contentEquals(cservice.selectWriter(roomNum))){
 			cservice.exitAllChatRoom(roomNum);
 			cservice.deleteChatRoom(roomNum);
 		}else {
 			cservice.exitChatRoom(name, roomNum);
 		}
+
+		this.session.setAttribute("exited", "done");
 		return "redirect:/";
 	}
 	@RequestMapping("hacker")
