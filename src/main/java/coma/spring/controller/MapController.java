@@ -85,7 +85,6 @@ public class MapController {
 		try{place_id = Integer.parseInt(request.getParameter("place_id"));}catch(Exception e) {}
 		String object = gson.toJson(list);
 		String jsonPath = sc.getRealPath("resources/json/mapData.json");
-		System.out.println(jsonPath);
 		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
 		JsonArray arr = gson.fromJson(object, JsonArray.class);

@@ -21,6 +21,9 @@ function partyDelete(seq){
 		location.href = "/party/partydelete?seq="+seq;
 	}
 }
+$(function () {
+	  $('[data-toggle="tooltip"]').tooltip();
+})
 $(function(){
 		/****************** 스타일 관련 영역 ******************/
 		$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
