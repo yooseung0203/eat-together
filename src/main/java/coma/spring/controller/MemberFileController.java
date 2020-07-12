@@ -48,7 +48,7 @@ public class MemberFileController {
 	public String getEditProfileImageView() {
 		return "member/editprofileimage";
 	}
-
+	
 	//프로필사진 업로드_20200708 수정
 	public MemberFileDTO uploadProc(MemberDTO mdto, MemberFileDTO mfdto, String realPath)throws Exception {
 		System.out.println("파일업로드 Proc 접속하기");
@@ -83,4 +83,5 @@ public class MemberFileController {
 		
 		return mfdto;
 	}
+	
 }

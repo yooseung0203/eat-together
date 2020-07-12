@@ -71,7 +71,7 @@
 
 			<div class="signup_text">
 				<label for="profile" class="signup_text">프로필 이미지</label><br>
-				<div id='preview'></div>
+				<div id='preview'><img src="#" id='tempImg' onError="this.src='/resources/img/no_img.png'" alt=""></div>
 				<br> <label class="btn btn-secondary btn-file"> 업로드하기 <input
 					type="file" id="profile" name="profile" style="display: none;">
 				</label>
@@ -125,13 +125,14 @@
 	</form>
 
 	<script>
-		//by 지은, 이미지를 첨부할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
+		//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
 		var upload = document.querySelector('#profile');
 		var preview = document.querySelector('#preview');
 
 		upload.addEventListener('change', function(e) {
 			var get_file = e.target.files;
 			var image = document.createElement('img');
+			var tempImg = document.getElementById('tempImg');
 			var reader = new FileReader();
 
 			reader.onload = (function(aImg) {
@@ -146,7 +147,7 @@
 				reader.readAsDataURL(get_file[0]);
 				console.log(2);
 			}
-
+			preview.removeChild(tempImg);
 			preview.appendChild(image);
 		})
 
