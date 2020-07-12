@@ -255,25 +255,6 @@ public class PartyController {
 		pservice.delete(seq);
 		return "redirect:/map/toMap";
 	}
-	// 태훈 모임 리스트 출력
-//	@RequestMapping("partylist")
-//	public String partyList(HttpServletRequest request) throws Exception {
-//		
-//		List<PartyDTO> partyList = pservice.selectList();
-//		System.out.println(partyList.size());
-//		
-//		List<String> imgList = new ArrayList<>();
-//		for(int i=0; i<partyList.size(); i++) {
-//					
-//			imgList.add(pservice.clew(partyList.get(i).getParent_name()));
-//			System.out.println(i +" : "+partyList.get(i).getSeq()+" : "+imgList.get(i));
-//		}
-//		
-//		
-//		request.setAttribute("list", partyList);
-//		request.setAttribute("imglist", imgList);
-//		return "/party/party_list";
-//	}
 	// 태훈 모임 리스트 네비 포함
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
@@ -463,4 +444,14 @@ public class PartyController {
 		System.out.println("이미지 주소 " + imgaddr);
 		return imgaddr;
 	}
+	// 태훈 모임 신고  ( 현재 신고 접수 되면 모임 내용 수정 됨)
+	@ResponseBody
+	@RequestMapping(value="party_report", method=RequestMethod.POST)
+	public int partyReport(int seq)  throws Exception {
+		System.out.println("seq : " + seq);
+		int result = pservice.partyReport(seq);
+		System.out.println("result : " + result);
+		return result;
+	}
+
 }

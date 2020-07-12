@@ -111,10 +111,6 @@ public class PartyDAO {
 	public int selectAllCount() throws Exception{
 		return mybatis.selectOne("Party.selectAllCount");
 	}
-	// 태훈 모임 리스트 뽑기
-//	public List<PartyDTO> selectList() {
-//		return mybatis.selectList("Party.selectList");
-//	}
 	// 태훈 모임 리스트 뽑기 네비 포함
 	public List<PartyDTO> selectList(int cpage) {
 		int start = cpage * PartyConfiguration.SEARCH_COUNT_PER_PAGE - (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
@@ -139,11 +135,14 @@ public class PartyDAO {
 	// 지은 작성자 별 모임 갯수
 	public int getMyPageArticleCount(String nickname) throws Exception{
 		return mybatis.selectOne("Party.getMyPageArticleCount", nickname);
-	}
-	
+	}	
 	//블랙리스트유저차단
 	public int userBlockedConfirm(Map<String , Object> map) {
 	      return mybatis.selectOne("Party.userBlockedConfirm", map);
-	   }
+	}
+	// 태훈 모임 게시글 신고
+	public int partyReport(int seq) {
+		return mybatis.selectOne("Party.partyReport", seq);
+	}
 
 }

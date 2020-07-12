@@ -46,7 +46,7 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- BootStrap4 End-->
+<!-- BootStrap4 End--> 
 
 <!-- google font -->
 <link
@@ -163,27 +163,28 @@ $(function() {
 	});
 
 	/*******************   무한 스크롤 ************************/
-	var page = 1; //페이징과 같은 방식이라고 생각하면 된다. 
+	
+	var cpage = 1; //페이징과 같은 방식이라고 생각하면 된다. 
 
 	$(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
-		getList(page);
+		getList(cpage);
 		page++;
 	});
 
 	$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
 		if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
-			getList(page);
+			getList(cpage);
 			page++;
 		}
 	});
-	/*
+	
 	function getList(page){
 		 
 	    $.ajax({
 	        type : 'POST',  
 	        dataType : 'json', 
-	        data : {"page" : page},
-	        url : '주소'
+	        data : {"cpage" : cpage},
+	        url : '/party/partylist',
 	        success : function(returnData) {
 	            var data = returnData.rows;
 	            var html = "";
@@ -208,9 +209,15 @@ $(function() {
 	               alert("데이터를 가져오는데 실패하였습니다.");
 	           };
 	       }
-	    }); 
+	    })
+	    .ajaxStart(function(){
+			$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
+		})
+		.ajaxStop(function(){
+			$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
+		});	
 	}
-	*/
+	
 	/*******************   무한 스크롤 ************************/
 
 	/*****************************  태훈 party list 스크립 ***********************************************/
@@ -331,7 +338,6 @@ $(function() {
 														<input type="hidden" class="party_seq" value="${partyList.seq}">
 													</li>
 												</ul>
-												
 											</div>
 										</div>
 										<div class="team-content text-center">
@@ -400,42 +406,8 @@ $(function() {
 
   <!-- Template Main JS File -->
   <script src="/resources/assets/js/main.js"></script>
-	
+
 </body>
 </html>
 
-	<!-- <div class="container">
-		<div class="row aa">
-			<c:choose>
-				<c:when test="${empty list}">
-					<div class="col-sm-12 col-md-3">
-						<span>검색 된 내용이 없습니다.</span>
-					</div>
-				</c:when>
-				<c:otherwise>
-					<c:forEach var="partyList" items="${list}">
-						<div class="col-sm-12 col-md-3 card-deck">
-							<div class="card partylist icon-box">
-								<img src="${partyList.imgaddr}" class="card-img-top">
-								<div class="card-body">
-									<h5 class="card-title">${partyList.parent_name }</h5>
-									<p class="card-text">
-										날짜 : ${partyList.sDate}<br>지역 :
-										${partyList.parent_address }
-									</p>
-									<input type="hidden" class="party_seq" value="${partyList.seq}">
-									<button type="button" class="btn btn-info btn-lg myBtn">상세
-										보기</button>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</c:otherwise>
-			</c:choose>
-
-			<nav aria-label="Page navigation example">
-				<ul class="pagination justify-content-center">${navi}
-				</ul>
-			</nav>
-		</div>
-	</div>-->
+	

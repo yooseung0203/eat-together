@@ -323,14 +323,14 @@
 	<!-- hedaer  -->
 	<!-- ******************* -->
 
-	<c:if test="${con.writer ne sessionScope.loginInfo.id}">
+	<c:if test="${con.writer ne sessionScope.loginInfo.nickname}">
 		<script>
 			alert("작성자만 수정 가능합니다.");
 			location.href("/party/party_content?seq=${con.seq}");
 		</script>
 	</c:if>
 
-	<c:if test="${con.writer eq sessionScope.loginInfo.id}">
+	<c:if test="${con.writer eq sessionScope.loginInfo.nickname}">
 		<form id="form" name="form" method="post"
 			action="/party/party_modifyProc">
 			<div class="container">

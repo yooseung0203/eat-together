@@ -78,7 +78,7 @@
 	<!-- by 태훈 모임 리스트 -->
 	<select id="selectList" resultType="coma.spring.dto.PartyDTO">
 		<!-- select * from party where status = 1 order by seq desc -->
-		select * from (select party.*, row_number() over(order by seq desc) as
+		select * from (select party.*, row_number() over(order by status desc, seq desc) as
 		rnum from party) where rnum between #{start} and #{end}
 	</select>
 	<!--by 태훈 상세 검색 -->
@@ -120,4 +120,8 @@
 	<select id="userBlockedConfirm" resultType="int">
       select count(*) from blacklist where chatSeq_parent= #{seq} and blocked = #{name}
    </select>
+   <!-- by 태훈 모임 글 신고 -->
+   <update id="partyReport">
+   		update from party set content = '신고 됨' where seq = #{seq}
+   </update>
 </mapper>

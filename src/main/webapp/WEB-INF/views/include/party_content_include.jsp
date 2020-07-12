@@ -1,121 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script>
-/********************************* 채팅방으로 이동 ************************************/
-function toChatroom(num){
-    var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"
-    window.open("/chat/chatroom?roomNum="+num, num, option);
-}
-/********************************* 채팅방으로 이동 ************************************/
-
-/*****************************  수지 party content 스크립 ***********************************************/
-$(document).ready(function(){
-	 $("a[data-toggle='sns_share']").click(function(e){
-			var option = "width = 500, height = 600, top = 100, left = 200, scrollbars=no";
-			e.preventDefault();
-			var current_url = document.location.href;
-			var _this = $(this);
-			var sns_type = _this.attr('data-service');
-			var href = current_url;
-			var title = _this.attr('data-title');
-			var loc = "";
-			var img = $("meta[name='og:image']").attr('content');
-			
-			if( ! sns_type || !href || !title) return;
-			
-			if( sns_type == 'facebook' ) {
-				loc = '//www.facebook.com/sharer/sharer.php?u='+href+'&t='+title;
-			}
-			else if ( sns_type == 'twitter' ) {
-				loc = '//twitter.com/home?status='+encodeURIComponent(title)+' '+href;
-			}
-			
-			else if ( sns_type == 'pinterest' ) {
-				
-				loc = '//www.pinterest.com/pin/create/button/?url='+href+'&media='+img+'&description='+encodeURIComponent(title);
-			}
-			else if ( sns_type == 'kakaostory') {
-				loc = 'https://story.kakao.com/share?url='+encodeURIComponent(href);
-			}
-			else if ( sns_type == 'band' ) {
-				loc = 'http://www.band.us/plugin/share?body='+encodeURIComponent(title)+'%0A'+encodeURIComponent(href);
-			}
-			else if ( sns_type == 'naver' ) {
-				loc = "http://share.naver.com/web/shareView.nhn?url="+encodeURIComponent(href)+"&title="+encodeURIComponent(title);
-			}
-			else {
-				return false;
-			}
-			
-			window.open(loc,"_blank",option);
-			return false;
-		});
-	
-	
-	var stime = "${con.sTime}";
-	var time = stime.substr(0,5);
-	console.log(time);
-	$("#time").html(time);
-});
-
-	$(function() {
-		$("#partyModify").on("click", function() {
-			location.href = "/party/partymodify?seq=${con.seq}";
-		});
-
-		$("#partyDelete").on("click", function() {
-			var ask = confirm("삭제 후에는 복구할 수 없습니다.\n 정말 삭제하겠습니까?");
-			if (ask) {
-				location.href = "/party/partydelete?seq=${con.seq}";
-			}
-		});
-		$("#partyReport").on("click", function() {
-			var ask = confirm("무분별한 신고는 신고자 본인에게 불이익이 갈 수 있습니다.\n정말 신고하겠습니까?");
-			if (ask) {
-				location.href = "/re/partydelete?seq=${con.seq}";
-			}
-		});
-		
-		$("#toChatroom").on("click", function() {
-			toChatroom(${con.seq });
-		});
-
-
-		$("#toPartyList").on("click", function() {
-			location.href = "/party/partylist";
-		});
-		
-		$("#toPartyJoin").on("click",function(){ //모임가입
-			location.href="/party/partyJoin?seq=${con.seq}";
-			
-			
-		});
-			
-		$("#toStopRecruit").on("click",function(){
-			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
-			if (ask) {
-			location.href= "/party/stopRecruit?seq=${con.seq}";
-			}
-		});
-
-	});
-	
-	//페이지 리사이징
-	$(function() {
-		$('.cropping img').each(function(index, item) {
-			if ($(this).height() / $(this).width() < 0.567) {
-				$(this).addClass('landscape').removeClass('portrait');
-			} else {
-				$(this).addClass('portrait').removeClass('landscape');
-			}
-		});
-	});
-</script>
+<script type="text/javascript" src='/resources/js/partyList.js?ver=31'></script>
 	<div class="container">
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
             <h2 class="party_headline">${con.title}</h2>
+            <input type="hidden" id ="party_seq" value="${con.seq}">
+            <input type="hidden" id ="party_time" value="${con.sTime}">
            <c:choose>
 					<c:when test="${con.status  eq '1'}">
 						<span class="badge badge-success">멤버 모집중</span>
@@ -200,7 +92,7 @@ $(document).ready(function(){
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">소개</div>
-			<div class="col-10">${con.content}</div>
+			<div class="col-10"> <c:out value='${con.content}' /></div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">SNS공유</div>
@@ -233,17 +125,18 @@ $(document).ready(function(){
 					</c:when>
 				</c:choose>
 				
-            <c:if test="${con.writer eq sessionScope.loginInfo.id }">
-           <c:choose>
-						<c:when test="${con.status  eq '1'}">
+            <c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
+            	<c:choose>
+            		<c:when test="${con.status  eq '1'}">
 							<button type="button" id="toStopRecruit" class="btn btn-light">모집종료하기</button>
-						</c:when>
-						<c:when test="${con.status  eq '0'}"></c:when>
-					</c:choose>
+					</c:when>
+					<c:when test="${con.status  eq '0'}">
+					</c:when>
+				</c:choose>
                <button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
                <button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
             </c:if>
-            <c:if test="${con.writer ne sessionScope.loginInfo.id }">
+            <c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
             	<button type="button" id="partyReport" class="btn btn-info">신고하기</button>
             </c:if>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">목록으로</button>

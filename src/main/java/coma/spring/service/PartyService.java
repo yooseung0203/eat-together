@@ -328,4 +328,8 @@ public class PartyService {
 	      map.put("seq" , seq);
 	      return pdao.userBlockedConfirm(map);
 	}
+	// 태훈 모임 게시글 신고
+	public int partyReport(int seq) {
+		return pdao.partyReport(seq);
+	}
 }
