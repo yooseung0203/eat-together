@@ -73,4 +73,9 @@ public class ReviewController {
 		
 		return mav;
 	}
+	
+	/*
+	 * @RequestMapping("") public String reviewReport() throws Exception{ return "";
+	 * }
+	 */
 }

@@ -3,7 +3,7 @@
 <mapper namespace="Review">
 	<insert id="insert">
 		insert into review
-		values(review_seq.nextval,#{id},#{content},#{rating},sysdate,#{parent_seq})
+		values(review_seq.nextval,#{id},#{content},#{rating},sysdate,#{parent_seq},default)
 	</insert>
 	<insert id="insertFile">
 		insert into review_file
