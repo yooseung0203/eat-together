@@ -5,6 +5,8 @@ public class PartyMemberDTO {
 	private String participant;
 	private int viewed_seq;
 	private String exist;
+	private String id;
+	private String sysname;
 	public PartyMemberDTO() {}
 	public PartyMemberDTO(int chatSeq_parent, String participant) {
 		this.chatSeq_parent = chatSeq_parent;
@@ -51,6 +53,18 @@ public class PartyMemberDTO {
 
 	public void setExist(String exist) {
 		this.exist = exist;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getSysname() {
+		return sysname;
+	}
+	public void setSysname(String sysname) {
+		this.sysname = sysname;
 	}
 
 	

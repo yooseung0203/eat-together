@@ -173,6 +173,7 @@ public class MemberController {
 
 		return "redirect:/";
 	}
+	
 
 	//회원가입시 아이디 중복체크
 	@RequestMapping("isIdAvailable")

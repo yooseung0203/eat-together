@@ -49,14 +49,15 @@
 	<div class="jumbotron jumbotron-fluid">
 		<div class="container withdraw_text">
 			<h1 class="display-4" class="withdraw_text">${loginInfo.id}
-				님이 참여한 모임 00개로<br>수많은 새로운 맛집 친구를 만났습니다.
+				님이 참여한 모임으로<br>수많은 새로운 맛집 친구를 만났습니다.
 			</h1>
 			<br>
 			<p class="lead withdraw_text">
 				앞으로 더 많은 맛집 친구들이 기다리고 있습니다.<br>정말로 탈퇴하시겠습니까?
 			</p>
 		</div>
-	</div>
+	</div><br>
+	<button type = button id="kakaoWithdrawBtn" class="btn btn-warning" onclick="/member/withdrawProc">카카오톡회원 탈퇴하기</button><br>
 	<form action="/member/withdrawProc" method="post" class="withdraw_text">
 		<div class="withdraw_text">
 			<label for="pw" class="withdraw_text">비밀번호</label> <input
@@ -66,7 +67,7 @@
 			<label for="pw" class="withdraw_text">비밀번호 확인</label> <input
 				type="password" class="form-control" id="pwCorrection">
 			<div id="pw_text" style="display: none;"></div>
-		</div>
+		</div><br>
 		<button type=submit class="btn btn-light withdraw_text" id="withdraw">탈퇴하기</button>
 		<button type="button" class="btn btn-warning withdraw_text" id="back">되돌아가기</button>
 	</form>
