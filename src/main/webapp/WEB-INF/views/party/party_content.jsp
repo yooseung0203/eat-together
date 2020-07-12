@@ -370,11 +370,8 @@ $(document).ready(function(){
 					<button type="button" id="partyReport" class="btn btn-info">신고하기</button>
 				</c:if>
 				<button type="button" id="toPartylist" class="btn btn-secondary">목록으로</button>
-
 			</div>
-
 		</div>
-
 	</div>
 
 
