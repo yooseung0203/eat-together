@@ -70,6 +70,9 @@
 		msg_sender!='administrator'
 	</select> -->
 	<!--insert 문 -->
+	
+	
+	
 	<insert id="insert">
 		insert into msg
 		values(msg_seq.nextval,#{msg_sender},#{msg_receiver},#{msg_title},#{msg_text},sysdate,0,0,0)
