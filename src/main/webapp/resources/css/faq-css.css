@@ -25,7 +25,8 @@
 }
 .accordion-section .container .panel-default .panel-title a {
     display: block;
-    font-style: italic;
+    font-family: 'NEXON Lv1 Gothic OTF';
+  /*   font-style: italic; */
     font-size: 1.5rem;
 }
 .accordion-section .container .panel-default .panel-title a:after {
