@@ -271,6 +271,7 @@ public class MemberController {
 	public String withdrawProc(String pw) throws Exception{
 		//By지은, 카카오톡 로그인의 경우 회원탈퇴 시 어세스토큰 만료 필요하다_20200712
 		if(session.getAttribute("access_Token")!=null) {
+			String access_Token = (String) session.getAttribute("access_Token");
 			MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 			String id = mdto.getId();
 
@@ -281,7 +282,7 @@ public class MemberController {
 			param.put("targetValue2", "kakao");
 
 			int result = mservice.deleteMember(param);
-			mservice.kakaoLogout((String)session.getAttribute("access_Token"));
+			mservice.kakaoWithdraw(access_Token);
 			session.invalidate();
 			System.out.println("회원탈퇴 성공1 실패0" + result);
 			return "redirect:/";

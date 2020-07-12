@@ -140,7 +140,7 @@ public class MemberService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=39543f4353dc8ce2c9268fc23c6d67e4");
-			sb.append("&redirect_uri=http://eat-together.net/member/kakaoLogin");
+			sb.append("&redirect_uri=https://eat-together.net/member/kakaoLogin");
 			sb.append("&code=" + code);
 			bw.write(sb.toString());
 			bw.flush();
