@@ -17,7 +17,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +33,7 @@ import com.google.gson.JsonObject;
 
 import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.PartySearchListDTO;
 import coma.spring.service.ChatService;
@@ -353,9 +353,12 @@ public class PartyController {
 //		if(partyParticipantCheck) {
 //			request.setAttribute("participant", 1);
 //		}
+		
+		PartyCountDTO pcdto = pservice.getPartyCounts(seq);
 
 		request.setAttribute("img", img);
 		request.setAttribute("con",content);
+		request.setAttribute("party", pcdto);
 		request.setAttribute("partyFullCheck", partyFullCheck);
 		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/party/party_content";
