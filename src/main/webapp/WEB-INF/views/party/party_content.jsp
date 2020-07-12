@@ -5,6 +5,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<meta property="fb:app_id" content="APP_ID" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="맛집갔다갈래" />
+<meta property="og:url" content="eat-together.net" />
+<meta property="og:description" content="맛집동행찾기서비스" />
+<meta property="og:image" content="웹 페이지 대표 이미지" />
+
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>맛집갔다갈래 - ${con.title} / ${con.writer}</title>
@@ -18,6 +26,10 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- BootStrap4 End-->
 
+<!--  kakao api -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
+
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -30,6 +42,10 @@
 	rel="stylesheet">
 
 <!-- google font end-->
+
+<!-- SNS Share js start -->
+<script src='/resources/js/sns_share.js'></script>
+<!-- SNS Share js end -->
 
 <!-- ******************* -->
 <!-- header,footer용 css  -->
@@ -49,47 +65,6 @@ function toChatroom(num){
 
 
 $(document).ready(function(){
-	
-	 $("a[data-toggle='sns_share']").click(function(e){
-			var option = "width = 500, height = 600, top = 100, left = 200, scrollbars=no";
-			e.preventDefault();
-			var current_url = document.location.href;
-			var _this = $(this);
-			var sns_type = _this.attr('data-service');
-			var href = current_url;
-			var title = _this.attr('data-title');
-			var loc = "";
-			var img = $("meta[name='og:image']").attr('content');
-			
-			if( ! sns_type || !href || !title) return;
-			
-			if( sns_type == 'facebook' ) {
-				loc = '//www.facebook.com/sharer/sharer.php?u='+href+'&t='+title;
-			}
-			else if ( sns_type == 'twitter' ) {
-				loc = '//twitter.com/home?status='+encodeURIComponent(title)+' '+href;
-			}
-			
-			else if ( sns_type == 'pinterest' ) {
-				
-				loc = '//www.pinterest.com/pin/create/button/?url='+href+'&media='+img+'&description='+encodeURIComponent(title);
-			}
-			else if ( sns_type == 'kakaostory') {
-				loc = 'https://story.kakao.com/share?url='+encodeURIComponent(href);
-			}
-			else if ( sns_type == 'band' ) {
-				loc = 'http://www.band.us/plugin/share?body='+encodeURIComponent(title)+'%0A'+encodeURIComponent(href);
-			}
-			else if ( sns_type == 'naver' ) {
-				loc = "http://share.naver.com/web/shareView.nhn?url="+encodeURIComponent(href)+"&title="+encodeURIComponent(title);
-			}
-			else {
-				return false;
-			}
-			
-			window.open(loc,"_blank",option);
-			return false;
-		});
 	
 	
 	var stime = "${con.sTime}";
@@ -111,7 +86,7 @@ $(document).ready(function(){
 		});
 
 		$("#toPartylist").on("click", function() {
-			location.href = "/party/toPartylist";
+			location.href = "/party/selectByWriter?mcpage=1";
 		});
 		
 		$("#toPartyJoin").on("click",function(){ //모임가입
@@ -211,15 +186,43 @@ $(document).ready(function(){
 	<div class="container">
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
-				<h2 class="party_headline"><c:out value='${con.title}' /></h2>
-				<c:choose>
-					<c:when test="${con.status  eq '1'}">
-						<span class="badge badge-success">멤버 모집중</span>
-					</c:when>
-					<c:when test="${con.status  eq '0'}">
-						<span class="badge badge-secondary">모집마감</span>
-					</c:when>
-				</c:choose>
+				<h2 class="party_headline">
+					<c:out value='${con.title}' />
+					<input type="hidden" id="sns_share_title"
+						value=" /' ${con.parent_name} /' 에 같이 가자!!! - 맛집동행찾기서비스 맛집갔다갈래">
+					<c:choose>
+						<c:when test="${con.status  eq '1'}">
+							<span class="badge badge-success">멤버 모집중</span>
+
+							<c:if
+								test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false }">
+								<div class="row  pt-1 mt-2">
+									<div class="col-sm-4 alert alert-success">
+										<h6 class="">참여가능한 모임입니다.</h6>
+										<span class="party-info">현재 <strong>${party.count}명</strong>
+											참여중 / 총 모집인원 <strong>${con.count}명</strong>
+										</span>
+									</div>
+								</div>
+							</c:if>
+						</c:when>
+						<c:when test="${con.status  eq '0'}">
+							<span class="badge badge-secondary">모집마감</span>
+							<c:if
+								test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false  }">
+								<div class="row mt-2 ">
+									<div class="col-sm-4 alert alert-danger">
+										<h6 class="">모집이 종료되어 참여할 수 없습니다.</h6>
+										<span class="party-info">(참여 : <strong>${party.count}</strong>
+											/ 모집 : <strong>${party.pull}</strong>)
+										</span>
+									</div>
+								</div>
+							</c:if>
+						</c:when>
+					</c:choose>
+				</h2>
+
 			</div>
 			<div class="col-sm-12">작성자 : ${con.writer}</div>
 		</div>
@@ -256,7 +259,8 @@ $(document).ready(function(){
 		</div>
 		<div class="row mb-1">
 			<div class="col-sm-2 party-titlelabel">인원</div>
-			<div class="col-sm-2">${con.count }</div>
+			<div class="col-sm-4">현재 참여자 ${party.count} 명 / 총 모집인원
+				${con.count} 명</div>
 
 		</div>
 		<div class="row mb-1">
@@ -291,28 +295,42 @@ $(document).ready(function(){
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">소개</div>
-			<div class="col-10"> <c:out value='${con.content}' /></div>
+			<div class="col-10">
+				<c:out value='${con.content}' />
+			</div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">SNS공유</div>
 			<div class="col-10">
-				<a href="#" data-toggle="sns_share" data-service="naver"
-					data-title="네이버 SNS공유" class="btn btn-default">네이버 SNS 공유하기</a> <a
-					href="#" data-toggle="sns_share" data-service="twitter"
-					data-title="트위터 SNS공유" class="btn btn-default">트위터 SNS 공유하기</a> <a
-					href="#" data-toggle="sns_share" data-service="facebook"
-					data-title="페이스북 SNS공유" class="btn btn-default">페이스북 SNS 공유하기</a> <a
-					href="#" data-toggle="sns_share" data-service="band"
-					data-title="네이버밴드 SNS공유" class="btn btn-default">네이버 밴드 공유하기</a> <a
-					href="#" data-toggle="sns_share" data-service="pinterest"
-					data-title="핀터레스트 SNS공유" class="btn btn-default">핀터레스트 공유하기</a> <a
-					href="#" data-toggle="sns_share" data-service="kakaostory"
-					data-title="카카오스토리 SNS공유" class="btn btn-default">카카오스토리 공유하기</a>
 
+				<!-- 네이버 블로그/카페 공유 -->
+
+				<span> 
+					<script type="text/javascript"
+						src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
+					<script type="text/javascript">
+						new ShareNaver.makeButton({"type": "e"});
+					</script>
+				</span>
+
+				<!-- 트위터 공유 -->
+				<a onclick="share_twitter()"><img
+					src="/resources/img/sns_icon/sns_tw.png" class="sns_icon"></a>
+				
+				<!-- 페이스북 공유 -->
+				<a onclick="share_facebook()"><img
+					src="/resources/img/sns_icon/sns_face.png" class="sns_icon"></a>
+				
+				<!-- 카카오톡 공유 -->
+				<a onclick="share_kakao()"><img
+					src="/resources/img/sns_icon/sns_ka.png" class="sns_icon"></a>
+					
+				
+			
 			</div>
 		</div>
-		<div class="row mb-3">
-			<div class="col-12 mb-5">
+		<div class="row mb-2">
+			<div class="col-12">
 				<c:choose>
 					<c:when
 						test="${partyFullCheck eq false && partyParticipantCheck eq false}">
@@ -321,18 +339,30 @@ $(document).ready(function(){
 					<c:when test="${partyParticipantCheck  eq true}">
 						<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 							이동</button>
-						<button type="button" id="toExitParty" class="btn btn-primary">모임 나가기</button>
+						<c:if test="${con.writer ne sessionScope.loginInfo.id }">
+							<button type="button" id="toExitParty" class="btn btn-primary">모임
+								나가기</button>
+						</c:if>
+						<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+
+							<c:choose>
+								<c:when test="${con.status  eq '1'}">
+									<button type="button" id="toStopRecruit" class="btn btn-dark">모집
+										종료하기</button>
+								</c:when>
+								<c:when test="${con.status  eq '0'}"></c:when>
+							</c:choose>
+						</c:if>
 					</c:when>
+
+
 				</c:choose>
+			</div>
 
-
+		</div>
+		<div class="row mb-3">
+			<div class="col-12 mb-5">
 				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
-					<c:choose>
-						<c:when test="${con.status  eq '1'}">
-							<button type="button" id="toStopRecruit" class="btn btn-light">모집종료하기</button>
-						</c:when>
-						<c:when test="${con.status  eq '0'}"></c:when>
-					</c:choose>
 					<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 					<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
 				</c:if>

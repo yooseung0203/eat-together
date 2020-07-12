@@ -100,7 +100,8 @@ $(function () {
 	});
 
 	$("#toPartylist").on("click", function() {
-		location.href = "/party/toPartylist";
+		//location.href = "/party/toPartylist";
+		location.href = "/party/selectByWriter?mcpage=1";
 		//toPartylist();
 	});
 

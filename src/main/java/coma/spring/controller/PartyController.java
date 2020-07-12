@@ -33,6 +33,7 @@ import com.google.gson.JsonObject;
 
 import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.PartySearchListDTO;
 import coma.spring.dto.TopFiveStoreDTO;
@@ -310,15 +311,17 @@ public class PartyController {
 	// 태훈 모임 내용 모달 창
 	@RequestMapping(value="party_content_include")
 	public String party_content_include(HttpServletRequest request) throws Exception {
-		PartyDTO content = pservice.selectBySeq(Integer.parseInt(request.getParameter("seq")));		
+		String seq = request.getParameter("seq");
+		PartyDTO content = pservice.selectBySeq(Integer.parseInt(seq));		
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String nickname = account.getNickname();
-		boolean partyFullCheck = pservice.isPartyfull(request.getParameter("seq"));
-		boolean partyParticipantCheck= pservice.isPartyParticipant(request.getParameter("seq"), nickname);
+		boolean partyFullCheck = pservice.isPartyfull(seq);
+		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
 		//String img = pservice.clew(content.getParent_name());
-		
+		PartyCountDTO pcdto = pservice.getPartyCounts(seq);
 		//request.setAttribute("img", img);
 		request.setAttribute("con",content);
+		request.setAttribute("party", pcdto);
 		request.setAttribute("partyFullCheck", partyFullCheck);
 		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/include/party_content_include";
@@ -336,9 +339,12 @@ public class PartyController {
 //		if(partyParticipantCheck) {
 //			request.setAttribute("participant", 1);
 //		}
+		
+		PartyCountDTO pcdto = pservice.getPartyCounts(seq);
 
 		request.setAttribute("img", img);
 		request.setAttribute("con",content);
+		request.setAttribute("party", pcdto);
 		request.setAttribute("partyFullCheck", partyFullCheck);
 		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/party/party_content";

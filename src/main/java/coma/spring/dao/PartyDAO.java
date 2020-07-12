@@ -11,6 +11,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.statics.PartyConfiguration;
 
@@ -139,10 +140,19 @@ public class PartyDAO {
 	//블랙리스트유저차단
 	public int userBlockedConfirm(Map<String , Object> map) {
 	      return mybatis.selectOne("Party.userBlockedConfirm", map);
+
+	}
+	// 수지 파티의 모집인원수, 현재 참여인원수 구하기
+	public PartyCountDTO getPartyCounts(String seq) {
+		return mybatis.selectOne("Party.getPartyCounts",seq);
+
 	}
 	// 태훈 모임 게시글 신고
 	public int partyReport(int seq) {
 		return mybatis.selectOne("Party.partyReport", seq);
+
 	}
+
+
 
 }

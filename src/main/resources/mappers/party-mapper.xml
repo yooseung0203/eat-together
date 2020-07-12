@@ -124,4 +124,8 @@
    <update id="partyReport">
    		update from party set content = '신고 됨' where seq = #{seq}
    </update>
+   <!--  by 수지 모임별 현재인원수 및 제한인원수 구하기 -->
+   <select id="getPartyCounts" resultType="coma.spring.dto.PartyCountDTO">
+   		select DISTINCT  p.seq, p.count as pull, (select count(*) from partylist where chatseq_parent = p.seq) as count from party p INNER join partylist l on p.seq = l.chatseq_parent where p.seq=#{value}
+   </select>
 </mapper>
