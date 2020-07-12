@@ -61,14 +61,14 @@
 		select count(*) from msg where
 		msg_receiver = #{value} and msg_view=0
 	</select>
-	<select id="newMsgByAdmin">
+<!-- 	<select id="newMsgByAdmin">
 		select count(*) from msg where msg_receiver=#{value}
 		and msg_view=0 and msg_sender='administrator'
 	</select>
 	<select id="newMsgByAdmin">
 		select count(*) from msg where msg_receiver=#{value} and msg_view=0 and
 		msg_sender!='administrator'
-	</select>
+	</select> -->
 	<!--insert 문 -->
 	<insert id="insert">
 		insert into msg

@@ -56,7 +56,7 @@ public class MsgController {
 		int msgcpage=(int)session.getAttribute("msgcpage");
 		List<MsgDTO> dto = msgservice.selectBySender(msgcpage,msg_receiver);
 		String navi = msgservice.Sendnavi(msgcpage,msg_receiver);
-		request.setAttribute("newMsg", newMsg);
+		session.setAttribute("newMsg", newMsg);
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
 		return "msg/mypage_sendmsg";
