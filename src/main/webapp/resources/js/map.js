@@ -21,6 +21,12 @@ function partyDelete(seq){
 		location.href = "/party/partydelete?seq="+seq;
 	}
 }
+function reviewReport(seq,place_id,content,id){
+	var ask = confirm("허위신고일 경우 피해가 되돌아올 수 있습니다. \n정말 신고하시겠습니까?\n신고할 사용자 : "+id+"\n신고할 리뷰 내용 : "+content);
+	if(ask){
+		location.href = "/review/report?seq="+seq+"&place_id="+place_id;
+	}
+}
 $(function () {
 	  $('[data-toggle="tooltip"]').tooltip();
 })

@@ -140,6 +140,7 @@
 	    padding: 20px;
 	    font-size:10pt;
     }
+    .store_info .name{font-size:12pt !important;}
     .store_info i{
     	color:#ffd900;
     }
@@ -216,6 +217,7 @@
     width: 1px;
         margin: 6px 7px 0 8px;
 	}
+	.report.btn{font-size:8pt;background-color:white;color:black;border:0px;padding:0px;}
 	.raty i{color:#ffd900;}
     .rating {float:left;}
     .rating:not(:checked) > input {

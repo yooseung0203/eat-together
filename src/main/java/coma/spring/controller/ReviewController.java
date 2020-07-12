@@ -74,8 +74,12 @@ public class ReviewController {
 		return mav;
 	}
 	
-	/*
-	 * @RequestMapping("") public String reviewReport() throws Exception{ return "";
-	 * }
-	 */
+	// 예지 : 리뷰 신고 기능
+	@RequestMapping("report")
+	public String reviewReport(String place_id, int seq) throws Exception{
+		// 태훈씨 코드랑 합치면서 멤버 테이블의 report 컬럼 카운트 +1 하는 코드 추가할 예정
+		// 일단 리뷰 테이블 report 컬럼만 추가하는 기능 작성
+		rservice.report(seq);
+		return "redirect:/map/selectMarkerInfo?place_id="+place_id;
+	}
 }

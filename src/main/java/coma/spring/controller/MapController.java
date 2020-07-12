@@ -449,7 +449,6 @@ public class MapController {
 		Map<ReviewDTO,ReviewFileDTO> rmap = new LinkedHashMap<>();
 		List<ReviewDTO> rlist = rservice.selectByPseq(mapdto.getSeq());
 		for(ReviewDTO rdto : rlist) {
-			System.out.println(rdto.getSdate());
 			ReviewFileDTO rf = rservice.selectFileByPseq(rdto.getSeq());
 			rmap.put(rdto, rf);
 		}
