@@ -69,9 +69,9 @@
 			</div>
 			<br>
 
-			<div class="signup_text">
+			<div class="signup_text" id=profile_image>
 				<label for="profile" class="signup_text">프로필 이미지</label><br>
-				<div id='preview'><img src="#" id='tempImg' onError="this.src='/resources/img/no_img.png'" alt=""></div>
+				<div id='preview'><img src="#" id="profile_preview" onError="this.src='/resources/img/no_img.png'" alt=""></div>
 				<br> <label class="btn btn-secondary btn-file"> 업로드하기 <input
 					type="file" id="profile" name="profile" style="display: none;">
 				</label>
@@ -125,14 +125,14 @@
 	</form>
 
 	<script>
-		//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200708
+		//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200710
 		var upload = document.querySelector('#profile');
 		var preview = document.querySelector('#preview');
 
 		upload.addEventListener('change', function(e) {
 			var get_file = e.target.files;
 			var image = document.createElement('img');
-			var tempImg = document.getElementById('tempImg');
+			image.setAttribute("id", "profile_preview");
 			var reader = new FileReader();
 
 			reader.onload = (function(aImg) {
@@ -147,7 +147,9 @@
 				reader.readAsDataURL(get_file[0]);
 				console.log(2);
 			}
-			preview.removeChild(tempImg);
+			//이미 올라간 차일드 지우고 새로운 이미지 업로드시 사진 반영하기_20200712
+			var profile_preview = document.getElementById("profile_preview");
+			document.getElementById("preview").removeChild(profile_preview);
 			preview.appendChild(image);
 		})
 
