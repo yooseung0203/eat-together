@@ -9,6 +9,7 @@
 		width: 100vw;
         height: 100vh;
         padding:0px;
+        font-family: 'InfinitySans-RegularA1';
 	}
 	#sideBar{
 	    float: left;
@@ -44,11 +45,18 @@
 	 	border-radius: 30px;
 	 	float:right;
 	 	text-align: center; 
-	 	line-height: 25px;
+	 	line-height: 30px;
 	 	margin-right: 5px;
+	}
+	.search_btn i{
+		color: #ff9900;
 	}
 	.search_btn:hover{
 		cursor: pointer;
+		background-color:#ff9900;
+	}
+	.search_btn:hover i{
+		color:white;
 	}
 	.search_btn img{
 		color:#ffd900;
@@ -67,8 +75,19 @@
     	align:center;
 	    border-bottom:1px solid #ededed;
 	    padding: 20px;
-	    font-size:10pt;
     }
+    .map_approach p:first-child{font-weight:bold;}
+    .map_approach img{height:60px;}
+    .map_approach .card .row:not(:last-child){border-bottom: 1px solid #ededed;}
+    .tooltip-inner {
+    	background-color: #ff9900 !important;
+    	font-family: 'InfinitySans-RegularA1' !important;
+    	font-weight: 100 !important;
+    	font-size:10pt;
+	}
+	.bs-tooltip-bottom .arrow::before{
+	    border-bottom-color: #ff9900 !important;
+	}
     .search_result .map_info{
     	align:center;
 	    border-top:1px solid #ededed;
@@ -401,3 +420,4 @@
 .cafecustomoverlay:after {content:'';position:absolute;margin-left:-12px;left:50%;bottom:-12px;width:22px;height:12px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
 	
 @font-face { font-family: 'GmarketSansBold'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'InfinitySans-RegularA1'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-RegularA1.woff') format('woff'); font-weight: 100; font-style: normal; }
