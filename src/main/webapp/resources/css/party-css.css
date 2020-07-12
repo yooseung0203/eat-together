@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@font-face { font-family: 'NEXON Lv1 Gothic OTF Light'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Light.woff') format('woff'); font-weight: normal; font-style: normal; }
 
 .party_headline {
 	font-family: 'Noto Sans KR', sans-serif;
@@ -16,4 +17,14 @@ form {
 
 #img-area > img {
 	width:200px;	
+}
+
+.party-info{
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size:11pt;
+	font-family: 'NEXON Lv1 Gothic OTF Light';
+}
+
+.sns_icon{
+	width:36px;
 }

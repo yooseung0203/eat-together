@@ -18,8 +18,8 @@
 		var userenter = true;
 		var viewed = 0;
 		$(".input-area").empty();
+		//var ws = new WebSocket("wss://eat-together.net/chat/chatroom")
 		var ws = new WebSocket("ws://192.168.60.19/chat/chatroom")
-
 		ws.onmessage = function(e) {
 			var some = e.data.split(":");
 			if (some[0] == "z8qTA0JCIruhIhmCAQyHRBpIqUKjS3VBT2oJndv61od6") {
@@ -30,20 +30,20 @@
 
 				if ($("li").children("#" + some[1]).text() == "") {
 					var useradd = $("<li>");
-					useradd.append("<div class=thum><img src= alt=>");
+					useradd.attr("id" ,some[1]);
+					useradd.attr("class" , "exist");
+					useradd.append("<div class=thum><img src="+some[2]+">");
 					useradd.append("<div id="+some[1]+" class=exist>"+some[1]);
-					if(${item.participant != loginInfo.nickname }){
-						var btns = $("<div class=chatBtns><div>쪽지</div>");
-						if(${writer == loginInfo.nickname }){
-							if(${item.participant != loginInfo.nickname }){
-								btns.append("<div id=kick>강퇴</div>");
-							}
-						}
+					var btns = $("<div class=chatBtns>");
+					if(${writer == loginInfo.nickname }){
+						btns.append("<div id=kick>강퇴</div>");
 					}
+					btns.append("<div id=postNote>쪽지</div>");
 					useradd.append(btns);
 
 					$(".memNow").append(useradd);
 				} else {
+					$("#" + some[1]+">.thum>img").attr("src" ,some[2]);
 					$("#" + some[1]).attr("class", "exist");
 				}
 				if (userenter) {
@@ -56,12 +56,15 @@
 				}
 			} else if (some[0] == "qCPxXT9PAati6uDl2lecy4Ufjbnf6ExYsrN7iZA6dA4e4X") {
 				$("#" + some[1]).attr("class", "noexist");
+				$("#" + some[1]+">.thum>img").attr("src" ,"");
 			} else if (some[0] == "elgnNST1qytCBnpR3DYlHqMIBxbMA0Kl7ld6B10nvOr2jMhDAfMwo0") {
 				viewed = $('.message-area')[0].scrollHeight;
 				var line = $("<div>");
 				line.attr("class", "viewed");
 				line.append(some[1])
 				$(".message-area").append(line);
+			}  else if (some[0] == "F1Ox28MRqHxk5ABxeRxOp7lK88jPSDAOWvV0rk9exQdFYR8E") {
+				$("#"+some[1]).remove();
 			} else {
 				var str = some[1];
 				for (var i = 2; i < some.length; i++) {
@@ -78,7 +81,6 @@
 					}
 					var mInfo = $("<div>");
 					mInfo.attr("class", "info");
-					mInfo.append("<div class=thum>");
 					mInfo.append("<div class=name>" + some[0]);
 					line.append(mInfo);
 					line.append("<div class=msgBox><div><p>" + str)
@@ -121,6 +123,10 @@
 						});
 
 		$(".input-area").keydown(function(key) {
+			if(key.ctrlKey && key.keyCode == 86 ){ 
+				key.keyCode = 0;
+				key.returnValue = false; 
+		    }
 			if (key.keyCode == 13) {
 				var text = $(".input-area").text();
 				if (text.trim() != "") {
@@ -139,9 +145,10 @@
 					url:"/chat/exit",
 					data:{"roomNum" : ${roomNum}},
 					success:function(){
+						ws.send("${loginInfo.nickname}F1Ox28MRqHxk5ABxeRxOp7lK88jPSDAOWvV0rk9exQdFYR8E");
 						window.close();
 					},error:function(){
-						colsole.log("실패");						
+						console.log("실패");						
 					}
 						
 				})
@@ -165,10 +172,10 @@
 					data:{"name" : kickedMember,
 						"seq" : ${roomNum}},
 					success:function(){
-						//ws.send("강퇴");
-						colsole.log("강퇴 성공");	
+						ws.send(kickedMember+"F1Ox28MRqHxk5ABxeRxOp7lK88jPSDAOWvV0rk9exQdFYR8E");
+						console.log("강퇴 성공");	
 					},error:function(){
-						colsole.log("실패");						
+						console.log("실패");						
 					}
 						
 				})
@@ -184,8 +191,7 @@
 </script>
 
 </head>
-<body>
-
+<body oncontextmenu="return false" ondragstart="return false">
 	<section id="chatRoom" class="clearfix">
 		<div id="exit">
 			<button>채팅방 나가기</button>
@@ -196,12 +202,15 @@
 				<ul class="memNow">
 					<c:if test="${!empty memberList }">
 						<c:forEach var="item" items="${memberList }">
-							<li id="${item.participant}"  class="${item.exist}">
+							<li id="${item.participant}" class="${item.exist}">
 								<div class="thum">
-									<img src="" alt="">
+									<img
+										src=<c:if test="${!empty item.id }">
+										"/upload/${item.id}/${item.sysname}"
+									</c:if>>
 								</div>
-								<div id="${item.participant}">${item.participant}</div>
-								<c:if test="${item.participant != loginInfo.nickname }">
+								<div id="${item.participant}">${item.participant}</div> <c:if
+									test="${item.participant != loginInfo.nickname }">
 									<div class="chatBtns">
 										<c:if test="${writer == loginInfo.nickname }">
 											<div id="kick">강퇴</div>
