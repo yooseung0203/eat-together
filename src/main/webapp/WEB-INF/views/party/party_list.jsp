@@ -104,9 +104,6 @@ $(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리�
 			alert("더 이상 검색할 내용이 없습니다.");
 		}
 		else{
-			if(cpage==1){
-				$("#start_list").append("<script type=\"text/javascript\" src=\'/resources/js/partyList.js?ver=28\'><\/script>");
-			}
 			getPartyList(cpage);				
 			cpage++;	
 		}
@@ -126,7 +123,11 @@ function getPartyList(cpage){
         data : {"cpage" : cpage},
         url : '/party/getPartyList',
         success : function(partyList) {
-            $("#start_list").append(partyList)	            
+            $("#start_list").append(partyList);
+            $("#start_list").append("*********************"+cpage+"************************");
+            //if(cpage==1){
+				//$("#start_list").append("<script type=\"text/javascript\" src=\'/resources/js/party_add_content.js?ver=15\'><\/script>");
+			//}            
        },
        error:function(e){
     	   alert("데이터를 가져오는데 실패하였습니다.");        
@@ -136,6 +137,32 @@ function getPartyList(cpage){
 
 /*******************   무한 스크롤 ************************/
 
+/******************* 상세 보기 ************************/
+$(function(){
+	console.log("버튼 기능 준비");
+	
+	$(document).on('click', '.myBtn', function(){
+		console.log("버튼 기능 시작");
+		if ("${loginInfo.id}" == "") {
+			alert("로그인 후 이용해주세요");
+			 //location.replace('/member/loginview');
+		} else {
+			var select_seq = $(this).parent().siblings().children(".party_seq").val();
+			$("#aaa").empty();
+			$.ajax({
+				url:"/party/party_content_include",
+				data : {
+					seq : select_seq
+				}
+			}).done(function(con) {
+				console.log(con);
+				$("#aaa").append(con);
+				$("#mymodal").modal();
+			});
+		}
+	});
+});
+/******************* 상세 보기 ************************/
 /*****************************  태훈 party list 스크립 ***********************************************/
 $(function() {
 		/******************* 지역 선택 ************************/
@@ -242,10 +269,16 @@ $(function() {
 						<div class="card-body cardedit">
 							<h5 class="card-title store_name">${top.name }</h5>
 							<p class="card-text">
-								<c:out value="${review[top.seq].content }"/>
-								<c:if test="${empty review[top.seq].content }">
-										${top.address }
-								</c:if>
+							<c:choose>
+								<c:when test="${empty review[top.seq].content }">
+									${top.address }
+								</c:when>
+								<c:otherwise>
+									<c:out value="${review[top.seq].content }"/>\
+									<br>
+									- by ${review[top.seq].id }	
+								</c:otherwise>
+							</c:choose>
 							</p>
 							<input type="hidden" class="store_place_id" value="${top.place_id}">
 							<input type="hidden" class="store_address" value="${top.address}">
