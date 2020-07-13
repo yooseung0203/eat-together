@@ -38,3 +38,7 @@
 #footer-container {
 	clear: both;
 }
+
+.menu > a {
+  display: block;
+}

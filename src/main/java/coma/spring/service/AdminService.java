@@ -22,6 +22,11 @@ public class AdminService {
 	@Autowired
 	private PartyDAO pdao;
 
+	//by 지은, 체크박스 회원 삭제하기
+	public int memberOut(String[] checkList) {
+		return adao.memberOut(checkList);
+	}
+	
 	//by 지은, 회원정보 리스트 출력하기_20200712
 	public List<MemberDTO> memberList(int cpage){
 		int start = cpage * Configuration.recordCountPerPage-(Configuration.recordCountPerPage-1);
