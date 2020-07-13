@@ -103,7 +103,6 @@
 							<th scope="row">GENDER</th>
 							<td class="edit_text">
 								<div class="edit_text">
-
 									<input type="radio" id="gender_1" name="gender" value="1"><label
 										for="gender_1" id="gender_text">남</label> <input type="radio"
 										id="gender_2" name="gender" value="2"><label
@@ -142,8 +141,7 @@
 			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']')
 					.attr("checked", true);
 			//by 지은, 회원정보 중 성별정보가 유효한 회원의 경우 성별 수정을 불가능하도록 한다_20200710
-			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']')
-					.attr("disabled", true);
+			$('input:radio[name=gender]').attr("disabled", true);
 
 			//by 지은, 이메일을 수정했을 경우 인증이 필요하다_20200708
 			$("#account_email").keydown(function() {
