@@ -49,7 +49,7 @@ $(function(){
 			<tbody>
 				<tr align="center">
 					<th scope="col">제목</th>
-					<th scope="col">[1:1문의]문의글입니다.</th>
+					<th scope="col">${qdto.msg_title}</th>
 				</tr>
 
 				<tr align="center">

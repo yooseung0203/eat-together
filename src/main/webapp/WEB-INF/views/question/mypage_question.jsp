@@ -88,11 +88,11 @@ function questionViewPopUp(msg_seq){
 							<td><a href="javascript:questionViewPopUp(${i.msg_seq})">${i.msg_title}</a></td>
 							<td>${i.msg_date}</td>
 							<td><c:choose>
-									<c:when test="${i.msg_view==0}">
+									<c:when test="${i.msg_view==0||i.msg_view==1}">
 										답변중	 	
 								 	</c:when>
 									<c:otherwise>
-								 		답변완료
+								 		<button type="button" class="btn btn-warning" id="answerQuestion" onclick="location.href='javascript:questionViewPopUp(${i.msg_view})'">답변완료</button>
 								 	</c:otherwise>
 								</c:choose></td>
 							<td><button>삭제</button></td>

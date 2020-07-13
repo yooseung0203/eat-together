@@ -50,6 +50,10 @@ public class QuestionDAO {
 	public int insertQuestion(QuestionDTO qdto)throws Exception{
 		return mybatis.insert("question.insertQuestion",qdto);
 	}
+	//다음 시퀀스
+	public int getNextVal() {
+		return mybatis.selectOne("question.getNextval");
+	}
 	//1:1문의 답변하기
 	public int QuestionAnswer(QuestionDTO qdto)throws Exception{
 		return mybatis.insert("question.QuestionAnswer",qdto);

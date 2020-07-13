@@ -42,7 +42,7 @@ public class MsgController {
 	@RequestMapping("msg_list_sender")
 	public String msglist_sender(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-		String msg_receiver = mdto.getId();
+		String msg_receiver = mdto.getNickname();
 		System.out.println(msg_receiver+"의 받은 쪽지함");
 		//새로운 메세지 카운트
 		int newMsg=msgservice.newmsg(msg_receiver);
@@ -66,7 +66,7 @@ public class MsgController {
 	@RequestMapping("msg_list_admin")
 	public String msglist_admin(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-		String msg_receiver = mdto.getId();
+		String msg_receiver = mdto.getNickname();
 		System.out.println(msg_receiver+"의 관리자 쪽지함");
 		
 		if(session.getAttribute("msgAcpage")==null) {
@@ -90,7 +90,7 @@ public class MsgController {
 	@RequestMapping("msg_list_receiver")
 	public String msglist_receiver(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-		String msg_receiver = mdto.getId();
+		String msg_receiver = mdto.getNickname();
 		System.out.println(msg_receiver+"의 보낸 쪽지함");
 		
 		if(session.getAttribute("msgRcpage")==null) {
@@ -118,7 +118,7 @@ public class MsgController {
 	@RequestMapping("msgSend")
 	public String msgSend(MsgDTO msgdto)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-		String msg_sender=mdto.getId();
+		String msg_sender=mdto.getNickname();
 		msgdto.setMsg_sender(msg_sender);
 		//메세지 보낸사람 넣기
 		int result = msgservice.insert(msgdto);
@@ -133,7 +133,7 @@ public class MsgController {
 	@RequestMapping("msgResponse")
 	public String msgResponse(HttpServletRequest request,String msg_receiver)throws Exception{
 		//받은사람을 보낼사람에 넣어줍니다
-		boolean check = mservice.isIdAvailable(msg_receiver);
+		boolean check = mservice.isNickAvailable(msg_receiver);
 		//아이디가 있는 아이디인지 체크
 		System.out.println(check);
 		if(check) {
@@ -150,7 +150,8 @@ public class MsgController {
 		
 		MsgDTO msgDTO = msgservice.selectBySeq(msg_seq);
 		String sender = msgDTO.getMsg_sender();
-		MemberDTO mdto = mservice.selectMyInfo(sender);
+		//보낸 사람의 이미지 가져오기
+		MemberDTO mdto = mservice.selectMyInfoByNick(sender);
 		String msg_receiver=msgDTO.getMsg_receiver();
 		//읽음처리되는것
 		int result = msgservice.updateView(msg_seq);
@@ -194,7 +195,7 @@ public class MsgController {
 	@ResponseBody
 	public int newmsg(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-		String msg_receiver=mdto.getId();
+		String msg_receiver=mdto.getNickname();
 		int newmsg = msgservice.newmsg(msg_receiver);
 		session.setAttribute("newMsg", newmsg);
 		return newmsg;

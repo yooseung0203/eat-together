@@ -41,6 +41,11 @@ public class MemberDAO {
 	public MemberDTO selectMyInfo(String id) throws Exception {
 		return mybatis.selectOne("Member.selectMyInfo", id);
 	}
+	//닉네임으로 내정보보기
+	public MemberDTO selectMyInfoByNick(String nickname)throws Exception{
+		return mybatis.selectOne("Member.selectMyInfoByNick",nickname);
+	}
+	
 	//회원가입 시 이메일 중복 검사
 	public boolean isEmailAvailable(String account_email) throws Exception{
 		int result = mybatis.selectOne("Member.isEmailAvailable", account_email);
