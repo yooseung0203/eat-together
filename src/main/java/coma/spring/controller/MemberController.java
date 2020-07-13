@@ -383,7 +383,7 @@ public class MemberController {
 	//카카오톡 로그인하기
 	@RequestMapping("/kakaoLogin")
 	public String kakaoLogin(@RequestParam("code") String code, HttpSession session)throws Exception {
-		System.out.println("code : "+ code);
+		System.out.println("카카오 로그인 code : "+ code);
 		String access_Token = mservice.getAccessToken(code);
 		System.out.println("controller access_token : " + access_Token);
 		MemberDTO mdto = mservice.getloginInfo(access_Token);
@@ -391,6 +391,7 @@ public class MemberController {
 
 		//    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
 		if (mdto.getId() != null) {
+			
 			session.setAttribute("loginInfo", mdto);
 			session.setAttribute("access_Token", access_Token);
 		}
