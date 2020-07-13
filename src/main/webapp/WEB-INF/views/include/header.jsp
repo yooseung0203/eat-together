@@ -95,7 +95,7 @@
 							<span class="main-login"> 
 								${loginInfo.id}님, 환영합니다. / 
 								<a href="/member/logoutProc" id="logout">로그아웃</a>
-								<a href="/member/logoutProc" id="Report">신고하기</a>
+								<a href="#" onclick="window.open('/report/toReport', 'Report','width=600, height=700, location=no'); return false" id="Report">신고하기</a>
 							</span>
 						</div>
 					</c:otherwise>
@@ -121,7 +121,7 @@
 	})
 	
 	$("#newMsg").on("click",function(){
-		location.href="/msg/msg_list_sender";
+		location.href="/msg/msg_list_sender?msgcpage=1";
 	})
 
 </script>

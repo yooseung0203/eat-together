@@ -42,8 +42,13 @@
 <script>
 function questionWritePopUp(){
 	var name = "qpop.test";
-	var option = "width=500,height=480 location=no";
+	var option = "width=500,height=550 location=no";
 	window.open("question_write",name,option);
+}
+function questionViewPopUp(msg_seq){
+	var name = msg_seq;
+	var option ="width=500,height=550 location=no"
+	window.open("questionView?msg_seq="+msg_seq,name,option);
 }
 </script>
 <meta charset="UTF-8">
@@ -75,12 +80,12 @@ function questionWritePopUp(){
 					</tr>
 					<c:if test="${empty list}">
 						<tr>
-							<td>1:1 문의가 없습니다.</td>
+							<td scope="col" colspan=12 align="center">1:1 문의가 없습니다.</td>
 						</tr>
 					</c:if>
 					<c:forEach var="i" items="${list}" varStatus="status">
 						<tr>
-							<td>${i.msg_title}</td>
+							<td><a href="javascript:questionViewPopUp(${i.msg_seq})">${i.msg_title}</a></td>
 							<td>${i.msg_date}</td>
 							<td><c:choose>
 									<c:when test="${i.msg_view==0}">

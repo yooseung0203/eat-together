@@ -150,8 +150,15 @@ public class PartyService {
 			param.put("address", "");
 		}
 		else {
-			param.put("address",pdto.getSido() + " " + pdto.getGugun());
+			if(pdto.getGugun().equals("구/군 선택")) {
+				param.put("address",pdto.getSido());
+			}
+			else {
+				param.put("address",pdto.getSido() + " " + pdto.getGugun());
+			}
+			
 		}
+		System.out.println(param.get("address"));
 		// 성별 정보
 		param.put("gender",pdto.getGender());
 		// 나이 정보
@@ -187,15 +194,6 @@ public class PartyService {
 		param.put("content", content);
 		param.put("both", both);
 
-		return param;
-	}
-	// 태훈 맛집 top5 장소 아이디 리스트
-	public Map<String,String> partyCountById(){
-		List<String> list =  pdao.partyCountById();
-		Map<String, String> param = new HashMap<>();
-		for (int i=0; i<5; i++) {
-			param.put("top"+(i+1),list.get(i));
-		}
 		return param;
 	}
 	// 예지 장소 아이디 별 모임 리스트
@@ -320,7 +318,7 @@ public class PartyService {
 		}
 		else {
 			// 이미지 소스 없는 가게 에러 해결 위해 추가 - 태훈
-			return "https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-rectangle.png";
+			return "/resources/img/admin-logo.png";
 		}
 	}
 
@@ -337,9 +335,14 @@ public class PartyService {
 		return pdao.getPartyCounts(seq);
 	}
 
+	// 태훈 모임 게시글 신고
+	public int partyReport(int seq) {
+		return pdao.partyReport(seq);
+	}
 	// 수지 모집 재시작 기능
 	public int restartRecruit(String seq) throws Exception {
 		return pdao.restartRecruit(seq);
+
 	}
 }
 
