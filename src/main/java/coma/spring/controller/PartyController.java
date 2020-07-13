@@ -3,7 +3,9 @@ package coma.spring.controller;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -97,12 +99,23 @@ public class PartyController {
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		String today = null;
+		today = formatter.format(cal.getTime());
+		Timestamp ts = Timestamp.valueOf(today);
+		
+		if(meetdate.before(ts)) {
+			return "error/partyinsert";
+		}
+		
+		
+		
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String userid= account.getId();
 		String nickname = account.getNickname();
-		
-		
-		
+			
 		dto.setWriter(nickname);
 		dto.setStatus("1");
 		//
