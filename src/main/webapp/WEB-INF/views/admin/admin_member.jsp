@@ -143,6 +143,14 @@
 
 		})
 
+		//by 지은, 성별의 int 값을 jsp에서 남여로 출력하는 과정_20200708
+		var gender = $("#gender").val();
+		if (gender == 1) {
+			$("#gender_text").html("남");
+		} else {
+			$("#gender_text").html("여");
+		}
+
 		//by 지은, 전체선택 시 모든 회원 선택 가능_20200713
 		$("#checkAll").click(function() {
 			if ($("#checkAll").is(":checked")) {
