@@ -12,9 +12,9 @@ function toChatroom(num){
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
 	var writer = $(".party_writer").html();
-	var report_id = writer.substring(6,writer.lenght);
+	var report_id = writer.substring(6,writer.length);
 	console.log();
-	console.log("신고 시작 : "+ writer);
+	console.log("신고 시작 : "+ report_id);
 	$.ajax({
 		url:"/party/party_report",
 		data : { seq : num, report_id : report_id},
@@ -36,48 +36,6 @@ function partyReport(num){
 
 /*****************************  수지 party content 스크립 ***********************************************/
 $(document).ready(function(){
-
-	$("a[data-toggle='sns_share']").click(function(e){
-		var option = "width = 500, height = 600, top = 100, left = 200, scrollbars=no";
-		e.preventDefault();
-		var current_url = document.location.href;
-		var _this = $(this);
-		var sns_type = _this.attr('data-service');
-		var href = current_url;
-		var title = _this.attr('data-title');
-		var loc = "";
-		var img = $("meta[name='og:image']").attr('content');
-
-		if( ! sns_type || !href || !title) return;
-
-		if( sns_type == 'facebook' ) {
-			loc = '//www.facebook.com/sharer/sharer.php?u='+href+'&t='+title;
-		}
-		else if ( sns_type == 'twitter' ) {
-			loc = '//twitter.com/home?status='+encodeURIComponent(title)+' '+href;
-		}
-
-		else if ( sns_type == 'pinterest' ) {
-
-			loc = '//www.pinterest.com/pin/create/button/?url='+href+'&media='+img+'&description='+encodeURIComponent(title);
-		}
-		else if ( sns_type == 'kakaostory') {
-			loc = 'https://story.kakao.com/share?url='+encodeURIComponent(href);
-		}
-		else if ( sns_type == 'band' ) {
-			loc = 'http://www.band.us/plugin/share?body='+encodeURIComponent(title)+'%0A'+encodeURIComponent(href);
-		}
-		else if ( sns_type == 'naver' ) {
-			loc = "http://share.naver.com/web/shareView.nhn?url="+encodeURIComponent(href)+"&title="+encodeURIComponent(title);
-		}
-		else {
-			return false;
-		}
-
-		window.open(loc,"_blank",option);
-		return false;
-	});
-
 
 	//var stime = "${con.sTime}";
 	var stime = $("#party_time").val();

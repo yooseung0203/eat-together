@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<script type="text/javascript" src='/resources/js/partyList.js?ver=25'></script>
+<script type="text/javascript" src='/resources/js/partyList.js?ver=28'></script>
 <!-- SNS Share js start -->
 <script src='/resources/js/sns_share.js'></script>
 <!-- SNS Share js end -->
@@ -9,7 +9,7 @@
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
             <h2 class="party_headline">
-					<c:out value='${con.title}' />
+					# <c:out value='${con.seq}' /> / <c:out value='${con.title}' />
 					<input type="hidden" id="party_seq" value="${con.seq }">
 					<input type="hidden" id="party_time" value="${con.sTime }">
 					<input type="hidden" id="sns_share_title"
@@ -46,6 +46,30 @@
 						</c:when>
 					</c:choose>
 				</h2>
+				<c:if
+									test="${con.report == 0 }">
+									<div class="row  pt-1 mt-2">
+										<div class="col-sm-4 alert alert-success">
+											<h6 class=""><strong>정상모임</strong> : 신고건수  ${con.report} 건</h6>
+										</div>
+									</div>
+								</c:if>
+								<c:if
+									test="${con.report > 0 && con.report < 5 }">
+									<div class="row  pt-1 mt-2">
+										<div class="col-sm-4 alert alert-warning">
+											<h6 class=""><strong>요주의모임</strong> : 신고건수  ${con.report} 건</h6>
+										</div>
+									</div>
+								</c:if>
+								<c:if
+									test="${con.report >= 5}">
+									<div class="row  pt-1 mt-2">
+										<div class="col-sm-4 alert alert-danger">
+											<h6 class=""><strong>위험모임</strong> : 신고건수 ${con.report} 건</h6>
+										</div>
+									</div>
+								</c:if>
          </div>
          <div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
       </div>

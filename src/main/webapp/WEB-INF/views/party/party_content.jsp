@@ -63,6 +63,28 @@ function toChatroom(num){
     window.open("/chat/chatroom?roomNum="+num, num, option);
 }
 
+function partyReport(num){
+	console.log("신고 시작 : "+ num);
+	var writer = $(".party_writer").html();
+	var report_id = writer.substring(6,writer.length);
+	console.log();
+	console.log("신고 시작 : "+ report_id);
+	$.ajax({
+		url:"/party/party_report",
+		data : { seq : num, report_id : report_id},
+		success : function(result) {
+			if (result == 1){ 
+				alert("신고가 정상적으로 접수되었습니다.");	
+			}
+			else{
+				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
+			}
+		},
+		error:function(e){
+			console.log("error");
+		}
+	});	
+}
 
 $(document).ready(function(){
 	
@@ -97,9 +119,10 @@ $(document).ready(function(){
 		
 		// 태훈 신고
 		$("#partyReport").on("click", function() {
-			var ask = confirm("무분별한 신고는 신고자 본인에게 불이익이 갈 수 있습니다.\n정말 신고하겠습니까?");
+			var ask = confirm("무분별한 신고는 신고자 본인에게 불이익이 갈 수 있습니다.\n정말 신고하겠습니까?");	
 			if (ask) {
-				location.href = "/re/partydelete?seq=${con.seq}";
+				
+				partyReport(${con.seq} );
 			}
 		});
 		
@@ -248,7 +271,7 @@ $(document).ready(function(){
 								</c:if>
 
 			</div>
-			<div class="col-sm-12">작성자 : ${con.writer}</div>
+			<div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-5">
