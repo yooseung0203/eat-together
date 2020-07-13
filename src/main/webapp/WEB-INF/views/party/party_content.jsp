@@ -63,6 +63,28 @@ function toChatroom(num){
     window.open("/chat/chatroom?roomNum="+num, num, option);
 }
 
+function partyReport(num){
+	console.log("신고 시작 : "+ num);
+	var writer = $(".party_writer").html();
+	var report_id = writer.substring(6,writer.length);
+	console.log();
+	console.log("신고 시작 : "+ report_id);
+	$.ajax({
+		url:"/party/party_report",
+		data : { seq : num, report_id : report_id},
+		success : function(result) {
+			if (result == 1){ 
+				alert("신고가 정상적으로 접수되었습니다.");	
+			}
+			else{
+				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
+			}
+		},
+		error:function(e){
+			console.log("error");
+		}
+	});	
+}
 
 $(document).ready(function(){
 	
@@ -93,6 +115,15 @@ $(document).ready(function(){
 			location.href="/party/partyJoin?seq=${con.seq}";
 			
 			
+		});
+		
+		// 태훈 신고
+		$("#partyReport").on("click", function() {
+			var ask = confirm("무분별한 신고는 신고자 본인에게 불이익이 갈 수 있습니다.\n정말 신고하겠습니까?");	
+			if (ask) {
+				
+				partyReport(${con.seq} );
+			}
 		});
 		
 		$("#toChatroom").on("click", function() {
@@ -240,7 +271,7 @@ $(document).ready(function(){
 								</c:if>
 
 			</div>
-			<div class="col-sm-12">작성자 : ${con.writer}</div>
+			<div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-5">
@@ -382,12 +413,12 @@ $(document).ready(function(){
 					<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 					<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
 				</c:if>
+				<c:if test="${con.writer ne sessionScope.loginInfo.id }">
+					<button type="button" id="partyReport" class="btn btn-info">신고하기</button>
+				</c:if>
 				<button type="button" id="toPartylist" class="btn btn-secondary">목록으로</button>
-
 			</div>
-
 		</div>
-
 	</div>
 
 

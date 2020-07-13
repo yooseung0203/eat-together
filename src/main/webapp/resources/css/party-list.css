@@ -1,0 +1,97 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css?family=Hi+Melody:400')
+
+* {
+	text-overflow:ellipsis;
+}
+
+div{
+	border: 0px solid black;
+}
+
+.aa {
+	width: 100%;
+	margin: auto;
+	
+}
+
+.listtitle {
+	font-size: 35px;
+}
+
+.partylist {
+	margin-bottom: 15px;
+}
+
+.party_headline {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+form {
+	font-family: 'Noto Sans KR', sans-serif;
+	weight: 200;
+}
+
+.party-titlelabel {
+	font-family: 'Noto Sans KR', sans-serif;
+	weight: 400;
+}
+
+#img-area > img {
+	width:200px;	
+}
+
+.party-info{
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size:11pt;
+	font-family: 'NEXON Lv1 Gothic OTF Light';
+}
+
+.sns_icon{
+	width:36px;
+}
+
+
+.featImgWrap {
+	height: 250px;
+	position: relative;
+	padding-top: 56.57%;
+	/* 16:9 ratio */
+	overflow: hidden;
+}
+
+.featImgWrap .cropping {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	-webkit-transform: translate(50%, 50%);
+	-ms-transform: translate(50%, 50%);
+	transform: translate(50%, 50%);
+}
+
+.featImgWrap .cropping img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	max-width: 100%;
+	height: auto;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.featImgWrap .cropping img.landscape {
+	max-height: 100%;
+	height: 100%;
+	max-width: none;
+}
+
+.featImgWrap .cropping img.portrait {
+	max-width: 100%;
+	width: 100%;
+	max-height: none;
+	border: 1px solid black;
+}
