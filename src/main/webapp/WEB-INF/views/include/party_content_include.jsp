@@ -151,14 +151,12 @@
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">SNS공유</div>
 			<div class="col-10">
+			
 				<!-- 네이버 블로그/카페 공유 -->
-				<span> 
-					<script type="text/javascript"
-						src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
-					<script type="text/javascript">
-						new ShareNaver.makeButton({"type": "e"});
-					</script>
-				</span>
+
+				<a onclick="share_naver()">
+				<img
+					src="/resources/img/sns_icon/sns_naver.png" class="sns_icon"></a>
 				
 				<!-- 트위터 공유 -->
 				<a onclick="share_twitter()"><img

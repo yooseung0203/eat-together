@@ -277,38 +277,89 @@ public class PartyController {
 		return "redirect:/admin/toAdmin_party";
 	}
 
-	// 태훈 모임 리스트 네비 포함
+//	// 태훈 모임 리스트 네비 포함
+//	@RequestMapping("partylist")
+//	public String partyList(HttpServletRequest request) throws Exception {
+//		
+//		int cpage=1;
+//		
+//		try {
+//			cpage = Integer.parseInt(request.getParameter("cpage"));
+//		}catch(Exception e) {
+//
+//		}
+//		if(cpage <=1) {
+//			////////////////////////top 5 ///////////////////////////
+//			List<MapDTO> top = mapservice.selectTopStore();
+//			Map<Integer, Object> reviews = rservice.getReview(top);
+//
+//			System.out.println(reviews.size());
+//			List<String> imgList2 = new ArrayList<>();
+//			for(int i=0; i<top.size(); i++) {
+//
+//				imgList2.add(pservice.clew(top.get(i).getName()));
+//				System.out.println(i + " : " + top.get(i).getSeq() + " : "+imgList2.get(i));
+//				System.out.println(top.get(i).getName());
+//			}
+//			
+//			request.setAttribute("top", top);
+//			request.setAttribute("imglist2", imgList2);
+//			request.setAttribute("review", reviews);
+//			//////////////////////// top 5 ///////////////////////////
+//		}
+//		
+//		List<PartyDTO> partyList = pservice.selectList(cpage);
+//		String navi = pservice.getPageNaviTH(cpage);
+//
+//		
+//		
+//		request.setAttribute("list", partyList);
+//		request.setAttribute("navi", navi);
+//		return "/party/party_list";
+//	}
+	
+	// 태훈 모임 리스트 페이지로 이동
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
-		
+
+		////////////////////////top 5 ///////////////////////////
 		List<MapDTO> top = mapservice.selectTopStore();
 		Map<Integer, Object> reviews = rservice.getReview(top);
-	
+
 		System.out.println(reviews.size());
 		List<String> imgList2 = new ArrayList<>();
 		for(int i=0; i<top.size(); i++) {
-			
+
 			imgList2.add(pservice.clew(top.get(i).getName()));
 			System.out.println(i + " : " + top.get(i).getSeq() + " : "+imgList2.get(i));
 			System.out.println(top.get(i).getName());
 		}
+		////////////////////////top 5 ///////////////////////////
 		
+		request.setAttribute("top", top);
+		request.setAttribute("imglist2", imgList2);
+		request.setAttribute("review", reviews);
+		
+		return "/party/party_list";
+	}
+	
+	// 태훈 모임 리스트 출력
+	@RequestMapping("getPartyList")
+	public String getPartyList(HttpServletRequest request) throws Exception {
 		int cpage=1;
+		
 		try {
 			cpage = Integer.parseInt(request.getParameter("cpage"));
 		}catch(Exception e) {
 
 		}
-		List<PartyDTO> partyList = pservice.selectList(cpage);
-		String navi = pservice.getPageNaviTH(cpage);
-
 		
-		request.setAttribute("top", top);
-		request.setAttribute("imglist2", imgList2);
-		request.setAttribute("review", reviews);
+		List<PartyDTO> partyList = pservice.selectList(cpage);
+		//String navi = pservice.getPageNaviTH(cpage);
+		
 		request.setAttribute("list", partyList);
-		request.setAttribute("navi", navi);
-		return "/party/party_list";
+		//request.setAttribute("navi", navi);
+		return "/include/party_list_include";
 	}
 	// 태훈 모임 통합 검색
 	@RequestMapping(value="partysearch",  method = RequestMethod.POST)

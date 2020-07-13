@@ -7,11 +7,12 @@
 <meta charset="UTF-8">
 
 <meta property="fb:app_id" content="APP_ID" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="맛집갔다갈래" />
+<meta property="og:site_name" content="맛집동행찾기서비스 - 맛집갔다갈래">
+<meta property="og:type" content="article" />
+<meta property="og:title" content="${con.title}" />
 <meta property="og:url" content="eat-together.net" />
-<meta property="og:description" content="맛집동행찾기서비스" />
-<meta property="og:image" content="웹 페이지 대표 이미지" />
+<meta property="og:description" content="${con.content}" />
+<meta property="og:image" content="https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-rectangle.png" />
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -78,13 +79,63 @@
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
-
+<!-- ******************* -->
+<link rel="stylesheet" type="text/css"
+	href="/resources/css/party-css.css">
 <!-- 태훈 css -->
 <link rel="stylesheet" type="text/css" href="/resources/css/party-list.css?aa">
 <!-- 태훈 css -->
 
 <title>모임 리스트</title>
 <script>
+/*******************   무한 스크롤 ************************/
+var cpage = 1; //페이징과 같은 방식이라고 생각하면 된다. 
+
+$(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+	getPartyList(cpage);
+	cpage++;
+});
+
+$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+	if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+		console.log($("#start_list > div").last().html());
+		console.log($("#start_list > div").last().attr('id'));
+		if($("#start_list > div").last().attr('id') == "endSearch"){
+			alert("더 이상 검색할 내용이 없습니다.");
+		}
+		else{
+			if(cpage==1){
+				$("#start_list").append("<script type=\"text/javascript\" src=\'/resources/js/partyList.js?ver=28\'><\/script>");
+			}
+			getPartyList(cpage);				
+			cpage++;	
+		}
+		
+	}
+});
+$(document).ajaxStart(function(){
+	$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
+})
+$(document).ajaxStop(function(){
+	$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
+});
+
+function getPartyList(cpage){		 
+    $.ajax({
+        type : 'get',  
+        data : {"cpage" : cpage},
+        url : '/party/getPartyList',
+        success : function(partyList) {
+            $("#start_list").append(partyList)	            
+       },
+       error:function(e){
+    	   alert("데이터를 가져오는데 실패하였습니다.");        
+       }
+    });
+}
+
+/*******************   무한 스크롤 ************************/
+
 /*****************************  태훈 party list 스크립 ***********************************************/
 $(function() {
 		/******************* 지역 선택 ************************/
@@ -151,28 +202,6 @@ $(function() {
 		});
 		/******************* 지역 선택 ************************/
 		
-		/******************* 상세 보기 ************************/
-		$(".myBtn").on("click", function() {
-			if ("${loginInfo.id}" == "") {
-				alert("로그인 후 이용해주세요");
-				location.replace('/member/loginview');
-			} else {
-				var select_seq = $(this).parent().siblings().children(".party_seq").val();
-				$("#aaa").empty();
-				$.ajax({
-					url:"/party/party_content_include",
-					data : {
-						seq : select_seq
-					}
-				}).done(function(con) {
-					console.log(con);
-					$("#aaa").append(con);
-					$("#mymodal").modal();
-				});
-			}
-		});
-		/******************* 상세 보기 ************************/
-		
 		/******************* 인기 맛집  모집하러기 ************************/
 		$(".topBtn").on("click",function(){
 			location.href = "/map/mapToParty_New?parent_name="+$(this).siblings(".store_name").html()
@@ -183,64 +212,9 @@ $(function() {
 		}); 
 		/******************* 인기 맛집  모집하러기 ************************/
 		
-	/*******************   무한 스크롤 ************************/
-	/*
-	var cpage = 1; //페이징과 같은 방식이라고 생각하면 된다. 
-
-	$(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
-		getList(cpage);
-		page++;
-	});
-
-	$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
-		if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
-			getList(cpage);
-			page++;
-		}
-	});
 	
-	function getList(page){
-		 
-	    $.ajax({
-	        type : 'POST',  
-	        dataType : 'json', 
-	        data : {"cpage" : cpage},
-	        url : '/party/partylist',
-	        success : function(returnData) {
-	            var data = returnData.rows;
-	            var html = "";
-	            if (page==1){ //페이지가 1일경우에만 id가 list인 html을 비운다.
-	                  $("#list").html(""); 
-	            }
-	            if (returnData.startNum<=returnData.totCnt){
-	                if(data.length>0){
-	                // for문을 돌면서 행을 그린다.
-	                }else{
-	                //데이터가 없을경우
-	                }
-	            }
-	            html = html.replace(/%20/gi, " ");
-	            if (page==1){  //페이지가 1이 아닐경우 데이터를 붙힌다.
-	                $("#list").html(html); 
-	            }else{
-	                $("#busStopList").append(html);
-	            }
-	       },error:function(e){
-	           if(e.status==300){
-	               alert("데이터를 가져오는데 실패하였습니다.");
-	           };
-	       }
-	    })
-	    .ajaxStart(function(){
-			$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
-		})
-		.ajaxStop(function(){
-			$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
-		});	
-	}
-	*/
-	/*******************   무한 스크롤 ************************/
-
+		$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
+	
 	/*****************************  태훈 party list 스크립 ***********************************************/
 });
 </script>
@@ -339,47 +313,8 @@ $(function() {
 						</div>
 					</div>
 				</div>
-				<div class="row">
-					<c:choose>
-						<c:when test="${empty list}">
-							<div class="col-sm-12 col-md-3">
-								<span>검색 된 내용이 없습니다.</span>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<!-- start column -->
-							<c:forEach var="partyList" items="${list}">
-								<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-									<div class="single-team-member">
-										<div class="team-img">
-											<a href="#"> <img src="${partyList.imgaddr}" alt=""></a>
-											<div class="team-social-icon text-center">
-												<ul>
-													<li>
-														<a class="myBtn">상세 보기</a>
-													</li>
-													<li style="display:none">
-														<input type="hidden" class="party_seq" value="${partyList.seq}">
-													</li>
-												</ul>
-											</div>
-										</div>
-										<div class="team-content text-center">
-											<h3>${partyList.title }</h3>
-											<br>
-											<h5 class="card-subtitle mb-2 text-muted">${partyList.parent_name }</h5>
-											<p>
-												날짜 : ${partyList.sDate}<br>
-												지역 : ${partyList.parent_address }
-											</p>
-											
-										</div>
-									</div>
-								</div>
-							</c:forEach>
-							<!-- End column -->
-						</c:otherwise>
-					</c:choose>
+				<div class="row" id="start_list">
+					
 				</div>
 			</div>
 		</div>
@@ -387,9 +322,12 @@ $(function() {
 	<!-- End Party List Section -->
 	
 	<!-- ======= Page Navi Section ======= -->
-	<nav aria-label="Page navigation example">
+	<div id = "Progress_Loading"><!-- 로딩바 -->
+			<img src="/resources/img/Progress_Loading.gif"/>
+		</div>
+	<!--  <nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">${navi }</ul>
-	</nav>
+	</nav>-->
 	<!-- ======= End page Navi Section ======= -->
 	
 	<a href="#" class="back-to-top"> 
@@ -433,5 +371,38 @@ $(function() {
   
 </body>
 </html>
+ <!-- 
+<c:choose>
+	<c:when test="${empty list}">
+		<div class="col-sm-12 col-md-3">
+			<span>검색 된 내용이 없습니다.</span>
+		</div>
+	</c:when>
+	<c:otherwise>
+		<c:forEach var="partyList" items="${list}">
+			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+				<div class="single-team-member">
+					<div class="team-img">
+						<a href="#"> <img src="${partyList.imgaddr}" alt=""></a>
+						<div class="team-social-icon text-center">
+							<ul>
+								<li><a class="myBtn">상세 보기</a></li>
+								<li style="display: none"><input type="hidden"
+									class="party_seq" value="${partyList.seq}"></li>
+							</ul>
+						</div>
+					</div>
+					<div class="team-content text-center">
+						<h3>${partyList.title }</h3>
+						<br>
+						<h5 class="card-subtitle mb-2 text-muted">${partyList.parent_name }</h5>
+						<p>
+							날짜 : ${partyList.sDate}<br> 지역 : ${partyList.parent_address }
+						</p>
+					</div>
+				</div>
+			</div>
+		</c:forEach>	
+	</c:otherwise>
+</c:choose> -->
 
-	

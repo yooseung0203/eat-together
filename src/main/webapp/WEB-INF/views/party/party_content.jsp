@@ -406,11 +406,11 @@ $(document).ready(function(){
 		</div>
 		<div class="row mb-3">
 			<div class="col-12 mb-5">
-				<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+				<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
 					<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 					<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
 				</c:if>
-				<c:if test="${con.writer ne sessionScope.loginInfo.id }">
+				<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 					<button type="button" id="partyReport" class="btn btn-info">신고하기</button>
 				</c:if>
 				<button type="button" id="toPartylist" class="btn btn-secondary">목록으로</button>
