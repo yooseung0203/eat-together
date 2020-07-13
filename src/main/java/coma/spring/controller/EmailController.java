@@ -56,8 +56,8 @@ public class EmailController {
 		return sb.toString();
 	}
 
-	//회원가입시 인증 메일 보내기
-	@RequestMapping("mailSendingForSignUp")
+	//회원가입시 인증 메일 보내기, 이메일 정보 수정시 사용_20200713
+	@RequestMapping("mailSending")
 	@ResponseBody
 	public String mailSender(@RequestParam String account_email) throws Exception{ 
 		String username = "eat-together";
@@ -75,7 +75,7 @@ public class EmailController {
 			System.out.println("랜덤문자열 : " + dice);
 
 			String recipient = account_email;
-			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
+			String subject = "맛집갔다갈래 인증 이메일입니다.";
 			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
 
 			Properties props = new Properties();

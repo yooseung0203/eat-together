@@ -86,7 +86,9 @@
 			if ($("#account_email").val() == "") {
 				alert("이메일을 모두 입력해주십시오.");
 				$("#account_email").focus();
-			} else {
+			} else if($("#account_email").val()=="need@eat-together.com"){
+				alert("이메일 인증을 하지 않은 회원입니다.\n내정보 수정 - 이메일 인증을 진행해주세요.");
+			}else {
 				$.ajax({
 					url : "/mail/mailSendingForOut",
 					type : "post",

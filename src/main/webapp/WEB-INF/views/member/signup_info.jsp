@@ -390,7 +390,7 @@
 				$("#account_email").focus();
 			} else {
 				$.ajax({
-					url : "/mail/mailSendingForSignUp",
+					url : "/mail/mailSending",
 					type : "post",
 					data : {
 						account_email : $("#account_email").val()

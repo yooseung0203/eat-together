@@ -85,9 +85,7 @@
 						<tr>
 							<th scope="row">PASSWORD</th>
 							<td class="edit_text"><button type=button
-									class="btn btn-light"
-									onclick="window.open('/member/editPw','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');"
-									id="pwEdit">비밀번호 수정하기</button></td>
+									class="btn btn-light" id="pwEdit">비밀번호 수정하기</button></td>
 						</tr>
 						<tr>
 							<th scope="row">NICKNAME</th>
@@ -136,7 +134,17 @@
 	</div>
 	<script>
 		window.onload = function() {
-			if(${mdto.gender}==0){
+			//by 지운, 카카오톡 회원의 경우, 비밀번호를 수정할 필요가 없다._20200713
+			$("#pwEdit").on("click", function(){
+				if("${mdto.member_type}"=="kakao"){
+					alert("카카오톡 회원은 비밀번호 수정이 불가능합니다.");
+				}else{
+					window.open('/member/editPw','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');
+				}
+			})
+				
+			//by 지은, 카카오톡 회원가입 초기 설정에서는 성별이 0으로 저장되어서 수정가능하지만, 이후에는 성별 수정이 불가능하도록 한다_20200713
+			if("${mdto.gender}"==0){
 				
 			}else{
 			//by 지은, 성별 라디오박스에서 내정보 수정 시 체크값이 유지되도록 한다_20200710
