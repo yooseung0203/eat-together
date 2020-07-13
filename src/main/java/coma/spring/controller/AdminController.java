@@ -208,4 +208,9 @@ public class AdminController {
 			request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 			return "/admin/admin_party_content";
 		}
+		// 태훈 신고
+		@RequestMapping(value="admin_report_content")
+		public String report_content() {
+			return"a";
+		}
 }
