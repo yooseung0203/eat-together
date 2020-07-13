@@ -40,7 +40,6 @@ $(function(){
 </head>
 <body>
 	<div id=container>
-	<form action="insertQuestion" method="post">
 		<table class="table">
 			<thead class="thead-dark">
 				<tr>
@@ -61,23 +60,21 @@ $(function(){
 					<th scope="col" colspan=12>내용</th>
 				</tr>
 				<tr align="center">
-					<td scope="col" colspan=12><textarea placeholder="내용을 입력해주세요"
-							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;" id="msg_text"  name="msg_text"></textarea></td>
-				</tr>
-				<tr>
-
-					<td scope="col" colspan=12 id="wordcheck" align="right"><span
-						class="current">0</span>/2000자</td>
+					<td scope="col" colspan=12><textarea
+							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;" id="msg_text"  name="msg_text" readonly>${qdto.msg_text}</textarea></td>
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12>
-					<button type="submit" class="btn btn-secondary">문의하기</button>
+					<button type="button" id="close" class="btn btn-secondary">닫기</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
-		</form>
 	</div>
-
+<script>
+	$("#close").on("click",function(){
+		window.close();
+	})
+</script>
 </body>
 </html>

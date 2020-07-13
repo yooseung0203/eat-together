@@ -34,7 +34,7 @@
             </div>
             <div class="row menubtn">
                 <div class="col">
-                    <a href="">1:1문의</a>
+                    <a href="/question/AdminQuestion_list">1:1문의</a>
                 </div>
             </div> 
             <div class="row menubtn">
