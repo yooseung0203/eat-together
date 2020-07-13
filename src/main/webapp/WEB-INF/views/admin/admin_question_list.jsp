@@ -22,9 +22,8 @@
 <script>
 	function AnswerPopUp(msg_seq,msg_sender){
 		var name = msg_seq;
-		
 		var option ="width=500,height=550 location=no";
-		window.open("questionAnswer?msg_seq="+msg_seq+"&msg_sender="+msg_sender);
+		window.open("questionAnswer?msg_seq="+msg_seq+"&msg_sender="+msg_sender,msg_sender,option);
 	}
 </script>
 <body>
@@ -67,10 +66,15 @@
 													<tr>
 														<td class="admin_text">${i.msg_seq}</td>
 														<td class="admin_text">${i.msg_sender}</td>
-														<td class="admin_text">${i.msg_title}</td>
+														<td class="admin_text"><a href="questionViewAdmin?msg_seq=${i.msg_seq}">${i.msg_title}</a></td>
 														<td class="admin_text">${i.msg_date}</td>
 														<td class="admin_text"><c:choose>
-																<c:when test="${i.msg_view==0}"><a href="javascript:AnswerPopUp(${i.msg_seq},${i.msg_sender})">답변대기</a></c:when>
+																<c:when test="${i.msg_view==0}"><a href="javascript:AnswerPopUp(${i.msg_seq},${i.msg_sender})">답변대기</a>
+																<form>
+																	<input type="hidden" name="msg_seq">
+																	<input type="hidden" name="msg_sender">
+																</form>
+																</c:when>
 																<c:otherwise>답변완료</c:otherwise>
 															</c:choose></td>
 														<td class="myinfo_text">삭제</td>

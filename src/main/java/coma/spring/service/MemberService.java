@@ -76,7 +76,11 @@ public class MemberService {
 		MemberDTO mdto = mdao.selectMyInfo(id);
 		return mdto;
 	}
-
+	//닉네임으로 내정보 가져오기
+	public MemberDTO selectMyInfoByNick(String nickname)throws Exception{
+		MemberDTO mdto= mdao.selectMyInfoByNick(nickname);
+		return mdto;
+	}
 	//회원가입시 이메일 중복검사
 	public boolean isEmailAvailable(String account_email)throws Exception{
 		boolean result = mdao.isEmailAvailable(account_email);

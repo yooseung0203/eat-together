@@ -57,6 +57,13 @@ public class QuestionController {
 		request.setAttribute("qdto", qdto);
 		return "question/questionView";
 	}
+	@RequestMapping("questionViewAdmin")
+	public String QuestionViewAdmin(HttpServletRequest request,int msg_seq)throws Exception{
+		QuestionDTO qdto = qservice.selectBySeq(msg_seq);
+		request.setAttribute("qdto", qdto);
+		return "admin/admin_question_view";
+	}
+	
 	//관리자 페이지 1:1문의 리스트
 	@RequestMapping("AdminQuestion_list")
 	public String AdminQuestion_list(HttpServletRequest request)throws Exception{
@@ -97,16 +104,19 @@ public class QuestionController {
 		
 		String admin = mdto.getId();
 		if(admin.contentEquals("administrator")) {
+			int answerSeq= qservice.getNextVal();
+			qdto.setMsg_seq(answerSeq);
 			int result = qservice.QuestionAnswer(qdto);
 			if(result==1) {
 				System.out.println(qdto.getMsg_view()+"번의 게시글에 대한 답변");
-				int msg_view=qdto.getMsg_view();
-//				
-//				QuestionDTO updto = qservice.selectByView(msg_view);
-//				System.out.println(updto.getMsg_seq()+"답변 게시글의 seq");
-//				
-//				
-//				int update = qservice.answerUpdate(updto);
+				
+				QuestionDTO updto = new QuestionDTO();
+				updto.setMsg_seq(qdto.getMsg_view());
+				updto.setMsg_view(answerSeq);
+				System.out.println("답변업데이트 게시글 번호seq :"+qdto.getMsg_view()+"답변 게시글 번호 :"+answerSeq);
+				
+				int update = qservice.answerUpdate(updto);
+				
 				return "msg/msgWriteResult";
 			}else{
 				return "error";
