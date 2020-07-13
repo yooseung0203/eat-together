@@ -39,15 +39,15 @@
 		
 		
 		$("#idcheck").on("click", function() {
-			var id = $("#msg_receiver").val();
+			var nickname = $("#msg_receiver").val();
 			$.ajax({
-				url : '../member/isIdAvailable?id=' + id,
+				url : '../member/isNickAvailable?nickname=' + nickname,
 				dataType : 'json',
 				success : function(resp) {
 					console.log(resp);
 					if (resp == false) {
 						alert("존재하는 회원입니다.");
-						$("#msg_receiver").val(id);
+						$("#msg_receiver").val(nickname);
 						$("#msg_receiver").attr("readonly", true);
 						$("#msg_receiver").css("background-color", "DarkGray");
 						$("#idcheck").val("확인됨");

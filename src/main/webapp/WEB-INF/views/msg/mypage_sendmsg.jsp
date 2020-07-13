@@ -85,7 +85,6 @@
 	}
 	function msgViewPopUp(msg_seq) {
 		var name = msg_seq;
-		var msg_receiver = msg_receiver;
 		var option = "width=500,height=440 location=no";
 		window.open("msgView?msg_seq=" + msg_seq, msg_seq, option);
 	}
