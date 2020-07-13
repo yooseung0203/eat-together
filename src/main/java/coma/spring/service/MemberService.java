@@ -99,8 +99,8 @@ public class MemberService {
 	}
 
 	//회원탈퇴
-	public int deleteMember(Map<String, String> param) throws Exception{
-		int result = mdao.deleteMember(param);
+	public int deleteMember(String id) throws Exception{
+		int result = mdao.deleteMember(id);
 		return result;
 	}
 	//내정보수정하기

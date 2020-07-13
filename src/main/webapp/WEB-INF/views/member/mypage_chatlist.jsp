@@ -64,6 +64,7 @@
 					<tr>
 						<th scope="row">No.</th>
 						<td class="myinfo_text">모임위치</td>
+						<td class="myinfo_text">모임제목</td>
 						<td class="myinfo_text"></td>
 						<td class="myinfo_text">모임날짜</td>
 					</tr>
@@ -88,6 +89,7 @@
 											<span class="badge badge-success">방장</span>
 										</c:if> <c:if test="${loginInfo.nickname ne i.writer }">
 										</c:if></td>
+										<td class="myinfo_text" align=left>${i.title}</td>
 
 									<td class="myinfo_text" align=right>
 										<button type=button class="btn btn-light" id="toPartyContents"
@@ -97,7 +99,7 @@
 											onClick=" window.open('/chat/chatroom?roomNum='+ ${i.seq}, ${i.seq}, 'width = 800, height = 800, top = 100, left = 200, scrollbars=no')">채팅방
 											들어가기</button>
 										<button type=button class="btn btn-secondary"
-											id="exitChatRoom">모임 나가기</button>
+											id="exitChatRoom">채팅방 나가기</button>
 									</td>
 									<td class="myinfo_text">${i.sDate}</td>
 								</tr>
