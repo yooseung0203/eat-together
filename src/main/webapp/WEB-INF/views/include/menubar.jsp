@@ -8,7 +8,7 @@
 		<a href="/member/mypage_myinfo" class="menubar-list">내 정보</a>
 	</div>
 	<div class="menu">
-		<a href="/msg/msg_list_sender" class="menubar-list">쪽지함</a>
+		<a href="/msg/msg_list_sender?msgcpage=1" class="menubar-list">쪽지함</a>
 	</div>
 	<div class="menu">
 		<a href="/party/selectByWriter?mcpage=0" class="menubar-list">내 모임</a>
@@ -17,6 +17,7 @@
 		<a href="/review/selectById?mcpage=0" class="menubar-list">내 리뷰</a>
 	</div>
 	<div class="menu">
-		<a href="/question/question_list" class="menubar-list">1:1 문의</a>
+		<a href="/question/question_list?qcpage=1" class="menubar-list">1:1 문의</a>
 	</div>
 </div>
+
