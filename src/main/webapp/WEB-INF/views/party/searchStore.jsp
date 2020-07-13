@@ -28,7 +28,23 @@
 	rel="stylesheet">
 
 <!-- google font end-->
-
+<style>
+.storegroup{
+	border-top: 1px solid #ddd;
+	border-collapse: collapse ;
+	padding:20px 0;
+}
+.btnselect{
+padding-top: 5pt;
+	
+}
+#place_name0{
+	font-size:20px;
+	font-weight:600;
+	padding-bottom:15px;
+	
+}
+</style>
 <script>
 
 function btnClick(clicked_id){
@@ -117,7 +133,7 @@ $(document).ready(function(){
 		 
 				//for(var i=0;i+)
 				var line = $("<div></div>");
-				var test = $("<div></div>");
+				var test = $("<div class='row'></div>");
 				for(var i=0; i< resp.documents.length;i++){
 					/* line.append("<div class=row>")
 					line.append(resp.documents[i].place_name);
@@ -125,7 +141,7 @@ $(document).ready(function(){
 					line.append("<div class=row><div class=col-12>"+resp.documents[i].road_address_name+"</div>");
 					line.append("<div class=row><div class=col-12><button class='btn btn-primary' id=button"+i+">선택</button></div>");
  */
- 					test.append("<div>"+ "<input type='hidden' id=api_id"+i+" value='"+resp.documents[i].id +"'>"+
+ 					test.append("<div class='col-sm-10 storegroup'>"+ "<input type='hidden' id=api_id"+i+" value='"+resp.documents[i].id +"'>"+
  					"<input type='hidden' id='lat"+i+"' name='lat' value='"+resp.documents[i].y+"'>"+
  					"<input type='hidden' name='lng' id='lng"+i+"' value='"+resp.documents[i].x+"'>"+
  					"<input type='hidden' name='place_url' id='place_url"+i+"' value='"+resp.documents[i].place_url+"'>"+
@@ -134,7 +150,7 @@ $(document).ready(function(){
  					"</div><div id=phone"+i+">" +resp.documents[i].phone + 
  					 
  					"</div><div id=address_name"+i+">" + resp.documents[i].address_name + 
- 					"</div><button class='btn btn-primary' id="+i+" onClick='btnClick(this.id)')>선택</button></div>"); 
+ 					"</div></div><div class='col-sm-2 storegroup btnselect'><button class='btn btn-primary ' id="+i+" onClick='btnClick(this.id)')>선택</button></div>"); 
 			
 				}
 				$("#resultdiv").html(test);
