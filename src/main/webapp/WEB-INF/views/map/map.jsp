@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaa">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaa">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"

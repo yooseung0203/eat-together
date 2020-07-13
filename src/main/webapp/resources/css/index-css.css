@@ -10,7 +10,7 @@
 
 .navibar {
 	/*font-size: 14pt;*/
-	font-family: 'Noto Sans KR', sans-serif;
+	
 }
 
 .slide-area {
@@ -25,6 +25,8 @@
 
 .navi-menu>a {
 	color: #212529;
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size:16pt;
 }
 
 .navi-menu>a:hover {

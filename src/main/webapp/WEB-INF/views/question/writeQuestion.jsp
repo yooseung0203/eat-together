@@ -40,6 +40,7 @@ $(function(){
 </head>
 <body>
 	<div id=container>
+	<form action="insertQuestion" method="post">
 		<table class="table">
 			<thead class="thead-dark">
 				<tr>
@@ -61,7 +62,7 @@ $(function(){
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12><textarea placeholder="내용을 입력해주세요"
-							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;" id="msg_text"></textarea></td>
+							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;" id="msg_text"  name="msg_text"></textarea></td>
 				</tr>
 				<tr>
 
@@ -70,11 +71,12 @@ $(function(){
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12>
-					<button type="button" class="btn btn-secondary">문의하기</button>
+					<button type="submit" class="btn btn-secondary">문의하기</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
+		</form>
 	</div>
 
 </body>

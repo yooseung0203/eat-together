@@ -3,7 +3,6 @@
 	body{overflow-y:hidden;margin:0px;}
 	#header{
 		position:relative;
-		height:5vh;
 	}
 	.container-fluid.all{
 		width: 100vw;

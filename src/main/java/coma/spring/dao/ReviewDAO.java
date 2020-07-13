@@ -8,9 +8,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import coma.spring.dto.MapDTO;
 import coma.spring.dto.ReviewDTO;
+import coma.spring.dto.TopFiveStoreDTO;
 import coma.spring.statics.Configuration;
-import coma.spring.statics.PartyConfiguration;
 
 @Repository
 public class ReviewDAO {
@@ -57,5 +58,18 @@ public class ReviewDAO {
 	}
 	public ReviewDTO selectBySeq(int seq) {
 		return mybatis.selectOne("Review.selectBySeq",seq);
+	}
+	//by지은, 마이페이지 내리뷰리스트 출력을 위한 네비바_20200707
+	public int getMyPageArticleCount(String id)throws Exception{
+		return mybatis.selectOne("Review.getMyPageArticleCount", id);
+	}
+	// 태훈 top5 소개 리뷰 뽑기
+	public List<TopFiveStoreDTO> getReview(List<MapDTO> top){
+		Map<String, Integer> param = new HashMap<>();
+		for (int i=0; i<top.size(); i++) {
+			param.put("top"+(i+1), top.get(i).getSeq());	
+		}
+		System.out.println(param);
+		return mybatis.selectList("Review.top5review", param);
 	}
 }

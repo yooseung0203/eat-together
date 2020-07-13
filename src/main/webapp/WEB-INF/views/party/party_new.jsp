@@ -20,10 +20,14 @@
 <!-- BootStrap4 End-->
 
 <!--  datetimepicekr CDN -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
-<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+<link rel="stylesheet"
+	href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
 
 <!-- google font -->
 <link
@@ -75,68 +79,31 @@
 		return year + '' + month + '' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 	}
 	$(function() {
-		//$('input[name=date]').attr("readonly",true);
 		
-		
-	/* 	$("#party_date").datepicker({
-			dateFormat : 'yy-mm-dd',
-			minDate : 0,
-			dayNamesShort : [ "일", "월", "화", "수", "목", "금", "토" ],
+		$("#party_date").on("blur", function() {
+			var d = new Date($("#party_date").val());
+			var d_format = getFormatDate(d);
+			var now = new Date();
+			var now_format = getFormatDate(now);
+
+			console.log(d_format);
+			console.log(now_format);
+			var now_time = now.getTime();
+			var d_time = d.getTime();
+			
+			console.log(now_time);
+			console.log(d_time);
+			
+			if (now_format > d_format) {
+				alert("과거의 날짜를 선택하셨습니다.");
+				$("#party_date").val("");
+			}else if (now_time > d_time) {
+				alert("과거의 시간을 선택하셨습니다.");
+				$("#party_date").val("");
+			};
+
 		});
-		var hour = "";
-		var minute = "";
-		
-		$("#party_date").on("change", function(){
-		$("#party_time").val("");
-		hour="";
-		minute="";
-		
-		var d = new Date($("#party_date").val())
-		var d_format = getFormatDate(d);
-		var now = new Date();
-		var now_format = getFormatDate(now);
-		console.log(d_format);
-		console.log(now_format);
-	
-		if (now_format ==d_format) {
-			hour = d.getHours() + "";
-			minute = d.getMinutes() + "";
-		} else {
-			hour = "10";
-			minute = "0";
-		}
-		$('#party_time').timepicker({
-			timeFormat : 'h:mm p',
-			interval : 5,
-			minHour : hour,
-			minMinutes : minute,
-			startTime: '10:00',
-			maxTime: '11:50pm',
-			defaultTime : 'now',
-			dynamic : false,	
-			dropdown : true,
-			scrollbar : true
-		});
-		
-		console.log(hour);
-		console.log(minute);
-		});
-	 */
-	 $("#party_date").on("blur", function(){
-		 var d = new Date($("#party_date").val());
-		 var d_format = getFormatDate(d);
-		 var now = new Date();
-		 var now_format = getFormatDate(now);
-		 
-		 console.log(d_format);
-		 console.log(now_format);
-		  
-		 if (now_format>d_format) {
-			 alert("과거의 시간을 선택하셨습니다.");
-			 $("#party_date").val("");
-		 };
-	 });
-		
+
 		var birthday = "${age}";
 		var yyyy = birthday.substr(0, 4);
 		var mm = birthday.substr(5, 2);
@@ -225,7 +192,7 @@
 			var content = $("#content").val();
 			var isCheckGender = $('input:radio[name=gender]').is(':checked');
 			var isCheckAge = $('input:checkbox[name=age]').is(':checked');
-			
+
 			console.log(title);
 			console.log(date);
 			console.log(time);
@@ -248,33 +215,35 @@
 				return false;
 			}
 			;
-/* 
-			if (!time) {
-				alert("모임시간을 선택해주세요");
-				return false;
-			}
-			; */
+			/* 
+			 if (!time) {
+			 alert("모임시간을 선택해주세요");
+			 return false;
+			 }
+			 ; */
 			if ($.trim(count) == '') {
 				alert("모임인원을 선택해주세요");
 				return false;
 			}
 			;
-			
-			if(count>4 || count < 2){
+
+			if (count > 4 || count < 2) {
 				alert("모임인원은 2~4명 사이로 지정해주세요");
 				return false;
-			};
-			
+			}
+			;
+
 			if (!isCheckGender) {
 				alert('멤버구성을 선택해주세요');
 				return false;
 			}
 			;
-			
-			if(count>4 || count < 2){
-	            alert("모임인원은 2~4명 사이로 지정해주세요");
-	            return false;
-	         };
+
+			if (count > 4 || count < 2) {
+				alert("모임인원은 2~4명 사이로 지정해주세요");
+				return false;
+			}
+			;
 			if (!isCheckAge) {
 				alert('모집하고자하는 연령대를 선택해주세요');
 				return false;
@@ -296,7 +265,7 @@
 				alert('선택된 날짜가 과거입니다.');
 				return false;
 			}
-			
+
 			if (agech == "age5") {
 				$("input:checkbox[id=age5]").attr("disabled", false);
 			} else if (agech == "age4") {
@@ -351,42 +320,52 @@
 							<div class="col-sm-8">
 								<!-- 예지 수정 : 지도형 페이지에서 '내가 직접 모집하기' 버튼으로 접근 / 네비 '모임모집' 버튼으로 접근하는 경우 구분-->
 								<input type="text" class="form-control" name="parent_address"
-										id="parent_address" value="${parent_address}" readonly> 
+									id="parent_address" value="${parent_address}" readonly>
 								<c:choose>
 									<c:when test="${not empty mdto}">
-										<input type="hidden"
-										name="place_id" id="place_id" value="${mdto.place_id}"> <input type="hidden"
-										name="lng" id="lng" value="${mdto.lng}"> <input type="hidden" name="lat"
-										id="lat" value="${mdto.lat}"> <input type="hidden" name="category"
-										id="category" value="${mdto.category}"> <input type="hidden" name="phone"
-										id="phone" value="${mdto.phone}"> <input type="hidden" name="road_address_name"
-										id="road_address_name" value="${mdto.road_address}"> <input type="hidden"
-										name="place_url" id="place_url" value="${mdto.place_url}"> <input type="hidden"
-										name="imgaddr" id="imgaddr" value="${img}">
+										<input type="hidden" name="place_id" id="place_id"
+											value="${mdto.place_id}">
+										<input type="hidden" name="lng" id="lng" value="${mdto.lng}">
+										<input type="hidden" name="lat" id="lat" value="${mdto.lat}">
+										<input type="hidden" name="category" id="category"
+											value="${mdto.category}">
+										<input type="hidden" name="phone" id="phone"
+											value="${mdto.phone}">
+										<input type="hidden" name="road_address_name"
+											id="road_address_name" value="${mdto.road_address}">
+										<input type="hidden" name="place_url" id="place_url"
+											value="${mdto.place_url}">
+										<input type="hidden" name="imgaddr" id="imgaddr"
+											value="${img}">
 									</c:when>
 									<c:when test="${not empty kakaojson}">
-										<c:forEach items="${kakaojson}" var="i" begin="0" end="0" varStatus="status">
-											<input type="hidden"
-											name="place_id" id="place_id" value="${place_id}" > <input type="hidden"
-											name="lng" id="lng" value="${lng}"> <input type="hidden" name="lat"
-											id="lat" value="${lat}"> <input type="hidden" name="category"
-											id="category" value="${category}"> <input type="hidden" name="phone"
-											id="phone" value="${phone}"> <input type="hidden" name="road_address_name"
-											id="road_address_name" value="${road_address}"> <input type="hidden"
-											name="place_url" id="place_url" value="${place_url}"> <input type="hidden"
-											name="imgaddr" id="imgaddr" value="${img}">
+										<c:forEach items="${kakaojson}" var="i" begin="0" end="0"
+											varStatus="status">
+											<input type="hidden" name="place_id" id="place_id"
+												value="${place_id}">
+											<input type="hidden" name="lng" id="lng" value="${lng}">
+											<input type="hidden" name="lat" id="lat" value="${lat}">
+											<input type="hidden" name="category" id="category"
+												value="${category}">
+											<input type="hidden" name="phone" id="phone" value="${phone}">
+											<input type="hidden" name="road_address_name"
+												id="road_address_name" value="${road_address}">
+											<input type="hidden" name="place_url" id="place_url"
+												value="${place_url}">
+											<input type="hidden" name="imgaddr" id="imgaddr"
+												value="${img}">
 										</c:forEach>
 									</c:when>
 									<c:otherwise>
-										<input type="hidden"
-										name="place_id" id="place_id"> <input type="hidden"
-										name="lng" id="lng"> <input type="hidden" name="lat"
-										id="lat"> <input type="hidden" name="category"
-										id="category"> <input type="hidden" name="phone"
-										id="phone"> <input type="hidden" name="road_address_name"
-										id="road_address_name"> <input type="hidden"
-										name="place_url" id="place_url"> <input type="hidden"
-										name="imgaddr" id="imgaddr">
+										<input type="hidden" name="place_id" id="place_id">
+										<input type="hidden" name="lng" id="lng">
+										<input type="hidden" name="lat" id="lat">
+										<input type="hidden" name="category" id="category">
+										<input type="hidden" name="phone" id="phone">
+										<input type="hidden" name="road_address_name"
+											id="road_address_name">
+										<input type="hidden" name="place_url" id="place_url">
+										<input type="hidden" name="imgaddr" id="imgaddr">
 									</c:otherwise>
 								</c:choose>
 							</div>
@@ -399,31 +378,37 @@
 									id="party_title">
 							</div>
 						</div>
-							<div class="row mb-1">
-								<div class="col-sm-2">모임날짜와 시간</div>
-								<div class="col-sm-8">
-									 <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-	                    <input type="text" id="party_date" name="date" class="form-control datetimepicker-input" data-target="#datetimepicker1"/>
-	                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-	                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-	                    </div>
-	                </div>
-	                <script type="text/javascript">
-	            $(function () {
-	                $('#datetimepicker1').datetimepicker({
-	                		pickDate: true,
-	                	    pickTime: true,
-	                	    useSeconds: false,
-	                	    startDate: 'd',
-	                	    format: 'YYYY-MM-DD H:mm',
-	                	    stepping: 5,
-	                	    showOn: "both"
-	                
-	                }); //datepicker end
-	            });
-	        </script>
+						<div class="row mb-1">
+							<div class="col-sm-2">모임날짜와 시간</div>
+							<div class="col-sm-8">
+								<div class="input-group date" id="datetimepicker1"
+									data-target-input="nearest">
+									<input type="text" id="party_date" name="date"
+										class="form-control datetimepicker-input"
+										data-target="#datetimepicker1" />
+									<div class="input-group-append" data-target="#datetimepicker1"
+										data-toggle="datetimepicker">
+										<div class="input-group-text">
+											<i class="fa fa-calendar"></i>
+										</div>
+									</div>
 								</div>
+								<script type="text/javascript">
+									$(function() {
+										$('#datetimepicker1').datetimepicker({
+											pickDate : true,
+											pickTime : true,
+											useSeconds : false,
+											startDate : 'd',
+											format : 'YYYY-MM-DD H:mm',
+											stepping : 5,
+											showOn : "both"
+
+										}); //datepicker end
+									});
+								</script>
 							</div>
+						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">인원</div>
 							<div class="col-sm-5">
@@ -507,7 +492,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-4" id="img-area"><img src="${img}" width="300px" id="storeimg"></div>
+					<div class="col-12 col-sm-4" id="img-area">
+						<img src="${img}" width="300px" id="storeimg">
+					</div>
 				</div>
 			</div>
 			<div class="container formdiv">

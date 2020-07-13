@@ -7,11 +7,12 @@
 <meta charset="UTF-8">
 
 <meta property="fb:app_id" content="APP_ID" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="맛집갔다갈래" />
+<meta property="og:site_name" content="맛집동행찾기서비스 - 맛집갔다갈래">
+<meta property="og:type" content="article" />
+<meta property="og:title" content="${con.title}" />
 <meta property="og:url" content="eat-together.net" />
-<meta property="og:description" content="맛집동행찾기서비스" />
-<meta property="og:image" content="웹 페이지 대표 이미지" />
+<meta property="og:description" content="${con.content}" />
+<meta property="og:image" content="https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-rectangle.png" />
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -63,6 +64,28 @@ function toChatroom(num){
     window.open("/chat/chatroom?roomNum="+num, num, option);
 }
 
+function partyReport(num){
+	console.log("신고 시작 : "+ num);
+	var writer = $(".party_writer").html();
+	var report_id = writer.substring(6,writer.length);
+	console.log();
+	console.log("신고 시작 : "+ report_id);
+	$.ajax({
+		url:"/party/party_report",
+		data : { seq : num, report_id : report_id},
+		success : function(result) {
+			if (result == 1){ 
+				alert("신고가 정상적으로 접수되었습니다.");	
+			}
+			else{
+				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
+			}
+		},
+		error:function(e){
+			console.log("error");
+		}
+	});	
+}
 
 $(document).ready(function(){
 	
@@ -93,6 +116,15 @@ $(document).ready(function(){
 			location.href="/party/partyJoin?seq=${con.seq}";
 			
 			
+		});
+		
+		// 태훈 신고
+		$("#partyReport").on("click", function() {
+			var ask = confirm("무분별한 신고는 신고자 본인에게 불이익이 갈 수 있습니다.\n정말 신고하겠습니까?");	
+			if (ask) {
+				
+				partyReport(${con.seq} );
+			}
 		});
 		
 		$("#toChatroom").on("click", function() {
@@ -240,7 +272,7 @@ $(document).ready(function(){
 								</c:if>
 
 			</div>
-			<div class="col-sm-12">작성자 : ${con.writer}</div>
+			<div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
 		</div>
 		<div class="row">
 			<div class="col-sm-5">
@@ -321,13 +353,9 @@ $(document).ready(function(){
 
 				<!-- 네이버 블로그/카페 공유 -->
 
-				<span> 
-					<script type="text/javascript"
-						src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
-					<script type="text/javascript">
-						new ShareNaver.makeButton({"type": "e"});
-					</script>
-				</span>
+				<a onclick="share_naver()">
+				<img
+					src="/resources/img/sns_icon/sns_naver.png" class="sns_icon"></a>
 
 				<!-- 트위터 공유 -->
 				<a onclick="share_twitter()"><img
@@ -355,11 +383,11 @@ $(document).ready(function(){
 					<c:when test="${partyParticipantCheck  eq true}">
 						<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 							이동</button>
-						<c:if test="${con.writer ne sessionScope.loginInfo.id }">
+						<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 							<button type="button" id="toExitParty" class="btn btn-primary">모임
 								나가기</button>
 						</c:if>
-						<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+						<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
 
 							<c:choose>
 								<c:when test="${con.status  eq '1'}">
@@ -382,12 +410,12 @@ $(document).ready(function(){
 					<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 					<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>
 				</c:if>
+				<c:if test="${con.writer ne sessionScope.loginInfo.id }">
+					<button type="button" id="partyReport" class="btn btn-info">신고하기</button>
+				</c:if>
 				<button type="button" id="toPartylist" class="btn btn-secondary">목록으로</button>
-
 			</div>
-
 		</div>
-
 	</div>
 
 

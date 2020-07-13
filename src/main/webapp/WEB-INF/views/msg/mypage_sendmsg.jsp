@@ -80,13 +80,12 @@
 	}
 	function msgWritePopUp() {
 		var name = "popup.test";
-		var option = "width=500,height=510 location=no,toolbar=no,menubar=no,top=200,left=600";
+		var option = "width=500,height=550 location=no,scrollbar=no,menubar=no,top=200,left=600";
 		window.open("msgWrite", name, option);
 	}
 	function msgViewPopUp(msg_seq) {
 		var name = msg_seq;
-		var msg_receiver = msg_receiver;
-		var option = "width=500,height=390 location=no";
+		var option = "width=500,height=440 location=no";
 		window.open("msgView?msg_seq=" + msg_seq, msg_seq, option);
 	}
 </script>
