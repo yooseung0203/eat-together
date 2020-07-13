@@ -25,6 +25,13 @@
 		var option ="width=500,height=550 location=no";
 		window.open("questionAnswer?msg_seq="+msg_seq+"&msg_sender="+msg_sender,msg_sender,option);
 	}
+	$(function(){
+		$(document).on("click",".answer",function(){
+			var some = $(this).attr("id").split(":");
+			console.log(some);
+			AnswerPopUp(some[0] , some[1]);
+		})
+	})
 </script>
 <body>
 	<div class="container-fluid mx-0 px-0">
@@ -69,7 +76,7 @@
 														<td class="admin_text"><a href="questionViewAdmin?msg_seq=${i.msg_seq}">${i.msg_title}</a></td>
 														<td class="admin_text">${i.msg_date}</td>
 														<td class="admin_text"><c:choose>
-																<c:when test="${i.msg_view==0}"><a href="javascript:AnswerPopUp(${i.msg_seq},${i.msg_sender})">답변대기</a>
+																<c:when test="${i.msg_view==0}"><button id="${i.msg_seq}:${i.msg_sender}" class="answer">답변대기</button>
 																<form>
 																	<input type="hidden" name="msg_seq">
 																	<input type="hidden" name="msg_sender">

@@ -67,7 +67,7 @@
 										</tr>
 										<tr align="center">
 											<td scope="col" colspan=12><textarea
-													style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;"
+													style="width: 100%; padding: 10px; word-break: keep-all; height: 180px; resize:none;"
 													id="msg_text" name="msg_text" readonly>${qdto.msg_text}</textarea></td>
 										</tr>
 										<tr align="center">
@@ -81,6 +81,8 @@
 						</div>
 						<div class="row mb-5">
 							<div class="col-12">${navi}</div>
+							
+							
 
 						</div>
 					</div>
