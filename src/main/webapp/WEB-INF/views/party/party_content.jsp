@@ -7,11 +7,12 @@
 <meta charset="UTF-8">
 
 <meta property="fb:app_id" content="APP_ID" />
-<meta property="og:type" content="website" />
-<meta property="og:title" content="맛집갔다갈래" />
+<meta property="og:site_name" content="맛집동행찾기서비스 - 맛집갔다갈래">
+<meta property="og:type" content="article" />
+<meta property="og:title" content="${con.title}" />
 <meta property="og:url" content="eat-together.net" />
-<meta property="og:description" content="맛집동행찾기서비스" />
-<meta property="og:image" content="웹 페이지 대표 이미지" />
+<meta property="og:description" content="${con.content}" />
+<meta property="og:image" content="https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-rectangle.png" />
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -321,13 +322,9 @@ $(document).ready(function(){
 
 				<!-- 네이버 블로그/카페 공유 -->
 
-				<span> 
-					<script type="text/javascript"
-						src="https://ssl.pstatic.net/share/js/naver_sharebutton.js"></script>
-					<script type="text/javascript">
-						new ShareNaver.makeButton({"type": "e"});
-					</script>
-				</span>
+				<a onclick="share_naver()">
+				<img
+					src="/resources/img/sns_icon/sns_naver.png" class="sns_icon"></a>
 
 				<!-- 트위터 공유 -->
 				<a onclick="share_twitter()"><img
@@ -355,11 +352,11 @@ $(document).ready(function(){
 					<c:when test="${partyParticipantCheck  eq true}">
 						<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 							이동</button>
-						<c:if test="${con.writer ne sessionScope.loginInfo.id }">
+						<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 							<button type="button" id="toExitParty" class="btn btn-primary">모임
 								나가기</button>
 						</c:if>
-						<c:if test="${con.writer eq sessionScope.loginInfo.id }">
+						<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
 
 							<c:choose>
 								<c:when test="${con.status  eq '1'}">
