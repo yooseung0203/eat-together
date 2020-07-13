@@ -50,6 +50,7 @@
 						</c:when>
 					</c:choose>
 				</div>
+<<<<<<< HEAD
 
 			</div>
 	
@@ -80,6 +81,30 @@
 					</c:choose>
 				</c:if>
 		
+=======
+			</c:if>
+			<c:if test="${loginInfo.id != null}">
+				<c:choose>
+					<c:when test="${loginInfo.id == 'administrator'}">
+						<div class="col-sm-1">
+							<span class="main-login"> 
+								관리자님, 환영합니다. / 
+								<a href="/member/logoutProc" id="logout">로그아웃</a>
+							</span>
+						</div>
+					</c:when>
+					<c:otherwise>
+						<div class="col-sm-1">
+							<span class="main-login"> 
+								${loginInfo.id}님, 환영합니다. / 
+								<a href="/member/logoutProc" id="logout">로그아웃</a>
+								<a href="#" onclick="window.open('/report/toReport', 'Report','width=600, height=700, location=no'); return false" id="Report">신고하기</a>
+							</span>
+						</div>
+					</c:otherwise>
+				</c:choose>
+			</c:if>
+>>>>>>> ee72460ee9b29ebde008006ccdaf50864d3ee2ba
 		</div>
 
 
@@ -98,6 +123,13 @@
 			location.replace('/member/mypage_myinfo');
 		}
 	})
+<<<<<<< HEAD
+=======
+	
+	$("#newMsg").on("click",function(){
+		location.href="/msg/msg_list_sender?msgcpage=1";
+	})
+>>>>>>> ee72460ee9b29ebde008006ccdaf50864d3ee2ba
 
 	$("#newMsg").on("click", function() {
 		location.href = "/msg/msg_list_sender";
