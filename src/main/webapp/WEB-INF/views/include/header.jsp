@@ -62,7 +62,7 @@
 					<div class="col-sm-1">
 						<div class="navi-menu">
 							<c:choose>
-								<c:when test="${loginInfo.id!=null && newMsg!=0}">
+								<c:when test="${loginInfo.id!=null && loginInfo.id!='administrator' && newMsg!=0}">
 									<button type="button" class="btn btn-primary" id="newMsg">
 										New<span class="badge badge-light">${newMsg}</span>
 									</button>

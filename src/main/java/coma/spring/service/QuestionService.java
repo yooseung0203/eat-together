@@ -38,6 +38,11 @@ public class QuestionService {
 		int result = qdao.QuestionAnswer(qdto);
 		return result;
 	}
+	//다음 시퀀스
+	public int getNextVal()throws Exception{
+		int result = qdao.getNextVal();
+		return result;
+	}
 	//1:1문의 답변처리
 	public int answerUpdate(QuestionDTO updto)throws Exception{
 		int result = qdao.answerUpdate(updto);
