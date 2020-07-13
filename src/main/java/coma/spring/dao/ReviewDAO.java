@@ -33,15 +33,6 @@ public class ReviewDAO {
 	public int report(int seq) throws Exception{
 		return mybatis.update("Review.updateReport", seq);
 	}
-	// 예지 리뷰 리스트
-	public List<ReviewDTO> selectByPageNo(int cpage) throws Exception{
-		int start = cpage * Configuration.navCountPerPage - (Configuration.navCountPerPage-1);
-		int end = start + (Configuration.navCountPerPage-1);
-		Map<String, Integer> param = new HashMap<>();
-		param.put("start", start);
-		param.put("end", end);
-		return mybatis.selectList("Review.selectByPageNo",param);
-	}
 	// 예지 리뷰 총 갯수
 	public int getArticleCount() throws Exception{
 		return mybatis.selectOne("Review.getArticleCount");

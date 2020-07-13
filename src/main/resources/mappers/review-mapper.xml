@@ -33,10 +33,6 @@
 		select count(*) from review
 	</select>
 	<!-- by예지, 페이지별 리뷰 리스트 -->
-	<select id="selectByPageNo" resultType="coma.spring.dto.ReviewDTO">
-		select * from (select review.*, map.name, row_number() over(order by review.seq desc) as rnum from review, map where review.parent_seq = map.seq) where rnum between #{start} and #{end}
-	</select>
-	<!-- by예지, 페이지별 리뷰 리스트 -->
 	<select id="selectByPageAndOption" resultType="coma.spring.dto.ReviewDTO">
 		select * from (select review.*, map.name, row_number() over(order by review.${targetColumn} desc, review.seq desc) as rnum from review, map where review.parent_seq = map.seq) where rnum between #{start} and #{end}
 	</select>

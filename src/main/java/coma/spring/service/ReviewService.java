@@ -55,49 +55,11 @@ public class ReviewService {
 		// 태훈씨 코드랑 합치면서 멤버 테이블의 report 컬럼 카운트 +1 하는 코드 추가할 예정 ( txManager 처리 )
 		return rdao.report(seq);
 	}
-	// 예지 리뷰 리스트
-	public List<ReviewDTO> selectByPageNo(int cpage) throws Exception{
-		return rdao.selectByPageNo(cpage);
-	}
-	// 예지 페이지 네비
-	public String getPageNavi(int currentPage) throws Exception{
-		int recordTotalCount = rdao.getArticleCount(); 
-		int pageTotalCount = 0; 
-		if(recordTotalCount % Configuration.recordCountPerPage > 0) {
-			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage + 1;			
-		}else {
-			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage;
-		}
-		if(currentPage < 1) {
-			currentPage = 1;
-		}else if(currentPage > pageTotalCount) {
-			currentPage = pageTotalCount;
-		}
-		int startNavi = (currentPage - 1) / Configuration.recordCountPerPage * Configuration.recordCountPerPage + 1;
-		int endNavi = startNavi + Configuration.recordCountPerPage - 1;
-		if(endNavi > pageTotalCount) {
-			endNavi = pageTotalCount;
-		}
-		boolean needPrev = true; // <
-		boolean needNext = true; // >
-		if(startNavi == 1) {needPrev = false;}
-		if(endNavi == pageTotalCount) {needNext = false;}
-
-		StringBuilder sb = new StringBuilder();
-		if(needPrev) {sb.append("<li class='page-item'><a class='page-link' href='toAdmin_review?cpage="+(startNavi-1)+"' tabindex='-1' aria-disabled='true'><i class=\"fas fa-chevron-left\"></i> </a></li>");}
-		for(int i = startNavi;i <= endNavi;i++) {
-			if(currentPage == i) {
-				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='toAdmin_review?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
-			}else {
-				sb.append("<li class='page-item'><a class='page-link' href='toAdmin_review?cpage="+i+"'>"+i+"</a></li>");
-			}
-		}
-		if(needNext) {sb.append("<li class='page-item'><a class='page-link' href='toAdmin_review?cpage="+(endNavi+1)+"'><i class=\"fas fa-chevron-right\"></i></a></li>");}
-		return sb.toString();
-	}
+	// 예지 : 리뷰 관리 페이지 - 조건 정렬
 	public List<ReviewDTO> selectByPageAndOption(int cpage, Object option) {
 		return rdao.selectByPageAndOption(cpage, option);
 	}
+	// 예지 : 리뷰 관리 페이지 - 조건 정렬
 	public String getPageNaviByOption(int cpage, Object option) throws Exception {
 		int recordTotalCount = rdao.getArticleCount(); 
 		int pageTotalCount = 0; 

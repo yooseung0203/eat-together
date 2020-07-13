@@ -188,25 +188,7 @@ public class AdminController {
 			System.out.println(option + "검색성공");
 			return mav;
 		}
-			
-	@RequestMapping("toAdmin_review") // 예지 : 리뷰 관리 페이지
-	public String toAdmin_review(HttpServletRequest request) throws Exception{
-		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
-		String adminCheck = loginInfo.getId();
-		if(adminCheck.contentEquals("administrator")) {
-			int cpage=1;
-			try {cpage = Integer.parseInt(request.getParameter("cpage"));}catch(Exception e) {}
-			List<ReviewDTO> list = rservice.selectByPageNo(cpage);
-			String navi = rservice.getPageNavi(cpage);
 
-			request.setAttribute("rlist", list);
-			request.setAttribute("navi", navi);
-			return "/admin/admin_review";
-		}
-		else {
-			return "error";
-		}
-	}
 	@RequestMapping("sortReview") // 예지 : 리뷰 검색
 	public ModelAndView sortReview(HttpServletRequest request) throws Exception{
 		ModelAndView mav = new ModelAndView();
