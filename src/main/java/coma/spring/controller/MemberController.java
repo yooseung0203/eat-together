@@ -366,7 +366,7 @@ public class MemberController {
 	@RequestMapping("editMyInfoProc")
 	public ModelAndView editMyInfoProc(MultipartFile profile, int gender, String account_email, String birth, MemberFileDTO mfdto) throws Exception {
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("member/mypage_myinfo");
+		mav.setViewName("redirect:/member/mypage_myinfo");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getId();
@@ -378,11 +378,15 @@ public class MemberController {
 
 		String realPath = session.getServletContext().getRealPath("upload/"+id+"/");
 		mfdto = mfcon.uploadProc(mdto, mfdto, realPath);
+		mdto.setSysname(mfdto.getSysname());
+		
 		int result = mservice.editMyInfo(mdto, mfdto);
-
+		System.out.println("이전:"+mdto.getGender());
 		System.out.println("회원정보수정 결과 1-성공 0-실패 : " + result);
 		session.setAttribute("loginInfo", mdto);
 
+		MemberDTO mdto2 = (MemberDTO) session.getAttribute("loginInfo");
+		System.out.println("이후:"+mdto2.getGender());
 		mdto = mservice.selectMyInfo(id);
 		mav.addObject("mdto", mdto);
 		return mav;

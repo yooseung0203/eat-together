@@ -77,7 +77,7 @@
 														<td class="admin_text">${i.account_email}</td>
 														<td class="admin_text">${i.sdate}</td>
 														<td class="admin_text">${i.report_count}</td>
-														<td class="myinfo_text">탈퇴</td>
+														<td class="myinfo_text"><input type="checkbox" name="checkbox[]" value="탈퇴" class="checkSelect"></td>
 													</tr>
 												</c:forEach>
 											</c:when>
@@ -88,10 +88,11 @@
 						</div>
 						<div class="row mb-5">
 							<div class="col-2"></div>
-							<div class="col-8">${navi}</div>
-							<div class="col-2">
+							<div class="col-6">${navi}</div>
+							<div class="col-4">
 								<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
 									<button class="btn btn-primary" id="toWriteBtn">글쓰기</button>
+									<button class="btn btn-danger" id="toOut">탈퇴</button>
 								</c:if>
 							</div>
 						</div>
@@ -111,6 +112,10 @@
 		} else {
 			$("#gender_text").html("여");
 		}
+		
+		$("#toOut").on("click", function(){
+			
+		})
 	</script>
 </body>
 </html>
