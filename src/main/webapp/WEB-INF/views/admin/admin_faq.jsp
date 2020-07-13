@@ -28,7 +28,6 @@ function toDelete(seq){
 	}
 };
 
-
 $(function(){
 	$("#toWriteBtn").on("click",function(){
 		location.href="/faq/toWriteInAdmin";
@@ -58,7 +57,7 @@ $(function(){
 								<table class="table border-bottom border-dark">
 									<thead class="thead-dark">
 										<tr>
-											<th scope="col" class="text-center">선택</th>
+											<th scope="col" class="text-center">번호</th>
 
 											<th scope="col">카테고리</th>
 											<th scope="col">타이틀</th>
@@ -70,8 +69,7 @@ $(function(){
 									<tbody>
 										<c:forEach var="i" items="${list}" varStatus="status">
 											<tr>
-												<th scope="row" class="text-center"><input
-													type="checkbox" name="seq" value="${i.seq}"></th>
+												<th scope="row" class="text-center">${i.seq}</th>
 
 												<td>
 												
@@ -118,7 +116,7 @@ $(function(){
 							</div>
 						</div>
 						<div class="row mb-5">
-							<div class="col-2"></div>
+							<div class="col-2"><%-- <button type="button" id="toDelete${i.seq}" onclick="toSelectDelete()"class="btn btn-danger">선택삭제</button> --%></div>
 							<div class="col-8">${navi}</div>
 							<div class="col-2">
 								<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">

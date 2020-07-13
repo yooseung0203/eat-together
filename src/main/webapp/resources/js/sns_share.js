@@ -2,6 +2,17 @@
  * SNS share js
  */
 
+/*네이버*/
+ function share_naver() {
+	 var sh_title = $("#sns_share_title").val(); 
+	 var sh_desc = "혼자서는 망설여지는 맛집이 있다면?\n 맛집동행찾기서비스 /'맛집갔다갈래/' 를　 이용해보세요!"; 
+      var url = encodeURIComponent(encodeURIComponent(window.location.href));
+      var title = encodeURIComponent(sh_title);
+      var shareURL = "https://share.naver.com/web/shareView.nhn?url=" + url + "&title=" + title;
+      alert(shareURL);
+      document.location = shareURL;
+    }
+
 /*트위터*/
 function share_twitter(){
 	window.open("https://twitter.com/intent/tweet"

@@ -185,7 +185,7 @@ public class MemberController {
 		System.out.println("아이디 중복체크 결과 : " + result);
 		return String.valueOf(result);
 	}
-	
+
 	//by 지은, 회원가입시 닉네임 중복체크_20200710
 	@RequestMapping("isNickAvailable")
 	@ResponseBody

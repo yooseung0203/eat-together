@@ -25,5 +25,23 @@
 		member) where rnum between #{start} and
 		#{end}
 	</select>
-
+	
+	<!-- by 수지, 모임글 리스트 뽑기 -->
+	<select id="partyList" resultType="coma.spring.dto.PartyDTO">
+		select * from (select
+		party.*, row_number() over(order by 1 desc) rnum from
+		party) where rnum between #{start} and
+		#{end}
+	</select>
+	
+	<!-- by 수지, 모임글 옵션순으로 회원정보 출력하기 -->
+	<select id="partyByOption"
+		resultType="coma.spring.dto.PartyDTO">
+		select * from (select
+		party.*, row_number() over(order by
+		${targetColumn} desc) rnum from
+		party) where rnum between #{start} and
+		#{end}
+	</select>
+	
 </mapper>
