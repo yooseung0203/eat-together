@@ -40,7 +40,7 @@ $(function(){
 </head>
 <body>
 	<div id=container>
-	<form action="insertQuestion" method="post">
+	<form action="questionAnswerSend" method="post">
 		<table class="table">
 			<thead class="thead-dark">
 				<tr>
@@ -49,13 +49,13 @@ $(function(){
 			</thead>
 			<tbody>
 				<tr align="center">
-					<th scope="col">제목</th>
-					<th scope="col">[1:1문의]문의글입니다.</th>
+					<th scope="col">제목<input type="hidden" name="msg_view" id="msg_view"></th>
+					<th scope="col">[1:1문의]답변입니다.</th>
 				</tr>
 
 				<tr align="center">
 					<th scope="col">받는사람</th>
-					<th scope="col">관리자</th>
+					<th scope="col">${qdto.msg_sender}<input type="hidden" name="msg_receiver" id="msg_receiver"></th>
 				</tr>
 				<tr align="center">
 					<th scope="col" colspan=12>내용</th>
@@ -71,13 +71,22 @@ $(function(){
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12>
-					<button type="submit" class="btn btn-secondary">문의하기</button>
+					<button type="submit" id=submit class="btn btn-secondary">문의하기</button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 		</form>
 	</div>
-
+	<script>
+		$("#submit").on("click",function(){
+			var where = ${qdto.msg_seq};
+			var msg_receiver = ${qdto.msg_sender};
+			$("#msg_view").val(where);
+			$("#msg_receiver").val(msg_receiver);
+			console.log(where);
+			console.log(msg_receiver);
+		})
+	</script>
 </body>
 </html>

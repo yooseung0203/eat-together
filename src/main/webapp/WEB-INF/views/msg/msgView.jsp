@@ -62,7 +62,7 @@
 
 		<div class="row" align="center">
 			<div class="col-12" align="center">
-				<button type="button" id="msgResponse" class="btn btn-warning">답장</button>
+				<button type="button" id="msgResponse" class="btn btn-warning" onclick="location.href='msgResponse?msg_receiver=${msgView.msg_sender}'">답장</button>
                <button type="button" id="close" class="btn btn-light">닫기</button>
 			</div>
 		</div>

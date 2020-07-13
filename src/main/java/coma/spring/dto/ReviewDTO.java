@@ -10,6 +10,7 @@ public class ReviewDTO {
 	private int rating;
 	private Timestamp write_date;
 	private int parent_seq;
+	private int report;
 	private String sdate;
 	
 	//by 지은, 내리뷰 페이지에서 가게명을 함께 출력하기 위한 맴버필드 추가_20200709
@@ -18,7 +19,7 @@ public class ReviewDTO {
 	public ReviewDTO() {}
 
 	public ReviewDTO(int seq, String id, String content, int rating, Timestamp write_date, int parent_seq, String sdate,
-			String name) {
+			String name, int report) {
 		super();
 		this.seq = seq;
 		this.id = id;
@@ -26,6 +27,7 @@ public class ReviewDTO {
 		this.rating = rating;
 		this.write_date = write_date;
 		this.parent_seq = parent_seq;
+		this.report = report;
 		this.sdate = sdate;
 		this.name = name;
 	}
@@ -90,5 +92,11 @@ public class ReviewDTO {
 	}
 	public void setSdate(String sdate) {
 		this.sdate = sdate;
+	}
+	public int getReport() {
+		return report;
+	}
+	public void setReport(int report) {
+		this.report = report;
 	}
 }
