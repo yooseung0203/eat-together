@@ -21,10 +21,25 @@ function partyDelete(seq){
 		location.href = "/party/partydelete?seq="+seq;
 	}
 }
-function reviewReport(seq,place_id,content,id){
+function reviewReport(seq,content,id){
+	console.log("신고 시작 : "+ seq);
 	var ask = confirm("허위신고일 경우 피해가 되돌아올 수 있습니다. \n정말 신고하시겠습니까?\n신고할 사용자 : "+id+"\n신고할 리뷰 내용 : "+content);
 	if(ask){
-		location.href = "/review/report?seq="+seq+"&place_id="+place_id;
+		$.ajax({
+			url:"/review/report",
+			data : { seq : seq, report_id : id},
+			success : function(result) {
+				if (result == 1){ 
+					alert("신고가 정상적으로 접수되었습니다.");	
+				}
+				else{
+					alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
+				}
+			},
+			error:function(e){
+				console.log("error");
+			}
+		});
 	}
 }
 
@@ -46,7 +61,7 @@ $(function(){
 	    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 	    mapOption = { 
 	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-	        level: 10 // 지도의 확대 레벨 
+	        level: 3 // 지도의 확대 레벨 
 	    };
 		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 		var map = new kakao.maps.Map(mapContainer, mapOption); 
@@ -78,7 +93,11 @@ $(function(){
 	            removable : iwRemoveable
 	        });
 	        infowindow.open(map, marker);
-	        map.setCenter(locPosition);      
+	        map.setCenter(locPosition); 
+
+		    if($("#markerLat").text()!=""){
+				map.setCenter(new kakao.maps.LatLng($("#markerLat").text(), $("#markerLng").text()));
+		    }
 	    }  
 		// 마커 클러스터러 : 맛집으로 등록된 마커는 이것으로 표시!
 	    var clusterer = new kakao.maps.MarkerClusterer({
@@ -296,8 +315,6 @@ $(function(){
 	        return marker;
 	    }
 	    $(document).on("click","#recruit",function(){
-	    	alert($(this).closest(".info").find(".place_name b").text());
-	    	alert($(this).closest(".info").find(".address_name").text());
 	    	location.href = "/map/toParty_New?name="+$(this).closest(".info").find(".place_name b").text()
 	    									+"&address="+$(this).closest(".info").find(".address").text()
 	    									+"&road_address="+$(this).closest(".info").find(".road_address").text()
@@ -309,8 +326,6 @@ $(function(){
 	    									+"&place_id="+$(this).closest(".info").find(".place_id").text();
 	    })
 	    $("#mapRecruit").on("click",function(){
-	    	alert($(this).closest(".partylist").siblings(".store_info").find(".name").text());
-	    	alert($(this).closest(".partylist").siblings(".store_info").find(".address").text());
 	    	location.href = "/map/mapToParty_New?parent_name="+$(this).closest(".partylist").siblings(".store_info").find(".name").text()
 								    						+"&parent_address="+$(this).closest(".partylist").siblings(".store_info").find(".address").text()
 								    						+"&img="+$(this).closest(".partylist").siblings(".store_info").find("img").attr("src")
@@ -540,14 +555,13 @@ $(function(){
         			lng:$("#centerLng").text()},
         		dataType:"JSON"
         	}).done(function(resp){
-        		console.log(resp);
-        		alert("입력 완료");
-        	}).fail(function(error1,error2){
         		var iCHK = 1;
         		for(var i = 0;i<iCHK;i++)
         		{
         		document.location.reload();
         		}
+        		alert("입력 완료");
+        	}).fail(function(error1,error2){
         		console.log(error1);
         		console.log(error2);
         	})
@@ -566,7 +580,6 @@ $(function(){
         		{
         		document.location.reload();
         		}
-        		console.log(resp);
         		alert("입력 완료");
         	}).fail(function(error1,error2){
         		console.log(error1);
@@ -1240,9 +1253,6 @@ $(function(){
 		        infoOverSet(customOverlay,map);
 			})
 		})
-	    if($("#markerLat").text()!=""){
-			map.setCenter(new kakao.maps.LatLng($("#markerLat").text(), $("#markerLng").text()));
-	    }
 		/****************** 리뷰 및 기타 영역 ******************/		
 		$("#review_write").on("submit",function(){
 			var result = false;

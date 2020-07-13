@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>지도 생성하기</title>
+<title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src='/resources/js/map.js?asa'></script>
 <link rel="stylesheet"
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaa">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaaa">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -265,19 +265,16 @@
 							</c:if>
 							<c:if test="${not empty partyMap}">
 								<c:forEach var="i" items="${partyMap}">
-									<div class="party">
-										<div class="title">${i.key.title}</div>
-										<div class="seq" style="display: none;">${i.key.seq}</div>
-										<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
-										<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
-										<c:if test="${i.key.status eq 1}">
-											<button type="button" class="btn btn-primary join"
-												data-toggle="modal" data-target="#partyModal">참가</button>										
-										</c:if>
-										<c:if test="${i.key.status eq 0}">
-											<button type="button" class="btn btn-primary endParty" disabled>종료</button>
-										</c:if>
-									</div>
+									<c:if test="${i.key.status eq 1}">
+										<div class="party">
+											<div class="title">${i.key.title}</div>
+											<div class="seq" style="display: none;">${i.key.seq}</div>
+											<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
+											<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
+												<button type="button" class="btn btn-primary join"
+													data-toggle="modal" data-target="#partyModal">참가</button>										
+										</div>
+									</c:if>
 								</c:forEach>
 							</c:if>
 							<nav aria-label="Page navigation example">
@@ -348,7 +345,7 @@
 									</div>
 									<div class="content">${i.key.content}</div>
 									<div class="bottom">
-										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},${mapdto.place_id},'${i.key.content}','${i.key.id}')">신고</button>
+										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'${i.key.content}','${i.key.id}')">신고</button>
 									</div>
 								</div>
 							</c:forEach>

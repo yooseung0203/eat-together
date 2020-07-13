@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import coma.spring.dao.MapDAO;
+import coma.spring.dao.ReportDAO;
 import coma.spring.dao.ReviewDAO;
 import coma.spring.dao.ReviewFileDAO;
 import coma.spring.dto.MapDTO;
+import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.dto.ReviewFileDTO;
 import coma.spring.dto.TopFiveStoreDTO;
@@ -20,24 +22,26 @@ import coma.spring.statics.Configuration;
 @Service
 public class ReviewService {
 	@Autowired
-	private ReviewDAO rdao;
+	private ReviewDAO rvdao;
+	@Autowired
+	private ReportDAO rdao;
 	@Autowired
 	private MapDAO mapdao;
 	@Autowired
 	private ReviewFileDAO rfdao;
 	@Transactional("txManager")
 	public void write(ReviewDTO rdto) throws Exception{
-		rdao.insert(rdto);
+		rvdao.insert(rdto);
 		mapdao.updateRatingAvg(rdto.getParent_seq());
 	}
 	@Transactional("txManager")
 	public void write(ReviewDTO rdto, ReviewFileDTO rfdto) throws Exception{
-		rdao.insert(rdto);
+		rvdao.insert(rdto);
 		rfdao.insert(rfdto);
 		mapdao.updateRatingAvg(rdto.getParent_seq());
 	}
 	public List<ReviewDTO> selectByPseq(int parent_seq) throws Exception{
-		return rdao.selectByPseq(parent_seq);
+		return rvdao.selectByPseq(parent_seq);
 	}
 	
 	public ReviewFileDTO selectFileByPseq(int parent_seq) throws Exception{
@@ -46,22 +50,23 @@ public class ReviewService {
 	
 	//by지은, 마이페이지 - 내모임 리스트 출력하는 select 문 수정_20200709
 	public List<ReviewDTO> selectById(String id)throws Exception{		
-		List<ReviewDTO> reviewList = rdao.selectById(id);
+		List<ReviewDTO> reviewList = rvdao.selectById(id);
 		return reviewList;
 	}
 	
 	// 예지 : 신고 기능
-	public int report(int seq) throws Exception{
-		// 태훈씨 코드랑 합치면서 멤버 테이블의 report 컬럼 카운트 +1 하는 코드 추가할 예정 ( txManager 처리 )
-		return rdao.report(seq);
+	@Transactional("txManager")
+	public int report(ReportDTO rdto) throws Exception{
+		rdao.newReport(rdto); // 신고 테이블 insert 문 
+		return rvdao.report(rdto.getParent_seq()); // 리뷰 테이블 신고 컬럼 update 문
 	}
 	// 예지 : 리뷰 관리 페이지 - 조건 정렬
 	public List<ReviewDTO> selectByPageAndOption(int cpage, Object option) {
-		return rdao.selectByPageAndOption(cpage, option);
+		return rvdao.selectByPageAndOption(cpage, option);
 	}
 	// 예지 : 리뷰 관리 페이지 - 조건 정렬
 	public String getPageNaviByOption(int cpage, Object option) throws Exception {
-		int recordTotalCount = rdao.getArticleCount(); 
+		int recordTotalCount = rvdao.getArticleCount(); 
 		int pageTotalCount = 0; 
 		if(recordTotalCount % Configuration.recordCountPerPage > 0) {
 			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage + 1;			
@@ -97,12 +102,12 @@ public class ReviewService {
 		return sb.toString();
 	}
 	public ReviewDTO selectBySeq(int seq) {
-		return rdao.selectBySeq(seq);
+		return rvdao.selectBySeq(seq);
 	}
 	
 	//by지은, 마이페이지 - 내 리뷰리스트 출력을 위한 네비바 생성_20200707
 	public String getMyPageNav(int mcpage, String id) throws Exception{
-		int recordTotalCount = rdao.getMyPageArticleCount(id); // 총 개시물의 개수
+		int recordTotalCount = rvdao.getMyPageArticleCount(id); // 총 개시물의 개수
 		int pageTotalCount = 0; // 전체 페이지의 개수
 
 		if( recordTotalCount % Configuration.recordCountPerPage > 0) {
@@ -156,7 +161,7 @@ public class ReviewService {
 	}
 	// 태훈 리뷰 긁어고기
 	public Map<Integer, Object> getReview(List<MapDTO> top){
-		List<TopFiveStoreDTO> reviewList = rdao.getReview(top);
+		List<TopFiveStoreDTO> reviewList = rvdao.getReview(top);
 		Map<Integer, Object> review = new HashMap<Integer, Object>();
 		for(int i=0; i<reviewList.size(); i++) {
 			review.put(reviewList.get(i).getParent_seq(), reviewList.get(i));
