@@ -3,17 +3,31 @@
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<style>
+.navi-menu>a {
+	color: #212529 !important; 
+	font-family: 'Noto Sans KR', sans-serif !important;
+	font-size:18pt !important;
+}
+.navi-menu>a:hover {
+	text-decoration: none;
+	color: #212529;
+}
 
+.navi-menu>a:visited {
+	color: #212529;
+}
+</style>
 
 
 <!-- header -->
 <div class="container-fluid ">
 	<div class="header-wrap  mt-3 mb-2 px-0 mx-0">
 		<div class="row">
-			<div class="col-sm-1 mx-0 px-0 my-0 py-0 logo-image ">
-				<a href="/"><img src="/resources/img/logo.png"></a>
+			<div class="col-sm-1 ml-2 mr-0 px-0 my-0 py-0 logo-image ">
+				<a href="/"><img class="mx-0 px-0 my-0 py-0" src="/resources/img/logo.png"></a>
 			</div>
-			<div class="col-sm-9 mb-3">
+			<div class="col-sm-8 mb-3">
 				<ul class="nav">
 					<li class="nav-item navi-menu"><a class="nav-link "
 						href="/info/toIntroduction">사이트소개</a></li>
@@ -55,8 +69,8 @@
 			</div>
 	
 				<c:if test="${loginInfo.id == null}">
-					<div class="col-sm-1">
-						<span class="main-login"> <a href="/member/loginview">
+					<div class="col-sm-1 text-right">
+						<span class="main-login "> <a href="/member/loginview">
 								로그인 </a> / <a href="/member/signup_check">회원가입</a>
 						</span>
 					</div>
@@ -64,7 +78,7 @@
 				<c:if test="${loginInfo.id != null}">
 					<c:choose>
 						<c:when test="${loginInfo.id == 'administrator'}">
-							<div class="col-sm-1">
+							<div class="col-sm-1 text-right">
 								<span class="main-login"> 관리자님, 환영합니다. / <a
 									href="/member/logoutProc" id="logout">로그아웃</a>
 								</span>
