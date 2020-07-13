@@ -84,9 +84,9 @@
 								<tr>
 									<th scope="row">${i.seq}</th>
 									<td class="myinfo_text" align=left>${i.parent_name}<c:if
-											test="${loginInfo.id eq i.writer}">
+											test="${loginInfo.nickname eq i.writer}">
 											<span class="badge badge-success">방장</span>
-										</c:if> <c:if test="${loginInfo.id ne i.writer }">
+										</c:if> <c:if test="${loginInfo.nickname ne i.writer }">
 										</c:if></td>
 
 									<td class="myinfo_text" align=right>
