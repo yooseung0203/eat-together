@@ -376,13 +376,16 @@
 		})
 
 		//메일 인증 
+
+		//by 지은, 이메일 인증 ajax의 중복호출을 방지하기 위해서 전송상태를 표시한다_20200713
+
 		$("#mail").on("click", function() {
 			if ($("#account_email").val() == "") {
 				alert("이메일을 입력해주십시오.");
 				$("#account_email").focus();
 			} else {
 				$.ajax({
-					url : "/mail/mailSending",
+					url : "/mail/mailSendingForSignUp",
 					type : "post",
 					data : {
 						account_email : $("#account_email").val()
@@ -394,12 +397,13 @@
 						$("#mail_div").css("display", "block");
 						$("#mail_accept").on("click", function() {
 							if ($("#mail_text").val() == resp) {
-								$("#mail_text").attr("readonly", true);
 								$("#mail_text").css("color", "blue");
 								$("#mail_text").val("인증에 성공하였습니다.");
+								$("#mail_text").attr("readonly", true);
 							} else {
 								alert("인증문자열을 확인해주세요.");
 								$("#mail_text").val("");
+
 							}
 						})
 					} else {
@@ -408,7 +412,9 @@
 						$("#mail_text").focus();
 					}
 
-				})
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					serrorFunction();
+				});
 			}
 		})
 	</script>

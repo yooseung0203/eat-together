@@ -57,7 +57,7 @@ public class EmailController {
 	}
 
 	//회원가입시 인증 메일 보내기
-	@RequestMapping("mailSending")
+	@RequestMapping("mailSendingForSignUp")
 	@ResponseBody
 	public String mailSender(@RequestParam String account_email) throws Exception{ 
 		String username = "eat-together";
@@ -65,7 +65,7 @@ public class EmailController {
 		String resp;
 
 		boolean result = mservice.isEmailAvailable(account_email);
-		System.out.println("이메일 사용가능한가? :" + false);
+		System.out.println("이메일 사용가능한가? :" + result);
 		if(result==false) {
 			resp = "";
 			return resp;
@@ -141,7 +141,7 @@ public class EmailController {
 			resplist.add(1, id);
 
 			String recipient = account_email;
-			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
+			String subject = "맛집갔다갈래 아이디찾기 이메일입니다.";
 			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
 
 			Properties props = new Properties();
@@ -210,7 +210,7 @@ public class EmailController {
 			System.out.println("랜덤문자열 : " + dice);
 
 			String recipient = account_email;
-			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
+			String subject = "맛집갔다갈래 비밀번호찾기 이메일입니다.";
 			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
 
 			Properties props = new Properties();
@@ -276,7 +276,7 @@ public class EmailController {
 			System.out.println("랜덤문자열 : " + dice);
 
 			String recipient = account_email;
-			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
+			String subject = "맛집갔다갈래 회원탈퇴인증 이메일입니다.";
 			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
 
 			Properties props = new Properties();
