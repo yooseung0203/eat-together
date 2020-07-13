@@ -5,8 +5,46 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<meta property="fb:app_id" content="APP_ID" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="맛집갔다갈래" />
+<meta property="og:url" content="eat-together.net" />
+<meta property="og:description" content="맛집동행찾기서비스" />
+<meta property="og:image" content="웹 페이지 대표 이미지" />
+
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- 태훈 추가 -->
+<meta content="" name="descriptison">
+<meta content="" name="keywords">
+
+<!-- Favicons -->
+<!-- <link href="/resources/assets/img/favicon.png" rel="icon"> -->
+<link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,600,700|Raleway:300,400,400i,500,500i,700,800,900"
+	rel="stylesheet">
+
+<!-- Vendor CSS Files -->
+<link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="/resources/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+<link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+<link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet">
+<link href="/resources/assets/vendor/nivo-slider/css/nivo-slider.css"
+	rel="stylesheet">
+<link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+	rel="stylesheet">
+<link href="/resources/assets/vendor/venobox/venobox.css" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="/resources/assets/css/style.css" rel="stylesheet">
+<!-- 태훈 추가 -->
+
 <!-- BootStrap4 -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -15,7 +53,11 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<!-- BootStrap4 End-->
+<!-- BootStrap4 End--> 
+
+<!--  kakao api -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
 
 <!-- google font -->
 <link
@@ -29,71 +71,23 @@
 	rel="stylesheet">
 <!-- google font end-->
 
+
 <!-- ******************* -->
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
+
+<!-- 태훈 css -->
+<link rel="stylesheet" type="text/css" href="/resources/css/party-list.css?aa">
+<!-- 태훈 css -->
+
 <title>모임 리스트</title>
-<style>
-.aa {
-	width: 80%;
-	margin: auto;
-}
-
-.listtitle {
-	font-size: 35px;
-}
-
-.partylist {
-	margin-bottom: 15px;
-}
-.featImgWrap {
-   height: 250px;
-   position: relative;
-   padding-top: 56.57%;
-   /* 16:9 ratio */
-   overflow: hidden;
-}
-
-.featImgWrap .cropping {
-   position: absolute;
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   -webkit-transform: translate(50%, 50%);
-   -ms-transform: translate(50%, 50%);
-   transform: translate(50%, 50%);
-}
-
-.featImgWrap .cropping img {
-   position: absolute;
-   top: 0;
-   left: 0;
-   max-width: 100%;
-   height: auto;
-   -webkit-transform: translate(-50%, -50%);
-   -ms-transform: translate(-50%, -50%);
-   transform: translate(-50%, -50%);
-}
-
-.featImgWrap .cropping img.landscape {
-   max-height: 100%;
-   height: 100%;
-   max-width: none;
-}
-
-.featImgWrap .cropping img.portrait {
-   max-width: 100%;
-   width: 100%;
-   max-height: none;
-   border: 1px solid black;
-}
-</style>
 <script>
-	$(function() {
+/*****************************  태훈 party list 스크립 ***********************************************/
+$(function() {
+		/******************* 지역 선택 ************************/
 		var area0 = [ "시/도 선택", "서울", "인천", "대전", "광주", "대구", "울산", "부산", "경기",
 				"강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주특별자치도" ];
 		var area1 = [ "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구",
@@ -135,13 +129,10 @@
 		var area16 = [ "서귀포시", "제주시" ];
 
 		// 시/도 선택 박스 초기화
-		$.each(area0,
-				function() {
-					$("#sido").append(
-							"<option value='"+this+"'>" + this + "</option>");
-				});
+		$.each(area0, function() {
+			$("#sido").append("<option value='"+this+"'>" + this + "</option>");
+		});
 		$("#gugun").append("<option value=''>구/군 선택</option>");
-
 		// 시/도 선택시 구/군 설정
 		$("#sido").change(
 				function() {
@@ -150,17 +141,113 @@
 					if (areaindex == 0) {
 						$("#gugun").append("<option value=''>구/군 선택</option>");
 					} else {
+						$("#gugun").append("<option value=''>구/군 선택</option>");
 						$.each(eval("area" + areaindex), function() {
 							$("#gugun").append(
 									"<option value='"+this+"'>" + this
 											+ "</option>");
 						});
 					}
+		});
+		/******************* 지역 선택 ************************/
+		
+		/******************* 상세 보기 ************************/
+		$(".myBtn").on("click", function() {
+			if ("${loginInfo.id}" == "") {
+				alert("로그인 후 이용해주세요");
+				location.replace('/member/loginview');
+			} else {
+				var select_seq = $(this).parent().siblings().children(".party_seq").val();
+				$("#aaa").empty();
+				$.ajax({
+					url:"/party/party_content_include",
+					data : {
+						seq : select_seq
+					}
+				}).done(function(con) {
+					console.log(con);
+					$("#aaa").append(con);
+					$("#mymodal").modal();
 				});
+			}
+		});
+		/******************* 상세 보기 ************************/
+		
+		/******************* 인기 맛집  모집하러기 ************************/
+		$(".topBtn").on("click",function(){
+			location.href = "/map/mapToParty_New?parent_name="+$(this).siblings(".store_name").html()
+			+"&parent_address="+$(this).siblings(".store_address").val()
+			+"&img="+$(this).parent().siblings().attr("src")
+			+"&place_id="+$(this).siblings(".store_place_id").val()
+			+"&category="+$(this).siblings(".store_category").val();
+		}); 
+		/******************* 인기 맛집  모집하러기 ************************/
+		
+	/*******************   무한 스크롤 ************************/
+	/*
+	var cpage = 1; //페이징과 같은 방식이라고 생각하면 된다. 
+
+	$(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+		getList(cpage);
+		page++;
 	});
+
+	$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
+		if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+			getList(cpage);
+			page++;
+		}
+	});
+	
+	function getList(page){
+		 
+	    $.ajax({
+	        type : 'POST',  
+	        dataType : 'json', 
+	        data : {"cpage" : cpage},
+	        url : '/party/partylist',
+	        success : function(returnData) {
+	            var data = returnData.rows;
+	            var html = "";
+	            if (page==1){ //페이지가 1일경우에만 id가 list인 html을 비운다.
+	                  $("#list").html(""); 
+	            }
+	            if (returnData.startNum<=returnData.totCnt){
+	                if(data.length>0){
+	                // for문을 돌면서 행을 그린다.
+	                }else{
+	                //데이터가 없을경우
+	                }
+	            }
+	            html = html.replace(/%20/gi, " ");
+	            if (page==1){  //페이지가 1이 아닐경우 데이터를 붙힌다.
+	                $("#list").html(html); 
+	            }else{
+	                $("#busStopList").append(html);
+	            }
+	       },error:function(e){
+	           if(e.status==300){
+	               alert("데이터를 가져오는데 실패하였습니다.");
+	           };
+	       }
+	    })
+	    .ajaxStart(function(){
+			$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
+		})
+		.ajaxStop(function(){
+			$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
+		});	
+	}
+	*/
+	/*******************   무한 스크롤 ************************/
+
+	/*****************************  태훈 party list 스크립 ***********************************************/
+});
 </script>
 </head>
+<!-- <body data-spy="scroll" data-target="#navbar-example"> -->
 <body>
+
 	<!-- ******************* -->
 	<!-- header  -->
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
@@ -168,70 +255,90 @@
 	<!-- ******************* -->
 
 	<div class="container-fluid">
+	
 		<div class="row aa">
-			<div class="col-12 jumbotron">
-				<span class="listtitle">이번주 인기 맛집 Top 5!</span>
-				<div class="row ingi">
-					<c:forEach var="top" items="${top}" varStatus="status">
-						<div class="col-sm-12 col-md-3">
-							<div class="card partylist">
-								<img src="${imglist2[status.index]}" class="card-img-top">
-								<div class="card-body">
-									<h5 class="card-title">${top.name }</h5>
-									<p class="card-text">
-										
-									</p>
-									<input type="hidden" class="store_seq" value="${top.seq}">
-									<button type="button" class="btn btn-info btn-lg topBtn">모집하러 가기</button>
-								</div>
-							</div>
+			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
+		</div>
+		
+		<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 aa">
+			<c:forEach var="top" items="${top}" varStatus="status">
+				<div class="col card-deck">
+					<div class="card partylist">
+						<img src="${imglist2[status.index]}" class="card-img-top">
+						<div class="card-body cardedit">
+							<h5 class="card-title store_name">${top.name }</h5>
+							<p class="card-text">
+								<c:out value="${review[top.seq].content }"/>
+								<c:if test="${empty review[top.seq].content }">
+										${top.address }
+								</c:if>
+							</p>
+							<input type="hidden" class="store_place_id" value="${top.place_id}">
+							<input type="hidden" class="store_address" value="${top.address}">
+							<input type="hidden" class="store_category" value="${top.category}">
+							<button type="button" class="btn btn-info btn-lg topBtn">모집하러 가기</button>
 						</div>
-					</c:forEach>
+					</div>
 				</div>
-			</div>
+			</c:forEach>
 		</div>
+
 		<div class="row aa">
-			<div class="col-12 jumbotron">
-				<form action="/party/partysearch" method="post">
-					<span class="listtitle">통합 검색</span>
-					<div id="areacheck">
-						지역: <select name="sido" id="sido"></select> <select name="gugun"
-							id="gugun"></select>
-					</div>
-					<div id="gendercheck">
-						성별 : <input type="radio" name="gender" value="m" />남자만 <input
-							type="radio" name="gender" value="f" />여자만 <input type="radio"
-							name="gender" value="a" />남녀무관
-					</div>
-					<div id="agecheck">
-						연령 : <input type="checkbox" name="age" value="10" />10대 <input
-							type="checkbox" name="age" value="20" />20대 <input
-							type="checkbox" name="age" value="30" />30대 <input
-							type="checkbox" name="age" value="40" />40대 <input
-							type="checkbox" name="age" value="50" />50대 이상
-					</div>
+			<form action="/party/partysearch" method="post">
+				<span class="listtitle">통합 검색</span>
+				<div id="areacheck">
+					지역: 
+					<select name="sido" id="sido"></select> 
+					<select name="gugun" id="gugun"></select>
+				</div>
+				<div id="gendercheck">
+					성별 : 
+					<input type="radio" name="gender" value="m" /> 남자만 
+					<input type="radio" name="gender" value="f" /> 여자만 
+					<input type="radio" name="gender" value="a" /> 남녀무관
+				</div>
+				<div id="agecheck">
+					연령 : 
+					<input type="checkbox" name="age" value="10" /> 10대 
+					<input type="checkbox" name="age" value="20" /> 20대 
+					<input type="checkbox" name="age" value="30" /> 30대 
+					<input type="checkbox" name="age" value="40" /> 40대 
+					<input type="checkbox" name="age" value="50" /> 50대 이상
+				</div>
 
-					<div id="drinkingcheck">
-						음주 : <input type="radio" name="drinking" value="0" />불가능 <input
-							type="radio" name="drinking" value="1" />가능 <input type="hidden"
-							name="drinking" value="2" />
-					</div>
+				<div id="drinkingcheck">
+					음주 : 
+					<input type="radio" name="drinking" value="0" /> 불가능 
+					<input type="radio" name="drinking" value="1" /> 가능 
+					<input type="hidden" name="drinking" value="2" />
+				</div>
 
-					<div>
-						<select name="text">
-							<option value="title">제목</option>
-							<option value="writer">작성자</option>
-							<option value="content">내용</option>
-							<option value="both">제목 + 내용</option>
-						</select> <input type="text" name="search"> <input type="submit"
-							value="검색">
-					</div>
+				<div>
+					<select name="text">
+						<option value="title">제목</option>
+						<option value="writer">작성자</option>
+						<option value="content">내용</option>
+						<option value="both">제목 + 내용</option>
+					</select> 
+					<input type="text" name="search">
+					<input type="submit" value="검색">
+				</div>
 
-				</form>
-			</div>
+			</form>
 		</div>
-		<div class="row aa">
-			<div class="col-12 jumbotron">
+	</div>
+	 
+	<!-- ======= Party List Section ======= -->
+	<main id="main">
+		<div id="team" class="our-team-area area-padding">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="section-headline text-center">
+							<h2>밥 먹고 갈래?</h2>
+						</div>
+					</div>
+				</div>
 				<div class="row">
 					<c:choose>
 						<c:when test="${empty list}">
@@ -240,43 +347,58 @@
 							</div>
 						</c:when>
 						<c:otherwise>
-							<c:forEach var="partyList" items="${list}" >
-								<div class="col-sm-12 col-md-3">
-									<div class="card partylist">
-										<img src="${partyList.imgaddr}" class="card-img-top">
-										<div class="card-body">
-											<h5 class="card-title">${partyList.parent_name }</h5>
-											<p class="card-text">
-												날짜 : ${partyList.meetdate}<br>인원 : ${partyList.count }
+							<!-- start column -->
+							<c:forEach var="partyList" items="${list}">
+								<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+									<div class="single-team-member">
+										<div class="team-img">
+											<a href="#"> <img src="${partyList.imgaddr}" alt=""></a>
+											<div class="team-social-icon text-center">
+												<ul>
+													<li>
+														<a class="myBtn">상세 보기</a>
+													</li>
+													<li style="display:none">
+														<input type="hidden" class="party_seq" value="${partyList.seq}">
+													</li>
+												</ul>
+											</div>
+										</div>
+										<div class="team-content text-center">
+											<h3>${partyList.title }</h3>
+											<br>
+											<h5 class="card-subtitle mb-2 text-muted">${partyList.parent_name }</h5>
+											<p>
+												날짜 : ${partyList.sDate}<br>
+												지역 : ${partyList.parent_address }
 											</p>
-											<input type="hidden" class="party_seq"
-												value="${partyList.seq}">
-											<button type="button" class="btn btn-info btn-lg myBtn">상세
-												보기</button>
+											
 										</div>
 									</div>
 								</div>
 							</c:forEach>
+							<!-- End column -->
 						</c:otherwise>
 					</c:choose>
 				</div>
-				<nav aria-label="Page navigation example">
-				  <ul class="pagination justify-content-center">
-				  	${navi}
-				  </ul>
-				</nav>
 			</div>
 		</div>
-	</div>
-	<!-- <div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-xl modal-dialog-centered"
-			role="document">
-			<div class="modal-content" id="aaa">
-			</div>
-		</div>
-	</div>
-	 -->
+	</main>
+	<!-- End Party List Section -->
+	
+	<!-- ======= Page Navi Section ======= -->
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">${navi }</ul>
+	</nav>
+	<!-- ======= End page Navi Section ======= -->
+	
+	<a href="#" class="back-to-top"> 
+		<i class="fa fa-chevron-up"></i>
+	</a>
+	
+	<!-- <div id="preloader"></div> -->
+	
+	<!-- ======= Page Modal Section ======= -->
 	<div class="modal fade" id="mymodal" role="dialog">
 		<div class="modal-dialog modal-xl">
 			<!-- Modal content-->
@@ -285,34 +407,31 @@
 			</div>
 		</div>
 	</div>
-
+	<!-- ======= End Page Modal Section ======= -->
 	<!-- ******************* -->
 	<!-- footer  -->
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 	<!-- footer  -->
 	<!-- ******************* -->
-</body>
-<script>
-	$(".myBtn").on("click", function() {
-		if ("${loginInfo.id}" == "") {
-			alert("로그인 후 이용해주세요");
-		} else {
-			var select_seq = $(this).siblings(".party_seq").val();
-			$("#aaa").empty();
-			$.ajax({
-				url:"/party/party_content_include",
-				//url : "/party/party_content_include2",
-				data : {
-					seq : select_seq
-				}
-			}).done(function(con) {
-				console.log(con);
-				$("#aaa").append(con);
+	
+	<!-- Vendor JS Files -->
+  <script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
+  <script src="/resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/resources/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="/resources/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/resources/assets/vendor/appear/jquery.appear.js"></script>
+  <script src="/resources/assets/vendor/knob/jquery.knob.js"></script>
+  <script src="/resources/assets/vendor/parallax/parallax.js"></script>
+  <script src="/resources/assets/vendor/wow/wow.min.js"></script>
+  <script src="/resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="/resources/assets/vendor/nivo-slider/js/jquery.nivo.slider.js"></script>
+  <script src="/resources/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="/resources/assets/vendor/venobox/venobox.min.js"></script>
 
-				//$("#partyModal").modal();
-				$("#mymodal").modal();
-			});
-		}
-	});
-</script>
+  <!-- Template Main JS File -->
+  <script src="/resources/assets/js/main.js"></script>
+  
+</body>
 </html>
+
+	

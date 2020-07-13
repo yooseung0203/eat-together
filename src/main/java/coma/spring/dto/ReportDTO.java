@@ -4,22 +4,24 @@ import java.sql.Timestamp;
 
 public class ReportDTO {
 	private int seq;
-	private String writer;
+	private int category;
+	private String id;
 	private String report_id;
-	private String content;
 	private Timestamp report_date;
+	private int parent_seq;
 	
 	public ReportDTO() {
 		super();
 	}
-
-	public ReportDTO(int seq, String writer, String report_id, String content, Timestamp report_date) {
+	
+	public ReportDTO(int seq, int category, String id, String report_id, Timestamp report_date, int parent_seq) {
 		super();
 		this.seq = seq;
-		this.writer = writer;
+		this.category = category;
+		this.id = id;
 		this.report_id = report_id;
-		this.content = content;
 		this.report_date = report_date;
+		this.parent_seq = parent_seq;
 	}
 	
 	public int getSeq() {
@@ -28,11 +30,17 @@ public class ReportDTO {
 	public void setSeq(int seq) {
 		this.seq = seq;
 	}
-	public String getWriter() {
-		return writer;
+	public int getCategory() {
+		return category;
 	}
-	public void setWriter(String writer) {
-		this.writer = writer;
+	public void setCategory(int category) {
+		this.category = category;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	public String getReport_id() {
 		return report_id;
@@ -40,18 +48,20 @@ public class ReportDTO {
 	public void setReport_id(String report_id) {
 		this.report_id = report_id;
 	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
 	public Timestamp getReport_date() {
 		return report_date;
 	}
 	public void setReport_date(Timestamp report_date) {
 		this.report_date = report_date;
 	}
+	public int getParent_seq() {
+		return parent_seq;
+	}
+	public void setParent_seq(int parent_seq) {
+		this.parent_seq = parent_seq;
+	}
 	
 	
+	
+
 }
