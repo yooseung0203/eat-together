@@ -217,21 +217,39 @@ public class MemberService {
 
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 
-			Random randomGenerator = new Random();
-			int randomInteger = randomGenerator.nextInt(1000);
 
 			if(mdao.selectMyInfo(id)==null) {
-				mdto.setId(id);
-				mdto.setPw("");
-				mdto.setNickname(nickname + randomInteger);
-				mdto.setBirth("1999-12-31");
-				mdto.setAccount_email("need@eat-together.com");
-				mdto.setGender(0);
-				mdto.setMember_type("kakao");
+				//by 지은, 닉네임 사용가능한 경우에는 카카오톡 정보를 그대로 가져온다_20200713
+				if(mdao.isNickAvailable(nickname)) {
+					mdto.setId(id);
+					mdto.setPw("");
+					mdto.setNickname(nickname);
+					mdto.setBirth("1999-12-31");
+					mdto.setAccount_email("need@eat-together.com");
+					mdto.setGender(0);
+					mdto.setMember_type("kakao");
 
 
-				int kakaoSignUpResult = mdao.signUpKakao(mdto);
-				System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+					int kakaoSignUpResult = mdao.signUpKakao(mdto);
+					System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+				}else {
+					//by 지은, 닉네임이 중복되는 경우에는 뒤에 증가하는 숫자를 더해주어 중복을 방지한다_20200713
+					int nickNum = 1;
+					int sum = nickNum++;
+
+					mdto.setId(id);
+					mdto.setPw("");
+					mdto.setNickname(nickname + sum);
+					mdto.setBirth("1999-12-31");
+					mdto.setAccount_email("need@eat-together.com");
+					mdto.setGender(0);
+					mdto.setMember_type("kakao");
+
+
+					int kakaoSignUpResult = mdao.signUpKakao(mdto);
+					System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+
+				}
 			}else {
 				System.out.println("이미 회원가입된 카카오계정입니다.");
 				System.out.println(mdto.getAccount_email());
