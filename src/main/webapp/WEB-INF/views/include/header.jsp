@@ -10,7 +10,7 @@
 <div class="container-fluid ">
 	<div class="header-wrap  mt-3 mb-2 px-0 mx-0">
 		<div class="row">
-			<div class="col-sm-1 logo-image ">
+			<div class="col-sm-1 mx-0 px-0 my-0 py-0 logo-image ">
 				<a href="/"><img src="/resources/img/logo.png"></a>
 			</div>
 			<div class="col-sm-9 mb-3">
@@ -20,7 +20,7 @@
 					<li class="nav-item navi-menu"><a class="nav-link "
 						href="/party/toParty_New" id="toPartyNew">모임모집</a></li>
 					<li class="nav-item navi-menu"><a class="nav-link "
-						href="/map/toMap" id="toMap">맛집검색</a></li>
+						href="/map/toMap" id="toMap">맛집지도</a></li>
 					<li class="nav-item navi-menu"><a class="nav-link "
 						href="/party/partylist" id="toPartyList">모임검색</a></li>
 					<li class="nav-item navi-menu"><a class="nav-link "
