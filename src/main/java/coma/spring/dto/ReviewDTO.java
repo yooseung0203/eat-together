@@ -12,13 +12,10 @@ public class ReviewDTO {
 	private int parent_seq;
 	private int report;
 	private String sdate;
-	
 	//by 지은, 내리뷰 페이지에서 가게명을 함께 출력하기 위한 맴버필드 추가_20200709
 	private String name;
-	
 	public ReviewDTO() {}
-
-	public ReviewDTO(int seq, String id, String content, int rating, Timestamp write_date, int parent_seq, String sdate,
+	public ReviewDTO(int seq, String id, String content, int rating, Timestamp write_date, int parent_seq, 
 			String name, int report) {
 		super();
 		this.seq = seq;
@@ -28,7 +25,7 @@ public class ReviewDTO {
 		this.write_date = write_date;
 		this.parent_seq = parent_seq;
 		this.report = report;
-		this.sdate = sdate;
+		this.sdate = new SimpleDateFormat("YYYY-MM-dd").format(write_date);
 		this.name = name;
 	}
 

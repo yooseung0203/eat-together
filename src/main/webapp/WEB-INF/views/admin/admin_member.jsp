@@ -16,9 +16,13 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
 <title>Admin-회원관리</title>
+<!-- admine용 css  -->
+<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<!-- ******************* -->
+
 </head>
 <body>
-	<div class="container-fluid mx-0 px-0">
+	<div class="container-fluid mx-0 px-0 admin_text">
 		<div class="row mx-0">
 
 			<div class="col-3 mx-0 px-0"><jsp:include
@@ -79,7 +83,7 @@
 															<td class="admin_text">${i.account_email}</td>
 															<td class="admin_text">${i.sdate}</td>
 															<td class="admin_text">${i.report_count}</td>
-															<td class="myinfo_text"><input type="checkbox"
+															<td class="admin_text"><input type="checkbox"
 																name="checkbox[]" value="${i.id}" class="checkboxes"></td>
 														</tr>
 													</c:forEach>
@@ -95,10 +99,10 @@
 							<div class="col-6">${navi}</div>
 							<div class="col-4">
 								<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
-									<button class="btn btn-primary" id="toWriteBtn">글쓰기</button>
-									<button class="btn btn-danger" id="toOut">탈퇴</button>
+									<button class="btn btn-primary admin_text" id="toWriteBtn">글쓰기</button>
+									<button class="btn btn-danger admin_text" id="toOut">탈퇴</button>
 									<label><input type="checkbox" id="checkAll"
-										class="checkAll"> <span class="label label-primary">전체선택</span>
+										class="checkAll"> <span class="label label-primary admin_text">전체선택</span>
 									</label>
 								</c:if>
 							</div>
@@ -135,9 +139,13 @@
 						ids : JSON.stringify(arr)
 					}
 				}).done(function(resp) {
+					if(resp>0){
 					alert("선택한 회원이 탈퇴 처리 되었습니다.");
 					$(this).closest("tr").remove();
 					location.reload();
+					}else{
+						alert("회원 탈퇴에 실패하였습니다.\n 관리자에게 문의하세요.");
+					}
 				})
 			}
 

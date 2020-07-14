@@ -16,6 +16,7 @@ import coma.spring.dto.MemberDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.service.PartyService;
 import coma.spring.service.ReportService;
+import coma.spring.service.ReviewService;
 
 @Controller
 @RequestMapping("/report/")
@@ -28,6 +29,9 @@ public class ReportController {
 	private PartyService pservice;
 	
 	@Autowired
+	private ReviewService rservice;
+	
+	@Autowired
 	private ReportService reposervice;
 	
 	@RequestMapping("toReport")
@@ -38,7 +42,7 @@ public class ReportController {
 	}
 	@ResponseBody
 	@RequestMapping("newReport")
-	public int newReport(HttpServletRequest request, RedirectAttributes redirectAttributes, ReportDTO rdto) {
+	public int newReport(HttpServletRequest request, RedirectAttributes redirectAttributes, ReportDTO rdto) throws Exception {
 		System.out.println("도착");
 		int result = 0;
 		Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
@@ -49,11 +53,17 @@ public class ReportController {
 		System.out.println(rdto.getParent_seq());
 		int check = reposervice.checkDupl(rdto);
 		System.out.println(check);
-		
-		if(check == 0) {
-			reposervice.newReport(rdto);
-			result = pservice.partyReport(rdto.getParent_seq());
-			System.out.println(result);
+		if(rdto.getCategory() == 0) { // 리뷰 신고
+			if(check == 0) {
+				result = rservice.report(rdto);
+				System.out.println("리뷰 신고 : " + result);
+			}
+		}else if(rdto.getCategory() == 1) { // 모임글 신고
+			if(check == 0) {
+				reposervice.newReport(rdto);
+				result = pservice.partyReport(rdto.getParent_seq());
+				System.out.println(result);
+			}
 		}
 		request.setAttribute("result", result);
 		return result;
