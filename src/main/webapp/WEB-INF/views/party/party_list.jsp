@@ -96,6 +96,8 @@ console.log(url);
 var formData = new FormData();
 console.log("시작값 : ");
 console.log(formData);
+var imgHeight = $(".imgTop").height();
+console.log(imgHeight);
 /******************* 변수 ************************/
  
 /************************* 첫  페이지 로딩 ******************************/
@@ -152,14 +154,17 @@ $(function() {
 	});
 });
 /********************* End 스크롤 페이지 로딩 **************************/
-
-$(document).ajaxStart(function(){
-	$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
+ 
+/*********************** ajax 로딩 이미지 ****************************/ 
+$(function(){
+	$(document).ajaxStart(function(){
+		$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
+	})
+	$(document).ajaxStop(function(){
+		$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
+	});	
 })
-$(document).ajaxStop(function(){
-	$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
-});
-
+/********************* End ajax 로딩 이미지 **************************/
 
 /********************* 기본 페이지 로딩 ajax **************************/
 function partySearch(url,formData,cpage){
@@ -201,11 +206,11 @@ $(function(){
 	$(document).on('submit','#idForm',function(e) {
 		console.log("상세검색 준비");
 		cpage=1;
-		//url = $(this).attr('action');
+		
 		formData = JSON.stringify($("#idForm").serializeArray());
 		console.log("검색 시작: " );
 		console.log(formData);
-		//form = $('#idForm').serializeArray();
+		
 	    e.preventDefault(); // avoid to execute the actual submit of the form.
 	    
 		$("#start_list").empty();
@@ -325,6 +330,7 @@ $(function(){
 	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.	
 });
 /***************** End예지 페이지 로딩 스피너 **************/
+
 </script>
 <style>
 * {
@@ -332,7 +338,7 @@ $(function(){
 }
 
 div{
-	border: 0px solid black;
+	border: 1px solid black;
 }
 
 .aa {
@@ -347,6 +353,47 @@ div{
 
 .partylist {
 	margin-bottom: 15px;
+}
+
+#Progress_Loading{
+	position:fixed;
+	height:100vh;
+	width:100vw;
+    background-color: rgba( 255, 255, 255, 0.5 );
+	z-index:100;
+}
+
+#Progress_Loading img{
+	position:absolute;
+	left: 50%;
+	top: 40%;
+}
+
+
+.thumbnail-wrapper {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail {
+  position: relative;
+  padding-top: 100%;
+  overflow: hidden;
+}
+
+.thumbnail-centered {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translate(50%, 50%);
+}
+
+.thumbnail-img {
+/*   max-width: 100%; */
+/*   height: 박스의 height와 같아야 한다. */
+  transform: translate(-50%, -50%);
 }
 </style>
 </head>
@@ -369,25 +416,35 @@ div{
 			<c:forEach var="top" items="${top}" varStatus="status">
 				<div class="col card-deck">
 					<div class="card partylist">
-						<img src="${imglist2[status.index]}" class="card-img-top">
+						<div class="thumbnail-wrapper imgBox">
+							<div class="thumbnail">
+								<div class="thumbnail-centered">
+									<img class="thumbnail-img"
+										src="${imglist2[status.index]}" />
+								</div>
+							</div>
+						</div>
+						<!-- <img src="${imglist2[status.index]}" class="card-img-top"> -->
 						<div class="card-body cardedit">
 							<h5 class="card-title store_name">${top.name }</h5>
 							<p class="card-text">
-							<c:choose>
-								<c:when test="${empty review[top.seq].content }">
+								<c:choose>
+									<c:when test="${empty review[top.seq].content }">
 									${top.address }
 								</c:when>
-								<c:otherwise>
-									<c:out value="${review[top.seq].content }"/>\
+									<c:otherwise>
+										<c:out value="${review[top.seq].content }" />\
 									<br>
 									- by ${review[top.seq].id }	
 								</c:otherwise>
-							</c:choose>
+								</c:choose>
 							</p>
-							<input type="hidden" class="store_place_id" value="${top.place_id}">
-							<input type="hidden" class="store_address" value="${top.address}">
-							<input type="hidden" class="store_category" value="${top.category}">
-							<button type="button" class="btn btn-info btn-lg topBtn">모집하러 가기</button>
+							<input type="hidden" class="store_place_id"
+								value="${top.place_id}"> <input type="hidden"
+								class="store_address" value="${top.address}"> <input
+								type="hidden" class="store_category" value="${top.category}">
+							<button type="button" class="btn btn-info btn-lg topBtn">모집하러
+								가기</button>
 						</div>
 					</div>
 				</div>
@@ -442,6 +499,12 @@ div{
 	</div>
 	<!-- ============ End Party List Search Section ============ -->
 	
+	<!-- =========== Loding Spinner Section ============= -->
+	<div id = "Progress_Loading"><!-- 로딩바 -->
+		<img src="/resources/img/Progress_Loading.gif"/>
+	</div>
+	<!-- ========== End Loding Spinner Section ========== -->
+	
 	<!-- ======= Party List Section ======= -->
 	<main id="main">
 		<div id="team" class="our-team-area area-padding">
@@ -460,12 +523,6 @@ div{
 		</div>
 	</main>
 	<!-- End Party List Section -->
-	
-	<!-- =========== Loding Spinner Section ============= -->
-	<div id = "Progress_Loading"><!-- 로딩바 -->
-		<img src="/resources/img/Progress_Loading.gif"/>
-	</div>
-	<!-- ========== End Loding Spinner Section ========== -->
 	
 	<!-- =========== To TOP Section ============= -->
 	<a href="#" class="back-to-top"> 
