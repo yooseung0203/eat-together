@@ -1,7 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<div class="container-fluid mx-0 sidebar">
+<!-- admine용 css  -->
+<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<!-- ******************* -->
+<div class="container-fluid mx-0 sidebar admin_menubar_text">
            <div class="row logo">
                 <div class="col">
                     <img src="/resources/img/admin-logo.png">

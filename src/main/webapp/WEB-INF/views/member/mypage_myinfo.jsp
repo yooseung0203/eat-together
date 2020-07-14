@@ -51,7 +51,9 @@
 
 
 	<div id=mypage-container>
-		<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
+		<div id=menubar-container>
+			<jsp:include page="/WEB-INF/views/include/menubar.jsp" />
+		</div>
 		<div id=contents>
 			<table class="table" id="mypage_table">
 				<thead class="thead-dark">
