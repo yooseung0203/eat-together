@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import coma.spring.dto.MapDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.dto.TopFiveStoreDTO;
+import coma.spring.statics.Configuration;
 
 @Repository
 public class ReviewDAO {
@@ -27,6 +28,27 @@ public class ReviewDAO {
 	//by지은, 마이페이지 내리뷰리스트 출력을 위한 select문 수정_20200709
 	public List<ReviewDTO> selectById(String id)throws Exception{
 		return mybatis.selectList("Review.selectById", id);
+	}
+	
+	public int report(int seq) throws Exception{
+		return mybatis.update("Review.updateReport", seq);
+	}
+	// 예지 리뷰 총 갯수
+	public int getArticleCount() throws Exception{
+		return mybatis.selectOne("Review.getArticleCount");
+	}
+	// 예지 리뷰 리스트 : 정렬 검색
+	public List<ReviewDTO> selectByPageAndOption(int cpage, Object option) {
+		int start = cpage * Configuration.navCountPerPage - (Configuration.navCountPerPage-1);
+		int end = start + (Configuration.navCountPerPage-1);
+		Map<String, Object> param = new HashMap<>();
+		param.put("start", start);
+		param.put("end", end);
+		param.put("targetColumn", option);
+		return mybatis.selectList("Review.selectByPageAndOption",param);
+	}
+	public ReviewDTO selectBySeq(int seq) {
+		return mybatis.selectOne("Review.selectBySeq",seq);
 	}
 	//by지은, 마이페이지 내리뷰리스트 출력을 위한 네비바_20200707
 	public int getMyPageArticleCount(String id)throws Exception{

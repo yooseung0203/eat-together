@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.dto.ReviewFileDTO;
 import coma.spring.service.ReviewService;
@@ -74,8 +76,12 @@ public class ReviewController {
 		return mav;
 	}
 	
-	/*
-	 * @RequestMapping("") public String reviewReport() throws Exception{ return "";
-	 * }
-	 */
+	// 예지 : 리뷰 신고 기능
+	@RequestMapping("report")
+	public String reviewReport(int seq, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception{
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto.getNickname();
+		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,0,id,request.getParameter("report_id"),null,seq));
+		return "redirect:/report/newReport";
+	}
 }

@@ -5,9 +5,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>지도 생성하기</title>
+<title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?as'></script>
+<script src='/resources/js/map.js?asa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aa">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaaa">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -162,6 +162,7 @@
 				<div class="choose_info">
 					<c:if test="${not empty mapdto}">
 						<div class="store_info mx-auto">
+							<div class="name">${mapdto.name}</div>
 							<div class="featImgWrap">
 								<div class="cropping">
 									<img src="${img}" id="mapimg">
@@ -169,7 +170,6 @@
 							</div>
 							<div class="category">${mapdto.category}</div>
 							<div class="place_id" style="display:none;">${mapdto.place_id}</div>
-							<div class="name">${mapdto.name}</div>
 							<div class="address">${mapdto.address}</div>
 							<div class="road_address">${mapdto.road_address}</div>
 							<div class="rating_avg">
@@ -259,22 +259,22 @@
 					</c:if>
 					<c:if test="${not empty mapdto}">
 						<div class="partylist">
-							<b>진행중인 모임</b>
+							<p>진행중인 모임</p>
+							<c:if test="${empty partyMap}">
+								<small>개설된 모임이 없습니다.</small>
+							</c:if>
 							<c:if test="${not empty partyMap}">
 								<c:forEach var="i" items="${partyMap}">
-									<div class="party">
-										<div class="title">${i.key.title}</div>
-										<div class="seq" style="display: none;">${i.key.seq}</div>
-										<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
-										<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
-										<c:if test="${i.key.status eq 1}">
-											<button type="button" class="btn btn-primary join"
-												data-toggle="modal" data-target="#partyModal">참가</button>										
-										</c:if>
-										<c:if test="${i.key.status eq 0}">
-											<button type="button" class="btn btn-primary endParty" disabled>종료</button>
-										</c:if>
-									</div>
+									<c:if test="${i.key.status eq 1}">
+										<div class="party">
+											<div class="title">${i.key.title}</div>
+											<div class="seq" style="display: none;">${i.key.seq}</div>
+											<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
+											<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
+												<button type="button" class="btn btn-primary join"
+													data-toggle="modal" data-target="#partyModal">참가</button>										
+										</div>
+									</c:if>
 								</c:forEach>
 							</c:if>
 							<nav aria-label="Page navigation example">
@@ -345,7 +345,7 @@
 									</div>
 									<div class="content">${i.key.content}</div>
 									<div class="bottom">
-										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><a href="#">신고</a>
+										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'${i.key.content}','${i.key.id}')">신고</button>
 									</div>
 								</div>
 							</c:forEach>
@@ -357,8 +357,10 @@
 
 		</div>
 		<div id="map"></div>
-		<div class="foodInsert text-center"><i class="fas fa-hamburger"></i></div>
-		<div class="cafeInsert text-center"><i class="fas fa-coffee"></i></div>
+		<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
+			<div class="foodInsert text-center"><i class="fas fa-hamburger"></i></div>
+			<div class="cafeInsert text-center"><i class="fas fa-coffee"></i></div>
+		</c:if>
 		
 		<!-- 맛집 참가 modal -->
 		<div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
