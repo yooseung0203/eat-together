@@ -5,7 +5,7 @@
 	<insert id="signUp">
 		insert into member
 		values(#{mdto.id},#{mdto.pw},#{mdto.nickname},#{mdto.birth},#{mdto.account_email},0,
-		default ,#{mfdto.sysname},#{mdto.gender})
+		default ,#{mfdto.sysname},#{mdto.gender}, default)
 	</insert>
 
 	<!-- by 지은, 파일업로드를 위해서 db에는 profile컬럼을 생성하였으나 dto에는 임의로 sysname이라는 맴버필드를 
@@ -21,7 +21,7 @@
 	<insert id="signUpKakao">
 		insert into member
 		values(#{id},#{pw},#{nickname},#{birth},#{account_email},0, default,
-		default, default)
+		default, default, #{member_type})
 	</insert>
 
 	<select id="logIn" resultType="int">
@@ -70,6 +70,10 @@
 	<select id="emailCheck" resultType="coma.spring.dto.MemberDTO">
 		select * from member where
 		account_email=#{value}
+	</select>
+
+	<select id="deleteMember" resultType="int">
+		delete from member where id=#{value}
 	</select>
 
 </mapper>

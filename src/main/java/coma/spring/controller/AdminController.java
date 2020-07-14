@@ -10,7 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -108,6 +110,24 @@ public class AdminController {
 		mav.addObject("navi", navi);
 		System.out.println(option + "검색성공");
 		return mav;
+	}
+	
+	//by 지은, 체크한 회원 탈퇴시키기_20200713
+	@RequestMapping("memberOutProc")
+	@ResponseBody
+	public int memberOutProc(HttpServletRequest request)throws Exception{
+		String data = request.getParameter("ids"); 
+        String ids = data.substring(2,data.length()-2);
+        String[] checkList = ids.split("\",\"");
+  
+		System.out.println("탈퇴 선택한 회원 수 : " + checkList.length);
+		
+		for(int a = 0; a<checkList.length;a++) {
+			System.out.println(checkList[a]);
+		}
+		int resp = aservice.memberOut(checkList);
+		
+		return resp;
 	}
 
 	//수지 FAQ 게시물 출력하기
