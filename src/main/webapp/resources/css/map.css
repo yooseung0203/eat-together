@@ -18,6 +18,11 @@
 	    background-color: #fcfcfc;
 	    font-family: 'InfinitySans-RegularA1';
 	}
+	.navi_btn{height:50px;width:30px;
+	position:absolute;right:-20px;top:400px;
+	background-color:#fcfcfc;border-bottom-right-radius: 25px;border-top-right-radius: 25px;z-index:-1;}
+	.navi_btn:hover{cursor:pointer;}
+	.navi_btn i{line-height:50px;padding-left:12px;color:#ff9900;}
 	#map{
 		z-index: 10;
 		position:fixed;
@@ -39,6 +44,14 @@
 	#backMap:hover{background-color:white;}
 	#backMap:hover i{color: #ff9900;}
 	#backMap i{color: white;}
+	#back{background-color:#ff9900;float:right;border-radius:60px;border:none;height:30px;width:30px;margin-bottom:10px;margin-left:10px;}
+	#back:hover{background-color:white;}
+	#back:hover i{color: #ff9900;}
+	#back i{color: white;}
+	#refresh{background-color:#ff9900;float:right;border-radius:60px;border:none;height:30px;width:30px;margin-bottom:10px;margin-left:10px;}
+	#refresh:hover{background-color:white;}
+	#refresh:hover i{color: #ff9900;}
+	#refresh i{color: white;}
 	.search_btn{
 	    background-color: white;
 	 	height: 30px; width: 60px;
