@@ -54,12 +54,15 @@ public class QuestionController {
 	@RequestMapping("questionView")
 	public String QuestionView(HttpServletRequest request,int msg_seq)throws Exception{
 		QuestionDTO qdto = qservice.selectBySeq(msg_seq);
+		
 		request.setAttribute("qdto", qdto);
 		return "question/questionView";
 	}
 	@RequestMapping("questionViewAdmin")
 	public String QuestionViewAdmin(HttpServletRequest request,int msg_seq)throws Exception{
 		QuestionDTO qdto = qservice.selectBySeq(msg_seq);
+
+		System.out.println("viewcount : "+qdto.getMsg_view());
 		request.setAttribute("qdto", qdto);
 		return "admin/admin_question_view";
 	}
