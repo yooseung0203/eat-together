@@ -87,25 +87,25 @@
 
 <title>모임 리스트</title>
 <script>
-/*******************   무한 스크롤 ************************/
- 
-
-
+/******************* 변수 ************************/
 var cpage = 1; //페이징과 같은 방식이라고 생각하면 된다. 
-
-//var form = $('#idForm').serializeArray();
-//console.log(form);
 
 var url = "/party/partysearch";
 console.log(url);
+
 var formData = new FormData();
 console.log("시작값 : ");
 console.log(formData);
+/******************* 변수 ************************/
+ 
+/************************* 첫  페이지 로딩 ******************************/
 window.onload = $(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
 	getPartyList(cpage);
 	cpage++;
 });
+/*********************** End 첫  페이지 로딩 ****************************/
 
+/*********************** 스크롤 페이지 로딩 ****************************/
 function getDocHeight() {
     var D = document;
     return Math.max(
@@ -122,8 +122,7 @@ function test() {
     };
 }
 
-$(function() {
-	
+$(function() {	
 	$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
 		console.log(getDocHeight());
 		if ($(window).scrollTop() == getDocHeight() - $(window).height()) {
@@ -139,8 +138,7 @@ $(function() {
 			if($("#start_list > div").last().attr('id') == "endSearch"){
 				alert("더 이상 검색할 내용이 없습니다.");
 			}
-			else{	
-				
+			else{					
 				if(check == "string"){
 					cpage++;
 					partySearch(url,formData,cpage);
@@ -149,12 +147,11 @@ $(function() {
 					getPartyList(cpage);
 					cpage++;
 				}
-				
 			}	
 		}
 	});
 });
-
+/********************* End 스크롤 페이지 로딩 **************************/
 
 $(document).ajaxStart(function(){
 	$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
@@ -163,21 +160,8 @@ $(document).ajaxStop(function(){
 	$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
 });
 
-function getPartyList(cpage){		 
-    $.ajax({
-        type : 'get',  
-        data : {"cpage" : cpage},
-        url : '/party/getPartyList',
-        success : function(partyList) {
-        	$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+ "기본 검색 <span></div>");
-            $("#start_list").append(partyList);         
-       },
-       error:function(e){
-    	   alert("데이터를 가져오는데 실패하였습니다.");        
-       }
-    });
-}
 
+/********************* 기본 페이지 로딩 ajax **************************/
 function partySearch(url,formData,cpage){
 	console.log(url);
 	$.ajax({
@@ -193,10 +177,26 @@ function partySearch(url,formData,cpage){
 	    }
 	});
 }
+/******************* End 기본 페이지 로딩 ajax ************************/
+ 
+/*********************** 통합 검색 페이지 로딩 ajax ***********************/
+function getPartyList(cpage){		 
+    $.ajax({
+        type : 'get',  
+        data : {"cpage" : cpage},
+        url : '/party/getPartyList',
+        success : function(partyList) {
+        	$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+ "기본 검색 <span></div>");
+            $("#start_list").append(partyList);         
+       },
+       error:function(e){
+    	   alert("데이터를 가져오는데 실패하였습니다.");        
+       }
+    });
+}
+/********************* End 통합 검색 페이지 로딩 ajax *********************/
 
-/*******************   무한 스크롤 ************************/
-
-/*******************   검색 스크롤 ************************/
+/************************ 통합 검색  *****************************/
 $(function(){
 	$(document).on('submit','#idForm',function(e) {
 		console.log("상세검색 준비");
@@ -212,9 +212,9 @@ $(function(){
 		partySearch(url,formData,cpage);
 	});	
 });
-	/*******************  검색 스크롤 ************************/
+/********************** End 통합 검색 ***************************/
 
-	/******************* 상세 보기 ************************/
+/******************* 태훈 모임 내용 모달창 생성 ************************/
 $(function() {
 	console.log("버튼 기능 준비");		
 	$(document).on('click', '.myBtn', function() {
@@ -236,11 +236,12 @@ $(function() {
 		}
 	});
 });
-	/******************* 상세 보기 ************************/
-	/*****************************  태훈 party list 스크립 ***********************************************/
+/***************** End 태훈 모임 내용 모달창 생성 **********************/
+
+/*****************************************  태훈  지역 검색 스크립트  ***********************************************/
 $(function() {
 	
-	/******************* 지역 선택 ************************/
+	/******************* 지역 리스트 ************************/
 	var area0 = [ "시/도 선택", "서울", "인천", "대전", "광주", "대구", "울산", "부산", "경기",
 			"강원", "충북", "충남", "전북", "전남", "경북", "경남", "제주특별자치도" ];
 	var area1 = [ "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구",
@@ -280,6 +281,7 @@ $(function() {
 				"창원시", "통영시", "거창군", "고성군", "남해군", "산청군", "의령군", "창녕군", "하동군",
 				"함안군", "함양군", "합천군" ];
 	var area16 = [ "서귀포시", "제주시" ];
+	/******************* 지역 리스트 ************************/
 	
 	// 시/도 선택 박스 초기화
 	$.each(area0,function() {
@@ -299,26 +301,30 @@ $(function() {
 			});
 		}
 	});
-		/******************* 지역 선택 ************************/
-
-		/******************* 인기 맛집  모집하러기 ************************/
-	$(".topBtn").on("click", function() {
-		location.href = "/map/mapToParty_New?parent_name="
-							+ $(this).siblings(".store_name").html()
-							+ "&parent_address="
-							+ $(this).siblings(".store_address").val()
-							+ "&img=" + $(this).parent().siblings().attr("src")
-							+ "&place_id="
-							+ $(this).siblings(".store_place_id").val()
-							+ "&category="
-							+ $(this).siblings(".store_category").val();
-	});
-		/******************* 인기 맛집  모집하러기 ************************/
-
-	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
-
-/*****************************  태훈 party list 스크립 ***********************************************/
 });
+/*************************************** End 태훈  지역 검색 스크립트  *********************************************/
+
+/**************************** 인기 맛집  모집하러기 *********************************/
+ $(function(){
+	 $(".topBtn").on("click", function() {
+			location.href = "/map/mapToParty_New?parent_name="
+								+ $(this).siblings(".store_name").html()
+								+ "&parent_address="
+								+ $(this).siblings(".store_address").val()
+								+ "&img=" + $(this).parent().siblings().attr("src")
+								+ "&place_id="
+								+ $(this).siblings(".store_place_id").val()
+								+ "&category="
+								+ $(this).siblings(".store_category").val();
+		});	 
+ });
+/************************** End 인기 맛집  모집하러기 ********************************/
+ 
+/***************** by 예지 페이지 로딩 스피너 **************/ 
+$(function(){
+	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.	
+});
+/***************** End예지 페이지 로딩 스피너 **************/
 </script>
 <style>
 * {

@@ -4,11 +4,9 @@ function toChatroom(num){
 	var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"
 		window.open("/chat/chatroom?roomNum="+num, num, option);
 }
-
 /********************************* 채팅방으로 이동 ************************************/
 
 /********************************* 모임 게시글 신고 ************************************/
-
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
 	var writer = $(".party_writer").html();
@@ -31,7 +29,7 @@ function partyReport(num){
 		}
 	});	
 }
- 
+
 /********************************* 채팅방으로 이동 ************************************/
 
 /*****************************  수지 party content 스크립 ***********************************************/
@@ -42,8 +40,7 @@ $(document).ready(function(){
 	console.log(stime);
 	$("#time").html(stime);
 });
-
-
+ 
 $(function () {
 	
 	var party_seq = $("#party_seq").val();

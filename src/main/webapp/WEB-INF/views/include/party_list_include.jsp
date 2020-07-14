@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:choose>
 	<c:when test="${empty list}">
-		<div class="col-sm-12 col-md-3" id="endSearch">
+		<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" id="endSearch">
 			<span>검색 된 내용이 없습니다.</span>
 		</div>
 	</c:when>
