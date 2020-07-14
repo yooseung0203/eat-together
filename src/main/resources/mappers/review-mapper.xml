@@ -10,8 +10,8 @@
 		values(review_file_seq.nextval,#{sysname},#{oriname},review_seq.currval)
 	</insert>
 	<select id="selectByPseq" resultType="coma.spring.dto.ReviewDTO">
-		select * from review where
-		parent_seq = #{parent_seq} order by 1 desc
+		select review.*, member.profile from review, member where
+		review.parent_seq = #{parent_seq} and review.id = member.id order by 1 desc
 	</select>
 	<select id="selectFileByPseq"
 		resultType="coma.spring.dto.ReviewFileDTO">
