@@ -105,22 +105,23 @@ public class AdminController {
 		System.out.println(option + "검색성공");
 		return mav;
 	}
-	
-	//by 지은, 체크한 회원 탈퇴시키기_20200713
+
+	//by 지은, 체크한 회원 탈퇴시키기_20200714
 	@RequestMapping("memberOutProc")
 	@ResponseBody
 	public int memberOutProc(HttpServletRequest request)throws Exception{
 		String data = request.getParameter("ids"); 
-        String ids = data.substring(2,data.length()-2);
-        String[] checkList = ids.split("\",\"");
-  
+		String ids = data.substring(2,data.length()-2);
+		String[] checkList = ids.split("\",\"");
+
 		System.out.println("탈퇴 선택한 회원 수 : " + checkList.length);
-		
+
 		for(int a = 0; a<checkList.length;a++) {
 			System.out.println(checkList[a]);
 		}
 		int resp = aservice.memberOut(checkList);
-		
+
+		System.out.println("탈퇴된 회원수 : " + resp);
 		return resp;
 	}
 
@@ -174,59 +175,59 @@ public class AdminController {
 			return "/error/adminpermission";
 		}
 	}
-	
+
 	//by 수지, 회원정보 옵션 검색하기
-		@RequestMapping("partyByOption")
-		public ModelAndView partyByOption(HttpServletRequest request)throws Exception {
-			ModelAndView mav = new ModelAndView();
-			mav.setViewName("/admin/admin_party");
-			Object option;
+	@RequestMapping("partyByOption")
+	public ModelAndView partyByOption(HttpServletRequest request)throws Exception {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("/admin/admin_party");
+		Object option;
 
-			if(request.getParameter("option")!=null) {
-				option = request.getParameter("option");
-				session.setAttribute("option", option);
-			}else {
-				option = session.getAttribute("option");
-			}
-
-			int cpage=1;
-			try {
-				cpage = Integer.parseInt(request.getParameter("cpage"));
-			}catch(Exception e) {
-
-			}
-			List<PartyDTO> list = aservice.partyByOption(cpage, option);
-			String navi = aservice.getSelectPartyPageNav(cpage, option);
-
-			mav.addObject("list", list);
-			mav.addObject("navi", navi);
-			System.out.println(option + "검색성공");
-			return mav;
+		if(request.getParameter("option")!=null) {
+			option = request.getParameter("option");
+			session.setAttribute("option", option);
+		}else {
+			option = session.getAttribute("option");
 		}
-		
-		// 수지 모임 글 보기
-		@RequestMapping(value="admin_party_content")
-		public String party_content(String seq, HttpServletRequest request) throws Exception {
-			PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
-			String img = pservice.clew(content.getParent_name());
-			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-			String id = account.getId();
-			String nickname = account.getNickname();
-			boolean partyFullCheck = pservice.isPartyfull(seq);
-			boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
-			
-//			if(partyParticipantCheck) {
-//				request.setAttribute("participant", 1);
-//			}
-			
-			PartyCountDTO pcdto = pservice.getPartyCounts(seq);
 
-			request.setAttribute("img", img);
-			request.setAttribute("con",content);
-			request.setAttribute("party", pcdto);
-			request.setAttribute("account", account);
-			request.setAttribute("partyFullCheck", partyFullCheck);
-			request.setAttribute("partyParticipantCheck", partyParticipantCheck);
-			return "/admin/admin_party_content";
+		int cpage=1;
+		try {
+			cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
+
 		}
+		List<PartyDTO> list = aservice.partyByOption(cpage, option);
+		String navi = aservice.getSelectPartyPageNav(cpage, option);
+
+		mav.addObject("list", list);
+		mav.addObject("navi", navi);
+		System.out.println(option + "검색성공");
+		return mav;
+	}
+
+	// 수지 모임 글 보기
+	@RequestMapping(value="admin_party_content")
+	public String party_content(String seq, HttpServletRequest request) throws Exception {
+		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
+		String img = pservice.clew(content.getParent_name());
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String id = account.getId();
+		String nickname = account.getNickname();
+		boolean partyFullCheck = pservice.isPartyfull(seq);
+		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
+
+		//			if(partyParticipantCheck) {
+		//				request.setAttribute("participant", 1);
+		//			}
+
+		PartyCountDTO pcdto = pservice.getPartyCounts(seq);
+
+		request.setAttribute("img", img);
+		request.setAttribute("con",content);
+		request.setAttribute("party", pcdto);
+		request.setAttribute("account", account);
+		request.setAttribute("partyFullCheck", partyFullCheck);
+		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
+		return "/admin/admin_party_content";
+	}
 }

@@ -26,13 +26,14 @@
 		#{end}
 	</select>
 
-	<!-- by 지은, 회원탈퇴 처리하기 -->
-	<delete id="memberOut">
+	<!-- by 지은, 회원탈퇴 처리하기_20200714 -->
+	<delete id="memberOut" parameterType="map">
 		delete from member where id in
-		<foreach collection="checkList" item="i" open="("
-			close=")" separator=",">
-			#{i.value}
+		<foreach collection="list" item="item" index="index"
+			separator="," open="(" close=")">
+			#{item,jdbcType=VARCHAR}
 		</foreach>
+
 	</delete>
 
 	<!-- by 수지, 모임글 리스트 뽑기 -->

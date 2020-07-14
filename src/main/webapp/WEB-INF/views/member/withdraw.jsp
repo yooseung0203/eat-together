@@ -66,7 +66,9 @@
 					<label for="account_email" class="withdraw_text">이메일</label> <input
 						type="text" class="form-control" id="account_email"
 						name="account_email" placeholder="ex)eat-together@naver.com">
-					<input type=button id=mail value="인증하기" class="btn btn-warning"><br>
+					<input type=button id=mail value="인증하기" class="btn btn-warning">
+					<button type="button" class="btn btn-dark withdraw_text" id="back">되돌아가기</button>
+					<br><br>
 					<div id=mail_div style="display: none;">
 						인증번호 : <input type=text id=mail_text>
 						<button type=button id=mail_accept class="btn btn-light">인증</button>
@@ -76,11 +78,13 @@
 							id="withdrawBtn">탈퇴하기</button>
 					</div>
 				</div>
-			</fieldset>
-			<button type="button" class="btn btn-dark withdraw_text" id="back">되돌아가기</button>
-		</form>
 
-		<script>
+			</fieldset>
+
+		</form>
+	</div>
+
+	<script>
 		//메일 인증_resp값이 text이므로 dataType을 text로 수정해야 제대로 작동함_20200709
 		$("#mail").on("click", function() {
 			if ($("#account_email").val() == "") {
@@ -157,12 +161,12 @@
 		</script>
 
 
-		<!-- ******************* -->
-		<!-- footer  -->
-		<div id=footer-container>
-			<jsp:include page="/WEB-INF/views/include/footer.jsp" />
-		</div>
-		<!-- footer  -->
-		<!-- ******************* -->
+	<!-- ******************* -->
+	<!-- footer  -->
+	<div id=footer-container>
+		<jsp:include page="/WEB-INF/views/include/footer.jsp" />
+	</div>
+	<!-- footer  -->
+	<!-- ******************* -->
 </body>
 </html>
