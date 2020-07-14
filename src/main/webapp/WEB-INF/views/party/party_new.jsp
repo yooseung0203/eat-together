@@ -521,8 +521,8 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-4" id="img-area">
-						<img src="${img}" width="300px" id="storeimg">
+					<div class="col-12 col-sm-4 mt-5 pt-5" id="img-area">
+						<img src="${img}" width="350px" id="storeimg">
 					</div>
 				</div>
 			</div>

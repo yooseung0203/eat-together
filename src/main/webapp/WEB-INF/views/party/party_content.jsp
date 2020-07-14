@@ -77,10 +77,19 @@ function partyReport(num){
 		success : function(result) {
 			if (result == 1){ 
 				alert("신고가 정상적으로 접수되었습니다.");	
+				
+				if (self.name != 'reload') {
+			         self.name = 'reload';
+			         self.location.reload(true);
+			     }
+			     else self.name = ''; 
 			}
 			else{
 				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
 			}
+			
+			
+			
 		},
 		error:function(e){
 			console.log("error");
@@ -115,9 +124,9 @@ $(document).ready(function(){
 		
 		$("#toPartyJoin").on("click",function(){ //모임가입
 			location.href="/party/partyJoin?seq=${con.seq}";
-			
-			
 		});
+		
+		
 		
 		// 태훈 신고
 		$("#partyReport").on("click", function() {
@@ -133,14 +142,25 @@ $(document).ready(function(){
 		});
 		
 		$("#toExitParty").on("click",function(){
-			toExitParty(${con.seq});
+			var ask = confirm("정말 모임을 나가시겠습니까?");
+			if (ask) {
+			location.href= "/party/toExitParty?seq=${con.seq}";
+			}
 		});
         
 		
 		$("#toStopRecruit").on("click",function(){
-			var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
+			var ask = confirm("정말 모집을 종료하시겠습니까?");
 			if (ask) {
-			location.href= "/party/stopRecruit?seq=${con.seq}";
+			location.href= "/party/stopRecruit?seq=${con.seq}&writer=${con.writer}";
+			}
+		});
+		
+
+		$("#torestartRecruit").on("click",function(){
+			var ask = confirm("모집을 다시 시작하겠습니까?");
+			if (ask) {
+			location.href= "/party/restartRecruit?seq=${con.seq}&writer=${con.writer}";
 			}
 		});
 
@@ -282,7 +302,7 @@ $(document).ready(function(){
 				<div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-5">
+				<div class="col-sm-5 mt-5 pt-5">
 					<div class="featImgWrap">
 						<div class="cropping">
 							<img src="${con.imgaddr}" id="img">
@@ -291,11 +311,11 @@ $(document).ready(function(){
 				</div>
 			</div>
 			<div class="row mb-1">
-				<div class="col-sm-2 party-titlelabel">상호명</div>
-				<div class="col-sm-3">${con.parent_name}</div>
+				<div class="col-sm-1 party-titlelabel">상호명</div>
+				<div class="col-sm-4">${con.parent_name}</div>
 			</div>
 			<div class="row mb-1">
-				<div class="col-sm-2 party-titlelabel">위치</div>
+				<div class="col-sm-1 party-titlelabel">위치</div>
 				<div class="col-sm-10">${con.parent_address}</div>
 			</div>
 			<%-- <div class="row mb-1">
@@ -305,21 +325,21 @@ $(document).ready(function(){
 				</div>
 			</div> --%>
 			<div class="row mb-1">
-				<div class="col-sm-2 party-titlelabel">모임날짜</div>
+				<div class="col-sm-1 party-titlelabel">모임날짜</div>
 				<div class="col-sm-2">${con.sDate }</div>
 			</div>
 			<div class="row mb-1">
-				<div class="col-sm-2 party-titlelabel">시간</div>
+				<div class="col-sm-1 party-titlelabel">시간</div>
 				<div class="col-sm-2" id="time"></div>
 			</div>
 			<div class="row mb-1">
-				<div class="col-sm-2 party-titlelabel">인원</div>
+				<div class="col-sm-1 party-titlelabel">인원</div>
 				<div class="col-sm-4">현재 참여자 ${party.count} 명 / 총 모집인원
 					${con.count} 명</div>
 
 			</div>
 			<div class="row mb-1">
-				<div class="col-sm-2 party-titlelabel">멤버구성</div>
+				<div class="col-sm-1 party-titlelabel">멤버구성</div>
 				<div class="col-sm-10">
 					<c:choose>
 						<c:when test="${con.gender  eq 'm'}">남자만</c:when>
@@ -334,12 +354,12 @@ $(document).ready(function(){
 
 
 			<div class="row mb-1">
-				<div class="col-sm-2 party-titlelabel">연령대</div>
+				<div class="col-sm-1 party-titlelabel">연령대</div>
 				<div class="col-sm-10">${con.age}</div>
 			</div>
 
 			<div class="row mb-1" id="adult_q">
-				<div class="col-sm-2 party-titlelabel">음주</div>
+				<div class="col-sm-1 party-titlelabel">음주</div>
 				<div class="col-sm-10">
 					<c:choose>
 						<c:when test="${con.drinking  eq '1'}">음주OK</c:when>
@@ -349,13 +369,13 @@ $(document).ready(function(){
 				</div>
 			</div>
 			<div class="row mb-1">
-				<div class="col-2 party-titlelabel">소개</div>
+				<div class="col-1 party-titlelabel">소개</div>
 				<div class="col-10">
 					<c:out value='${con.content}' />
 				</div>
 			</div>
 			<div class="row mb-1">
-				<div class="col-2 party-titlelabel">SNS공유</div>
+				<div class="col-1 party-titlelabel">SNS공유</div>
 				<div class="col-10">
 
 					<!-- 네이버 블로그/카페 공유 -->
@@ -382,7 +402,7 @@ $(document).ready(function(){
 			<div class="row mb-2">
 				<div class="col-12">
 					<c:choose>
-						<c:when test="${partyFullCheck eq false && partyParticipantCheck eq false}">
+						<c:when test="${(partyFullCheck eq false && con.status eq 1 ) && partyParticipantCheck eq false}">
 							<c:if test="${ (sessionScope.loginInfo.gender eq 1 &&  con.gender eq 'm') || (sessionScope.loginInfo.gender eq 2 && con.gender eq'f') || con.gender eq 'a' }">
 								<button type="button" id="toPartyJoin" class="btn btn-success">모임참가하기</button>
 							</c:if>

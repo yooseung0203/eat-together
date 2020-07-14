@@ -27,7 +27,7 @@
 			<div class="col-sm-1 ml-2 mr-0 px-0 my-0 py-0 logo-image ">
 				<a href="/"><img class="mx-0 px-0 my-0 py-0" src="/resources/img/logo.png"></a>
 			</div>
-			<div class="col-sm-8 mb-3">
+			<div class="col-sm-7 mb-3">
 				<ul class="nav">
 					<li class="nav-item navi-menu"><a class="nav-link "
 						href="/info/toIntroduction">사이트소개</a></li>
@@ -54,7 +54,7 @@
 				</ul>
 			</div>
 
-			<div class="col-sm-1">
+			<div class="col-sm-2 px-0 mx-0">
 				<div class="navi-menu">
 					<c:choose>
 						<c:when test="${loginInfo.id!=null && newMsg!=0}">
@@ -79,14 +79,15 @@
 					<c:choose>
 						<c:when test="${loginInfo.id == 'administrator'}">
 							<div class="col-sm-1 text-right">
-								<span class="main-login"> 관리자님, 환영합니다. / <a
+								<span class="main-login"> 관리자님, 환영합니다. 
+								<br> <a
 									href="/member/logoutProc" id="logout">로그아웃</a>
 								</span>
 							</div>
 						</c:when>
 						<c:otherwise>
-							<div class="col-sm-1">
-								<span class="main-login"> ${loginInfo.id}님, 환영합니다. / <a
+							<div class="col-sm-1 text-right">
+								<span class="main-login "> ${loginInfo.id}님, 환영합니다. <br> <a
 									href="/member/logoutProc" id="logout">로그아웃</a> <a
 									href="/member/logoutProc" id="Report">신고하기</a>
 								</span>
