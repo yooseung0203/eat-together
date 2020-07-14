@@ -194,7 +194,7 @@ $(document).ready(function(){
 
 </head>
 <body>
-	<div class="container">
+	<div class="container section">
 		<form id="form" name="form" action="/party/searchStoreProc">
 			<div class="row mt-3">
 				<div class="col-12">

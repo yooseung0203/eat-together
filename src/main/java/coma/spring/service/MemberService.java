@@ -99,8 +99,8 @@ public class MemberService {
 	}
 
 	//회원탈퇴
-	public int deleteMember(Map<String, String> param) throws Exception{
-		int result = mdao.deleteMember(param);
+	public int deleteMember(String id) throws Exception{
+		int result = mdao.deleteMember(id);
 		return result;
 	}
 	//내정보수정하기
@@ -144,7 +144,9 @@ public class MemberService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=39543f4353dc8ce2c9268fc23c6d67e4");
-			sb.append("&redirect_uri=http://eat-together.net/member/kakaoLogin");
+			
+			//테스트는 localhost로 수행하지만, 최종발표에서는 redirect_uri=https://eat-together.net/member/kakaoLogin 수정필요_20200713
+			sb.append("&redirect_uri=http://localhost/member/kakaoLogin");
 			sb.append("&code=" + code);
 			bw.write(sb.toString());
 			bw.flush();
@@ -217,20 +219,39 @@ public class MemberService {
 
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 
-			Random randomGenerator = new Random();
-			int randomInteger = randomGenerator.nextInt(1000);
 
 			if(mdao.selectMyInfo(id)==null) {
-				mdto.setId(id);
-				mdto.setPw("");
-				mdto.setNickname(nickname + randomInteger);
-				mdto.setBirth("1999-12-31");
-				mdto.setAccount_email("need@eat-together.com");
-				mdto.setGender(0);
+				//by 지은, 닉네임 사용가능한 경우에는 카카오톡 정보를 그대로 가져온다_20200713
+				if(mdao.isNickAvailable(nickname)) {
+					mdto.setId(id);
+					mdto.setPw("");
+					mdto.setNickname(nickname);
+					mdto.setBirth("1999-12-31");
+					mdto.setAccount_email("need@eat-together.com");
+					mdto.setGender(0);
+					mdto.setMember_type("kakao");
 
 
-				int kakaoSignUpResult = mdao.signUpKakao(mdto);
-				System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+					int kakaoSignUpResult = mdao.signUpKakao(mdto);
+					System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+				}else {
+					//by 지은, 닉네임이 중복되는 경우에는 뒤에 증가하는 숫자를 더해주어 중복을 방지한다_20200713
+					int nickNum = 1;
+					int sum = nickNum++;
+
+					mdto.setId(id);
+					mdto.setPw("");
+					mdto.setNickname(nickname + sum);
+					mdto.setBirth("1999-12-31");
+					mdto.setAccount_email("need@eat-together.com");
+					mdto.setGender(0);
+					mdto.setMember_type("kakao");
+
+
+					int kakaoSignUpResult = mdao.signUpKakao(mdto);
+					System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+
+				}
 			}else {
 				System.out.println("이미 회원가입된 카카오계정입니다.");
 				System.out.println(mdto.getAccount_email());

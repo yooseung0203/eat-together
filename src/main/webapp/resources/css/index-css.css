@@ -24,6 +24,10 @@
 }
 
 
+.navi-menu {
+	margin-right:30px;
+}
+
 .navi-menu>a {
 	color: #212529 !important; 
 	font-family: 'Noto Sans KR', sans-serif !important;

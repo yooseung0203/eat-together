@@ -68,18 +68,22 @@
 												</tr>
 											</c:when>
 											<c:when test="${!empty mlist}">
-												<c:forEach var="i" items="${mlist}">
-													<tr>
-														<td class="admin_text">${i.id}</td>
-														<td class="admin_text">${i.nickname}</td>
-														<td class="admin_text">${i.birth}</td>
-														<td class="admin_text" id='gender'>${i.gender}</td>
-														<td class="admin_text">${i.account_email}</td>
-														<td class="admin_text">${i.sdate}</td>
-														<td class="admin_text">${i.report_count}</td>
-														<td class="myinfo_text">탈퇴</td>
-													</tr>
-												</c:forEach>
+												<form action="/admin/memberOutProc" id="memberOutProc"
+													method="post">
+													<c:forEach var="i" items="${mlist}">
+														<tr>
+															<td class="admin_text">${i.id}</td>
+															<td class="admin_text">${i.nickname}</td>
+															<td class="admin_text">${i.birth}</td>
+															<td class="admin_text" id='gender'>${i.gender}</td>
+															<td class="admin_text">${i.account_email}</td>
+															<td class="admin_text">${i.sdate}</td>
+															<td class="admin_text">${i.report_count}</td>
+															<td class="myinfo_text"><input type="checkbox"
+																name="checkbox[]" value="${i.id}" class="checkboxes"></td>
+														</tr>
+													</c:forEach>
+												</form>
 											</c:when>
 										</c:choose>
 									</tbody>
@@ -88,10 +92,14 @@
 						</div>
 						<div class="row mb-5">
 							<div class="col-2"></div>
-							<div class="col-8">${navi}</div>
-							<div class="col-2">
+							<div class="col-6">${navi}</div>
+							<div class="col-4">
 								<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
 									<button class="btn btn-primary" id="toWriteBtn">글쓰기</button>
+									<button class="btn btn-danger" id="toOut">탈퇴</button>
+									<label><input type="checkbox" id="checkAll"
+										class="checkAll"> <span class="label label-primary">전체선택</span>
+									</label>
 								</c:if>
 							</div>
 						</div>
@@ -111,6 +119,62 @@
 		} else {
 			$("#gender_text").html("여");
 		}
+
+		//by 지은, 탈퇴하고자 하는 회원의 id를 배열로 생성, ajax로 삭제처리한다_20200713
+		$("#toOut").on("click", function() {
+			var result = confirm("정말로 회원을 탈퇴시키겠습니까?");
+			if (result) {
+				var arr = [];
+				$(".checkboxes:checked").each(function(i) {
+					arr.push($(this).val());
+				})
+				$.ajax({
+					url : "/admin/memberOutProc",
+					type : "post",
+					data : {
+						ids : JSON.stringify(arr)
+					}
+				}).done(function(resp) {
+					alert("선택한 회원이 탈퇴 처리 되었습니다.");
+					$(this).closest("tr").remove();
+					location.reload();
+				})
+			}
+
+		})
+
+		//by 지은, 성별의 int 값을 jsp에서 남여로 출력하는 과정_20200708
+		var gender = $("#gender").val();
+		if (gender == 1) {
+			$("#gender_text").html("남");
+		} else {
+			$("#gender_text").html("여");
+		}
+
+		//by 지은, 전체선택 시 모든 회원 선택 가능_20200713
+		$("#checkAll").click(function() {
+			if ($("#checkAll").is(":checked")) {
+				$(".checkboxes").prop("checked", true);
+			} else {
+				$(".checkboxes").prop("checked", false);
+			}
+		});
+
+		// by 지은, 전체 선택 후 회원 선택 시 전체선택 해제_20200713
+		$(".checkboxes")
+				.click(
+						function() {
+							var checklength = $("input:checkbox[name='checkbox[]']").length;
+							console.log(checklength);
+							console
+									.log($("input:checkbox[name='checkbox[]']:checked").length);
+
+							if ($("input:checkbox[name='checkbox[]']:checked").length == checklength) {
+								$("#checkAll").prop("checked", true);
+							} else {
+								$("#checkAll").prop("checked", false);
+							}
+						});
 	</script>
 </body>
 </html>

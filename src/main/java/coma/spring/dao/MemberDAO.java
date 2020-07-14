@@ -70,8 +70,8 @@ public class MemberDAO {
 	}
 
 	//회원탈퇴
-	public int deleteMember(Map<String, String> param) throws Exception{
-		return mybatis.delete("Member.deleteMember", param);
+	public int deleteMember(String id) throws Exception{
+		return mybatis.delete("Member.deleteMember", id);
 	}
 	//회원정보수정
 	public int editMyInfo(Map<String, Object> editParam)throws Exception{

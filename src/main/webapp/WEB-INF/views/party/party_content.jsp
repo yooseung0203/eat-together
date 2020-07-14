@@ -55,7 +55,7 @@
 <!-- header,footer용 css  -->
 <!-- ******************* -->
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/party-css.css">
+	href="/resources/css/party-css.css?ver=1">
 </head>
 <script>
 
@@ -206,7 +206,7 @@ $(document).ready(function(){
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
-
+<div class="container-fluid section">
 	<div class="container">
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
@@ -417,7 +417,7 @@ $(document).ready(function(){
 			</div>
 		</div>
 	</div>
-
+</div>
 
 
 	<!-- ******************* -->
