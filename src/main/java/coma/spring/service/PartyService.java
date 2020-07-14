@@ -136,12 +136,67 @@ public class PartyService {
 		return sb.toString();
 	}
 	// 태훈 모임 글 상세 검색
-	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{
-		List<PartyDTO> list = pdao.partySearch(this.searchKey(pdto));
+//	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{
+//		List<PartyDTO> list = pdao.partySearch(this.searchKey(pdto));
+//		return list;
+//	}
+	// 태훈 모임 글 상세 검색
+	public List<PartyDTO> partySearch(Map<String, Object> map, int cpage) throws Exception{
+		List<PartyDTO> list = pdao.partySearch(this.searchKey(map),cpage);
+		System.out.println(list);
 		return list;
 	}
 	// 태훈 검색 키워드 가공
-	public Map<String, Object> searchKey(PartySearchListDTO pdto) throws Exception{
+	public Map<String, Object> searchKey(Map<String, Object> map) throws Exception{
+
+		Map<String, Object> param = new HashMap<>();
+
+		// 지역 정보
+		if(map.get("sido").equals("시/도 선택")) {
+			param.put("address", "");
+			
+		}
+		else {
+			if(map.get("gugun").equals("구/군 선택")) {
+				param.put("address",map.get("sido"));
+			}
+			else {
+				param.put("address",map.get("sido") + " " +map.get("gugun"));
+			}
+			
+		}
+		System.out.println(param.get("address"));
+		// 성별 정보
+		param.put("gender",map.get("gender"));
+		// 나이 정보
+		param.put("ageList", map.get("ageList"));
+		param.put("ageList.size",map.get("ageListSize"));
+		// 음주 정보
+		param.put("drinking",map.get("drinking"));
+		// 키워드 검색
+		String title = "", writer = "", content = "", both = ""; 
+		if(map.get("text").equals("title")) {
+			title = (String) map.get("search");
+		}
+		else if(map.get("text").equals("writer")){
+			writer = (String) map.get("search");
+			System.out.println("W"+writer);
+		}
+		else if(map.get("text").equals("content")) {
+			content = (String) map.get("search");
+			System.out.println("C"+content);
+		}
+		else if(map.get("text").equals("both")) {
+			both = (String) map.get("search");
+		}
+		param.put("title", title);
+		param.put("writer", writer);
+		param.put("content", content);
+		param.put("both", both);
+		return param;
+	}
+	/*
+	public Map<String, Object> searchKey(Map<String, Object> map) throws Exception{
 
 		Map<String, Object> param = new HashMap<>();
 
@@ -195,7 +250,7 @@ public class PartyService {
 		param.put("both", both);
 
 		return param;
-	}
+	}*/
 	// 예지 장소 아이디 별 모임 리스트
 	public List<PartyDTO> selectByPageNo(int cpage, int place_id) throws Exception{
 		return pdao.selectByPageNo(cpage, place_id);
