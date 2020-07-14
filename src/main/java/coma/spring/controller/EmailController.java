@@ -79,9 +79,10 @@ public class EmailController {
 				"		새로운 맛집 친구와 함께 즐거운 모임을 시작하시길 바랍니다.<br>\r\n" + 
 				"		감사합니다.\r\n" + 
 				"	</p>\r\n" + 
-				"<a href=\"https://eat-together.net\" target=\"blank\"><h5>사이트로 이동하기</h5></a><br>\r\n" + 
-				"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\">\r\n" + 
-				"</div></body></html>";
+				"<center>\r\n" + 
+				"<a href=\"https://eat-together.net\" target=\"blank\" class=\"myButton\">사이트에 접속하기</a>\r\n" + 
+				"</center>\r\n" + 
+				"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\">";
 
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.daum.net");
