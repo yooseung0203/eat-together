@@ -66,7 +66,10 @@
 							<th scope="row">PROFILE IMAGE</th>
 							<td class="myinfo_text" id="profile_box"><br>
 								<div class="edit_text">
-									<div id='preview'><img src="#" id="profile_preview" onError="this.src='/resources/img/no_img.png'" alt=""></div>
+									<div id='preview'>
+										<img src="#" id="profile_preview"
+											onError="this.src='/resources/img/no_img.png'" alt="">
+									</div>
 									<br> <label class="btn btn-secondary btn-file">
 										업로드하기 <input type="file" id="profile" name="profile"
 										style="display: none;">
@@ -75,14 +78,14 @@
 						</tr>
 						<tr>
 							<th scope="row">ID</th>
-							<td class="edit_text">${loginInfo.id}</td>
+							<td class="edit_text">${loginInfo.id}<input type=hidden
+								id="member_type" value="${loginInfo.member_type}">
+							</td>
 						</tr>
 						<tr>
 							<th scope="row">PASSWORD</th>
 							<td class="edit_text"><button type=button
-									class="btn btn-light"
-									onclick="window.open('/member/editPw','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');"
-									id="pwEdit">비밀번호 수정하기</button></td>
+									class="btn btn-light" id="pwEdit">비밀번호 수정하기</button></td>
 						</tr>
 						<tr>
 							<th scope="row">NICKNAME</th>
@@ -131,11 +134,26 @@
 	</div>
 	<script>
 		window.onload = function() {
+			//by 지운, 카카오톡 회원의 경우, 비밀번호를 수정할 필요가 없다._20200713
+			$("#pwEdit").on("click", function(){
+				if("${mdto.member_type}"=="kakao"){
+					alert("카카오톡 회원은 비밀번호 수정이 불가능합니다.");
+				}else{
+					window.open('/member/editPw','비밀번호 수정하기','width=430,height=500,location=no,status=no,scrollbars=yes');
+				}
+			})
+				
+			//by 지은, 카카오톡 회원가입 초기 설정에서는 성별이 0으로 저장되어서 수정가능하지만, 이후에는 성별 수정이 불가능하도록 한다_20200713
+			if("${mdto.gender}"==0){
+				
+			}else{
 			//by 지은, 성별 라디오박스에서 내정보 수정 시 체크값이 유지되도록 한다_20200710
-			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("checked", true);
+			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']')
+					.attr("checked", true);
 			//by 지은, 회원정보 중 성별정보가 유효한 회원의 경우 성별 수정을 불가능하도록 한다_20200710
-			$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("disabled", true);
-
+			$('input:radio[name=gender]').attr("disabled", true);
+			}
+			
 			//by 지은, 이메일을 수정했을 경우 인증이 필요하다_20200708
 			$("#account_email").keydown(function() {
 				$("#isEmailEdited").val("");
@@ -147,6 +165,7 @@
 					if ($("#isEmailEdited").val() != "") {
 						if ($("#birth").val() != "") {
 							if ($('input:radio[name=gender]').is(':checked')) {
+								$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("disabled", false);
 								alert("회원정보가 수정되었습니다!");
 								return true;
 							} else {
@@ -164,33 +183,36 @@
 				return false;
 			})
 
-		//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200710
-		var upload = document.querySelector('#profile');
-		var preview = document.querySelector('#preview');
+			//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200710
+			var upload = document.querySelector('#profile');
+			var preview = document.querySelector('#preview');
 
-		upload.addEventListener('change', function(e) {
-			var get_file = e.target.files;
-			var image = document.createElement('img');
-			image.setAttribute("id", "profile_preview");
-			var reader = new FileReader();
+			upload.addEventListener('change',
+					function(e) {
+						var get_file = e.target.files;
+						var image = document.createElement('img');
+						image.setAttribute("id", "profile_preview");
+						var reader = new FileReader();
 
-			reader.onload = (function(aImg) {
-				console.log(1);
-				return function(e) {
-					console.log(3);
-					aImg.src = e.target.result
-				}
-			})(image)
+						reader.onload = (function(aImg) {
+							console.log(1);
+							return function(e) {
+								console.log(3);
+								aImg.src = e.target.result
+							}
+						})(image)
 
-			if (get_file) {
-				reader.readAsDataURL(get_file[0]);
-				console.log(2);
-			}
-			//이미 올라간 차일드 지우고 새로운 이미지 업로드시 사진 반영하기_20200712
-			var profile_preview = document.getElementById("profile_preview");
-			document.getElementById("preview").removeChild(profile_preview);
-			preview.appendChild(image);
-		})
+						if (get_file) {
+							reader.readAsDataURL(get_file[0]);
+							console.log(2);
+						}
+						//이미 올라간 차일드 지우고 새로운 이미지 업로드시 사진 반영하기_20200712
+						var profile_preview = document
+								.getElementById("profile_preview");
+						document.getElementById("preview").removeChild(
+								profile_preview);
+						preview.appendChild(image);
+					})
 
 			//by지은, back버튼 생성_20200708
 			$("#back").on("click", function() {

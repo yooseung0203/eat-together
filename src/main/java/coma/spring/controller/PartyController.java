@@ -458,6 +458,7 @@ public class PartyController {
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String nickname = mdto.getNickname();
+		
 		List<PartyDTO> partyList = pservice.selectByWriterPage(nickname, mcpage);
 		String navi = pservice.getMyPageNav(mcpage, nickname);
 		System.out.println("내 모임 개수 : " + partyList.size());

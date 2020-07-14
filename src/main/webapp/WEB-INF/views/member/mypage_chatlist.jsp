@@ -64,6 +64,7 @@
 					<tr>
 						<th scope="row">No.</th>
 						<td class="myinfo_text">모임위치</td>
+						<td class="myinfo_text">모임제목</td>
 						<td class="myinfo_text"></td>
 						<td class="myinfo_text">모임날짜</td>
 					</tr>
@@ -84,21 +85,21 @@
 								<tr>
 									<th scope="row">${i.seq}</th>
 									<td class="myinfo_text" align=left>${i.parent_name}<c:if
-											test="${loginInfo.id eq i.writer}">
+											test="${loginInfo.nickname eq i.writer}">
 											<span class="badge badge-success">방장</span>
-										</c:if> <c:if test="${loginInfo.id ne i.writer }">
+										</c:if> <c:if test="${loginInfo.nickname ne i.writer }">
 										</c:if></td>
+										<td class="myinfo_text" align=left>${i.title}</td>
 
 									<td class="myinfo_text" align=right>
-										<button type=button class="btn btn-light"
-											id="toPartyContents"
+										<button type=button class="btn btn-light" id="toPartyContents"
 											onclick="location.href='/party/party_content?seq=${i.seq}'">모임글
 											보기</button>
 										<button type=button class="btn btn-warning" id="toChatroom"
 											onClick=" window.open('/chat/chatroom?roomNum='+ ${i.seq}, ${i.seq}, 'width = 800, height = 800, top = 100, left = 200, scrollbars=no')">채팅방
 											들어가기</button>
-										<button type=button class="btn btn-secondary" id="exitChatRoom">모임
-											나가기</button>
+										<button type=button class="btn btn-secondary"
+											id="exitChatRoom">채팅방 나가기</button>
 									</td>
 									<td class="myinfo_text">${i.sDate}</td>
 								</tr>
@@ -120,9 +121,11 @@
 	</div>
 	<script type="text/javascript">
 $(document).on("click","#exitChatRoom", function() {
+	var con = confirm("정말로 모임을 나가시겠습니까?");
+		
+if(con){
 	var seq = $(this).closest("tr").children("th").text();
-
-		$.ajax({
+			$.ajax({
 			type:"POST",
 			url:"/chat/exit",
 			data:{
@@ -135,10 +138,11 @@ $(document).on("click","#exitChatRoom", function() {
 			}
 				
 		})
-	
+}
 	
 })
-</script><!-- ******************* -->
+</script>
+	<!-- ******************* -->
 	<!-- footer  -->
 	<div id=footer-container>
 		<jsp:include page="/WEB-INF/views/include/footer.jsp" />
