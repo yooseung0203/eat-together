@@ -83,13 +83,14 @@
 <!-- ******************* -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/party-css.css">
-<!-- 태훈 css -->
-<link rel="stylesheet" type="text/css" href="/resources/css/party-list.css?aa">
-<!-- 태훈 css -->
+
 
 <title>모임 리스트</title>
 <script>
 /*******************   무한 스크롤 ************************/
+ 
+
+
 var cpage = 1; //페이징과 같은 방식이라고 생각하면 된다. 
 
 //var form = $('#idForm').serializeArray();
@@ -105,11 +106,27 @@ window.onload = $(function() { //페이지가 로드되면 데이터를 가져�
 	cpage++;
 });
 
+function getDocHeight() {
+    var D = document;
+    return Math.max(
+        D.body.scrollHeight, D.documentElement.scrollHeight,
+        D.body.offsetHeight, D.documentElement.offsetHeight,
+        D.body.clientHeight, D.documentElement.clientHeight
+    );
+}
 
+function test() {
+    window.onbeforeunload = function (e) {
+    	cpage = 1;
+    	$(window).scrollTop(0);
+    };
+}
 
-$(function(){
+$(function() {
+	
 	$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
-		if ($(window).scrollTop() >= $(document).height() - $(window).height()) {
+		console.log(getDocHeight());
+		if ($(window).scrollTop() == getDocHeight() - $(window).height()) {
 			console.log($("#start_list > div").last().html());
 			console.log($("#start_list > div").last().attr('id'));
 			console.log("새로 로딩 : ");
@@ -123,18 +140,20 @@ $(function(){
 				alert("더 이상 검색할 내용이 없습니다.");
 			}
 			else{	
-				cpage++;
+				
 				if(check == "string"){
+					cpage++;
 					partySearch(url,formData,cpage);
 				}
 				else{
-					getPartyList(cpage);	
+					getPartyList(cpage);
+					cpage++;
 				}
 				
 			}	
 		}
 	});
-})
+});
 
 
 $(document).ajaxStart(function(){
@@ -150,8 +169,8 @@ function getPartyList(cpage){
         data : {"cpage" : cpage},
         url : '/party/getPartyList',
         success : function(partyList) {
-            $("#start_list").append(partyList);
-            $("#start_list").append("*********************"+cpage +"기본검색"+"************************");         
+        	$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+ "기본 검색 <span></div>");
+            $("#start_list").append(partyList);         
        },
        error:function(e){
     	   alert("데이터를 가져오는데 실패하였습니다.");        
@@ -166,8 +185,8 @@ function partySearch(url,formData,cpage){
 		url : url,
 		data : {"formData" : formData, "cpage":cpage},
 		success : function(partyList) {
+			$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+" 통합 검색<span></div>");
 			$("#start_list").append(partyList);
-            $("#start_list").append("*********************"+cpage+"상세검색"+"************************");
 		},
 	    error:function(e){
 	    	alert("데이터를 가져오는데 실패하였습니다.");        
@@ -301,6 +320,29 @@ $(function() {
 /*****************************  태훈 party list 스크립 ***********************************************/
 });
 </script>
+<style>
+* {
+	text-overflow:ellipsis;
+}
+
+div{
+	border: 0px solid black;
+}
+
+.aa {
+	width: 100%;
+	margin: auto;
+	
+}
+
+.listtitle {
+	font-size: 35px;
+}
+
+.partylist {
+	margin-bottom: 15px;
+}
+</style>
 </head>
 <!-- <body data-spy="scroll" data-target="#navbar-example"> -->
 <body>
@@ -313,10 +355,10 @@ $(function() {
 
 	<div class="container-fluid">
 	
+		<!-- ================ Top 5 Section ================ -->
 		<div class="row aa">
 			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
-		</div>
-		
+		</div>	
 		<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 aa">
 			<c:forEach var="top" items="${top}" varStatus="status">
 				<div class="col card-deck">
@@ -345,7 +387,9 @@ $(function() {
 				</div>
 			</c:forEach>
 		</div>
-
+		<!-- ============== End Top 5 Section ============== -->
+		
+		<!-- ============== Party List Search Section ============== -->
 		<div class="row aa">
 			<form id="idForm">
 				<span class="listtitle">통합 검색</span>
@@ -390,7 +434,8 @@ $(function() {
 			</form>
 		</div>
 	</div>
-	 
+	<!-- ============ End Party List Search Section ============ -->
+	
 	<!-- ======= Party List Section ======= -->
 	<main id="main">
 		<div id="team" class="our-team-area area-padding">
@@ -410,20 +455,17 @@ $(function() {
 	</main>
 	<!-- End Party List Section -->
 	
-	<!-- ======= Page Navi Section ======= -->
+	<!-- =========== Loding Spinner Section ============= -->
 	<div id = "Progress_Loading"><!-- 로딩바 -->
-			<img src="/resources/img/Progress_Loading.gif"/>
-		</div>
-	<!--  <nav aria-label="Page navigation example">
-		<ul class="pagination justify-content-center">${navi }</ul>
-	</nav>-->
-	<!-- ======= End page Navi Section ======= -->
+		<img src="/resources/img/Progress_Loading.gif"/>
+	</div>
+	<!-- ========== End Loding Spinner Section ========== -->
 	
+	<!-- =========== To TOP Section ============= -->
 	<a href="#" class="back-to-top"> 
 		<i class="fa fa-chevron-up"></i>
 	</a>
-	
-	<!-- <div id="preloader"></div> -->
+	<!-- ========= End To TOP Section =========== -->
 	
 	<!-- ======= Page Modal Section ======= -->
 	<div class="modal fade" id="mymodal" role="dialog">
@@ -435,6 +477,7 @@ $(function() {
 		</div>
 	</div>
 	<!-- ======= End Page Modal Section ======= -->
+	
 	<!-- ******************* -->
 	<!-- footer  -->
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
@@ -460,38 +503,5 @@ $(function() {
   
 </body>
 </html>
- <!-- 
-<c:choose>
-	<c:when test="${empty list}">
-		<div class="col-sm-12 col-md-3">
-			<span>검색 된 내용이 없습니다.</span>
-		</div>
-	</c:when>
-	<c:otherwise>
-		<c:forEach var="partyList" items="${list}">
-			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-				<div class="single-team-member">
-					<div class="team-img">
-						<a href="#"> <img src="${partyList.imgaddr}" alt=""></a>
-						<div class="team-social-icon text-center">
-							<ul>
-								<li><a class="myBtn">상세 보기</a></li>
-								<li style="display: none"><input type="hidden"
-									class="party_seq" value="${partyList.seq}"></li>
-							</ul>
-						</div>
-					</div>
-					<div class="team-content text-center">
-						<h3>${partyList.title }</h3>
-						<br>
-						<h5 class="card-subtitle mb-2 text-muted">${partyList.parent_name }</h5>
-						<p>
-							날짜 : ${partyList.sDate}<br> 지역 : ${partyList.parent_address }
-						</p>
-					</div>
-				</div>
-			</div>
-		</c:forEach>	
-	</c:otherwise>
-</c:choose> -->
+ 
 

@@ -255,9 +255,9 @@ public class PartyController {
 //			dateAndtime = date + " "+time+":00.0";
 //		}
 		dateAndtime = date+":00.0";
-		System.out.println(date);
+	//	System.out.println(date);
 	//	System.out.println(time);
-		System.out.println(dateAndtime);
+	//	System.out.println(dateAndtime);
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);

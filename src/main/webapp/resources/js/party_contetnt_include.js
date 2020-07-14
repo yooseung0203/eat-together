@@ -36,7 +36,6 @@ function partyReport(num){
 
 /*****************************  수지 party content 스크립 ***********************************************/
 $(document).ready(function(){
-
 	//var stime = "${con.sTime}";
 	var stime = $("#party_time").val();
 	var time = stime.substr(0,5);
@@ -46,12 +45,13 @@ $(document).ready(function(){
 
 
 $(function () {
+	
 	var party_seq = $("#party_seq").val();
 	console.log(party_seq);
+	
 	$("#partyModify").on("click", function() {
 		//location.href = "/party/partymodify?seq=${con.seq}";
 		location.href = "/party/partymodify?seq="+party_seq;
-		//partyModify(party_seq);
 	});
 
 	$("#partyDelete").on("click", function() {
@@ -60,19 +60,16 @@ $(function () {
 			////location.href = "/party/partydelete?seq=${con.seq}";
 			location.href = "/party/partydelete?seq="+party_seq;
 		}
-		//partyDelete(party_seq);
 	});
 
 	$("#toPartylist").on("click", function() {
 		//location.href = "/party/toPartylist";
 		location.href = "/party/selectByWriter?mcpage=1";
-		//toPartylist();
 	});
 
 	$("#toPartyJoin").on("click",function(){ //모임가입
 		//location.href="/party/partyJoin?seq=${con.seq}";
 		location.href="/party/partyJoin?seq="+party_seq;
-		//toPartyJoin(party_seq);
 	});
 
 	// 태훈 신고
@@ -100,7 +97,6 @@ $(function () {
 			////location.href= "/party/stopRecruit?seq=${con.seq}";
 			location.href= "/party/stopRecruit?seq="+party_seq;
 		}
-		//toStopRecruit(party_seq);
 	});
 
 });
