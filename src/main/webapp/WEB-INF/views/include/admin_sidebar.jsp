@@ -24,7 +24,7 @@
             </div> 
             <div class="row menubtn">
                 <div class="col">
-                    <a href="">리뷰관리</a>
+                    <a href="/admin/sortReview?option=write_date">리뷰관리</a>
                 </div>
             </div>
             <div class="row menubtn">
