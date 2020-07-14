@@ -35,6 +35,8 @@ public class Scheduler {
 		}
 		long end = System.currentTimeMillis();
 
-		//System.out.println(end-start);
+		
+		System.out.println(end-start);
+
 	}
 }

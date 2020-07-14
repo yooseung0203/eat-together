@@ -7,3 +7,14 @@
 .withdraw_text{
     font-family: 'Noto Sans KR', sans-serif;
 }
+
+#mail{
+    margin: 20px;
+}
+
+.contents_container{
+    padding-top: 20px;
+    width: 50%;
+    height: 70%;
+    margin: auto;
+}

@@ -10,8 +10,8 @@
 		values(review_file_seq.nextval,#{sysname},#{oriname},review_seq.currval)
 	</insert>
 	<select id="selectByPseq" resultType="coma.spring.dto.ReviewDTO">
-		select * from review where
-		parent_seq = #{parent_seq} order by 1 desc
+		select review.*, member.profile from review, member where
+		review.parent_seq = #{parent_seq} and review.id = member.id order by 1 desc
 	</select>
 	<select id="selectFileByPseq"
 		resultType="coma.spring.dto.ReviewFileDTO">
@@ -24,6 +24,21 @@
 
 	<!-- by지은, 마이페이지 내부 내리뷰리스트 출력을 위한 select문 작성_20200707 -->
 	
+	<!-- by예지, 리뷰글에 대해 신고 카운트 1 증가 -->
+	<update id="updateReport">
+		update review set report = report + 1 where seq = #{seq}
+	</update>
+	<!-- by예지, 리뷰 총 갯수 -->
+	<select id="getArticleCount" resultType="int">
+		select count(*) from review
+	</select>
+	<!-- by예지, 페이지별 리뷰 리스트 -->
+	<select id="selectByPageAndOption" resultType="coma.spring.dto.ReviewDTO">
+		select * from (select review.*, map.name, row_number() over(order by review.${targetColumn} desc, review.seq desc) as rnum from review, map where review.parent_seq = map.seq) where rnum between #{start} and #{end}
+	</select>
+	<select id="selectBySeq" resultType="coma.spring.dto.ReviewDTO">
+		select review.*, map.name from review, map where review.seq = #{seq} and review.parent_seq = map.seq
+	</select>
 	<!-- 태훈 top5 음식점 소개할 리뷰 고르기 -->
 	<select id="top5review" resultType="coma.spring.dto.TopFiveStoreDTO">
 		select id, parent_seq,(select name from map where seq = parent_seq), content 
