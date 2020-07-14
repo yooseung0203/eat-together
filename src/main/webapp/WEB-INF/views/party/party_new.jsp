@@ -47,7 +47,7 @@
 <!-- ******************* -->
 
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/party-css.css?ver=1">
+	href="/resources/css/party-css.css?ver=23">
 <link rel="stylesheet" type="text/css"
 	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet"
@@ -313,7 +313,9 @@
 	<!-- ******************* -->
 <div class="container-fluid section">
 	<c:if test="${empty sessionScope.loginInfo }">
+	<div class="loginError">
 		<h3 class="text-center my-5">로그인 후 이용해주세요.</h3>
+	</div>
 	</c:if>
 	<c:if test="${!empty sessionScope.loginInfo }">
 		<form id="form" name="form" method="post"

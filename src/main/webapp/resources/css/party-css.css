@@ -32,3 +32,12 @@ form {
 .sns_icon{
 	width:36px;
 }
+
+
+.loginError{
+	height:610px;
+}
+
+.loginerrormsg{
+	padding-top:200px;
+}
