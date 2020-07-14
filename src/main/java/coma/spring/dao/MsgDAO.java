@@ -75,11 +75,18 @@ public class MsgDAO {
 	public int receiver_del(int msg_seq)throws Exception{
 		return mybatis.update("msg.receiver_del",msg_seq);
 	}
-	//새로운쪽지
+	//새로운쪽지확인
 	public int newmsg(String msg_receiver)throws Exception{
 		return mybatis.selectOne("msg.newmsg",msg_receiver);
 	}
-	
+	//새로운 관리자쪽지확인
+	public int newMsgByAdmin(String msg_receiver)throws Exception{
+		return mybatis.selectOne("msg.newMsgByAdmin",msg_receiver);
+	}
+	//새로운 받은쪽지함 쪽지 확인
+	public int newMsgByNick(String msg_receiver)throws Exception{
+		return mybatis.selectOne("msg.newMsgByNick",msg_receiver);
+	}
 	//회원가입축하
 	public int insertWelcome(String msg_receiver)throws Exception{
 		return mybatis.insert("msg.insertWelcome",msg_receiver);

@@ -65,6 +65,14 @@ public class MsgService {
 		int result = msgdao.newmsg(msg_receiver);
 		return result;
 	}
+	public int newMsgByAdmin(String msg_receiver)throws Exception{
+		int result = msgdao.newMsgByAdmin(msg_receiver);
+		return result;
+	}
+	public int newMsgByNick(String msg_receiver)throws Exception{
+		int result = msgdao.newMsgByNick(msg_receiver);
+		return result;
+	}
 
 	//관리자 쪽지함 네비
 	public String Adminnavi (int cpage,String msg_receiver) throws Exception{

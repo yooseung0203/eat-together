@@ -25,6 +25,7 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
 	rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="/resources/css/msg.css">
 <!-- google font end-->
 <meta charset="UTF-8">
 
@@ -34,7 +35,7 @@
 	<div class="container">
 		<table class="table">
 			<thead>
-				<tr class="table-success">
+				<tr class="table" id="orange">
 					<th scope="col" colspan=12>${msgView.msg_receiver}님으로쪽지가
 						도착하였습니다.</th>
 				</tr>

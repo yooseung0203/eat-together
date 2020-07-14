@@ -59,16 +59,18 @@
 	<!-- 새로운 메세지 카운트 -->
 	<select id="newmsg" resultType="java.lang.Integer">
 		select count(*) from msg where
-		msg_receiver = #{value} and msg_view=0
+		msg_receiver = #{value} and msg_view=0 and receiver_del=0
 	</select>
-<!-- 	<select id="newMsgByAdmin">
+	
+ 	<select id="newMsgByAdmin" resultType="java.lang.Integer">
 		select count(*) from msg where msg_receiver=#{value}
-		and msg_view=0 and msg_sender='administrator'
+		and msg_view=0 and msg_sender='administrator' and receiver_del=0
 	</select>
-	<select id="newMsgByAdmin">
-		select count(*) from msg where msg_receiver=#{value} and msg_view=0 and
-		msg_sender!='administrator'
-	</select> -->
+	
+	<select id="newMsgByNick" resultType="java.lang.Integer">
+		select count(*) from msg where msg_receiver=#{value}
+		and msg_view=0 and msg_sender!='administrator' and receiver_del=0
+	</select>
 	<!--insert 문 -->
 	
 	

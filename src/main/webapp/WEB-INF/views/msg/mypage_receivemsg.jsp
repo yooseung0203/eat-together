@@ -150,7 +150,7 @@
 										value="${i.msg_title}" /></a></td>
 							<td colspan=2>${i.msg_date}</td>
 							<td colspan=2>
-								<button type="button"
+								<button type="button" class="btn btn-outline-dark"
 									onclick="location.href='javascript:msgSenderDel(${i.msg_seq})'">삭제</button>
 
 							</td>

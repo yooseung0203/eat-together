@@ -112,9 +112,17 @@
 					<tr>
 						<td scope="col" colspan=12 align="left">
 							<button type="button" class="btn btn-outline-danger"
-								id="list_admin">관리자</button>
+								id="list_admin">관리자
+								<c:if test="${newMsgByAdmin!=0}">
+									<span class="badge badge-danger">N</span>
+								</c:if>
+								</button>
 							<button type="button" class="btn btn-outline-warning"
-								id="list_sender">받은 쪽지함</button>
+								id="list_sender">받은 쪽지함
+								<c:if test="${newMsgByNick!=0}">
+									<span class="badge badge-danger">N</span>
+								</c:if>
+								</button>
 							<button type="button" class="btn btn-outline-warning"
 								id="list_receiver">보낸쪽지함</button>
 								<button type="button" class="btn btn-warning" id="writeMsg">쪽지보내기</button>
@@ -164,7 +172,7 @@
 										value="${i.msg_title}" /></a></td>
 							<td colspan=2>${i.msg_date}</td>
 							<td colspan=2>
-								<button type="button"
+								<button type="button" class="btn btn-outline-dark"
 									onclick="location.href='javascript:msgReceiverDel(${i.msg_seq})'">삭제</button>
 							</td>
 						</tr>
