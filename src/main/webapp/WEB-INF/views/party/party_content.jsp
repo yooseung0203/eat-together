@@ -63,7 +63,7 @@
 <script>
 function send_msg(){
 	var option = "width = 500, height = 550, top = 100, left = 200, scrollbars=no"
-	var target=${con.writer};
+	var target='${con.writer}';
 	window.open("/msg/msgResponse?msg_receiver="+target,target,option);
 };
 

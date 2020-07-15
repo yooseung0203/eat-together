@@ -259,11 +259,11 @@
 		var gender = "${gender}";
 		console.log(gender);
 		if (gender == 1) {
-			$('input:radio[id=gender1]').attr("disabled", false);
-			$('input:radio[id=gender2]').attr("disabled", true);
-		} else {
 			$('input:radio[id=gender1]').attr("disabled", true);
 			$('input:radio[id=gender2]').attr("disabled", false);
+		} else {
+			$('input:radio[id=gender1]').attr("disabled", false);
+			$('input:radio[id=gender2]').attr("disabled", true);
 		}
 		;
 
