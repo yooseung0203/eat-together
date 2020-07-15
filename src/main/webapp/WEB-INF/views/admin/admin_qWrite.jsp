@@ -81,6 +81,7 @@ $(function(){
 	<script>
 		$("#submit").on("click",function(){
 			var where = ${qdto.msg_seq};
+			console.log(where);
 			var msg_receiver = ${qdto.msg_sender};
 			$("#msg_view").val(where);
 			$("#msg_receiver").val(msg_receiver);

@@ -47,22 +47,15 @@ public class WebChatSocket {
 		mdto = (MemberDTO)this.session.getAttribute("loginInfo");
 		roomNum = (int)this.session.getAttribute("roomNum");
 		writer = (String)this.session.getAttribute("writer");
-		System.out.println("온오픈의 작성자 : " + writer);
 		int viewed = (int)this.session.getAttribute("viewed");
 		this.session.removeAttribute("roomNum");
 		this.session.removeAttribute("viewed");
 		this.session.removeAttribute("writer");
 		
-		System.out.println("여기까지 읽은 "+viewed);
 		//clients에 세션정보와 방의 번호를 저장
 		clients.put(client , roomNum);
 
-		//		System.out.println(mdto.getNickname() +" 은 여기까지 읽음 " + viewed);
 		// members 내에 roomNum 방번호가 존재하면 방을 만들지 않음, 존재하지 않으면 방을 만듬
-		//		boolean memberExist = true;
-		//		for(int i : members.keySet()) {
-		//			if(i == roomNum) {memberExist = false;break;}
-		//		}
 		if(!members.keySet().contains(roomNum)) {members.put(roomNum, new HashMap());}
 
 		// members 맵에 해당 방번호 list에 세션정보를 추가한다 
@@ -71,7 +64,6 @@ public class WebChatSocket {
 		// 이전 채팅내용을 가져오기 위해 basic 선언
 		Basic basic = client.getBasicRemote();
 
-		//basic.sendText("hereasd:여거까지일그서씁니다");
 		// 채팅 내용을 가져오기
 		for(ChatDTO d : ChatStatics.savedChats.get(roomNum)) {
 			if(mdto.getNickname().contentEquals(d.getWriter())) {
@@ -128,7 +120,6 @@ public class WebChatSocket {
 				String exited = (String) this.session.getAttribute("exited");
 				this.session.removeAttribute("kicked");
 				this.session.removeAttribute("exited");
-				System.out.println(kicked);
 				if(some[0].contentEquals(mdto.getNickname()) && exited.contentEquals("done") 
 						|| mdto.getNickname().contentEquals(writer)&&kicked.contentEquals("done")) {
 					synchronized (members.get(roomNum).keySet()) {
@@ -144,7 +135,7 @@ public class WebChatSocket {
 				}
 			}
 			else {
-				String msg = message.replace("\"", "").replaceAll("</\\w+>", "라고 말한 바보입니다. 감히 여러분들을 공격하려다 이렇게 적발이 되었습니다 죄송합니다.").replaceAll("<\\w+>", "저는");
+				String msg = message.replaceAll("<([^>]+)>", "");
 				// 채팅 저장변수 선언 (방번호,채팅SEQ,메세지,닉네임,현재시간,조회수)
 				ChatDTO c = new ChatDTO(roomNum,
 						ChatStatics.savedChatsSeq.get(roomNum),
@@ -180,11 +171,6 @@ public class WebChatSocket {
 	//채팅창 닫을시
 	@OnClose
 	public void onClose(Session session) {
-
-
-		//		System.out.println(roomNum);
-		//		System.out.println(mdto.getNickname());
-		System.out.println("세큐 몇번:" +ChatStatics.savedChatsSeq.get(roomNum));
 		cservice.chatViewedSave(roomNum,
 				mdto.getNickname(),
 				ChatStatics.savedChatsSeq.get(roomNum)-1);

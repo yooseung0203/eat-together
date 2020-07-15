@@ -19,7 +19,6 @@ public class Scheduler {
 	@Scheduled(fixedDelay = 10000)
 	public void scheduleTest() {
 		ChatStatics.savedChat = !ChatStatics.savedChat;
-		long start = System.currentTimeMillis();
 		if(!ChatStatics.chats1.isEmpty() && !ChatStatics.savedChat) {
 			mybatis.insert("Chats.insertChat",ChatStatics.chats1);
 			for(ChatDTO dto : ChatStatics.chats1) {

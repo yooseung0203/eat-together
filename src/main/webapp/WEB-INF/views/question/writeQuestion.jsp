@@ -50,7 +50,7 @@ $(function(){
 			<tbody>
 				<tr align="center">
 					<th scope="col">제목</th>
-					<th scope="col">[1:1문의]문의글입니다.</th>
+					<th scope="col">[1:1문의]<input type="text" id="msg_title" name="msg_title"></th>
 				</tr>
 
 				<tr align="center">
@@ -62,8 +62,10 @@ $(function(){
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12><textarea placeholder="내용을 입력해주세요"
-							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;" id="msg_text"  name="msg_text"></textarea></td>
+							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px; resize: none;" id="msg_text"  name="msg_text"></textarea></td>
 				</tr>
+				
+				
 				<tr>
 
 					<td scope="col" colspan=12 id="wordcheck" align="right"><span
