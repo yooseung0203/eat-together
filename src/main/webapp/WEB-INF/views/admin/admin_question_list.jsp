@@ -20,16 +20,17 @@
 <script sre="https://code.jquery.com/jquery-3.5.1.js"></script>
 </head>
 <script>
-	function AnswerPopUp(msg_seq,msg_sender){
+	function AnswerPopUp(msg_seq, msg_sender) {
 		var name = msg_seq;
-		var option ="width=500,height=550 location=no";
-		window.open("questionAnswer?msg_seq="+msg_seq+"&msg_sender="+msg_sender,msg_sender,option);
+		var option = "width=500,height=550 location=no";
+		window.open("questionAnswer?msg_seq=" + msg_seq + "&msg_sender="
+				+ msg_sender, msg_sender, option);
 	}
-	$(function(){
-		$(document).on("click",".answer",function(){
+	$(function() {
+		$(document).on("click", ".answer", function() {
 			var some = $(this).attr("id").split(":");
 			console.log(some);
-			AnswerPopUp(some[0] , some[1]);
+			AnswerPopUp(some[0], some[1]);
 		})
 	})
 </script>
@@ -73,17 +74,27 @@
 													<tr>
 														<td class="admin_text">${i.msg_seq}</td>
 														<td class="admin_text">${i.msg_sender}</td>
-														<td class="admin_text"><a href="questionViewAdmin?msg_seq=${i.msg_seq}">${i.msg_title}</a></td>
-														<td class="admin_text">${i.msg_date}</td>
-														<td class="admin_text"><c:choose>
-																<c:when test="${i.msg_view==0}"><button id="${i.msg_seq}:${i.msg_sender}" class="answer">답변대기</button>
-																<form>
-																	<input type="hidden" name="msg_seq">
-																	<input type="hidden" name="msg_sender">
-																</form>
-																</c:when>
-																<c:otherwise>답변완료</c:otherwise>
-															</c:choose></td>
+														<td class="admin_text">
+														<c:choose>
+															<c:when test="${i.msg_view==0||i.msg_view==1}">
+															<a href="questionViewAdmin?msg_seq=${i.msg_seq}">${i.msg_title}</a>
+															</c:when>
+															<c:otherwise>
+															<a href="questionViewAdmin?msg_seq=${i.msg_seq}" style="color:black;">${i.msg_title}</a>
+															</c:otherwise>
+														</c:choose>
+														
+														
+														</td>
+														<td class="admin_text">${i.date}</td>
+														<c:choose>
+															<c:when test="${i.msg_view==0||i.msg_view==1}">
+																<td class="admin_text" style="color: red;">답변대기</td>
+															</c:when>
+															<c:otherwise>
+																<td class="admin_text">답변완료</td>
+															</c:otherwise>
+														</c:choose>
 														<td class="myinfo_text">삭제</td>
 													</tr>
 												</c:forEach>

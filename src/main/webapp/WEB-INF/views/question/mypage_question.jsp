@@ -85,8 +85,8 @@ function questionViewPopUp(msg_seq){
 					</c:if>
 					<c:forEach var="i" items="${list}" varStatus="status">
 						<tr>
-							<td><a href="javascript:questionViewPopUp(${i.msg_seq})">${i.msg_title}</a></td>
-							<td>${i.msg_date}</td>
+							<td><a href="javascript:questionViewPopUp(${i.msg_seq})" style="color:black">${i.msg_title}</a></td>
+							<td>${i.date}</td>
 							<td><c:choose>
 									<c:when test="${i.msg_view==0||i.msg_view==1}">
 										답변중	 	

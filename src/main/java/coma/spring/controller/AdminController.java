@@ -1,32 +1,31 @@
 package coma.spring.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 
 import coma.spring.dto.FaqDTO;
-import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.MsgDTO;
 import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.QuestionDTO;
+import coma.spring.dto.ReviewDTO;
 import coma.spring.service.AdminService;
 import coma.spring.service.FaqService;
+import coma.spring.service.MsgService;
 import coma.spring.service.PartyService;
-import coma.spring.dto.ReviewDTO;
+import coma.spring.service.QuestionService;
 import coma.spring.service.ReviewService;
 
 
@@ -42,8 +41,12 @@ public class AdminController {
 
 	@Autowired
 	private PartyService pservice;
-
-
+	
+	@Autowired
+	private QuestionService qservice;
+	
+	@Autowired
+	private MsgService msgservice;
 
 	@Autowired
 	FaqService fservice;
@@ -264,4 +267,104 @@ public class AdminController {
 		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/admin/admin_party_content";
 	}
+	
+	//1:1문의 Admin 유승
+	
+	@RequestMapping("questionViewAdmin")
+	public String QuestionViewAdmin(HttpServletRequest request,int msg_seq)throws Exception{
+		QuestionDTO qdto = qservice.selectBySeq(msg_seq);
+
+		System.out.println("viewcount : "+qdto.getMsg_view());
+		
+		//0or1 = 답변 x 다른 번호  = 답변완료
+		int qResult=qdto.getMsg_view();
+		if(qResult==0||qResult==1) {
+			request.setAttribute("qdto", qdto);
+			return "admin/admin_question_view";
+		}else {
+			QuestionDTO qadto = qservice.selectBySeq(qResult);
+			request.setAttribute("qadto", qadto);
+			request.setAttribute("qdto", qdto);
+			return "/admin/admin_question_view";
+		}
+	}
+
+	
+	//관리자 페이지 1:1문의 리스트
+	@RequestMapping("AdminQuestion_list")
+	public String AdminQuestion_list(HttpServletRequest request)throws Exception{
+		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
+		if(session.getAttribute("Aqcpage")==null) {
+			session.setAttribute("Aqcpage", 1);
+		}
+		try {
+			session.setAttribute("Aqcpage", Integer.parseInt(request.getParameter("Aqcpage")));
+		}catch(Exception e) {}
+		String Id=mdto.getId();
+		if(Id.contentEquals("administrator")) {
+			int Aqcpage = (int)session.getAttribute("Aqcpage");
+			List<QuestionDTO> qdto = qservice.selectByAdminQ(Aqcpage);
+			String navi = qservice.AdminQuestionNavi(Aqcpage);
+			
+			request.setAttribute("navi", navi);
+			request.setAttribute("list", qdto);
+			
+			return "/admin/admin_question_list";
+		}else {
+			return "error";
+		}
+		
+	}
+	//1:1문의 답변페이지
+	@RequestMapping("questionAnswer")
+	public String QuestionAnswer(HttpServletRequest request,QuestionDTO qdto){
+		request.setAttribute("qdto", qdto);
+		System.out.println(qdto.getMsg_seq());
+		System.out.println(qdto.getMsg_sender());
+		return "/admin/admin_qWrite";
+	}
+	//1:1문의 답변
+	@RequestMapping("questionAnswerSend")
+	public String questionAnswerSend(QuestionDTO qdto)throws Exception{
+		MemberDTO mdto=(MemberDTO)session.getAttribute("loginInfo");
+		
+		String admin = mdto.getId();
+		if(admin.contentEquals("administrator")) {
+			int answerSeq= qservice.getNextVal();
+			qdto.setMsg_seq(answerSeq);
+			int result = qservice.QuestionAnswer(qdto);
+			if(result==1) {
+				System.out.println(qdto.getMsg_view()+"번의 게시글에 대한 답변");
+				
+				QuestionDTO updto = new QuestionDTO();
+				updto.setMsg_seq(qdto.getMsg_view());
+				updto.setMsg_view(answerSeq);
+				System.out.println("답변업데이트 게시글 번호seq :"+qdto.getMsg_view()+"답변 게시글 번호 :"+answerSeq);
+				
+				int update = qservice.answerUpdate(updto);
+				
+				return "redirect:/admin/questionViewAdmin?msg_seq="+qdto.getMsg_view();
+			}else{
+				return "error";
+			}
+			
+			
+		}else {
+			return "error";
+		}
+	}
+	//공지 쪽지
+	@RequestMapping("toAdmin_msg")
+	public String toAdmin_msg()throws Exception{
+		return "/admin/admin_msg";
+	}
+	@RequestMapping("msgNotice")
+	public String msgNotice(HttpServletRequest request,MsgDTO msgdto)throws Exception{
+		msgdto.setMsg_title("[공지]"+msgdto.getMsg_title());
+		int result = msgservice.msgNotice(msgdto);
+		System.out.println(result+"명의 회원에게 쪽지 전송 성공");
+		request.setAttribute("result",result);
+		return "/admin/admin_msgResult";
+	}
+	
 }

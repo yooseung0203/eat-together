@@ -170,7 +170,7 @@
 							<td colspan=4 class="msg_title" id="msg_title"><a
 								href="javascript:msgViewPopUp(${i.msg_seq})" class="newMsg"><c:out
 										value="${i.msg_title}" /></a></td>
-							<td colspan=2>${i.msg_date}</td>
+							<td colspan=2>${i.date}</td>
 							<td colspan=2>
 								<button type="button" class="btn btn-outline-dark"
 									onclick="location.href='javascript:msgReceiverDel(${i.msg_seq})'">삭제</button>

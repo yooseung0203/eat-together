@@ -63,6 +63,10 @@ public class MsgDAO {
 	public int insert(MsgDTO msgdto)throws Exception{
 		return mybatis.insert("msg.insert",msgdto);
 	}
+	//전체쪽지 보내기
+	public int msgNotice(MsgDTO msgdto)throws Exception{
+		return mybatis.insert("msg.msgNotice",msgdto);
+	}
 	//쪽지읽음처리
 	public int updateView(int msg_seq)throws Exception{
 		return mybatis.update("msg.view",msg_seq);
@@ -91,7 +95,7 @@ public class MsgDAO {
 	public int insertWelcome(String msg_receiver)throws Exception{
 		return mybatis.insert("msg.insertWelcome",msg_receiver);
 	}
-	
+
 	
 	//네비 메뉴
 	//관리자쪽지함 카운트
