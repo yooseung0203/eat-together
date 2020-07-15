@@ -369,6 +369,15 @@ Back to top button
 	margin-bottom: 15px;
 }
 
+.searchpart{
+	background-color:#cfcfcf;
+	padding:15px;
+}
+#lineline{
+	margin-top:3rem;
+	margin-bottom:0rem;
+}
+
 #Progress_Loading{
 	position:fixed;
 	height:100vh;
@@ -422,9 +431,16 @@ Back to top button
 	<div class="container-fluid">
 	
 		<!-- ================ Top 5 Section ================ -->
-		<div class="row aa">
+		<!-- <div class="row aa">
 			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
-		</div>	
+		</div> -->
+		<div class="row">
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="section-headline text-center">
+							<h2>밥 먹고 갈래?</h2>
+						</div>
+					</div>
+				</div>
 		<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 aa top5">
 			<c:forEach var="top" items="${top}" varStatus="status">
 					<div class="card partylist">
@@ -464,7 +480,7 @@ Back to top button
 		<!-- ============== End Top 5 Section ============== -->
 		
 		<!-- ============== Party List Search Section ============== -->
-		<div class="row aa">
+		<div class="row aa searchpart">
 			<form id="idForm">
 				<span class="listtitle">통합 검색</span>
 				<div id="areacheck">
@@ -509,7 +525,7 @@ Back to top button
 		</div>
 	</div>
 	<!-- ============ End Party List Search Section ============ -->
-	
+	<hr id="lineline" width="95%" color="black">
 	<!-- =========== Loding Spinner Section ============= -->
 	<div id = "Progress_Loading"><!-- 로딩바 -->
 		<img src="/resources/img/Progress_Loading.gif"/>
@@ -518,15 +534,9 @@ Back to top button
 	
 	<!-- ======= Party List Section ======= -->
 	<main id="main">
-		<div id="team" class="our-team-area area-padding">
+		<div class="area-padding">
 			<div class="container-fluid">
-				<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<div class="section-headline text-center">
-							<h2>밥 먹고 갈래?</h2>
-						</div>
-					</div>
-				</div>
+				
 				<div class="row" id="start_list">
 					
 				</div>
