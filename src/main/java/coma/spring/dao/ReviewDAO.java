@@ -63,4 +63,8 @@ public class ReviewDAO {
 		System.out.println(param);
 		return mybatis.selectList("Review.top5review", param);
 	}
+	// 체크박스 리뷰 삭제하기
+	public int delete(List<String> list) {
+		return mybatis.delete("Review.delete", list);
+	}
 }

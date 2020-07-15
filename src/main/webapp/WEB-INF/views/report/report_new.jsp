@@ -64,7 +64,10 @@ $(function() {
 		<input type="button" id="idcheck" value="확인">
 	</div>
 	<div>
-		신고 사유 :
+		신고 사유 : 
+		<textarea placeholder="신고 사유를 최대한 자세히 작성해 주세요.">
+			
+		</textarea>
 		<div>
 			
 		</div>
