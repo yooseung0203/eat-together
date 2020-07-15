@@ -30,7 +30,7 @@ public class ChatController {
 
 	@Autowired
 	private PartyService pservice;
-	
+
 	@RequestMapping("chatroom")
 	public String chatroom(int roomNum , HttpServletRequest request) throws Exception{
 
@@ -41,7 +41,7 @@ public class ChatController {
 
 		// 방번호를 HTTP세션에 저장 : 웹소켓에서 삭제됨
 		this.session.setAttribute("roomNum", roomNum);
-		
+
 		// 방번호의 저장된 채팅이 있는지 검색 
 		// 없으면 cservice.savedChat를 통해 가져옴 (채팅 리스트 ,채팅수)
 		if(!ChatStatics.savedChats.keySet().contains(roomNum)) {
@@ -51,20 +51,20 @@ public class ChatController {
 		List<PartyMemberDTO> list = cservice.selectChatMembers(roomNum);
 		// 현재 접속중인 인원을 '존재함'으로 표시함
 		try {
-		Iterator iterator = WebChatSocket.members.get(roomNum).entrySet().iterator();
-		while(iterator.hasNext()) {
-			Entry entry = (Entry)iterator.next();
-			for(int i = 0 ; i < list.size() ; i++) {
-				if(((MemberDTO)entry.getValue()).getNickname().equals(list.get(i).getParticipant())) {
-					list.get(i).setExist("exist");
-					list.get(i).setId(((MemberDTO)entry.getValue()).getId());
-					list.get(i).setSysname(((MemberDTO)entry.getValue()).getSysname());
-					break;
+			Iterator iterator = WebChatSocket.members.get(roomNum).entrySet().iterator();
+			while(iterator.hasNext()) {
+				Entry entry = (Entry)iterator.next();
+				for(int i = 0 ; i < list.size() ; i++) {
+					if(((MemberDTO)entry.getValue()).getNickname().equals(list.get(i).getParticipant())) {
+						list.get(i).setExist("exist");
+						list.get(i).setId(((MemberDTO)entry.getValue()).getId());
+						list.get(i).setSysname(((MemberDTO)entry.getValue()).getSysname());
+						break;
+					}
 				}
 			}
-		}
 		}catch(Exception e) {
-			
+
 		}
 		//존재하지 않으면 존재하지 않는다고 초기화
 		for(int i = 0 ; i < list.size() ; i++) {
