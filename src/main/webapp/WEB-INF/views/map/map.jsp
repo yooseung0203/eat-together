@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asas'></script>
+<script src='/resources/js/map.js?asasa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaaaaaa">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaaaaaaa">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -65,6 +65,7 @@
 		</div>
 		<div id="sideBar">
 			<div class="navi_btn"><i class="fas fa-chevron-left"></i></div>
+			<div class="current_position_btn text-center"><i class="fas fa-crosshairs "></i></div>
 			<div class="search_area">
 				<div class="category_search_btns mx-auto">
 					<button type="button" id="backMap"><i class="fas fa-map-marked-alt"></i></button>
@@ -275,9 +276,9 @@
 											<img src="/upload/files/${i.value.sysname}">
 										</c:if>
 									</div>
-									<div class="content">${i.key.content}</div>
+									<div class="content"><c:out value="${i.key.content}"></c:out></div>
 									<div class="bottom">
-										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'${i.key.content}','${i.key.id}')">신고</button>
+										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'<c:out value="${i.key.content}"></c:out>','${i.key.id}')">신고</button>
 									</div>
 								</div>
 							</c:forEach>
