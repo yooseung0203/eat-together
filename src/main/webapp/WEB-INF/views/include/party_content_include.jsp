@@ -1,15 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!-- 태훈 css -->
-<link rel="stylesheet" type="text/css" href="/resources/css/party-content-inlcude.css?ver=2">
-<!-- 태훈 css -->
 <!-- 태훈 스크립트 -->
-<script type="text/javascript" src='/resources/js/party_content_include.js?ver=2'></script>
+<script type="text/javascript" src='/resources/js/party_content_include.js?ver=5'></script>
 <!-- 태훈 스크립트 -->
 <!-- SNS Share js start -->
 <script src='/resources/js/sns_share.js'></script>
 <!-- SNS Share js end -->
+<div class="container-fluid section">
 	<div class="container">
 		<div class="row mb-3">
 			<div class="col-sm-12 mt-3">
@@ -223,3 +221,4 @@
 			</div>
 		</div>
 	</div>
+</div>

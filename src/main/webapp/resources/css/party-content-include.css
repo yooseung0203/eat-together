@@ -4,6 +4,10 @@
 
 /***************  수지씨 CSS 파일 **************/
 
+.section {
+	background-color: #fcfcfc;
+}
+
 .party_headline {
 	font-family: 'Noto Sans KR', sans-serif;
 }
@@ -18,8 +22,13 @@ form {
 	weight: 400;
 }
 
+.btn_select{
+	background-color:#ffcf00;
+	border-color:#ffcf00;
+}
+
 #img-area > img {
-	width:200px;	
+	width:320px;	
 }
 
 .party-info{
@@ -30,6 +39,23 @@ form {
 
 .sns_icon{
 	width:36px;
+}
+.loginError {
+	height: 610px;
+}
+
+.loginerrormsg {
+	padding-top: 200px;
+}
+
+.col-sm-2, .col-1 {
+	margin: 0px;
+	padding: 0px;
+}
+.party-contenttext-area{
+	 word-break:break-all;
+	 
+	 
 }
  /***************  수지씨 내부 CSS  **************/
 .featImgWrap {

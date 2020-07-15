@@ -28,10 +28,6 @@
 <!-- Vendor CSS Files -->
 <link href="/resources/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
 <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-<link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet">
-<link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css"
-	rel="stylesheet">
 
 <!-- Template Main CSS File -->
 <link href="/resources/assets/css/style.css" rel="stylesheet">
@@ -73,6 +69,9 @@
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/party-css.css">
 
+<!-- 태훈 css -->
+<link rel="stylesheet" type="text/css" href="/resources/css/party-content-include.css?ver=5">
+<!-- 태훈 css -->
 
 <title>모임 리스트</title>
 <script>
@@ -305,7 +304,7 @@ $(function() {
 								+ $(this).siblings(".store_name").html()
 								+ "&parent_address="
 								+ $(this).siblings(".store_address").val()
-								+ "&img=" + $(this).parent().siblings().attr("src")
+								+ "&img=" + $(this).parent().siblings().find("img").attr("src")
 								+ "&place_id="
 								+ $(this).siblings(".store_place_id").val()
 								+ "&category="
@@ -319,37 +318,39 @@ $(function(){
 	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.	
 });
 /***************** End예지 페이지 로딩 스피너 **************/
-/*
- * 
- $(function(){
-	
-	$('.top5 .partylist').each(function (index, item) { 
+
+$(function(){
+	$('.top5 .partylist>img').each(function (index, item) { 
 		// 인덱스는 말 그대로 인덱스 // item 은 해당 선택자인 객체를 나타냅니다. 
-		$(item ).
-		// item 과 this는 같아서 일반적으로 this를 많이 사용합니다. 
-		// $(this).addClass('li_0' + index); });
-
-	
-	$(".thumbnail-img").text(obj.height);	
+		$(this ).css('height', $(this).height());  
+	});	
 });
-*/
 
+/*--------------------------
+Back to top button
+---------------------------- */
 
+	$(function() {
+		$(window).scroll(function() {
+			if ($(this).scrollTop() > 100) {
+				$('.back-to-top').fadeIn('slow');
+			} else {
+				$('.back-to-top').fadeOut('slow');
+			}
+		});
 
-
-
+		$('.back-to-top').click(function() {
+			$('html, body').animate({
+				scrollTop : 0
+			}, 1500, 'easeInOutExpo');
+			return false;
+		});
+	});
 </script>
 <style>
-* {
-	text-overflow:ellipsis;
-}
-
-div{
-	border: 1px solid black;
-}
 
 .aa {
-	width: 100%;
+	width: 80%;
 	margin: auto;
 }
 
@@ -362,6 +363,9 @@ div{
 }
 
 .partylist {
+	margin-bottom: 20px;
+}
+.adb{
 	margin-bottom: 15px;
 }
 
@@ -451,7 +455,7 @@ div{
 								value="${top.place_id}"> <input type="hidden"
 								class="store_address" value="${top.address}"> <input
 								type="hidden" class="store_category" value="${top.category}">
-							<button type="button" class="btn btn-info btn-lg topBtn">모집하러
+							<button type="button" class="btn btn-info btn-sm topBtn">모집하러
 								가기</button>
 						</div>
 					</div>
@@ -555,21 +559,8 @@ div{
 	<!-- ******************* -->
 	
 	<!-- Vendor JS Files -->
-  
-  
   <script src="/resources/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-  
-  <script src="/resources/assets/vendor/appear/jquery.appear.js"></script>
-  
-  <script src="/resources/assets/vendor/parallax/parallax.js"></script>
-  
-  <script src="/resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  
-  <script src="/resources/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="/resources/assets/js/main.js"></script>
-  
+  <script src="/resources/assets/vendor/appear/jquery.appear.js"></script>  
 </body>
 </html>
  
