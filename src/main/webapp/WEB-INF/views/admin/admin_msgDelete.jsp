@@ -15,25 +15,14 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
-<title>Admin-쪽지관리</title>
 <script>
-$(function(){
-	$(".table-responsive").find("#msg_text").keyup(function(){
-		var word = $(this).val();
-		var wordSize = word.length;
-		console.log(wordSize);
-		if(wordSize <=2000){
-			$(".current").text(wordSize);
-		}else{
-			word=word.substr(0,2000);
-			$(".current").text(word.length);
-			$(this).val(word);
-			alert("전체쪽지는 2000자 이하로 작성해주세요");
-		}
-	})
-})
-
+function saveMsg(msg_seq) {
+	location.href = "saveMsg?msg_seq=" + msg_seq;
+	alert("복구성공");
+}
 </script>
+<title>Admin-쪽지관리</title>
+
 </head>
 <body>
 	<div class="container-fluid mx-0 px-0">
@@ -66,45 +55,48 @@ $(function(){
 									<table class="table border-bottom border-dark">
 										<thead class="thead-dark">
 											<tr>
-												<th scope="col" colspan=12 class="text-center">전체 쪽지</th>
+												<th scope="col" colspan=12 class="text-center">받은 쪽지</th>
 											</tr>
-											
-											
+
+
 										</thead>
 										<tbody>
 											<tr align="center">
+												<th scope="col" colspan=2>#</th>
+												<th scope="col" colspan=2>받는사람</th>
 												<th scope="col" colspan=4>제목</th>
-												<th scope="col" colspan=8>[공지] <input type="text"
-													id="msg_title" name="msg_title" style="width: 80%;"></th>
-											</tr>
-
-											<tr align="center">
-												<th scope="col" colspan=6>받는사람</th>
-												<th scope="col" colspan=6>전체 회원</th>
-											</tr>
-											<tr align="center">
-												<th scope="col" colspan=12>내용</th>
-											</tr>
-											<tr align="center">
-												<td scope="col" colspan=12><textarea
-														placeholder="내용을 입력해주세요"
-														style="width: 100%; padding: 10px; word-break: keep-all; height: 150px; resize: none;"
-														id="msg_text" name="msg_text"></textarea></td>
+												<th scope="col" colspan=2>날짜</th>
+												<th scope="col" colspan=2>삭제</th>
 											</tr>
 											<tr>
+												<c:if test="${empty list}">
+													<td scope="col" colspan=12 align="center">쪽지가 없습니다.</td>
+												</c:if>
+											</tr>
 
-												<td scope="col" colspan=12 id="wordcheck" align="right"><span
-													class="current">0</span>/2000자</td>
+											<c:forEach var="i" items="${list}" varStatus="status">
+												<tr align="center">
+													<td colspan=2>${i.msg_seq}</td>
+
+
+													<td colspan=2><c:choose>
+															<c:when test="${i.msg_receiver eq 'administrator'}">관리자</c:when>
+															<c:otherwise>${i.msg_receiver}</c:otherwise>
+														</c:choose></td>
+													<td colspan=4 class="msg_title" id="msg_title"><c:out value="${i.msg_title}" /></td>
+													<td colspan=2>${i.date}</td>
+													<td colspan=2>
+														<button type="button" class="btn btn-outline-dark"
+															onclick="location.href='javascript:saveMsg(${i.msg_seq})'">복구</button>
+													</td>
+												</tr>
+											</c:forEach>
+
+											<tr>
+												<td scope="col" colspan=12 align="center">${navi}</td>
 											</tr>
 										</tbody>
 									</table>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-12" align="center">
-									<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
-										<button class="btn btn-warning" id="submit" type="submit">보내기</button>
-									</c:if>
 								</div>
 							</div>
 
@@ -114,28 +106,7 @@ $(function(){
 			</div>
 
 		</div>
-<script>
-	$("#submit").on("click",function(){
-		if($("#msg_title").val()!=""){
-			if($("#msg_text").val()!=""){
-				var result = prompt("전체 회원에게 보내는 쪽지입니다.한번더 확인하고 확인을 입력해주세요");
-				if(result=="확인"){
-					return true;	
-				}else{
-					alert("확인을 입력해주세요");
-					return false;
-				}
-			}else{
-				alert("내용을 입력해주세요");
-				return false;
-			}
-		}else{
-			alert("제목을 입력해주세요");
-			return false;
-		}
-	})
 
-</script>
 	</div>
 </body>
 </html>

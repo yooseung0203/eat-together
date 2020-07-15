@@ -36,7 +36,7 @@
 		<table class="table">
 			<thead>
 				<tr class="table" id="orange">
-					<th scope="col" colspan=12>${msgView.msg_receiver}님으로쪽지가
+					<th scope="col" colspan=12>${msgView.msg_receiver}님에게 쪽지가
 						도착하였습니다.</th>
 				</tr>
 			</thead>

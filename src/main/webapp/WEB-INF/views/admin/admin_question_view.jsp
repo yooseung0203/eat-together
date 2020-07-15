@@ -83,8 +83,7 @@
 											</tr>
 											<tr>
 												<td scope="col" colspan=12><div
-														style="width: 100%; padding: 10px; word-break: keep-all; height: 140px; resize: none;"
-														>${qdto.msg_text}</div></td>
+														style="width: 100%; padding: 10px; word-break: keep-all; height: 140px; resize: none;">${qdto.msg_text}</div></td>
 											</tr>
 
 
@@ -96,14 +95,15 @@
 														</tr>
 													</thead>
 													<tr align="center">
-														<th scope="col">제목<input type="hidden"
+														<th scope="col" colspan=4>제목<input type="hidden"
 															name="msg_view" id="msg_view" value="${qdto.msg_seq}"></th>
-														<th scope="col">[1:1답변]</th>
+														<th scope="col" colspan=8>[1:1답변]<input type="text"
+															id="msg_title" name="msg_title" style="width: 80%;"></th>
 													</tr>
 
 													<tr align="center">
-														<th scope="col">받는사람</th>
-														<th scope="col">${qdto.msg_sender}<input
+														<th scope="col" colspan=6>받는사람</th>
+														<th scope="col" colspan=6>${qdto.msg_sender}<input
 															type="hidden" name="msg_receiver" id="msg_receiver"
 															value="${qdto.msg_sender}"></th>
 													</tr>
@@ -146,7 +146,7 @@
 
 													<tr align="center">
 														<th scope="col">작성 날짜</th>
-														<th scope="col">${qadto.msg_date}</th>
+														<th scope="col">${qadto.date}</th>
 													</tr>
 													<tr>
 														<td scope="col" colspan=12><div
@@ -169,12 +169,22 @@
 		</div>
 
 	</div>
-<!-- 	<script>
-		$("#submit").on("click",function(){
-			$("#msg_view").val(${qdto.msg_seq});
-			$("#msg_receiver").val(${qdto.msg_sender});
-		})
-	</script> -->
+	<script>
+	$("#submit").on("click",function(){
+		if($("#msg_title").val()!=""){
+			if($("#msg_text").val()!=""){
+				return true;
+			}else{
+				alert("내용을 입력해주세요");
+				return false;
+			}
+		}else{
+			alert("제목을 입력해주세요");
+			return false;
+		}
+	})
+
+</script>
 
 </body>
 </html>
