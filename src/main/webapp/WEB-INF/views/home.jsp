@@ -46,8 +46,60 @@
 		})
 	})
 </script> -->
+ <style type="text/css">
+        html,body{ margin:0; padding:0; width:100%; height:100%;}
+        .box{ width:100%; height:100%; position:relative; color:#ffffff; font-size:24pt;}
+        .imgdiv {margin:auto;padding-top:50px; padding-left:150px;}
+        .bg-fdc23e {background-color: #fdc23e;}
+        
+    </style>
+    <script type="text/javascript">
+        window.onload = function () {
+            var elm = ".box";
+            $(elm).each(function (index) {
+                // 개별적으로 Wheel 이벤트 적용
+                $(this).on("mousewheel DOMMouseScroll", function (e) {
+                    e.preventDefault();
+                    var delta = 0;
+                    if (!event) event = window.event;
+                    if (event.wheelDelta) {
+                        delta = event.wheelDelta / 120;
+                        if (window.opera) delta = -delta;
+                    } 
+                    else if (event.detail)
+                        delta = -event.detail / 3;
+                    var moveTop = $(window).scrollTop();
+                    var elmSelecter = $(elm).eq(index);
+                    // 마우스휠을 위에서 아래로
+                    if (delta < 0) {
+                        if ($(elmSelecter).next() != undefined) {
+                            try{
+                                moveTop = $(elmSelecter).next().offset().top;
+                            }catch(e){}
+                        }
+                    // 마우스휠을 아래에서 위로
+                    } else {
+                        if ($(elmSelecter).prev() != undefined) {
+                            try{
+                                moveTop = $(elmSelecter).prev().offset().top;
+                            }catch(e){}
+                        }
+                    }
+                     
+                    // 화면 이동 0.8초(800)
+                    $("html,body").stop().animate({
+                        scrollTop: moveTop + 'px'
+                    }, {
+                        duration: 800, complete: function () {
+                        }
+                    });
+                });
+            });
+        }
+    </script>
 </head>
-<body>
+<body style=" margin:0; padding:0; ">
+ <div class="box">
 	<!-- ******************* -->
 	<!-- header  -->
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
@@ -58,6 +110,7 @@
 	
 	<div class="container-fluid ">
 		<!-- 슬라이드 -->
+		
 		<div class="row slide-area ">
 			<div class="col px-0 mx-0">
 
@@ -125,14 +178,32 @@
 				</div>
 			</div>
 		</div>
+		</div>
 
-
-
-		<!-- 회원가입 권유 -->
+	<div class="container-fluid py-0 my-0 bg-fdc23e">
 		<div class="row">
-			<div class="col-sm-12">회원가입 권유</div>
+			<div class="col-12 col-sm-12  pt-3 pb-3 my-0 text-center">
+				<h4 class="lastcopy text-center">1분만에 간편 무료회원가입하고 모임을 시작해보세요.</h4>
+				<button type="button" id="toJoinBtn"
+					class="btn btn-success btn-lg text-center">간편 무료회원가입</button>
+			</div>
 		</div>
 	</div>
+
+
+		
+	</div>
+		 <div class="box" style="background-color:orange;"><div class="imgdiv"><img src="/resources/img/mn/party.jpg"></div></div>
+    <div class="box" style="background-color:yellow;"><div class="imgdiv"><img src="/resources/img/mn/map.jpg"></div></div>
+    <div class="box" style="background-color:green;"><div class="imgdiv"><img src="/resources/img/mn/chat.jpg"></div></div>
+    <div class="box" style="background-color:blue;"><div class="imgdiv"><img src="/resources/img/mn/search.jpg"></div></div>
+    
+    <div class="box" style="background-color:violet;"><!-- ******************* -->
+	<!-- footer  -->
+	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
+
+	<!-- footer  -->
+	<!-- ******************* --></div>
 	
 	<!-- 카카오톡으로 로그인한 경우 accoun_email인증이 안되었기 때문에 mypage로 이동시킨다. -->
 	<script>
@@ -142,11 +213,6 @@
 		}
 	</script>
 
-	<!-- ******************* -->
-	<!-- footer  -->
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
-
-	<!-- footer  -->
-	<!-- ******************* -->
+	
 </body>
 </html>
