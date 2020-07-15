@@ -143,6 +143,8 @@ public class NoticeController {
 		if(!filePath.exists()) {
 			filePath.mkdir(); //폴더 만들기
 		}
+		
+		System.out.println("중요?"+dto.getImportance());
 
 		/* 파일 업로드 */      
 		List <NoticeFileDTO> filelist = new ArrayList<NoticeFileDTO>();

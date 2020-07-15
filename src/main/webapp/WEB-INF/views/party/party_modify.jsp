@@ -43,7 +43,7 @@
 <!-- ******************* -->
 
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/party-css.css">
+	href="/resources/css/party-css.css?ver=1">
 <link rel="stylesheet"
 	href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <script>
@@ -320,7 +320,7 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
-
+<div class="container-fluid section">
 	<c:if test="${con.writer ne sessionScope.loginInfo.nickname}">
 		<script>
 			alert("작성자만 수정 가능합니다.");
@@ -507,7 +507,7 @@
 			</div>
 		</form>
 	</c:if>
-
+</div>
 
 
 	<!-- ******************* -->

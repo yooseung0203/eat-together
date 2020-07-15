@@ -3,15 +3,32 @@
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<style>
+.navi-menu>a {
+	color: #212529 !important;
+	font-family: 'Noto Sans KR', sans-serif !important;
+	font-size: 18pt !important;
+}
 
+.navi-menu>a:hover {
+	text-decoration: none;
+	color: #212529;
+}
+
+.navi-menu>a:visited {
+	color: #212529;
+}
+</style>
 
 
 <!-- header -->
 <div class="container-fluid ">
-	<div class="header-wrap  mt-3 mb-2 px-0 mx-0">
+	<div class="header-wrap  mt-3 mb-2 px-0 mx-0 row">
+	<div class="col-sm-12">
 		<div class="row">
-			<div class="col-sm-1 logo-image ">
-				<a href="/"><img src="/resources/img/logo.png"></a>
+			<div class="col-sm-1 mr-0 px-0 my-0 py-0 logo-image ">
+				<a href="/"><img class="mx-0 px-0 my-0 py-0"
+					src="/resources/img/logo.png"></a>
 			</div>
 			<div class="col-sm-9 mb-3">
 				<ul class="nav">
@@ -37,55 +54,51 @@
 								<a class="nav-link" href="#" id="goToMyPage">마이페이지</a>
 							</c:otherwise>
 						</c:choose></li>
+
+					<li class="nav-item navi-menu"><c:choose>
+							<c:when test="${loginInfo.id!=null && newMsg!=0}">
+								<button type="button" class="btn btn-danger" id="newMsg">
+									New<span class="badge badge-light">${newMsg}</span>
+								</button>
+							</c:when>
+						</c:choose></li>
 				</ul>
 			</div>
 
-			<div class="col-sm-1">
-				<div class="navi-menu">
-					<c:choose>
-						<c:when test="${loginInfo.id!=null && newMsg!=0}">
-							<button type="button" class="btn btn-primary" id="newMsg">
-								New<span class="badge badge-light">${newMsg}</span>
-							</button>
-						</c:when>
-					</c:choose>
-				</div>
 
+		
 
+		<c:if test="${loginInfo.id == null}">
+			<div class="col-sm-2 text-right">
+				<span class="main-login "> <a href="/member/loginview">
+						로그인 </a> / <a href="/member/signup_check">회원가입</a>
+				</span>
 			</div>
-	
-				<c:if test="${loginInfo.id == null}">
-					<div class="col-sm-1">
-						<span class="main-login"> <a href="/member/loginview">
-								로그인 </a> / <a href="/member/signup_check">회원가입</a>
+		</c:if>
+		<c:if test="${loginInfo.id != null}">
+			<c:choose>
+				<c:when test="${loginInfo.id == 'administrator'}">
+					<div class="col-sm-2 text-right">
+						<span class="main-login"> 관리자님, 환영합니다. <br> <a
+							href="/member/logoutProc" id="logout">로그아웃</a>
 						</span>
 					</div>
-				</c:if>
-				<c:if test="${loginInfo.id != null}">
-					<c:choose>
-						<c:when test="${loginInfo.id == 'administrator'}">
-							<div class="col-sm-1">
-								<span class="main-login"> 관리자님, 환영합니다. / <a
-									href="/member/logoutProc" id="logout">로그아웃</a>
-								</span>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<div class="col-sm-1">
-								<span class="main-login"> ${loginInfo.id}님, 환영합니다. / <a
-									href="/member/logoutProc" id="logout">로그아웃</a> <a
-									href="/member/logoutProc" id="Report">신고하기</a>
-								</span>
-							</div>
-						</c:otherwise>
-					</c:choose>
-				</c:if>
-			
-		</div>
-
-
-	</div>
+				</c:when>
+				<c:otherwise>
+					<div class="col-sm-2 text-right">
+						<span class="main-login "> ${loginInfo.id}님, 환영합니다. <br>
+							<a href="/member/logoutProc" id="logout">로그아웃</a>
+						</span>
+					</div>
+				</c:otherwise>
+			</c:choose>
+		</c:if>
 </div>
+	</div>
+
+</div>
+</div>
+
 
 <script>
 	$("#logout").on("click", function() {
