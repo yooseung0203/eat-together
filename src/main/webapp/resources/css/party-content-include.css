@@ -1,0 +1,102 @@
+@charset "UTF-8";
+@font-face { font-family: 'NEXON Lv1 Gothic OTF Light'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Light.woff') format('woff'); font-weight: normal; font-style: normal;}
+
+
+/***************  수지씨 CSS 파일 **************/
+
+.section {
+	background-color: #fcfcfc;
+}
+
+.party_headline {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+
+form {
+	font-family: 'Noto Sans KR', sans-serif;
+	weight: 200;
+}
+
+.party-titlelabel {
+	font-family: 'Noto Sans KR', sans-serif;
+	weight: 400;
+}
+
+.btn_select{
+	background-color:#ffcf00;
+	border-color:#ffcf00;
+}
+
+#img-area > img {
+	width:320px;	
+}
+
+.party-info{
+	font-family: 'Noto Sans KR', sans-serif;
+	font-size:11pt;
+	font-family: 'NEXON Lv1 Gothic OTF Light';
+}
+
+.sns_icon{
+	width:36px;
+}
+.loginError {
+	height: 610px;
+}
+
+.loginerrormsg {
+	padding-top: 200px;
+}
+
+.col-sm-2, .col-1 {
+	margin: 0px;
+	padding: 0px;
+}
+.party-contenttext-area{
+	 word-break:break-all;
+	 
+	 
+}
+ /***************  수지씨 내부 CSS  **************/
+.featImgWrap {
+	height: 250px;
+	position: relative;
+	padding-top: 56.57%;
+	/* 16:9 ratio */
+	overflow: hidden;
+}
+
+.featImgWrap .cropping {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	-webkit-transform: translate(50%, 50%);
+	-ms-transform: translate(50%, 50%);
+	transform: translate(50%, 50%);
+}
+
+.featImgWrap .cropping img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	max-width: 100%;
+	height: auto;
+	-webkit-transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.featImgWrap .cropping img.landscape {
+	max-height: 100%;
+	height: 100%;
+	max-width: none;
+}
+
+.featImgWrap .cropping img.portrait {
+	max-width: 100%;
+	width: 100%;
+	max-height: none;
+	border: 1px solid black;
+}

@@ -10,8 +10,8 @@
 		values(review_file_seq.nextval,#{sysname},#{oriname},review_seq.currval)
 	</insert>
 	<select id="selectByPseq" resultType="coma.spring.dto.ReviewDTO">
-		select * from review where
-		parent_seq = #{parent_seq} order by 1 desc
+		select review.*, member.profile from review, member where
+		review.parent_seq = #{parent_seq} and review.id = member.id order by 1 desc
 	</select>
 	<select id="selectFileByPseq"
 		resultType="coma.spring.dto.ReviewFileDTO">
@@ -45,4 +45,12 @@
 		from (select parent_seq, content, id, row_number() over(partition by parent_seq order by rating desc,length(content) desc) rank 
 		from review where parent_seq in (#{top1},#{top2},#{top3},#{top4},#{top5})) where rank = 1 order by parent_seq desc
 	</select>
+	<!-- by예지, 관리지 페이지에서 리뷰 체크박스 삭제 처리 -->
+	<delete id="delete" parameterType="map">
+		delete from review where seq in
+		<foreach collection="list" item="item" index="index"
+			separator="," open="(" close=")">
+			#{item,jdbcType=VARCHAR}
+		</foreach>
+	</delete>
 </mapper>

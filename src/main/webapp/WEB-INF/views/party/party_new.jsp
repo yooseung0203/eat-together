@@ -47,7 +47,7 @@
 <!-- ******************* -->
 
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/party-css.css">
+	href="/resources/css/party-css.css?ver=25">
 <link rel="stylesheet" type="text/css"
 	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet"
@@ -79,13 +79,46 @@
 		return year + '' + month + '' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 	}
 	$(function() {
+	      $("#party_title").on("change keyup paste",function() {
+	            var len = $(this).val();
+	            if(len.length > 25){
+	                alert("글 제목은 25자 이내로 설정해주세요")
+	                $(this).val(len.substr(0,25));
+	            }
+	      });
+	      
+	      $("#content").on("change keyup paste",function() {
+	            var len = $(this).val();
+	            if(len.length > 300){
+	                alert("글 제목은 300자 이내로 설정해주세요")
+	                $(this).val(len.substr(0,300));
+	            }
+	      })
+		
+		
 		
 		$("#party_date").on("blur", function() {
 			var d = new Date($("#party_date").val());
 			var d_format = getFormatDate(d);
 			var now = new Date();
 			var now_format = getFormatDate(now);
+			var lastday=new Date(now.getYear(), now.getMonth()+2, now.getDate());
+			var tdate = now.getFullYear();
+			
+			 if(10 > lastday.getMonth()) {
+			        tdate += "0" + lastday.getMonth();
+			      } else {
+			       tdate += "" + lastday.getMonth();
+			      }
 
+			      if(10 > lastday.getDate()) {
+			        tdate += "0" +  lastday.getDate();
+			      } else {
+			       tdate += "" +  lastday.getDate();
+			      }      
+
+			
+			
 			console.log(d_format);
 			console.log(now_format);
 			var now_time = now.getTime();
@@ -97,10 +130,17 @@
 			if (now_format > d_format) {
 				alert("과거의 날짜를 선택하셨습니다.");
 				$("#party_date").val("");
+			}else if (tdate < d_format) {
+				alert("너무 먼 날짜를 선택하셨습니다.");
 			}else if (now_time > d_time) {
 				alert("과거의 시간을 선택하셨습니다.");
 				$("#party_date").val("");
-			};
+			}else{
+
+				$("#timeDiv").text($("#party_date").val());
+			}
+			
+			
 
 		});
 
@@ -193,13 +233,7 @@
 			var isCheckGender = $('input:radio[name=gender]').is(':checked');
 			var isCheckAge = $('input:checkbox[name=age]').is(':checked');
 
-			console.log(title);
-			console.log(date);
-			console.log(time);
-			console.log(count);
-			console.log(content);
-			console.log(isCheckGender);
-			console.log(isCheckAge);
+			
 			if ($.trim(parent_name) == '') {
 				alert('상호명 찾기버튼으로 모임장소를 등록해주세요');
 				return false;
@@ -215,12 +249,7 @@
 				return false;
 			}
 			;
-			/* 
-			 if (!time) {
-			 alert("모임시간을 선택해주세요");
-			 return false;
-			 }
-			 ; */
+			
 			if ($.trim(count) == '') {
 				alert("모임인원을 선택해주세요");
 				return false;
@@ -288,9 +317,11 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp" />
 	<!-- hedaer  -->
 	<!-- ******************* -->
-
+<div class="container-fluid section">
 	<c:if test="${empty sessionScope.loginInfo }">
+	<div class="loginError">
 		<h3 class="text-center my-5">로그인 후 이용해주세요.</h3>
+	</div>
 	</c:if>
 	<c:if test="${!empty sessionScope.loginInfo }">
 		<form id="form" name="form" method="post"
@@ -298,26 +329,26 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-12 col-sm-8 formdiv">
-						<div class="row mb-3">
+						<div class="row pt-5 mb-3">
 							<div class="col-sm-12">
 								<h2 class="party_headline">모임 모집하기</h2>
 							</div>
 							<input type="hidden" name="writer">
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">상호명</div>
+							<div class="col-sm-2">상호</div>
 							<div class="col-sm-7">
 								<input type="text" class="form-control" name="parent_name"
 									id="parent_name" value="${parent_name}" readonly>
 							</div>
 							<div class="col-sm-3">
-								<button id="search_parent_name" class="btn btn-primary"
+								<button id="search_parent_name" class="btn btn_select"
 									type=button>상호 찾기</button>
 							</div>
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">위치</div>
-							<div class="col-sm-8">
+							<div class="col-sm-9">
 								<!-- 예지 수정 : 지도형 페이지에서 '내가 직접 모집하기' 버튼으로 접근 / 네비 '모임모집' 버튼으로 접근하는 경우 구분-->
 								<input type="text" class="form-control" name="parent_address"
 									id="parent_address" value="${parent_address}" readonly>
@@ -331,7 +362,7 @@
 											value="${mdto.category}">
 										<input type="hidden" name="phone" id="phone"
 											value="${mdto.phone}">
-										<input type="hidden" name="road_address_name"
+											<input type="hidden" name="road_address_name"
 											id="road_address_name" value="${mdto.road_address}">
 										<input type="hidden" name="place_url" id="place_url"
 											value="${mdto.place_url}">
@@ -371,19 +402,19 @@
 							</div>
 						</div>
 
-						<div class="row mb-1">
+						<div class="row pb-1">
 							<div class="col-sm-2">제목</div>
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 								<input class="form-control" type="text" name="title"
 									id="party_title">
 							</div>
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">모임날짜와 시간</div>
-							<div class="col-sm-8">
+							<div class="col-sm-2">날짜</div>
+							<div class="col-sm-1 ">
 								<div class="input-group date" id="datetimepicker1"
 									data-target-input="nearest">
-									<input type="text" id="party_date" name="date"
+									<input type="hidden" id="party_date" name="date"
 										class="form-control datetimepicker-input"
 										data-target="#datetimepicker1" />
 									<div class="input-group-append" data-target="#datetimepicker1"
@@ -402,11 +433,15 @@
 											startDate : 'd',
 											format : 'YYYY-MM-DD H:mm',
 											stepping : 5,
-											showOn : "both"
+											showOn : "both",
+											showButtonPanel: true
 
 										}); //datepicker end
 									});
 								</script>
+							</div>
+							<div class="col-sm-5">
+								<div id="timeDiv"></div>
 							</div>
 						</div>
 						<div class="row mb-1">
@@ -422,7 +457,7 @@
 
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">멤버구성</div>
+							<div class="col-sm-2">구성</div>
 							<div class="col-sm-10">
 								<div class="form-check form-check-inline">
 									<input class="form-check-input" type="radio" name="gender"
@@ -445,7 +480,7 @@
 						</div>
 
 						<div class="row mb-1">
-							<div class="col-sm-2">연령대</div>
+							<div class="col-sm-2">연령</div>
 							<div class="col-sm-10">
 								<div class="form-check form-check-inline">
 									<input class="form-check-input" type="checkbox" name="age"
@@ -492,23 +527,23 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-4" id="img-area">
-						<img src="${img}" width="300px" id="storeimg">
+					<div class="col-12 col-sm-4 mt-5 pt-5" id="img-area">
+						<img src="${img}" width="350px" id="storeimg">
 					</div>
 				</div>
 			</div>
-			<div class="container formdiv">
-				<div class="row mb-1">
+			<div class="container formdiv pb-5">
+				<div class="row pb-1">
 					<div class="col-1">소개</div>
 					<div class="col-11 px-5">
 						<textarea class="form-control " id="content" name="content"
-							placeholder="소개를 입력해주세요" rows="10"></textarea>
+							placeholder="소개를 입력해주세요" rows="5" style="resize: none;"></textarea>
 					</div>
 				</div>
-				<div class="row mb-3">
+				<div class="row pt-3 pb-3">
 					<div class="col-12">
 						<button type=button id="submitBtn"
-							class="btn btn-primary btn-lg btn-block">모임 등록하기</button>
+							class="btn btn_select btn-lg btn-block">모임 등록하기</button>
 					</div>
 
 				</div>
@@ -516,7 +551,7 @@
 			</div>
 		</form>
 	</c:if>
-
+</div>
 
 	<!-- ******************* -->
 	<!-- footer  -->

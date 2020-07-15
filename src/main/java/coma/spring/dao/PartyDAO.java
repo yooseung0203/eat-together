@@ -126,8 +126,18 @@ public class PartyDAO {
 		return mybatis.selectOne("Party.getListCount");
 	}
 	// 태훈 모임 통합 검색
-	public List<PartyDTO> partySearch(Map<String, Object> param){	
-		return mybatis.selectList("Party.partySearch", param);
+//	public List<PartyDTO> partySearch(Map<String, Object> param){	
+//		return mybatis.selectList("Party.partySearch", param);
+//	}
+	// 태훈 모임 통합 검색
+	public List<PartyDTO> partySearch(Map<String, Object> param, int cpage){
+		int start = cpage * PartyConfiguration.SEARCH_COUNT_PER_PAGE - (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);
+		int end = start + (PartyConfiguration.SEARCH_COUNT_PER_PAGE-1);	
+		param.put("start", start);
+		param.put("end", end);
+		System.out.println(param.get("start"));
+		System.out.println(param.get("end"));
+		return mybatis.selectList("Party.partySearch", param) ;
 	}
 	// 지은 작성자 별 모임 리스트
 	public List<PartyDTO> selectByWriterPage(Map<String, Object> param)throws Exception{

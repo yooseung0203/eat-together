@@ -9,8 +9,10 @@
       var url = encodeURIComponent(encodeURIComponent(window.location.href));
       var title = encodeURIComponent(sh_title);
       var shareURL = "https://share.naver.com/web/shareView.nhn?url=" + url + "&title=" + title;
-      alert(shareURL);
-      document.location = shareURL;
+     
+  	window.open(shareURL, "_blank"
+			, 'width=600,height=400,resizable=yes,scrollbars=yes'
+	);
     }
 
 /*트위터*/

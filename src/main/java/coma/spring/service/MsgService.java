@@ -37,9 +37,14 @@ public class MsgService {
 	}
 	//쪽지보내기
 	public int insert(MsgDTO msgdto)throws Exception {
-		int result = msgdao.insert(msgdto);
-		return result;
+		return msgdao.insert(msgdto);
+		
 	}
+	//전체쪽지 보내기
+	public int msgNotice(MsgDTO mdto)throws Exception{
+		return msgdao.msgNotice(mdto); 
+	}
+	
 	//가입축하쪽지
 	public int insertWelcome(String msg_receiver)throws Exception{
 		int result = msgdao.insertWelcome(msg_receiver);

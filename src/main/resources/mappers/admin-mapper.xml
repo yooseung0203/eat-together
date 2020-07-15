@@ -55,4 +55,64 @@
 		#{end}
 	</select>
 
+	<!-- 여기는 네비 카운트 -->
+	<!-- 관리자 받은 쪽지함 -->
+	<select id="getSenderCount" resultType="int">
+		select count(*) from msg
+		where msg_receiver = #{msg_receiver} and msg_sender!='administrator'
+		and
+		receiver_del=0 and msg_title not like '%[1:1문의]%'
+	</select>
+	<!-- 관리자 보낸 쪽지함 -->
+	<select id="getReceiverCount" resultType="int">
+		select count(*) from
+		msg
+		where msg_sender = #{msg_receiver} and
+		sender_del = 0 and msg_title
+		not like '%[1:1문의]%'
+	</select>
+	<!-- 관리자 휴지통 -->
+	<select id="getGarbageCount" resultType="int">
+		select count(*) from
+		msg where
+		receiver_del=1 and sender_del=1 and msg_title not like
+		'%[1:1%'
+	</select>
+
+	<!-- 받은쪽지함 -->
+	<select id="selectBySender" resultType="coma.spring.dto.MsgDTO">
+		select * from (select
+		msg.*, row_number() over(order by msg_date desc)
+		rnum from msg where
+		msg_receiver = #{msg_receiver} and
+		msg_sender!='administrator' and
+		receiver_del=0 and msg_title not like '%[1:1문의]%') where rnum between
+		#{start} and #{end}
+	</select>
+	<!-- 보낸쪽지함 -->
+	<select id="selectByReceiver"
+		resultType="coma.spring.dto.MsgDTO">
+		select * from (select
+		msg.*, row_number() over(order by
+		msg_date desc)
+		rnum from msg where msg_sender = #{msg_receiver} and
+		sender_del = 0 and msg_title not like '%[1:1문의]%') where rnum between
+		#{start} and #{end}
+	</select>
+	<!-- 관리자 휴지통 -->
+	<select id="selectByGarbage"
+		resultType="coma.spring.dto.MsgDTO">
+		select * from (select
+		msg.*, row_number() over(order by
+		msg_date desc)
+		rnum from msg where
+		receiver_del=1 and sender_del=1 and
+		msg_title not like
+		'%[1:1%') where rnum between
+		#{start} and #{end}
+	</select>
+	<!-- 삭제된 메세지 복구 -->
+	<update id="saveMsg">
+		update msg set receiver_del=0,sender_del=0 where msg_seq=#{value}
+	</update>
 </mapper>

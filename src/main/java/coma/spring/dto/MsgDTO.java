@@ -1,6 +1,7 @@
 package coma.spring.dto;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class MsgDTO {
 	private int msg_seq;
@@ -12,9 +13,19 @@ public class MsgDTO {
 	private int msg_view;
 	private int sender_del;
 	private int receiver_del;
+	private String date;
 	
+	public String getDate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	    String date = sdf.format(msg_date);
+	    System.out.println(date);
+		return date;
+	}
+	public void setdate(String date) {
+		this.date=date;
+	}
 	public MsgDTO() {};
-	public MsgDTO(int msg_seq,String msg_sender,String msg_receiver,String msg_title,String msg_text,Timestamp msg_date,int msg_view,int sender_del,int receiver_del) {
+	public MsgDTO(int msg_seq,String msg_sender,String msg_receiver,String msg_title,String msg_text,Timestamp msg_date,int msg_view,int sender_del,int receiver_del,String date) {
 		super();
 		this.msg_seq=msg_seq;
 		this.msg_sender=msg_sender;
@@ -25,6 +36,7 @@ public class MsgDTO {
 		this.msg_view=msg_view;
 		this.sender_del=sender_del;
 		this.receiver_del=receiver_del;
+		this.date=new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(msg_date);
 	}
 	public int getMsg_seq() {
 		return msg_seq;

@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asa'></script>
+<script src='/resources/js/map.js?asasa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaaa">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaaaaaaa">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -49,6 +49,9 @@
 	<div class="container-fluid all">
 		<div id="header"><jsp:include
 				page="/WEB-INF/views/include/header.jsp" /></div>
+		<div id="map_approach_info" style="display:none;">
+			<jsp:include page="/WEB-INF/views/include/map_approach_info.jsp" />
+		</div>
 		<c:if test="${empty sessionScope.loginInfo}">
 			<div class="loginPlease">
 				<p class="loginMsg">현재 진행중인 모임 ${partyAllCount}개<br>
@@ -61,6 +64,8 @@
 			<img src="/resources/img/Progress_Loading.gif"/>
 		</div>
 		<div id="sideBar">
+			<div class="navi_btn"><i class="fas fa-chevron-left"></i></div>
+			<div class="current_position_btn text-center"><i class="fas fa-crosshairs "></i></div>
 			<div class="search_area">
 				<div class="category_search_btns mx-auto">
 					<button type="button" id="backMap"><i class="fas fa-map-marked-alt"></i></button>
@@ -82,87 +87,15 @@
 			<div class="side">
 				<div class="search_result">
 					<c:if test="${empty mapdto}">
-						<div class="map_approach m-1">
-							<p class="m-0">핀 사용법</p>
-							<p class="mt-1"><small>지도에서 핀을 선택해 맛집 정보를 확인해주세요.</small></p>
-							<div class="card mb-3 mt-3" style="max-width: 540px;">
-							  <div class="row no-gutters ml-2 mr-2">
-							    <div class="col-3 text-center p-2">
-							      <img src="https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset5.png">
-							    </div>
-							    <div class="col-9">
-							      <div class="card-body p-1 pt-4">
-							        <p class="card-text p-1"><small>일반 음식점</small></p>
-							      </div>
-							    </div>
-							  </div>
-							  <div class="row no-gutters ml-2 mr-2" data-toggle="tooltip" data-placement="bottom" title="모임이 종료된 가게는 회색 핀으로 표시됩니다.">
-							    <div class="col-3 text-center p-2">
-							      <img src="https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset6.png">
-							    </div>
-							    <div class="col-9">
-							      <div class="card-body p-1 pt-4">
-							        <p class="card-text p-1"><small>일반 카페</small></p>
-							      </div>
-							    </div>
-							  </div>
-							  <div class="row no-gutters ml-2 mr-2">
-							    <div class="col-3 text-center p-2">
-							      <img src="https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset4.png">
-							    </div>
-							    <div class="col-9">
-							      <div class="card-body p-1 pt-4">
-							        <p class="card-text p-1"><small>모임 모집이 개설된 음식점</small></p>
-							      </div>
-							    </div>
-							  </div>
-							  <div class="row no-gutters ml-2 mr-2" data-toggle="tooltip" data-placement="bottom" title="파란색 핀을 클릭해 모임에 참가해보세요!">
-							    <div class="col-3 text-center p-2">
-							      <img src="https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset3.png">
-							    </div>
-							    <div class="col-9">
-							      <div class="card-body p-1 pt-4">
-							        <p class="card-text p-1"><small>모임 모집이 개설된 카페</small></p>
-							      </div>
-							    </div>
-							  </div>
-							  <div class="row no-gutters ml-2 mr-2">
-							    <div class="col-3 text-center p-2">
-							      <img src="https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset1.png">
-							    </div>
-							    <div class="col-9">
-							      <div class="card-body p-1 pt-4">
-							        <p class="card-text p-1"><small>리뷰 별점 평균 Top5</small></p>
-							      </div>
-							    </div>
-							  </div>
-							  <div class="row no-gutters ml-2 mr-2" data-toggle="tooltip" data-placement="bottom" title="노란 핀이 다섯 개보다 적은 경우, 리뷰 별점 평균이 1점 이상인 가게가 충분하지 않다는 의미입니다.">
-							    <div class="col-3 text-center p-2">
-							      <img src="https://eat-together.s3.ap-northeast-2.amazonaws.com/Asset2.png">
-							    </div>
-							    <div class="col-9">
-							      <div class="card-body p-1 pt-4">
-							        <p class="card-text p-1"><small>리뷰 별점 평균 Top5</small></p>
-							      </div>
-							    </div>
-							  </div>
-							</div>
-						</div>
-						<div class="map_approach m-1">
-							<p class="m-0">맛집 분포도</p>
-							<div class="clusterer_desc m-2">
-								<img src="/resources/img/clusterer_orange.png">
-								<img src="/resources/img/clusterer_white.png">
-								<div class="clusterer in_map"></div>
-							</div>
-							<p><small>오렌지색의 클러스터는 모임이 개설 중이거나 종료된 맛집, 흰색의 클러스터는 아직 모임이 한 번도 개설되지 않은 가게를 나타냅니다.</small></p>
-						</div>
+						<jsp:include page="/WEB-INF/views/include/map_approach_info.jsp" />
 					</c:if>
 				</div>
 				<div class="choose_info">
 					<c:if test="${not empty mapdto}">
 						<div class="store_info mx-auto">
-							<div class="name">${mapdto.name}</div>
+							<div class="name">${mapdto.name}
+								<button type="button" id="back"><i class="fas fa-times"></i></button>
+							</div>
 							<div class="featImgWrap">
 								<div class="cropping">
 									<img src="${img}" id="mapimg">
@@ -330,7 +263,7 @@
 							</form>
 							<c:forEach var="i" items="${reviewMap}" varStatus="status">
 								<div class="review">
-									<i class="fas fa-user fa-2x"></i>
+									<img src="/upload/${i.key.id}/${i.key.profile}">
 									<div class="raty">
 										<c:if test="${i.key.rating eq 1}"><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>
 										<c:if test="${i.key.rating eq 2}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>
@@ -343,9 +276,9 @@
 											<img src="/upload/files/${i.value.sysname}">
 										</c:if>
 									</div>
-									<div class="content">${i.key.content}</div>
+									<div class="content"><c:out value="${i.key.content}"></c:out></div>
 									<div class="bottom">
-										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'${i.key.content}','${i.key.id}')">신고</button>
+										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'<c:out value="${i.key.content}"></c:out>','${i.key.id}')">신고</button>
 									</div>
 								</div>
 							</c:forEach>

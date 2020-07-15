@@ -18,6 +18,14 @@
 	    background-color: #fcfcfc;
 	    font-family: 'InfinitySans-RegularA1';
 	}
+	.navi_btn{height:50px;width:30px;
+	position:absolute;right:-20px;top:400px;
+	background-color:#fcfcfc;border-bottom-right-radius: 25px;border-top-right-radius: 25px;z-index:-1;}
+	.navi_btn:hover{cursor:pointer;}
+	.navi_btn i{line-height:50px;padding-left:12px;color:#ff9900;}
+	.current_position_btn{height:35px;width:35px;position:absolute;right:-40px;top:5px;background-color:#fcfcfc;z-index:-1;border-radius:5px;box-shadow:0 5px 5px -5px black;}
+	.current_position_btn:hover{cursor:pointer;}
+	.current_position_btn i{line-height:35px;color:#ff9900;}
 	#map{
 		z-index: 10;
 		position:fixed;
@@ -39,6 +47,14 @@
 	#backMap:hover{background-color:white;}
 	#backMap:hover i{color: #ff9900;}
 	#backMap i{color: white;}
+	#back{background-color:#ff9900;float:right;border-radius:60px;border:none;height:30px;width:30px;margin-bottom:10px;margin-left:10px;}
+	#back:hover{background-color:white;}
+	#back:hover i{color: #ff9900;}
+	#back i{color: white;}
+	#refresh{background-color:#ff9900;float:right;border-radius:60px;border:none;height:30px;width:30px;margin-bottom:10px;margin-left:10px;}
+	#refresh:hover{background-color:white;}
+	#refresh:hover i{color: #ff9900;}
+	#refresh i{color: white;}
 	.search_btn{
 	    background-color: white;
 	 	height: 30px; width: 60px;
@@ -401,6 +417,12 @@
 		cursor:pointer;
 		background-color:#ededed;
 	}
+.custom {position:relative;bottom:60px;left:0px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
+.custom:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.custom div {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;overflow:hidden;background: #ff9900;background: #ff9900 url(https://eat-together.s3.ap-northeast-2.amazonaws.com/check-solid.png) no-repeat left 5px center;background-height:10px;}
+.custom .here {display:block;text-align:right;background:#fff;margin-left:30px;padding:0px 10px 0px 10px;height:30px;line-height:30px;}
+	
+	
 .mapcustomoverlay {position:relative;bottom:140px;left:0px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;}
 .mapcustomoverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
 .mapcustomoverlay a {display:block;text-decoration:none;color:#000;text-align:center;border-radius:6px;font-size:14px;overflow:hidden;background: #ff9900;background: #ff9900 url(https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/arrow_white.png) no-repeat right 10px center;}
