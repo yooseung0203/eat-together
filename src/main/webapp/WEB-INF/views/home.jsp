@@ -34,7 +34,7 @@
 <!-- ******************* -->
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/index-css.css">
+	href="/resources/css/index-css.css?a">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
 

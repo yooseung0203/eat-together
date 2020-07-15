@@ -46,7 +46,7 @@
 <!-- google font end-->
 
 <!-- SNS Share js start -->
-<script src='/resources/js/sns_share.js'></script>
+<script src='/resources/js/sns_share.js?a'></script>
 <!-- SNS Share js end -->
 
 <!-- ******************* -->
@@ -59,6 +59,11 @@
 	href="/resources/css/party-css.css?ver=1">
 </head>
 <script>
+function send_msg(){
+	var option = "width = 500, height = 550, top = 100, left = 200, scrollbars=no"
+	var target=${con.writer};
+	window.open("/msg/msgResponse?msg_receiver="+target,target,option);
+};
 
 function toChatroom(num){
     var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"
@@ -237,7 +242,7 @@ $(document).ready(function(){
 						/
 						<c:out value='${con.title}' />
 						<input type="hidden" id="sns_share_title"
-							value=" /' ${con.parent_name} /' 에 같이 가자!!! - 맛집동행찾기서비스 맛집갔다갈래">
+							value="《  ${con.parent_name} 》 에 같이 가자!!! - 맛집동행찾기서비스 맛집갔다갈래">
 						<c:choose>
 							<c:when test="${con.status  eq '1'}">
 								<span class="badge badge-success">멤버 모집중</span>
@@ -299,7 +304,7 @@ $(document).ready(function(){
 					</c:if>
 
 				</div>
-				<div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
+				<div class="col-sm-12 party_writer">작성자 : ${con.writer} <a onclick="send_msg()"><img src="/resources/img/send_message.png"></a></div>
 			</div>
 			<div class="row">
 				<div class="col-sm-5 mt-5 pt-5">
@@ -369,13 +374,13 @@ $(document).ready(function(){
 				</div>
 			</div>
 			<div class="row mb-1">
-				<div class="col-1 party-titlelabel">소개</div>
-				<div class="col-10">
+				<div class="col-sm-1 mb-3 party-titlelabel">소개</div>
+				<div class="col-8 party-contenttext-area">
 					<c:out value='${con.content}' />
 				</div>
 			</div>
-			<div class="row mb-1">
-				<div class="col-1 party-titlelabel">SNS공유</div>
+			<div class="row mb-1 my-5">
+				<div class="col-sm-1 party-titlelabel">SNS공유</div>
 				<div class="col-10">
 
 					<!-- 네이버 블로그/카페 공유 -->
@@ -408,8 +413,10 @@ $(document).ready(function(){
 							</c:if>
 						</c:when>
 						<c:when test="${partyParticipantCheck  eq true}">
+							<c:if test="${con.status eq '1' }">
 							<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 								이동</button>
+							</c:if>
 							<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 								<button type="button" id="toExitParty" class="btn btn-primary">모임
 									나가기</button>
@@ -421,7 +428,10 @@ $(document).ready(function(){
 										<button type="button" id="toStopRecruit" class="btn btn-dark">모집
 											종료하기</button>
 									</c:when>
-									<c:when test="${con.status  eq '0'}"></c:when>
+									<c:when test="${con.status  eq '0'}">
+										<button type="button" id="torestartRecruit" class="btn btn-success">모집 재시작</button>
+									
+									</c:when>
 								</c:choose>
 							</c:if>
 						</c:when>

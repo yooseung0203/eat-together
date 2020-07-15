@@ -90,6 +90,10 @@
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
+#newMsg{
+	margin-top:5px;	
+}
+
 .index-copyright {
 	color: #ff7761;
 }

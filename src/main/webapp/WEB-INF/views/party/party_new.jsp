@@ -47,7 +47,7 @@
 <!-- ******************* -->
 
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/party-css.css?ver=23">
+	href="/resources/css/party-css.css?ver=25">
 <link rel="stylesheet" type="text/css"
 	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet"
@@ -79,6 +79,23 @@
 		return year + '' + month + '' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 	}
 	$(function() {
+	      $("#party_title").on("change keyup paste",function() {
+	            var len = $(this).val();
+	            if(len.length > 25){
+	                alert("글 제목은 25자 이내로 설정해주세요")
+	                $(this).val(len.substr(0,25));
+	            }
+	      });
+	      
+	      $("#content").on("change keyup paste",function() {
+	            var len = $(this).val();
+	            if(len.length > 300){
+	                alert("글 제목은 300자 이내로 설정해주세요")
+	                $(this).val(len.substr(0,300));
+	            }
+	      })
+		
+		
 		
 		$("#party_date").on("blur", function() {
 			var d = new Date($("#party_date").val());
@@ -336,7 +353,7 @@
 									id="parent_name" value="${parent_name}" readonly>
 							</div>
 							<div class="col-sm-3">
-								<button id="search_parent_name" class="btn btn-primary"
+								<button id="search_parent_name" class="btn btn_select"
 									type=button>상호 찾기</button>
 							</div>
 						</div>
@@ -404,7 +421,7 @@
 							</div>
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">모임날짜와 시간</div>
+							<div class="col-sm-2">모임날짜</div>
 							<div class="col-sm-1">
 								<div class="input-group date" id="datetimepicker1"
 									data-target-input="nearest">
@@ -537,7 +554,7 @@
 				<div class="row pt-3 pb-3">
 					<div class="col-12">
 						<button type=button id="submitBtn"
-							class="btn btn-primary btn-lg btn-block">모임 등록하기</button>
+							class="btn btn_select btn-lg btn-block">모임 등록하기</button>
 					</div>
 
 				</div>

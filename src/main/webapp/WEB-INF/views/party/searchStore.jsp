@@ -36,9 +36,12 @@
 }
 .btnselect{
 padding-top: 5pt;
-	
 }
-#place_name0{
+.btn_select{
+background-color:#ffcf00;
+border-color:#ffcf00;
+}
+.placename{
 	font-size:20px;
 	font-weight:600;
 	padding-bottom:15px;
@@ -146,11 +149,11 @@ $(document).ready(function(){
  					"<input type='hidden' name='lng' id='lng"+i+"' value='"+resp.documents[i].x+"'>"+
  					"<input type='hidden' name='place_url' id='place_url"+i+"' value='"+resp.documents[i].place_url+"'>"+
  					"<input type='hidden' name='road_address_name' id='road_address_name"+i+"' value='"+resp.documents[i].road_address_name+"'>"+
- 					"<div id=place_name"+i+">"+resp.documents[i].place_name + 
+ 					"<div class='placename' id=place_name"+i+">"+resp.documents[i].place_name + 
  					"</div><div id=phone"+i+">" +resp.documents[i].phone + 
  					 
  					"</div><div id=address_name"+i+">" + resp.documents[i].address_name + 
- 					"</div></div><div class='col-sm-2 storegroup btnselect'><button class='btn btn-primary ' id="+i+" onClick='btnClick(this.id)')>선택</button></div>"); 
+ 					"</div></div><div class='col-sm-2 storegroup btnselect'><button class='btn btn_select' id="+i+" onClick='btnClick(this.id)')>선택</button></div>"); 
 			
 				}
 				$("#resultdiv").html(test);
@@ -224,7 +227,7 @@ $(document).ready(function(){
 						class="text-muted"> 예시 : 지역명+상호명 / 을지로 스타벅스, 홍대 락희돈 </small>
 				</div>
 				<div class="col-3">
-					<button type=button id=searchBtn class="btn btn-primary">검색</button>
+					<button type=button id=searchBtn class="btn btn_select">검색</button>
 				</div>
 			</div>
 		</form>
