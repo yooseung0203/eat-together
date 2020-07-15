@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -84,4 +85,21 @@ public class ReviewController {
 		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,0,id,request.getParameter("report_id"),null,seq));
 		return "redirect:/report/newReport";
 	}
+	@ResponseBody
+	@RequestMapping("reviewDeleteProc") // 체크한 리뷰 삭제시키기
+	public int reviewDeleteProc(HttpServletRequest request)throws Exception{
+		String data = request.getParameter("seqs"); 
+		String ids = data.substring(2,data.length()-2);
+		String[] checkList = ids.split("\",\"");
+
+		System.out.println("삭제 선택한 리뷰 수 : " + checkList.length);
+
+		for(int a = 0; a<checkList.length;a++) {
+			System.out.println(checkList[a]);
+		}
+		int resp = rservice.delete(checkList);
+		System.out.println("삭제된 리뷰 수 : " + resp);
+		return resp;
+	}
+
 }
