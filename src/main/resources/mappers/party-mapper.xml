@@ -12,7 +12,7 @@
 		#{title}, #{writer}, #{meetdate}, #{count},
 		#{gender}, #{age},
 		#{drinking}, #{content},#{status},#{place_id},
-		#{imgaddr},0)
+		#{imgaddr},0,#{meetdate}+5)
 	</insert>
 	<!-- by 수지 파티 참가 -->
 	<insert id="partyJoin">
