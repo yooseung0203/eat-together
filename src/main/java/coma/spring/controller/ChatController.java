@@ -90,6 +90,7 @@ public class ChatController {
 		if(!writer.contentEquals(cservice.selectWriter(seq))){
 			return "/chat/error";			
 		}		
+		try {
 		Iterator iterator = WebChatSocket.members.get(seq).entrySet().iterator();
 		while(iterator.hasNext()) {
 			Entry entry = (Entry)iterator.next();
@@ -98,6 +99,9 @@ public class ChatController {
 				WebChatSocket.clients.remove(entry.getKey());
 				break;
 			}
+		}
+		}catch(Exception e) {
+			
 		}
 		cservice.addBlacklist(name, seq);
 		cservice.exitChatRoom(name, seq);
