@@ -31,6 +31,6 @@
 </delete>
 
 <update id="update">
-      update notice set ${columnName1} = #{changeValue1}, ${columnName2} = #{changeValue2}, ${columnName3} = #{changeValue3} where ${targetColumn} = #{targetValue}
+      update notice set ${columnName1} = #{changeValue1}, ${columnName2} = #{changeValue2}, ${columnName3} = #{changeValue3}, ${columnName4} = #{changeValue4} where ${targetColumn} = #{targetValue}
  </update>
 </mapper>

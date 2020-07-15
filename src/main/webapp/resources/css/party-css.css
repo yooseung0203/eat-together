@@ -1,5 +1,17 @@
 @charset "UTF-8";
-@font-face { font-family: 'NEXON Lv1 Gothic OTF Light'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Light.woff') format('woff'); font-weight: normal; font-style: normal; }
+
+@font-face {
+	font-family: 'NEXON Lv1 Gothic OTF Light';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Light.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.section {
+	background-color: #fcfcfc;
+}
 
 .party_headline {
 	font-family: 'Noto Sans KR', sans-serif;
@@ -14,17 +26,39 @@ form {
 	font-family: 'Noto Sans KR', sans-serif;
 	weight: 400;
 }
-
-#img-area > img {
-	width:200px;	
+.btn_select{
+background-color:#ffcf00;
+border-color:#ffcf00;
 }
 
-.party-info{
+#img-area>img {
+	width: 320px;
+}
+
+.party-info {
 	font-family: 'Noto Sans KR', sans-serif;
-	font-size:11pt;
+	font-size: 11pt;
 	font-family: 'NEXON Lv1 Gothic OTF Light';
 }
 
-.sns_icon{
-	width:36px;
+.sns_icon {
+	width: 36px;
+}
+
+.loginError {
+	height: 610px;
+}
+
+.loginerrormsg {
+	padding-top: 200px;
+}
+
+.col-sm-2, .col-1 {
+	margin: 0px;
+	padding: 0px;
+}
+.party-contenttext-area{
+	 word-break:break-all;
+	 
+	 
 }
