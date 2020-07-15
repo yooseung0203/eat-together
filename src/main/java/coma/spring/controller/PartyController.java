@@ -603,8 +603,12 @@ public class PartyController {
 	public String partyReport(HttpServletRequest request,RedirectAttributes redirectAttributes)  throws Exception {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getNickname();
+		String report_id = request.getParameter("report_id");
+		if(id == report_id) {
+			return "self";
+		}
 		int seq = Integer.parseInt(request.getParameter("seq"));
-
+		
 		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,request.getParameter("report_id"),null,seq));
 		
 		return "redirect:/report/newReport/";

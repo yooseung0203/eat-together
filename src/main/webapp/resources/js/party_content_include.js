@@ -35,6 +35,9 @@ function partyReport(num){
 			     }
 			     else self.name = ''; 
 			}
+			else if(result == "self"){
+				alert("본인은 신고할 수 없습니다.");
+			}
 			else{
 				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
 			}
