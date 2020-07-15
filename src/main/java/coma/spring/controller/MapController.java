@@ -452,6 +452,7 @@ public class MapController {
 			ReviewFileDTO rf = rservice.selectFileByPseq(rdto.getSeq());
 			rmap.put(rdto, rf);
 		}
+//		request.setAttribute("", o);
 		request.setAttribute("reviewMap", rmap);
 		// 리뷰 사진
 		if(session.getAttribute("loginInfo")==null) {

@@ -310,6 +310,8 @@ $(function(){
 					info.append("<button type='button' class='btn btn-primary' id='recruit' style='margin-top:10px;'>내가 직접 모집하기</button>")
 					$(".search_result").append(info);
 					$(".search_result").css('max-height','700px');
+					$(".navi_btn").html('<i class="fas fa-chevron-left"></i>');
+					$("#sideBar").animate({right:0},1000);
 	        	})
 	        });
 	        return marker;
@@ -1297,6 +1299,30 @@ $(function(){
 		$("#backMap").on("click",function(){
 			location.href = "/map/toMap";
 		})
+		$("#back").on("click",function(){
+			$(".choose_info").html("");
+			$(".search_result").html($("#map_approach_info").html());
+			$(".search_result .pin_how_to").append("<button type='button' id='refresh'><i class='fas fa-undo-alt'></i></button>");
+		})
+		$(document).on("click","#refresh",function(){
+			location.reload(true);
+		})
+		var duration = 300;
+
+		$('.navi_btn').on('click', function(){
+		    if( $(this).html()=='<i class="fas fa-chevron-left"></i>')
+		    {
+		        $(this).html('<i class="fas fa-chevron-right"></i>');
+		        $("#sideBar").animate({right:300},1000);
+		    }
+		    else
+		    {
+		       $(this).html('<i class="fas fa-chevron-left"></i>');
+		        $("#sideBar").animate({right:0},1000);
+		     }
+		    
+		});
+
 	})
 	.ajaxStart(function(){
 		$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
