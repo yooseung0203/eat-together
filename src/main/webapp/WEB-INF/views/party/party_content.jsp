@@ -55,8 +55,10 @@
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
+
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/party-css.css?ver=1">
+
 </head>
 <script>
 function send_msg(){
@@ -73,11 +75,12 @@ function toChatroom(num){
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
 	var writer = $(".party_writer").html();
-	var report_id = writer.substring(6,writer.length);
-	console.log();
+	//var report_id = writer.substring(6,writer.length);
+	var report_id = "${con.writer}";
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
-		url:"/party/party_report",
+		url:"/party/party_report", 
+		//data : { seq : num, report_id : report_id},
 		data : { seq : num, report_id : report_id},
 		success : function(result) {
 			if (result == 1){ 
@@ -439,7 +442,6 @@ $(document).ready(function(){
 
 					</c:choose>
 				</div>
-
 			</div>
 			<div class="row mb-3">
 				<div class="col-12 mb-5">

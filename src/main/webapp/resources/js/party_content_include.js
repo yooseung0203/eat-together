@@ -1,19 +1,26 @@
 
 /********************************* 채팅방으로 이동 ************************************/
+function send_msg(){
+	var option = "width = 500, height = 550, top = 100, left = 200, scrollbars=no"
+	var target=	$(".party_writer").html();	
+	//var target=${con.writer};
+	window.open("/msg/msgResponse?msg_receiver="+target,target,option);
+};
+/********************************* 채팅방으로 이동 ************************************/
+
+/********************************* 채팅방으로 이동 ************************************/
 function toChatroom(num){
 	var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"
 		window.open("/chat/chatroom?roomNum="+num, num, option);
 }
-
 /********************************* 채팅방으로 이동 ************************************/
 
 /********************************* 모임 게시글 신고 ************************************/
-
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
-	var writer = $(".party_writer").html();
-	var report_id = writer.substring(6,writer.length);
-	console.log();
+	//var writer = $(".party_writer").html();
+	//var report_id = writer.substring(6,writer.length);
+	var report_id = $("#party_writer").val();
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
 		url:"/party/party_report",
@@ -21,6 +28,12 @@ function partyReport(num){
 		success : function(result) {
 			if (result == 1){ 
 				alert("신고가 정상적으로 접수되었습니다.");	
+				
+				if (self.name != 'reload') {
+			         self.name = 'reload';
+			         self.location.reload(true);
+			     }
+			     else self.name = ''; 
 			}
 			else{
 				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
@@ -31,27 +44,26 @@ function partyReport(num){
 		}
 	});	
 }
- 
+
 /********************************* 채팅방으로 이동 ************************************/
 
 /*****************************  수지 party content 스크립 ***********************************************/
 $(document).ready(function(){
-
 	//var stime = "${con.sTime}";
 	var stime = $("#party_time").val();
 	var time = stime.substr(0,5);
 	console.log(stime);
 	$("#time").html(stime);
 });
-
-
+ 
 $(function () {
+	
 	var party_seq = $("#party_seq").val();
 	console.log(party_seq);
+	
 	$("#partyModify").on("click", function() {
 		//location.href = "/party/partymodify?seq=${con.seq}";
 		location.href = "/party/partymodify?seq="+party_seq;
-		//partyModify(party_seq);
 	});
 
 	$("#partyDelete").on("click", function() {
@@ -60,19 +72,16 @@ $(function () {
 			////location.href = "/party/partydelete?seq=${con.seq}";
 			location.href = "/party/partydelete?seq="+party_seq;
 		}
-		//partyDelete(party_seq);
 	});
 
 	$("#toPartylist").on("click", function() {
 		//location.href = "/party/toPartylist";
 		location.href = "/party/selectByWriter?mcpage=1";
-		//toPartylist();
 	});
 
 	$("#toPartyJoin").on("click",function(){ //모임가입
 		//location.href="/party/partyJoin?seq=${con.seq}";
 		location.href="/party/partyJoin?seq="+party_seq;
-		//toPartyJoin(party_seq);
 	});
 
 	// 태훈 신고
@@ -90,19 +99,22 @@ $(function () {
 
 	$("#toExitParty").on("click",function(){
 		//toExitParty(${con.seq});
-		toExitParty(party_seq );
+		//toExitParty(party_seq );
+		if (ask) {
+			//location.href= "/party/toExitParty?seq=${con.seq}";
+			location.href= "/party/toExitParty?seq=" + party_seq;
+		}
 	});
 
 
 	$("#toStopRecruit").on("click",function(){
 		var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
 		if (ask) {
-			////location.href= "/party/stopRecruit?seq=${con.seq}";
-			location.href= "/party/stopRecruit?seq="+party_seq;
+			//location.href= "/party/restartRecruit?seq=${con.seq}&writer=${con.writer}";
+			location.href= "/party/stopRecruit?seq="+party_seq +"&writer="+$(".party_writer").html();
 		}
-		//toStopRecruit(party_seq);
 	});
-
+	$(".party_writer").html()
 });
 
 //페이지 리사이징

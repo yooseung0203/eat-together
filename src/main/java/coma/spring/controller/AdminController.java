@@ -224,6 +224,7 @@ public class AdminController {
 		}else {
 			option = session.getAttribute("option");
 		}
+
 		int cpage=1;
 		try {cpage = Integer.parseInt(request.getParameter("cpage"));}catch(Exception e) {}
 		List<ReviewDTO> rlist = rservice.selectByPageAndOption(cpage, option);
@@ -267,7 +268,8 @@ public class AdminController {
 		request.setAttribute("partyParticipantCheck", partyParticipantCheck);
 		return "/admin/admin_party_content";
 	}
-	
+
+
 	//1:1문의 Admin 유승
 	
 	@RequestMapping("questionViewAdmin")
@@ -368,3 +370,4 @@ public class AdminController {
 	}
 	
 }
+
