@@ -160,7 +160,7 @@ public class ReviewService {
 		sb.append("</ul></nav>");
 		return sb.toString();
 	}
-	// 태훈 리뷰 긁어고기
+	// 태훈 리뷰 검색
 	public Map<Integer, Object> getReview(List<MapDTO> top){
 		List<TopFiveStoreDTO> reviewList = rvdao.getReview(top);
 		Map<Integer, Object> review = new HashMap<Integer, Object>();

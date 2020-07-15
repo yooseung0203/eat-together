@@ -62,6 +62,8 @@ public class NoticeDAO {
 	      param.put("changeValue2", dto.getContents());
 	      param.put("columnName3", "attachment");
 	      param.put("changeValue3", dto.getAttachment());
+	      param.put("columnName4", "importance");
+	      param.put("changeValue4", Integer.toString(dto.getImportance()));
 	      param.put("targetColumn", "seq");
 	      param.put("targetValue", Integer.toString(dto.getSeq()));
 	     	      

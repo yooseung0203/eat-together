@@ -61,7 +61,7 @@ $(function(){
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12><textarea
-							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;" id="msg_text"  name="msg_text" readonly>${qdto.msg_text}</textarea></td>
+							style="width: 100%; padding: 10px; word-break: keep-all; height: 180px; resize: none;" id="msg_text"  name="msg_text" readonly>${qdto.msg_text}</textarea></td>
 				</tr>
 				<tr align="center">
 					<td scope="col" colspan=12>

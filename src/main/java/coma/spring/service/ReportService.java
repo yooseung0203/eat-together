@@ -2,6 +2,7 @@ package coma.spring.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import coma.spring.dao.ReportDAO;
 import coma.spring.dto.ReportDTO;

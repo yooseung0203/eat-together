@@ -127,7 +127,6 @@
 		 }else{
 			 $("#imp").prop("checked",false);
 		 }
-		
 	 });
 </script>
 </head>
