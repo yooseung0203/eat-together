@@ -75,11 +75,12 @@ function toChatroom(num){
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
 	var writer = $(".party_writer").html();
-	var report_id = writer.substring(6,writer.length);
-	console.log();
+	//var report_id = writer.substring(6,writer.length);
+	var report_id = "${con.writer}";
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
-		url:"/party/party_report",
+		url:"/party/party_report", 
+		//data : { seq : num, report_id : report_id},
 		data : { seq : num, report_id : report_id},
 		success : function(result) {
 			if (result == 1){ 

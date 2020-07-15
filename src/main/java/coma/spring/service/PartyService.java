@@ -10,11 +10,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import coma.spring.dao.PartyDAO;
+import coma.spring.dao.ReportDAO;
 import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.PartySearchListDTO;
+import coma.spring.dto.ReportDTO;
 import coma.spring.statics.Configuration;
 import coma.spring.statics.PartyConfiguration;
 
@@ -24,6 +27,9 @@ public class PartyService {
 
 	@Autowired
 	private PartyDAO pdao;
+	
+	@Autowired
+	private ReportDAO rdao;
 
 	// 수지 모임 생성
 	public int partyInsert(PartyDTO dto) throws Exception  {
@@ -77,69 +83,12 @@ public class PartyService {
 		return result;
 	}
 
-	// 태훈 그냥 모임 글 보기
-	//	public List<PartyDTO> selectList() throws Exception {
-	//		List<PartyDTO> list = pdao.selectList();
-	//		return list;
-	//	}
 	// 태훈 모임 리스트
 	public List<PartyDTO> selectList(int cpage) throws Exception {
 		List<PartyDTO> list = pdao.selectList(cpage);
 		return list;
 	}
-	// 태훈 페이지 네비
-	public String getPageNaviTH(int currentPage) throws Exception{
-		int recordTotalCount = pdao.getListCount(); 
-		int pageTotalCount = 0; 
-		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
-		}else {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
-		}
-		if(currentPage < 1) {
-			currentPage = 1;
-		}else if(currentPage > pageTotalCount) {
-			currentPage = pageTotalCount;
-		}
-		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
-		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
-		if(endNavi > pageTotalCount) {
-			endNavi = pageTotalCount;
-		}
-		boolean needPrev = true; // <
-		boolean needNext = true; // >
-		StringBuilder sb = new StringBuilder();
-		if(startNavi == 1) {needPrev = false;}
-		if(endNavi == pageTotalCount) {needNext = false;}
-
-		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='partylistBy?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
-		}
-		else {
-			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
-		}
-		for(int i = startNavi;i <= endNavi;i++) {
-			if(currentPage == i) {
-				sb.append("<li class='page-item active' aria-current=\"page\"><span class=\"page-link\">" + i +"<span class=\"sr-only\">(current)</span></span></li>");
-			}
-			else {
-				sb.append("<li class='page-item'><a class='page-link' href=\"partylist?cpage="+i+"\">" + i + "</a></li>");
-			}	
-		}
-		if(needNext) {
-			sb.append("<li class='page-item'><a class='page-link' href='partylistBy?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
-		}
-		else {
-			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
-		}
-
-		return sb.toString();
-	}
-	// 태훈 모임 글 상세 검색
-//	public List<PartyDTO> partySearch(PartySearchListDTO pdto) throws Exception{
-//		List<PartyDTO> list = pdao.partySearch(this.searchKey(pdto));
-//		return list;
-//	}
+	
 	// 태훈 모임 글 상세 검색
 	public List<PartyDTO> partySearch(Map<String, Object> map, int cpage) throws Exception{
 		List<PartyDTO> list = pdao.partySearch(this.searchKey(map),cpage);
@@ -195,62 +144,7 @@ public class PartyService {
 		param.put("both", both);
 		return param;
 	}
-	/*
-	public Map<String, Object> searchKey(Map<String, Object> map) throws Exception{
-
-		Map<String, Object> param = new HashMap<>();
-
-		// 지역 정보
-		if(pdto.getSido().equals("시/도 선택")) {
-			param.put("address", "");
-		}
-		else {
-			if(pdto.getGugun().equals("구/군 선택")) {
-				param.put("address",pdto.getSido());
-			}
-			else {
-				param.put("address",pdto.getSido() + " " + pdto.getGugun());
-			}
-			
-		}
-		System.out.println(param.get("address"));
-		// 성별 정보
-		param.put("gender",pdto.getGender());
-		// 나이 정보
-		List<String> ageList = new ArrayList<String>();
-		if(pdto.getAge() != null) {
-			for(int i=0; i<pdto.getAge().size();i++) {
-				ageList.add(Integer.toString(pdto.getAge().get(i)));
-			}
-		}
-		param.put("ageList.size", ageList.size());
-		param.put("ageList", ageList);
-		// 음주 정보
-		param.put("drinking",pdto.getDrinking());
-		// 키워드 검색
-		String title = "", writer = "", content = "", both = ""; 
-		if(pdto.getText().equals("title")) {
-			title = pdto.getSearch();
-
-		}
-		else if(pdto.getText().equals("writer")){
-			writer = pdto.getSearch();
-			System.out.println("W"+writer);
-		}
-		else if(pdto.getText().equals("content")) {
-			content = pdto.getSearch();
-			System.out.println("C"+content);
-		}
-		else if(pdto.getText().equals("both")) {
-			both = pdto.getSearch();
-		}
-		param.put("title", title);
-		param.put("writer", writer);
-		param.put("content", content);
-		param.put("both", both);
-
-		return param;
-	}*/
+	
 	// 예지 장소 아이디 별 모임 리스트
 	public List<PartyDTO> selectByPageNo(int cpage, int place_id) throws Exception{
 		return pdao.selectByPageNo(cpage, place_id);
@@ -390,9 +284,14 @@ public class PartyService {
 		return pdao.getPartyCounts(seq);
 	}
 
-	// 태훈 모임 게시글 신고
-	public int partyReport(int seq) {
-		return pdao.partyReport(seq);
+//	// 태훈 모임 게시글 신고
+//	public int partyReport(int seq) {
+//		return pdao.partyReport(seq);
+//	}
+	@Transactional("txManager")
+	public int partyReport(ReportDTO rdto) throws Exception{
+		rdao.newReport(rdto); // 신고 테이블 insert 문 
+		return pdao.partyReport(rdto.getParent_seq()); // 리뷰 테이블 신고 컬럼 update 문
 	}
 	// 수지 모집 재시작 기능
 	public int restartRecruit(String seq) throws Exception {

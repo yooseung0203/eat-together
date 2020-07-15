@@ -61,7 +61,7 @@ public class ReportController {
 		}else if(rdto.getCategory() == 1) { // 모임글 신고
 			if(check == 0) {
 				reposervice.newReport(rdto);
-				result = pservice.partyReport(rdto.getParent_seq());
+				result = pservice.partyReport(rdto);
 				System.out.println(result);
 			}
 		}

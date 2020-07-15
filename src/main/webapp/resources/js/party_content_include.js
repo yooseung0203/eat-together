@@ -18,9 +18,9 @@ function toChatroom(num){
 /********************************* 모임 게시글 신고 ************************************/
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
-	var writer = $(".party_writer").html();
-	var report_id = writer.substring(6,writer.length);
-	console.log();
+	//var writer = $(".party_writer").html();
+	//var report_id = writer.substring(6,writer.length);
+	var report_id = $("#party_writer").val();
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
 		url:"/party/party_report",

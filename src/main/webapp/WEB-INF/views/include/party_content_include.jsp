@@ -15,6 +15,7 @@
 					# <c:out value='${con.seq}' /> / <c:out value='${con.title}' />
 					<input type="hidden" id="party_seq" value="${con.seq }">
 					<input type="hidden" id="party_time" value="${con.sTime }">
+					<input type="hidden" id="party_writer" value="${con.writer }">
 					<input type="hidden" id="sns_share_title"
 						value=" /' ${con.parent_name} /' 에 같이 가자!!! - 맛집동행찾기서비스 맛집갔다갈래">
 					<c:choose>
@@ -74,7 +75,7 @@
 									</div>
 								</c:if>
          </div>
-         <div class="col-sm-12 party_writer">작성자 : ${con.writer} <a onclick="send_msg()"><img src="/resources/img/send_message.png"></a></div>
+         <div class="col-sm-12">작성자 : ${con.writer} <a onclick="send_msg()"><img src="/resources/img/send_message.png"></a></div>
       </div>
 
 		<div class="row">
