@@ -32,5 +32,6 @@ public class Scheduler {
 			}
 			ChatStatics.chats2.clear();			
 		}
+
 	}
 }

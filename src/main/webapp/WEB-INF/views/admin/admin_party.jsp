@@ -78,7 +78,7 @@ function toDelete(seq){
 									<tbody>
 										<c:forEach var="i" items="${list}" varStatus="status">
 											<tr>
-												<th scope="row" class="text-center">${i.seq}</th>
+												<th scope="row" class="text-center">${status.index}</th>
 
 												<td><a href="/admin/admin_party_content?seq=${i.seq}">${i.title}</a>
 
