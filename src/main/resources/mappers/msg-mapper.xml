@@ -59,20 +59,28 @@
 	<!-- 새로운 메세지 카운트 -->
 	<select id="newmsg" resultType="java.lang.Integer">
 		select count(*) from msg where
-		msg_receiver = #{value} and msg_view=0
+		msg_receiver = #{value} and msg_view=0 and receiver_del=0 and msg_title not like
+		'%[1:1문의]%'
 	</select>
-<!-- 	<select id="newMsgByAdmin">
-		select count(*) from msg where msg_receiver=#{value}
-		and msg_view=0 and msg_sender='administrator'
+
+	<select id="newMsgByAdmin" resultType="java.lang.Integer">
+		select count(*) from msg
+		where msg_receiver=#{value}
+		and msg_view=0 and
+		msg_sender='administrator' and receiver_del=0 and msg_title not like
+		'%[1:1문의]%'
 	</select>
-	<select id="newMsgByAdmin">
-		select count(*) from msg where msg_receiver=#{value} and msg_view=0 and
-		msg_sender!='administrator'
-	</select> -->
+
+	<select id="newMsgByNick" resultType="java.lang.Integer">
+		select count(*) from msg
+		where msg_receiver=#{value}
+		and msg_view=0 and
+		msg_sender!='administrator' and receiver_del=0
+	</select>
 	<!--insert 문 -->
-	
-	
-	
+
+
+
 	<insert id="insert">
 		insert into msg
 		values(msg_seq.nextval,#{msg_sender},#{msg_receiver},#{msg_title},#{msg_text},sysdate,0,0,0)
@@ -96,5 +104,13 @@
 		update msg set receiver_del=1 where msg_seq=#{value}
 	</update>
 
+
+	<insert id="msgNotice">
+		insert into
+		msg(msg_seq,msg_sender,msg_receiver,msg_title,msg_text,msg_date,msg_view,sender_del,receiver_del)
+		select
+		msg_seq.nextval,'administrator',nickname,#{msg_title},#{msg_text},sysdate,0,0,0
+		from member
+	</insert>
 
 </mapper>

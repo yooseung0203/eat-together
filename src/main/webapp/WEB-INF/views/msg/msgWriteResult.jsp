@@ -19,13 +19,19 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<title>Insert title here</title>
+<title>성공</title>
+   <script>
+      setTimeout(function() {
+        window.close();   
+      }, 3000);
+   </script>
 </head>
 <body>
 	<div class="container">
 		<div class="row" style="margin-top: 200px;">
 			<div class="col-12" align="center">
-				성공 !!
+				전송이 완료되었습니다.<br>
+				3초뒤에 자동으로 창이 꺼집니다.
 			</div>
 			<div class="col-12" align="center">
 				<button type="button" id="close" class="btn btn-light">닫기</button>
