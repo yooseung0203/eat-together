@@ -3,9 +3,11 @@ package coma.spring.controller;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -357,13 +359,31 @@ public class PartyController {
 		String nickname = account.getNickname();
 		boolean partyFullCheck = pservice.isPartyfull(seq);
 		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
-		
-//		if(partyParticipantCheck) {
-//			request.setAttribute("participant", 1);
-//		}
+		System.out.println("멤버인가?" + partyParticipantCheck);
+		if(partyParticipantCheck) {
+			request.setAttribute("participant", 1);
+		}
 		
 		PartyCountDTO pcdto = pservice.getPartyCounts(seq);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+		Calendar cal = Calendar.getInstance();
+		String today = null;
+		today = formatter.format(cal.getTime());
+		Timestamp ts = Timestamp.valueOf(today);
 
+		Timestamp deadln = content.getDeadline();
+		String partylife = "";
+		System.out.println("오늘날짜" + ts);
+		System.out.println("마감날짜" + deadln);
+		if(ts.compareTo(deadln)>0) {
+			partylife="dead";
+		}else {
+			partylife="alive";
+		}
+			
+			
+		request.setAttribute("partylife", partylife);
 		request.setAttribute("img", img);
 		request.setAttribute("con",content);
 		request.setAttribute("party", pcdto);
@@ -456,11 +476,16 @@ public class PartyController {
 		String nickname = account.getNickname();
 		
 		cservice.exitChatRoom(nickname, Integer.parseInt(seq));
+		boolean isPartyfull = pservice.isPartyfull(seq);
+		if(!isPartyfull) {
+			System.out.println("hello it's me");
+			pservice.restartRecruit(seq);
+		}
+		
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		if(nickname == content.getWriter()) {
 			this.partydelete(seq);
 		}
-		
 		return "redirect:/party/party_content?seq="+seq;
 		
 	}

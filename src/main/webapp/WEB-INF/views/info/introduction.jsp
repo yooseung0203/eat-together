@@ -39,7 +39,7 @@
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
-<link rel="stylesheet" type="text/css" href="/resources/css/info.css?a">
+<link rel="stylesheet" type="text/css" href="/resources/css/info.css?k">
 <style>
 body {
 	overflow-x: hidden;
@@ -91,8 +91,8 @@ body {
 				<h3 class="info-copyright mt-5 pt-5 ">
 					"우리는 사람과 식탁을 연결하고,<br>더 즐거운 삶의 방식을 만듭니다."
 				</h3>
-				<a href="/info/toIntroduction" class="infobadge badge-warning">사이트
-					소개</a> <a href="/info/aboutUs" class="infobadge badge-success">제작팀 소개</a>
+				<a href="/info/toIntroduction" class="infobadge badge badge-warning">사이트
+					소개</a> <a href="/info/aboutUs" class="infobadge badge badge-success">제작팀 소개</a>
 
 			</div>
 		</div>
