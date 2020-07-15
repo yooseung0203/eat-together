@@ -448,9 +448,7 @@ $(document).ready(function(){
 							<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 								이동</button>
 							 </c:if> 
-							<script>
- 							console.log(${partylife}); 
-							</script>
+							
 							<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 								<button type="button" id="toExitParty" class="btn btn-primary">모임
 									나가기</button>
