@@ -4,6 +4,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import coma.spring.dto.MemberReportDTO;
 import coma.spring.dto.ReportDTO;
 
 @Repository
@@ -22,6 +23,10 @@ public class ReportDAO {
 	
 	public int getListCount() {
 		return mybatis.selectOne("Report.getListCount");
+	}
+	
+	public int memReport(MemberReportDTO mdto) {
+		return mybatis.insert("Report.memReport", mdto);
 	}
 	
 }

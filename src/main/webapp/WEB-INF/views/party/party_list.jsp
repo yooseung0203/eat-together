@@ -28,7 +28,10 @@
 <!-- Vendor CSS Files -->
 <link href="/resources/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
 <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-
+<link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+<link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet">
+	
 <!-- Template Main CSS File -->
 <link href="/resources/assets/css/style.css" rel="stylesheet">
 <!-- 태훈 추가 -->
@@ -429,19 +432,18 @@ Back to top button
 	<!-- ******************* -->
 
 	<div class="container-fluid">
-	
-		<!-- ================ Top 5 Section ================ -->
-		<!-- <div class="row aa">
-			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
-		</div> -->
 		<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<div class="section-headline text-center">
-							<h2>밥 먹고 갈래?</h2>
-						</div>
-					</div>
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="section-headline text-center">
+					<h2>밥 먹고 갈래?</h2>
 				</div>
-		<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 aa top5">
+			</div>
+		</div>
+		<!-- ================ Top 5 Section ================ -->
+		<div class="row aa">
+			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
+		</div>
+		<div class="row row-cols-1 row-cols-sm-3 row-cols-lg-5 aa top5">
 			<c:forEach var="top" items="${top}" varStatus="status">
 					<div class="card partylist">
 						<div class="thumbnail-wrapper imgBox">

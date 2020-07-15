@@ -282,47 +282,6 @@ public class PartyController {
 		return "redirect:/admin/toAdmin_party";
 	}
 
-//	// 태훈 모임 리스트 네비 포함
-//	@RequestMapping("partylist")
-//	public String partyList(HttpServletRequest request) throws Exception {
-//		
-//		int cpage=1;
-//		
-//		try {
-//			cpage = Integer.parseInt(request.getParameter("cpage"));
-//		}catch(Exception e) {
-//
-//		}
-//		if(cpage <=1) {
-//			////////////////////////top 5 ///////////////////////////
-//			List<MapDTO> top = mapservice.selectTopStore();
-//			Map<Integer, Object> reviews = rservice.getReview(top);
-//
-//			System.out.println(reviews.size());
-//			List<String> imgList2 = new ArrayList<>();
-//			for(int i=0; i<top.size(); i++) {
-//
-//				imgList2.add(pservice.clew(top.get(i).getName()));
-//				System.out.println(i + " : " + top.get(i).getSeq() + " : "+imgList2.get(i));
-//				System.out.println(top.get(i).getName());
-//			}
-//			
-//			request.setAttribute("top", top);
-//			request.setAttribute("imglist2", imgList2);
-//			request.setAttribute("review", reviews);
-//			//////////////////////// top 5 ///////////////////////////
-//		}
-//		
-//		List<PartyDTO> partyList = pservice.selectList(cpage);
-//		String navi = pservice.getPageNaviTH(cpage);
-//
-//		
-//		
-//		request.setAttribute("list", partyList);
-//		request.setAttribute("navi", navi);
-//		return "/party/party_list";
-//	}
-	
 	// 태훈 모임 리스트 페이지로 이동
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
@@ -607,7 +566,7 @@ public class PartyController {
 		}
 		int seq = Integer.parseInt(request.getParameter("seq"));
 		
-		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,request.getParameter("report_id"),null,seq));
+		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,report_id,null,seq));
 		
 		return "redirect:/report/newReport/";
 	}
