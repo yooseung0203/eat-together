@@ -37,6 +37,9 @@ public class MemberController {
 
 	@Autowired
 	private MemberFileController mfcon;
+	
+	@Autowired
+	private EmailController econ;
 
 	//by지은, try-catch 예외처리 대체할 수 있는 메서드, ExceptionHandler_20200701
 	@ExceptionHandler
@@ -169,6 +172,7 @@ public class MemberController {
 		}
 		//회원가입축하메세지 입니다.
 		int msgresult= msgservice.insertWelcome(mdto.getNickname());
+		econ.mailSendingGreeting(mdto.getAccount_email());
 		System.out.println("signupProc 비밀번호 : " + mdto.getPw());
 
 		return "redirect:/";

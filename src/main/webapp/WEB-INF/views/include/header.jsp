@@ -20,7 +20,7 @@
 					<li class="nav-item navi-menu"><a class="nav-link "
 						href="/party/toParty_New" id="toPartyNew">모임모집</a></li>
 					<li class="nav-item navi-menu"><a class="nav-link "
-						href="/map/toMap" id="toMap">맛집검색</a></li>
+						href="/map/toMap" id="toMap">맛집지도</a></li>
 					<li class="nav-item navi-menu"><a class="nav-link "
 						href="/party/partylist" id="toPartyList">모임검색</a></li>
 					<li class="nav-item navi-menu"><a class="nav-link "
