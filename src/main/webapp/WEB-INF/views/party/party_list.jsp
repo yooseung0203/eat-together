@@ -18,12 +18,6 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <!-- 태훈 추가 -->
-<meta content="" name="descriptison">
-<meta content="" name="keywords">
-
-<!-- Favicons -->
-<!-- <link href="/resources/assets/img/favicon.png" rel="icon"> -->
-<link href="/resources/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
 <!-- Google Fonts -->
 <link
@@ -31,17 +25,12 @@
 	rel="stylesheet">
 
 <!-- Vendor CSS Files -->
-<link href="/resources/assets/vendor/bootstrap/css/bootstrap.min.css"
-	rel="stylesheet">
 <link href="/resources/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
 <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
 <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"
 	rel="stylesheet">
-<link href="/resources/assets/vendor/nivo-slider/css/nivo-slider.css"
-	rel="stylesheet">
 <link href="/resources/assets/vendor/owl.carousel/assets/owl.carousel.min.css"
 	rel="stylesheet">
-<link href="/resources/assets/vendor/venobox/venobox.css" rel="stylesheet">
 
 <!-- Template Main CSS File -->
 <link href="/resources/assets/css/style.css" rel="stylesheet">
@@ -59,7 +48,6 @@
 
 <!--  kakao api -->
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-
 
 <!-- google font -->
 <link
@@ -330,6 +318,24 @@ $(function(){
 	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.	
 });
 /***************** End예지 페이지 로딩 스피너 **************/
+/*
+ * 
+ $(function(){
+	
+	$('.top5 .partylist').each(function (index, item) { 
+		// 인덱스는 말 그대로 인덱스 // item 은 해당 선택자인 객체를 나타냅니다. 
+		$(item ).
+		// item 과 this는 같아서 일반적으로 this를 많이 사용합니다. 
+		// $(this).addClass('li_0' + index); });
+
+	
+	$(".thumbnail-img").text(obj.height);	
+});
+*/
+
+
+
+
 
 </script>
 <style>
@@ -344,7 +350,10 @@ div{
 .aa {
 	width: 100%;
 	margin: auto;
-	
+}
+
+.topt5{
+	margin: auto;
 }
 
 .listtitle {
@@ -391,13 +400,12 @@ div{
 }
 
 .thumbnail-img {
-/*   max-width: 100%; */
+	max-width: 100%;
 /*   height: 박스의 height와 같아야 한다. */
   transform: translate(-50%, -50%);
 }
 </style>
 </head>
-<!-- <body data-spy="scroll" data-target="#navbar-example"> -->
 <body>
 <% request.setCharacterEncoding("UTF-8"); %>
 	<!-- ******************* -->
@@ -412,9 +420,8 @@ div{
 		<div class="row aa">
 			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
 		</div>	
-		<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 aa">
+		<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 aa top5">
 			<c:forEach var="top" items="${top}" varStatus="status">
-				<div class="col card-deck">
 					<div class="card partylist">
 						<div class="thumbnail-wrapper imgBox">
 							<div class="thumbnail">
@@ -447,7 +454,6 @@ div{
 								가기</button>
 						</div>
 					</div>
-				</div>
 			</c:forEach>
 		</div>
 		<!-- ============== End Top 5 Section ============== -->
@@ -548,18 +554,17 @@ div{
 	<!-- ******************* -->
 	
 	<!-- Vendor JS Files -->
-  <script src="/resources/assets/vendor/jquery/jquery.min.js"></script>
-  <script src="/resources/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  
+  
   <script src="/resources/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-  <script src="/resources/assets/vendor/php-email-form/validate.js"></script>
+  
   <script src="/resources/assets/vendor/appear/jquery.appear.js"></script>
-  <script src="/resources/assets/vendor/knob/jquery.knob.js"></script>
+  
   <script src="/resources/assets/vendor/parallax/parallax.js"></script>
-  <script src="/resources/assets/vendor/wow/wow.min.js"></script>
+  
   <script src="/resources/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="/resources/assets/vendor/nivo-slider/js/jquery.nivo.slider.js"></script>
+  
   <script src="/resources/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
-  <script src="/resources/assets/vendor/venobox/venobox.min.js"></script>
 
   <!-- Template Main JS File -->
   <script src="/resources/assets/js/main.js"></script>

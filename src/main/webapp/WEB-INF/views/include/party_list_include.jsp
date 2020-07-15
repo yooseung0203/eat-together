@@ -13,12 +13,14 @@
 			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 				<div class="single-team-member">
 					<div class="team-img">
-						<a href="#"> <img src="${partyList.imgaddr}" alt=""></a>
+					<a href="#">
+					 <img src="${partyList.imgaddr}" alt=""></a>
 						<div class="team-social-icon text-center">
 							<ul>
 								<li><a class="myBtn">상세 보기</a></li>
-								<li style="display: none"><input type="hidden"
-									class="party_seq" value="${partyList.seq}"></li>
+								<li style="display: none">
+									<input type="hidden"class="party_seq" value="${partyList.seq}">
+								</li>
 							</ul>
 						</div>
 					</div>

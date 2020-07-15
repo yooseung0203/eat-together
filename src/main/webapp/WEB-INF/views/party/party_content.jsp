@@ -54,8 +54,7 @@
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
-<link rel="stylesheet" type="text/css"
-	href="/resources/css/party-css.css">
+
 </head>
 <script>
 
