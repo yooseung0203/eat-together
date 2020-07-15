@@ -7,5 +7,9 @@
 	<select id="checkDupl" resultType="int">
 		select count(*) from report where category=#{category} and id=#{id} and parent_seq=#{parent_seq}
 	</select>
-</mapper> <!-- by 태훈 모임 글 신고 신고 테이블 추가 -->
+	
+	<select id="getListCount"  resultType="int">
+		select count(*) from report
+	</select>
+</mapper> 
    

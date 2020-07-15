@@ -54,5 +54,11 @@
 		party) where rnum between #{start} and
 		#{end}
 	</select>
+	
+	<!-- by 태훈, 신고 리스트 출력 -->
+	<select id="reportList" resultType="coma.spring.dto.ReportDTO">
+		select * from (select report.* , row_number() over(order by seq desc)
+		rnum from report) where rnum between #{start} and #{end}
+	</select>
 
 </mapper>

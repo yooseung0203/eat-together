@@ -20,12 +20,14 @@ import coma.spring.dto.MsgDTO;
 import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.QuestionDTO;
+import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.service.AdminService;
 import coma.spring.service.FaqService;
 import coma.spring.service.MsgService;
 import coma.spring.service.PartyService;
 import coma.spring.service.QuestionService;
+import coma.spring.service.ReportService;
 import coma.spring.service.ReviewService;
 
 
@@ -53,6 +55,9 @@ public class AdminController {
 
 	@Autowired
 	private ReviewService rservice;
+	
+	@Autowired
+	private ReportService reposervice;
 
 	@RequestMapping("toAdmin")
 	public String toAdmin() {
@@ -368,6 +373,31 @@ public class AdminController {
 		request.setAttribute("result",result);
 		return "/admin/admin_msgResult";
 	}
-	
+
+	// 태훈 신고 리스트 출력하기 
+	@RequestMapping("toAdmin_report")
+	public String toAdmin_report(HttpServletRequest request)  throws Exception {
+		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
+		String adminCheck = loginInfo.getId();
+		if(adminCheck.contentEquals("administrator")) {
+
+			int cpage=1;
+			try {
+				cpage = Integer.parseInt(request.getParameter("cpage"));
+			}catch(Exception e) {
+
+			}
+
+			List<ReportDTO> list = aservice.reportList(cpage);
+			String navi = aservice.getReportNavi(cpage);
+
+			request.setAttribute("list", list);
+			request.setAttribute("navi", navi);
+			return "/admin/admin_report";
+		}
+		else {
+			return "/error/adminpermission";
+		}
+	}
 }
 

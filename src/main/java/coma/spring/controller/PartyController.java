@@ -361,31 +361,13 @@ public class PartyController {
 		int cpage = Integer.parseInt(request.getParameter("cpage"));
 
 		List<PartyDTO> partyList = pservice.selectList(cpage);
-		//String navi = pservice.getPageNaviTH(cpage);
+		
 		
 		request.setAttribute("list", partyList);
-		//request.setAttribute("navi", navi);
+		
 		return "/include/party_list_include";
 	}
-//	// 태훈 모임 통합 검색
-//	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
-//	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
-//
-//		List<PartyDTO> partyList = pservice.partySearch(pdto);
-//
-//		List<MapDTO> top = mapservice.selectTopStore();
-//		
-//		List<String> imgList2 = new ArrayList<>();
-//		for(int i=0; i<top.size(); i++) {
-//			imgList2.add(pservice.clew(top.get(i).getName()));
-//		}
-//
-//		//request.setAttribute("navi", navi);
-//		request.setAttribute("list", partyList);
-//		request.setAttribute("top", top);
-//		request.setAttribute("imglist2", imgList2);
-//		return "/party/party_list";
-//	}
+
 	// 태훈 모임 통합 검색
 	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
 	public String partySearch(HttpServletRequest request) throws Exception {
@@ -427,9 +409,9 @@ public class PartyController {
 		String nickname = account.getNickname();
 		boolean partyFullCheck = pservice.isPartyfull(seq);
 		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
-		//String img = pservice.clew(content.getParent_name());
+	
 		PartyCountDTO pcdto = pservice.getPartyCounts(seq);
-		//request.setAttribute("img", img);
+		
 		request.setAttribute("con",content);
 		request.setAttribute("party", pcdto);
 		request.setAttribute("partyFullCheck", partyFullCheck);
@@ -614,16 +596,7 @@ public class PartyController {
 		System.out.println("이미지 주소 " + imgaddr);
 		return imgaddr;
 	}
-	// 태훈 모임 신고
-	//@ResponseBody
-	//@RequestMapping("party_report")
-	//public int partyReport(HttpServletRequest request)  throws Exception {
-		//int seq = Integer.parseInt(request.getParameter("seq"));
-		//System.out.println("seq : " + seq);
-		//int result = pservice.partyReport(seq);
-		//System.out.println("result : " + result);
-		//return result;
-	//}
+
 	@RequestMapping("party_report")
 	public String partyReport(HttpServletRequest request,RedirectAttributes redirectAttributes)  throws Exception {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");

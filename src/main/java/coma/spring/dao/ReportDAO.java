@@ -19,5 +19,9 @@ public class ReportDAO {
 	public int checkDupl(ReportDTO rdto) {
 		return mybatis.selectOne("Report.checkDupl", rdto);
 	}
-
+	
+	public int getListCount() {
+		return mybatis.selectOne("Report.getListCount");
+	}
+	
 }

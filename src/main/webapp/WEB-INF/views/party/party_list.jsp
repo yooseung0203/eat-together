@@ -162,7 +162,7 @@ function partySearch(url,formData,cpage){
 		url : url,
 		data : {"formData" : formData, "cpage":cpage},
 		success : function(partyList) {
-			$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+" 통합 검색<span></div>");
+			//$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+" 통합 검색<span></div>");
 			$("#start_list").append(partyList);
 		},
 	    error:function(e){
@@ -179,7 +179,7 @@ function getPartyList(cpage){
         data : {"cpage" : cpage},
         url : '/party/getPartyList',
         success : function(partyList) {
-        	$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+ "기본 검색 <span></div>");
+        	//$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+ "기본 검색 <span></div>");
             $("#start_list").append(partyList);         
        },
        error:function(e){

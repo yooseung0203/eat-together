@@ -95,9 +95,7 @@ function partyReport(num){
 			else{
 				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
 			}
-			
-			
-			
+	
 		},
 		error:function(e){
 			console.log("error");

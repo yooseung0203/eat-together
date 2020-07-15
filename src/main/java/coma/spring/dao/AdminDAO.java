@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.ReportDTO;
 
 
 
@@ -46,7 +47,11 @@ public class AdminDAO {
 	public List<PartyDTO> partyByOption(Map<String, Object> param){
 		return mybatis.selectList("Admin.partyByOption", param);
 	}
-	
+	// by 태훈 신고 리스트 출력하기
+	public List<ReportDTO> reportList(Map<String, Integer> param){
+		System.out.println(param);
+		return mybatis.selectList("Admin.reportList", param);
+	}
 	
 	
 	
