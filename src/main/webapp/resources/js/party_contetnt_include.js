@@ -1,4 +1,15 @@
 
+
+
+/********************************* 채팅방으로 이동 ************************************/
+function send_msg(){
+	var option = "width = 500, height = 550, top = 100, left = 200, scrollbars=no"
+	var target=	$(".party_writer").html();	
+	//var target=${con.writer};
+	window.open("/msg/msgResponse?msg_receiver="+target,target,option);
+};
+/********************************* 채팅방으로 이동 ************************************/
+
 /********************************* 채팅방으로 이동 ************************************/
 function toChatroom(num){
 	var option = "width = 800, height = 800, top = 100, left = 200, scrollbars=no"

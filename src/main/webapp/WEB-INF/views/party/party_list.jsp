@@ -13,7 +13,8 @@
 <meta property="og:title" content="${con.title}" />
 <meta property="og:url" content="eat-together.net" />
 <meta property="og:description" content="${con.content}" />
-<meta property="og:image" content="https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-rectangle.png" />
+<meta property="og:image"
+	content="https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-rectangle.png" />
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">

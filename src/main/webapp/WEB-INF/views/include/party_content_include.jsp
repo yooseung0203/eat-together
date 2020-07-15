@@ -38,7 +38,7 @@
 						<c:when test="${con.status  eq '0'}">
 							<span class="badge badge-secondary">모집마감</span>
 							<c:if
-								test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false  }">
+								test="${con.writer ne sessionScope.loginInfo.nickname && partyParticipantCheck eq false  }">
 								<div class="row mt-2 ">
 									<div class="col-sm-4 alert alert-danger">
 										<h6 class="">모집이 종료되어 참여할 수 없습니다.</h6>
@@ -76,7 +76,7 @@
 									</div>
 								</c:if>
          </div>
-         <div class="col-sm-12 party_writer">작성자 : ${con.writer}</div>
+         <div class="col-sm-12 party_writer">작성자 : ${con.writer} <a onclick="send_msg()"><img src="/resources/img/send_message.png"></a></div>
       </div>
 
 		<div class="row">
@@ -149,7 +149,9 @@
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">소개</div>
-			<div class="col-10"> <c:out value='${con.content}' /></div>
+			<div class="col-8 party-contenttext-area">
+					<c:out value='${con.content}' />
+				</div>
 		</div>
 		<div class="row mb-1">
 			<div class="col-2 party-titlelabel">SNS공유</div>
@@ -179,23 +181,30 @@
 				<c:choose>
 					<c:when
 						test="${partyFullCheck eq false && partyParticipantCheck eq false}">
-						<button type="button" id="toPartyJoin" class="btn btn-success">모임참가하기</button>
+						<c:if test="${ (sessionScope.loginInfo.gender eq 1 &&  con.gender eq 'm') || (sessionScope.loginInfo.gender eq 2 && con.gender eq'f') || con.gender eq 'a' }">
+								<button type="button" id="toPartyJoin" class="btn btn-success">모임참가하기</button>
+							</c:if>
 					</c:when>
 					<c:when test="${partyParticipantCheck  eq true}">
-						<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
-							이동</button>
+						<c:if test="${con.status eq '1' }">
+							<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
+								이동</button>
+							</c:if>
 						<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 							<button type="button" id="toExitParty" class="btn btn-primary">모임
 								나가기</button>
 						</c:if>
 						<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
 							<c:choose>
-								<c:when test="${con.status  eq '1'}">
-									<button type="button" id="toStopRecruit" class="btn btn-dark">모집
-										종료하기</button>
-								</c:when>
-								<c:when test="${con.status  eq '0'}"></c:when>
-							</c:choose>
+									<c:when test="${con.status  eq '1'}">
+										<button type="button" id="toStopRecruit" class="btn btn-dark">모집
+											종료하기</button>
+									</c:when>
+									<c:when test="${con.status  eq '0'}">
+										<button type="button" id="torestartRecruit" class="btn btn-success">모집 재시작</button>
+									
+									</c:when>
+								</c:choose>
 						</c:if>
 					</c:when>
 				</c:choose>

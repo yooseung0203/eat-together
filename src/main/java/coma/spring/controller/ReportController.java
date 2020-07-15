@@ -65,6 +65,7 @@ public class ReportController {
 				System.out.println(result);
 			}
 		}
+		
 		request.setAttribute("result", result);
 		return result;
 	}

@@ -144,7 +144,7 @@ public class WebChatSocket {
 				}
 			}
 			else {
-				String msg = message.replaceAll("</\\w+>", "라고 말한 바보입니다. 감히 여러분들을 공격하려다 이렇게 적발이 되었습니다 죄송합니다.").replaceAll("<\\w+>", "저는");
+				String msg = message.replace("\"", "").replaceAll("</\\w+>", "라고 말한 바보입니다. 감히 여러분들을 공격하려다 이렇게 적발이 되었습니다 죄송합니다.").replaceAll("<\\w+>", "저는");
 				// 채팅 저장변수 선언 (방번호,채팅SEQ,메세지,닉네임,현재시간,조회수)
 				ChatDTO c = new ChatDTO(roomNum,
 						ChatStatics.savedChatsSeq.get(roomNum),
