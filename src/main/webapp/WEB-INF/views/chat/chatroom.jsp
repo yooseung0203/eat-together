@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/chatroom.css?after">
+	href="/resources/css/chatroom.css">
 
 <script>
 	$(function() {
@@ -137,6 +137,16 @@
 				return false;
 			}
 		})
+		$("#send").on("click",function(){
+				var text = $(".input-area").text();
+				if (text.trim() != "") {
+					scrolled = true;
+					ws.send(text.trim());
+				}
+				$(".input-area").empty();
+				return false;
+			
+		})
 		$("#exit").on("click",function() {
 			var realExit = confirm("퇴장하시겠습니까?\n진행중인 대화방은 삭제되며 참가중인 모임에서도 퇴장하게 됩니다");
 			if (realExit) {
@@ -235,7 +245,7 @@
 			<div class="inputBox">
 				<div class="input-area" contenteditable="true"></div>
 				<div class="submit">
-					<button type="button">전송</button>
+					<button type="button" id=send>전송</button>
 				</div>
 			</div>
 		</div>

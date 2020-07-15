@@ -1,4 +1,4 @@
-@charset "UTF-8";
+    @charset "UTF-8";
 
 body {
 	background: #f9f9f9;
@@ -13,6 +13,7 @@ body {
 ul, li {
 	list-style: none;
 }
+
 
 #chatRoom {
 	position: absolute;
@@ -109,7 +110,7 @@ ul, li {
 }
 
 #chatRoom .memberList .chatBtns>div:hover {
-	background: #4b7dfe;
+	background: #fedb8c;
 	color: #fff;
 	cursor: pointer;
 }
@@ -144,7 +145,7 @@ button {
 	border-radius: 20px;
 }
 .viewed {
-	background:#487afd; 
+	background:#fedb8c; 
 	color:#fff;
 	text-align: center;
 	max-width: 300px;
@@ -216,7 +217,7 @@ button {
 }
 
 #chatRoom .chatBox .message-area>article.my .msgBox div>p {
-	background: #487afd;
+	background: #fedb8c;
 	color: #fff;
 }
 
@@ -251,7 +252,7 @@ button {
 	padding: 5px 10px;
 	border-radius: 6px;
 	border: none;
-	background: #487afd;
+	background: #fedb8c;
 	color: #fff;
 	font-size: 12px;
 }
@@ -272,11 +273,11 @@ button {
 }
 
 #exit button:hover {
-	background: #487afd;
+	background: #fedb8c;
 }
 
 .exist {
-	color: blue;
+	color: orange;
 }
 
 .noexist {
