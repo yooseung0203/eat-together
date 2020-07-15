@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +40,6 @@ import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.PartySearchListDTO;
 import coma.spring.dto.ReportDTO;
-import coma.spring.dto.TopFiveStoreDTO;
 import coma.spring.service.ChatService;
 import coma.spring.service.MapService;
 import coma.spring.service.PartyService;
@@ -408,25 +408,45 @@ public class PartyController {
 		
 		PartyDTO content=pservice.selectBySeq(Integer.parseInt(seq));
 		
-		//redirectAttributes.addAttribute("con",content);
-		redirectAttributes.addAttribute("partyFullCheck", AfterpartyFullCheck);
-		redirectAttributes.addAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
+		Map<String,String> partyCheck = new HashMap<>();
+		
+		
+		/*
+		 * //redirectAttributes.addAttribute("con",content);
+		 * redirectAttributes.addAttribute("partyFullCheck", AfterpartyFullCheck);
+		 * redirectAttributes.addAttribute("partyParticipantCheck",
+		 * AfterpartyParticipantCheck);
+		 */
+		request.setAttribute("partyFullCheck", AfterpartyFullCheck);
+		request.setAttribute("partyParticipantCheck", AfterpartyParticipantCheck);
 		return "redirect:/party/party_content?seq=" + content.getSeq();
 		
 	}
 
 	// 수지 모집종료 기능
 	@RequestMapping("stopRecruit")
-	public String stopRecruit(String seq) throws Exception {
+	public String stopRecruit(String seq, String writer) throws Exception {
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = account.getNickname();
+		if(nickname.contentEquals(writer)) {
 		pservice.stopRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
+		}else {
+			return "/error/writerpermition";
+		}
 	}
 	
 	// 수지 모집 재시작 기능
 	@RequestMapping("restartRecruit")
-	public String restartRecruit(String seq) throws Exception {
+	public String restartRecruit(String seq, String writer) throws Exception {
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		String nickname = account.getNickname();
+		if(nickname.contentEquals(writer)) {
 		pservice.restartRecruit(seq);
 		return "redirect:/party/party_content?seq="+seq;
+		}else {
+			return "/error/writerpermition";
+		}
 	}
 	
 	// 수지 모임 나가기 기능
@@ -441,7 +461,7 @@ public class PartyController {
 			this.partydelete(seq);
 		}
 		
-		return "redirect:/party/partylist";
+		return "redirect:/party/party_content?seq="+seq;
 		
 	}
 	

@@ -16,4 +16,8 @@ public class ErrorController {
 	public String toAdminPermission() {
 		return "/error/adminpermission";
 	}
+	@RequestMapping("writepermition")
+	public String toWritePermition() {
+		return "/error/writepermition";
+	}
 }

@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/chatroom.css?after">
+	href="/resources/css/chatroom.css">
 
 <script>
 	$(function() {
@@ -18,8 +18,8 @@
 		var userenter = true;
 		var viewed = 0;
 		$(".input-area").empty();
-		//var ws = new WebSocket("wss://eat-together.net/chat/chatroom")
-		var ws = new WebSocket("ws://192.168.60.10/chat/chatroom")
+		var ws = new WebSocket("wss://eat-together.net/chat/chatroom")
+		//var ws = new WebSocket("ws://192.168.60.10/chat/chatroom")
 		ws.onmessage = function(e) {
 			var some = e.data.split(":");
 			if (some[0] == "z8qTA0JCIruhIhmCAQyHRBpIqUKjS3VBT2oJndv61od6") {
@@ -137,6 +137,16 @@
 				return false;
 			}
 		})
+		$("#send").on("click",function(){
+				var text = $(".input-area").text();
+				if (text.trim() != "") {
+					scrolled = true;
+					ws.send(text.trim());
+				}
+				$(".input-area").empty();
+				return false;
+			
+		})
 		$("#exit").on("click",function() {
 			var realExit = confirm("퇴장하시겠습니까?\n진행중인 대화방은 삭제되며 참가중인 모임에서도 퇴장하게 됩니다");
 			if (realExit) {
@@ -235,7 +245,7 @@
 			<div class="inputBox">
 				<div class="input-area" contenteditable="true"></div>
 				<div class="submit">
-					<button type="button">전송</button>
+					<button type="button" id=send>전송</button>
 				</div>
 			</div>
 		</div>
