@@ -1,27 +1,11 @@
 @charset "UTF-8";
+@font-face { font-family: 'NEXON Lv1 Gothic OTF Light'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Light.woff') format('woff'); font-weight: normal; font-style: normal;}
 
-@import url('https://fonts.googleapis.com/css?family=Hi+Melody:400')
 
-* {
-	text-overflow:ellipsis;
-}
+/***************  수지씨 CSS 파일 **************/
 
-div{
-	border: 0px solid black;
-}
-
-.aa {
-	width: 100%;
-	margin: auto;
-	
-}
-
-.listtitle {
-	font-size: 35px;
-}
-
-.partylist {
-	margin-bottom: 15px;
+.section {
+	background-color: #fcfcfc;
 }
 
 .party_headline {
@@ -38,8 +22,13 @@ form {
 	weight: 400;
 }
 
+.btn_select{
+	background-color:#ffcf00;
+	border-color:#ffcf00;
+}
+
 #img-area > img {
-	width:200px;	
+	width:320px;	
 }
 
 .party-info{
@@ -51,8 +40,24 @@ form {
 .sns_icon{
 	width:36px;
 }
+.loginError {
+	height: 610px;
+}
 
+.loginerrormsg {
+	padding-top: 200px;
+}
 
+.col-sm-2, .col-1 {
+	margin: 0px;
+	padding: 0px;
+}
+.party-contenttext-area{
+	 word-break:break-all;
+	 
+	 
+}
+ /***************  수지씨 내부 CSS  **************/
 .featImgWrap {
 	height: 250px;
 	position: relative;

@@ -19,6 +19,7 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link rel="stylesheet" type="text/css" href="/resources/css/msg.css">
 <title>쪽지보내기</title>
 
 <script>
@@ -68,7 +69,7 @@
 		<form action="msgSend" method="post">
 			<table class="table">
 				<thead>
-					<tr class="table-success" align="center">
+					<tr class="table" align="center" id="orange">
 						<th scope="col" colspan=12>쪽지보내기</th>
 					</tr>
 				</thead>
@@ -99,7 +100,7 @@
 					</tr>
 					<tr align="center">
 						<td scope="col" colspan=12>
-							<button type="submit" id="submit" class="btn btn-success">보내기</button>
+							<button type="submit" id="submit" class="btn btn-orange">보내기</button>
 							<button type="button" id="close" class="btn btn-light">취소</button>
 						</td>
 					</tr>

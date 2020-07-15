@@ -24,8 +24,10 @@ import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -35,6 +37,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
@@ -253,9 +256,9 @@ public class PartyController {
 //			dateAndtime = date + " "+time+":00.0";
 //		}
 		dateAndtime = date+":00.0";
-		System.out.println(date);
+	//	System.out.println(date);
 	//	System.out.println(time);
-		System.out.println(dateAndtime);
+	//	System.out.println(dateAndtime);
 
 		Timestamp meetdate = java.sql.Timestamp.valueOf(dateAndtime);
 		dto.setMeetdate(meetdate);
@@ -279,58 +282,142 @@ public class PartyController {
 		return "redirect:/admin/toAdmin_party";
 	}
 
-	// 태훈 모임 리스트 네비 포함
+//	// 태훈 모임 리스트 네비 포함
+//	@RequestMapping("partylist")
+//	public String partyList(HttpServletRequest request) throws Exception {
+//		
+//		int cpage=1;
+//		
+//		try {
+//			cpage = Integer.parseInt(request.getParameter("cpage"));
+//		}catch(Exception e) {
+//
+//		}
+//		if(cpage <=1) {
+//			////////////////////////top 5 ///////////////////////////
+//			List<MapDTO> top = mapservice.selectTopStore();
+//			Map<Integer, Object> reviews = rservice.getReview(top);
+//
+//			System.out.println(reviews.size());
+//			List<String> imgList2 = new ArrayList<>();
+//			for(int i=0; i<top.size(); i++) {
+//
+//				imgList2.add(pservice.clew(top.get(i).getName()));
+//				System.out.println(i + " : " + top.get(i).getSeq() + " : "+imgList2.get(i));
+//				System.out.println(top.get(i).getName());
+//			}
+//			
+//			request.setAttribute("top", top);
+//			request.setAttribute("imglist2", imgList2);
+//			request.setAttribute("review", reviews);
+//			//////////////////////// top 5 ///////////////////////////
+//		}
+//		
+//		List<PartyDTO> partyList = pservice.selectList(cpage);
+//		String navi = pservice.getPageNaviTH(cpage);
+//
+//		
+//		
+//		request.setAttribute("list", partyList);
+//		request.setAttribute("navi", navi);
+//		return "/party/party_list";
+//	}
+	
+	// 태훈 모임 리스트 페이지로 이동
 	@RequestMapping("partylist")
 	public String partyList(HttpServletRequest request) throws Exception {
-		
+
+		////////////////////////top 5 ///////////////////////////
 		List<MapDTO> top = mapservice.selectTopStore();
 		Map<Integer, Object> reviews = rservice.getReview(top);
-	
+
 		System.out.println(reviews.size());
 		List<String> imgList2 = new ArrayList<>();
 		for(int i=0; i<top.size(); i++) {
-			
+
 			imgList2.add(pservice.clew(top.get(i).getName()));
 			System.out.println(i + " : " + top.get(i).getSeq() + " : "+imgList2.get(i));
 			System.out.println(top.get(i).getName());
 		}
-		
-		int cpage=1;
-		try {
-			cpage = Integer.parseInt(request.getParameter("cpage"));
-		}catch(Exception e) {
-
-		}
-		List<PartyDTO> partyList = pservice.selectList(cpage);
-		String navi = pservice.getPageNaviTH(cpage);
-
+		////////////////////////top 5 ///////////////////////////
 		
 		request.setAttribute("top", top);
 		request.setAttribute("imglist2", imgList2);
 		request.setAttribute("review", reviews);
-		request.setAttribute("list", partyList);
-		request.setAttribute("navi", navi);
+		
 		return "/party/party_list";
 	}
+	
+	// 태훈 모임 리스트 출력
+	@RequestMapping("getPartyList")
+	public String getPartyList(HttpServletRequest request) throws Exception {
+		//int cpage=1;
+		
+//		try {
+//			 cpage = Integer.parseInt(request.getParameter("cpage"));
+//		}catch(Exception e) {
+//
+//		}
+		int cpage = Integer.parseInt(request.getParameter("cpage"));
+
+		List<PartyDTO> partyList = pservice.selectList(cpage);
+		//String navi = pservice.getPageNaviTH(cpage);
+		
+		request.setAttribute("list", partyList);
+		//request.setAttribute("navi", navi);
+		return "/include/party_list_include";
+	}
+//	// 태훈 모임 통합 검색
+//	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
+//	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
+//
+//		List<PartyDTO> partyList = pservice.partySearch(pdto);
+//
+//		List<MapDTO> top = mapservice.selectTopStore();
+//		
+//		List<String> imgList2 = new ArrayList<>();
+//		for(int i=0; i<top.size(); i++) {
+//			imgList2.add(pservice.clew(top.get(i).getName()));
+//		}
+//
+//		//request.setAttribute("navi", navi);
+//		request.setAttribute("list", partyList);
+//		request.setAttribute("top", top);
+//		request.setAttribute("imglist2", imgList2);
+//		return "/party/party_list";
+//	}
 	// 태훈 모임 통합 검색
 	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
-	public String partySearch(PartySearchListDTO pdto, HttpServletRequest request) throws Exception {
+	public String partySearch(HttpServletRequest request) throws Exception {
+        JsonArray Jarr = JsonParser.parseString(request.getParameter("formData")).getAsJsonArray();
+       
+        Map<String, Object> map = new HashMap<>();
+        List<String> ageList = new ArrayList<>();
+        for(int i=0; i<Jarr.size();i++) {
+        	if(Jarr.get(i).getAsJsonObject().get("name").getAsString().equals("age")) {
+        		String age = Jarr.get(i).getAsJsonObject().get("value").getAsString();
+        		ageList.add(age);
+        	}else {
+        		map.put(Jarr.get(i).getAsJsonObject().get("name").getAsString(), Jarr.get(i).getAsJsonObject().get("value").getAsString());
+        	}
+        }
+        map.put("ageList", ageList);
+        map.put("ageListSize", ageList.size());
+        System.out.println(map.get("ageList"));
+        System.out.println(map.get("ageList.size"));
+        System.out.println(map.get("search") + ":" + map.get("search").getClass().getTypeName());
+        System.out.println(map.get("text"));
+        System.out.println(map);
 
-		List<PartyDTO> partyList = pservice.partySearch(pdto);
-
-		List<MapDTO> top = mapservice.selectTopStore();
+		int cpage = Integer.parseInt(request.getParameter("cpage"));
 		
-		List<String> imgList2 = new ArrayList<>();
-		for(int i=0; i<top.size(); i++) {
-			imgList2.add(pservice.clew(top.get(i).getName()));
-		}
+		List<PartyDTO> partyList = pservice.partySearch(map , cpage);
 
-		//request.setAttribute("navi", navi);
 		request.setAttribute("list", partyList);
-		request.setAttribute("top", top);
-		request.setAttribute("imglist2", imgList2);
-		return "/party/party_list";
+
+		return "/include/party_list_include";
 	}
+	
 	// 태훈 모임 내용 모달 창
 	@RequestMapping(value="party_content_include")
 	public String party_content_include(HttpServletRequest request) throws Exception {

@@ -56,7 +56,7 @@
 						</c:choose></li>
 
 					<li class="nav-item navi-menu"><c:choose>
-							<c:when test="${loginInfo.id!=null && newMsg!=0}">
+							<c:when test="${loginInfo.id!=null&&loginInfo.id!='administrator' && newMsg!=0}">
 								<button type="button" class="btn btn-danger" id="newMsg">
 									New<span class="badge badge-light">${newMsg}</span>
 								</button>
@@ -64,8 +64,6 @@
 						</c:choose></li>
 				</ul>
 			</div>
-
-
 		
 
 		<c:if test="${loginInfo.id == null}">
