@@ -61,15 +61,10 @@ public class MemberController {
 		return "member/signup_check";
 	}
 
-	//by 지은 회원가입, 약관동의 후 정보입력 페이지로 이동, 체크박스 값 가져오기 수정_20200710
+	//by 지은 회원가입, 약관동의 후 정보입력 페이지로 이동_20200710
 	@RequestMapping("signup_info")
-	public String getSignupInfoView(String check_yn) {
-		System.out.println(check_yn);
-		if(check_yn.contentEquals("on")) {
+	public String getSignupInfoView() {
 			return "member/signup_info";
-		}else {
-			return "redirect:/";
-		}
 	}
 
 	//by지은, 마이페이지에서 내정보view로 이동_20200704

@@ -142,7 +142,7 @@ public class EmailController {
 					"<img src=\"https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-square.png\" width=\"350px\"><br>\r\n" + 
 					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\"><br>\r\n" + 
 					"		<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">맛집 동행 찾기 서비스 - <맛집갔다갈래></span><br>\r\n" + 
-					"		<span style=\"color: {$point_color};\">사이트 이용에에 필요한 인증메일</span>\r\n" + 
+					"		<span style=\"color: {$point_color};\">사이트 이용에 필요한 인증메일</span>\r\n" + 
 					"	</h1>\r\n" + 
 					"	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">\r\n" + 
 					"		안녕하세요.<br>\r\n" + 

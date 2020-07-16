@@ -124,7 +124,7 @@
 
 				<div align=center>
 					<button type=submit id=btn class="btn btn-warning signup_text">가입하기</button>
-					<button type=reset class="btn btn-light signup_text"
+					<button type=reset id="reset" class="btn btn-light signup_text"
 						style="margin-left: 5px;">다시 작성하기</button>
 				</div>
 				<br>
@@ -132,6 +132,8 @@
 		</form>
 	</div>
 	<script>
+		var code;
+	
 		//by 지은, 이미지를 수정할 때에 미리보기로 자신이 없로드한 사진을 보여준다_20200710
 		var upload = document.querySelector('#profile');
 		var preview = document.querySelector('#preview');
@@ -195,15 +197,9 @@
 					return false;
 				})
 
-		//다시작성 버튼
+		//다시작성 버튼_20200716
 		$("#reset").on("click", function() {
-			$("#id").val("");
-			$("#id_text").html("");
-			$("#pw").val("");
-			$("#pwCorrection").val("");
-			$("#nickname").val("");
-			$("#account_email").val("");
-			$("#birth").val("");
+			location.reload();
 		})
 
 		//id regex
@@ -376,14 +372,7 @@
 		})
 
 		//메일 인증 
-
-		//by 지은, 이메일 인증 ajax의 중복호출을 방지하기 위해서 전송상태를 표시한다_20200713
-
-		$.ajaxSetup({
-			timeout : 3000,
-			retryAfter : 7000
-		});
-
+		//by 지은, 이메일 인증 ajax의 중복호출을 방지하기 위해서 전송상태를 표시한다_20200716
 		$("#mail").on("click", function() {
 			if ($("#account_email").val() == "") {
 				alert("이메일을 입력해주십시오.");
@@ -396,32 +385,37 @@
 						account_email : $("#account_email").val()
 					}
 				}).done(function(resp) {
-					console.log(resp);
-					if (resp != "") {
+					code = resp;
+					console.log(code);
+					if (code != "") {
 						alert("인증메일이 발송되었습니다.");
 						$("#mail_div").css("display", "block");
+
 					} else {
 						alert("이미 사용중인 이메일입니다.");
 						$("#mail_text").val("");
 						$("#mail_text").focus();
 					}
-					
-					
-					$("#mail_accept").on("click", function() {
-						if (resp == $("#mail_text").val()) {
-							$("#mail_text").css("color", "blue");
-							$("#mail_text").val("인증에 성공하였습니다.");
-							$("#mail_text").attr("readonly", true);
-						} else {
-							alert("인증문자열을 확인해주세요.");
-							$("#mail_text").val("");
-
-						}
-					})
 
 				}).fail(function(jqXHR, textStatus, errorThrown) {
 					serrorFunction();
 				});
+			}
+		})
+
+		$("#mail_accept").on("click", function() {
+			if ($("#mail_text").val() == code) {
+				$("#mail_text").css("color", "blue");
+				$("#mail_text").val("인증에 성공하였습니다.");
+				$("#mail_text").attr("readonly", true);
+			} else if ($("#mail_text").val == "") {
+				alert("인증문자열을 입력해주세요.");
+				$("#mail_text").focus();
+			} else if ($("#mail_text") != code) {
+				alert("인증문자열이 일치하지 않습니다.");
+				$("#mail_text").val("");
+				$("#mail_text").focus();
+
 			}
 		})
 	</script>
