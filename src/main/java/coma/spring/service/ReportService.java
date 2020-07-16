@@ -22,7 +22,4 @@ public class ReportService {
 		return rdao.checkDupl(rdto);
 	}
 	
-	public int memReport(MemberReportDTO mdto) throws Exception {
-		return rdao.memReport(mdto);
-	}
 }

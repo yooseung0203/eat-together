@@ -132,7 +132,6 @@
 		<div class="row">
 			<div class="col-sm-12">
 				회원가입 권유 
-				<a href="#" onclick="window.open('/report/toReport', 'Report','width=600, height=800, location=no'); return false">신고하기</a>
 			</div>	
 		</div>
 	</div>

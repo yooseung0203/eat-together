@@ -11,12 +11,6 @@
 	<select id="getListCount"  resultType="int">
 		select count(*) from report
 	</select>
-	
-	<insert id="memReport">	
-		<selectKey keyProperty="seq" resultType="int" order="AFTER">
-			select member_report_seq.currval as seq from dual
-		</selectKey>
-		insert into member_report values(member_report_seq.nextval,#{id},#{report_id},#{title},#{content},sysdate)
-	</insert>
+
 </mapper> 
    

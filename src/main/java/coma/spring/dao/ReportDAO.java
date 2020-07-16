@@ -25,8 +25,5 @@ public class ReportDAO {
 		return mybatis.selectOne("Report.getListCount");
 	}
 	
-	public int memReport(MemberReportDTO mdto) {
-		return mybatis.insert("Report.memReport", mdto);
-	}
 	
 }

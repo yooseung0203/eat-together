@@ -30,7 +30,6 @@ function toDelete(seq){
 <body>
 	<div class="container-fluid mx-0 px-0">
 		<div class="row mx-0">
-
 			<div class="col-2 mx-0 px-0"><jsp:include
 					page="/WEB-INF/views/include/admin_sidebar.jsp" /></div>
 			<div class="col-10 px-5">
@@ -77,8 +76,11 @@ function toDelete(seq){
 													<c:when test="${i.category eq 0}">
 														<td>리뷰 신고</td>
 													</c:when>
-													<c:otherwise>
+													<c:when test="${i.category eq 1}">
 														<td>모임 글 신고</td>
+													</c:when>
+													<c:otherwise>
+														<td>회원 신고</td>
 													</c:otherwise>
 												</c:choose>																							
 												<td>${i.id}</td>	

@@ -31,17 +31,23 @@ $(function() {
 		}
 		else{
 			$.ajax({
-				url : '../member/isNickAvailable?nickname=' + nickname,
+				url : '../memreport/duplCheck?nickname=' + nickname,
 				dataType : 'json',
 				success : function(resp) {
 					console.log(resp);
-					if (resp == false) {
+					if (resp == 0) {
 						alert(nickname + "님을 신고합니다.");
 						$("#report_id").val(nickname);
 						$("#report_id").attr("readonly",true);
 						$("#report_id").css("background-color","DarkGray");
 						$("#idcheck").val("확인됨");
-					} else {
+					} else if(resp == 1){
+						alert("무분별한 신고를 막기 위해 한 회원 당 한번만 가능합니다.\n다시 한번 확인해주세요.");
+						$("#report_id").val("");
+					}else if(resp == 3){ 
+						alert("관리자는 신고할 수 없습니다..\n다시 한번 확인해주세요.");
+						$("#report_id").val("");
+					}else{
 						alert("존재하지 않는 회원입니다.\n다시 한번 확인해주세요.");
 						$("#report_id").val("");
 						//$("#idcheck").val("확인");
@@ -60,7 +66,7 @@ $(function() {
 </style>
 </head>
 <body>
-<form id="report" action="/report/memReport">
+<form id="report" action="/memreport/memReport">
 	<div>신고 페이지</div>
 	<div >
 		신고자 닉네임 : ${nick }

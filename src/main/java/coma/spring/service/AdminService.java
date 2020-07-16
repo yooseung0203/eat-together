@@ -308,7 +308,7 @@ public class AdminService {
 	
 	// 태훈 신고 리스트 출력
 	public List<ReportDTO> reportList(int cpage){
-		System.out.println("서비스 : "+cpage);
+		System.out.println("신고 서비스 : "+cpage);
 		int start = cpage * Configuration.recordCountPerPage-(Configuration.recordCountPerPage-1);
 		int end = start + (Configuration.recordCountPerPage-1);
 

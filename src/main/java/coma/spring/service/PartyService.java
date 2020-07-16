@@ -282,11 +282,8 @@ public class PartyService {
 	public PartyCountDTO getPartyCounts(String seq) {
 		return pdao.getPartyCounts(seq);
 	}
-
-//	// 태훈 모임 게시글 신고
-//	public int partyReport(int seq) {
-//		return pdao.partyReport(seq);
-//	}
+	
+	// 태훈 모임 게시글 신고
 	@Transactional("txManager")
 	public int partyReport(ReportDTO rdto) throws Exception{
 		rdao.newReport(rdto); // 신고 테이블 insert 문 

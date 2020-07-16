@@ -24,7 +24,7 @@ public class ReportDTO {
 		this.report_id = report_id;
 		this.report_date = report_date;
 		this.parent_seq = parent_seq;
-		this.sdate = new SimpleDateFormat("YYYY-MM-dd").format(report_date);
+		this.sdate=new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(report_date);
 	}
 	
 	public int getSeq() {
@@ -64,22 +64,12 @@ public class ReportDTO {
 		this.parent_seq = parent_seq;
 	}
 	public String getSdate() {
-		long report_date = this.report_date.getTime(); // 글 작성 시점
-		long current_date = System.currentTimeMillis(); // 현재 시점
-		long gapTime = (current_date - report_date)/1000; // 초단위
-		if(gapTime < 60) {
-			return "방금 전";
-		}else if(gapTime < 3600) {
-			return gapTime / 60 + "분 전";
-		}else if(gapTime < 86400) {
-			return gapTime / 3600 + "시간 전";
-		}else {
-			return new SimpleDateFormat("YYYY-MM-dd").format(report_date);
-		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	    String sdate = sdf.format(report_date);
+	    System.out.println(sdate);
+		return sdate;
 	}
 	public void setSdate(String sdate) {
-		this.sdate = sdate;
+		this.sdate=sdate;
 	}
-	
-
 }

@@ -49,7 +49,6 @@ public class AdminDAO {
 	}
 	// by 태훈 신고 리스트 출력하기
 	public List<ReportDTO> reportList(Map<String, Integer> param){
-		System.out.println(param);
 		return mybatis.selectList("Admin.reportList", param);
 	}
 	

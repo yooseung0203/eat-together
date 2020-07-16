@@ -1,6 +1,7 @@
 package coma.spring.dto;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class MemberReportDTO {
 	private int seq;
@@ -9,6 +10,8 @@ public class MemberReportDTO {
 	private String title;
 	private String content;
 	private Timestamp write_date;
+	private int status;
+	private String sdate;
 	
 	public int getSeq() {
 		return seq;
@@ -46,7 +49,23 @@ public class MemberReportDTO {
 	public void setWrite_date(Timestamp write_date) {
 		this.write_date = write_date;
 	}
-	public MemberReportDTO(int seq, String id, String report_id, String title, String content, Timestamp write_date) {
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	public String getSdate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	    String sdate = sdf.format(write_date);
+	    System.out.println(sdate);
+		return sdate;
+	}
+	public void setSdate(String sdate) {
+		this.sdate=sdate;
+	}
+	public MemberReportDTO(int seq, String id, String report_id, String title, String content, Timestamp write_date, int status) {
 		super();
 		this.seq = seq;
 		this.id = id;
@@ -54,6 +73,8 @@ public class MemberReportDTO {
 		this.title = title;
 		this.content = content;
 		this.write_date = write_date;
+		this.status = status;
+		this.sdate=new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(write_date);
 	}
 	public MemberReportDTO() {
 		super();
