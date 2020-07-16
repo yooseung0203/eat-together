@@ -561,12 +561,13 @@ public class PartyController {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getNickname();
 		String report_id = request.getParameter("report_id");
-		if(id == report_id) {
-			return "self";
-		}
 		int seq = Integer.parseInt(request.getParameter("seq"));
-		
-		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,report_id,null,seq));
+		if(id.equals(report_id)) {
+			 
+			return "redirect:/party/party_content?seq="+seq;
+		}
+		Timestamp stamp = new Timestamp(System.currentTimeMillis());
+		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,report_id,request.getParameter("title"),request.getParameter("content"),stamp,seq));
 		
 		return "redirect:/report/newReport/";
 	}

@@ -168,4 +168,8 @@ public class ReviewService {
 		}
 		return review;
 	}
+	
+	public String getStorename(int parent_seq) {
+		return rvdao.getStoreName(parent_seq);
+	}
 }

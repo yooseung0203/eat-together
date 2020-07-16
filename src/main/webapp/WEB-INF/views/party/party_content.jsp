@@ -74,14 +74,14 @@ function toChatroom(num){
 
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
-	var writer = $(".party_writer").html();
-	//var report_id = writer.substring(6,writer.length);
 	var report_id = "${con.writer}";
+	var title = "${con.title}";
+	var content = "${con.content}";
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
-		url:"/party/party_report", 
+		url:"/party/party_report",
 		//data : { seq : num, report_id : report_id},
-		data : { seq : num, report_id : report_id},
+		data : { seq : num, report_id : report_id , title : title , content : content},
 		success : function(result) {
 			if (result == 1){ 
 				alert("신고가 정상적으로 접수되었습니다.");	
@@ -91,8 +91,9 @@ function partyReport(num){
 			         self.location.reload(true);
 			     }
 			     else self.name = ''; 
-			}
-			else{
+			}else if(result == "self"){
+				alert("본인이 작성한 글은 신고할 수 없습니다.");
+			}else{
 				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
 			}
 	

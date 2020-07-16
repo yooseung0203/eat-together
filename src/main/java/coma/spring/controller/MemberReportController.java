@@ -1,5 +1,7 @@
 package coma.spring.controller;
 
+import java.sql.Timestamp;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -55,7 +57,6 @@ public class MemberReportController {
 		}else {
 			return 2;
 		}
-		
 	}
 	
 	@RequestMapping("memReport")
@@ -70,7 +71,8 @@ public class MemberReportController {
 		System.out.println("결과 :" +result);
 		if(result >0) {
 			System.out.println("result : "+result);
-			redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,2,mdto.getId(),mdto.getReport_id(),null,result));
+			Timestamp stamp = new Timestamp(System.currentTimeMillis());
+			redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,2,mdto.getId(),mdto.getReport_id(),mdto.getTitle(),mdto.getContent(),stamp,result));
 			return "redirect:/report/newReport/";
 		}
 		return "/memreport/memreport_new";

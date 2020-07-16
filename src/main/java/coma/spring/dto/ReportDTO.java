@@ -8,6 +8,8 @@ public class ReportDTO {
 	private int category;
 	private String id;
 	private String report_id;
+	private String title;
+	private String content;
 	private Timestamp report_date;
 	private int parent_seq;
 	private String sdate;
@@ -16,12 +18,14 @@ public class ReportDTO {
 		super();
 	}
 	
-	public ReportDTO(int seq, int category, String id, String report_id, Timestamp report_date, int parent_seq) {
+	public ReportDTO(int seq, int category, String id, String report_id, String title, String content, Timestamp report_date, int parent_seq) {
 		super();
 		this.seq = seq;
 		this.category = category;
 		this.id = id;
 		this.report_id = report_id;
+		this.title = title;
+		this.content = content;
 		this.report_date = report_date;
 		this.parent_seq = parent_seq;
 		this.sdate=new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(report_date);
@@ -50,6 +54,20 @@ public class ReportDTO {
 	}
 	public void setReport_id(String report_id) {
 		this.report_id = report_id;
+	}
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
 	}
 	public Timestamp getReport_date() {
 		return report_date;

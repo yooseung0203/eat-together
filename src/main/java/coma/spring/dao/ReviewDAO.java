@@ -68,4 +68,8 @@ public class ReviewDAO {
 		System.out.println(list);
 		return mybatis.selectList("Review.top5review", list);
 	}
+	
+	public String getStoreName(int parent_seq) {
+		return mybatis.selectOne("Review.getStoreName", parent_seq);
+	}
 }

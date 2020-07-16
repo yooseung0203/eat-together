@@ -275,8 +275,7 @@ public class AdminController {
 	}
 
 
-	//1:1문의 Admin 유승
-	
+	//1:1문의 Admin 유승	
 	@RequestMapping("questionViewAdmin")
 	public String QuestionViewAdmin(HttpServletRequest request,int msg_seq)throws Exception{
 		QuestionDTO qdto = qservice.selectBySeq(msg_seq);
