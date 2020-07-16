@@ -10,15 +10,15 @@ public class ReviewDTO {
 	private int rating;
 	private Timestamp write_date;
 	private int parent_seq;
+	private int report;
 	private String sdate;
-	
 	//by 지은, 내리뷰 페이지에서 가게명을 함께 출력하기 위한 맴버필드 추가_20200709
 	private String name;
-	
+	//by 예지, 리뷰 작성자의 프로필 사진 불러오기 위한 맴버필드 추가
+	private String profile;
 	public ReviewDTO() {}
-
-	public ReviewDTO(int seq, String id, String content, int rating, Timestamp write_date, int parent_seq, String sdate,
-			String name) {
+	public ReviewDTO(int seq, String id, String content, int rating, Timestamp write_date, int parent_seq, 
+			String name, String profile, int report) {
 		super();
 		this.seq = seq;
 		this.id = id;
@@ -26,8 +26,10 @@ public class ReviewDTO {
 		this.rating = rating;
 		this.write_date = write_date;
 		this.parent_seq = parent_seq;
-		this.sdate = sdate;
+		this.report = report;
+		this.sdate = new SimpleDateFormat("YYYY-MM-dd").format(write_date);
 		this.name = name;
+		this.profile = profile;
 	}
 
 	public String getName() {
@@ -37,7 +39,12 @@ public class ReviewDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	public String getProfile() {
+		return profile;
+	}
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
 	public int getSeq() {
 		return seq;
 	}
@@ -90,5 +97,11 @@ public class ReviewDTO {
 	}
 	public void setSdate(String sdate) {
 		this.sdate = sdate;
+	}
+	public int getReport() {
+		return report;
+	}
+	public void setReport(int report) {
+		this.report = report;
 	}
 }

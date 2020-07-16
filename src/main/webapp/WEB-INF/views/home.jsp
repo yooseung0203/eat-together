@@ -34,7 +34,7 @@
 <!-- ******************* -->
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/index-css.css">
+	href="/resources/css/index-css.css?a">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
 
@@ -55,7 +55,7 @@
 	<!-- ******************* -->
 
 	<!--contents-->
-	<a href="/chat/chatroom?roomNum=90">채팅하기</a>
+	
 	<div class="container-fluid ">
 		<!-- 슬라이드 -->
 		<div class="row slide-area ">
@@ -130,7 +130,9 @@
 
 		<!-- 회원가입 권유 -->
 		<div class="row">
-			<div class="col-sm-12">회원가입 권유</div>
+			<div class="col-sm-12">
+				회원가입 권유 
+			</div>	
 		</div>
 	</div>
 	

@@ -18,6 +18,7 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="/resources/css/msg.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <title>쪽지보내기</title>
 
@@ -39,15 +40,15 @@
 		
 		
 		$("#idcheck").on("click", function() {
-			var id = $("#msg_receiver").val();
+			var nickname = $("#msg_receiver").val();
 			$.ajax({
-				url : '../member/isIdAvailable?id=' + id,
+				url : '../member/isNickAvailable?nickname=' + nickname,
 				dataType : 'json',
 				success : function(resp) {
 					console.log(resp);
 					if (resp == false) {
 						alert("존재하는 회원입니다.");
-						$("#msg_receiver").val(id);
+						$("#msg_receiver").val(nickname);
 						$("#msg_receiver").attr("readonly", true);
 						$("#msg_receiver").css("background-color", "DarkGray");
 						$("#idcheck").val("확인됨");
@@ -68,7 +69,7 @@
 		<form action="msgSend" method="post">
 			<table class="table">
 				<thead>
-					<tr class="table-success" align="center">
+					<tr class="table" align="center" id="orange">
 						<th scope="col" colspan=12>쪽지보내기</th>
 					</tr>
 				</thead>
@@ -90,7 +91,7 @@
 					</tr>
 					<tr align="center">
 						<td scope="col" colspan=12><textarea placeholder="내용을 입력해주세요"
-								style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;"
+								style="width: 100%; padding: 10px; word-break: keep-all; height: 180px; resize: none;"
 								name="msg_text" id="msg_text"></textarea></td>
 					</tr>
 					<tr>
@@ -100,7 +101,7 @@
 					</tr>
 					<tr align="center">
 						<td scope="col" colspan=12>
-							<button type="submit" id="submit" class="btn btn-success">보내기</button>
+							<button type="submit" id="submit" class="btn btn-orange">보내기</button>
 							<button type="button" id="close" class="btn btn-light">취소</button>
 						</td>
 					</tr>

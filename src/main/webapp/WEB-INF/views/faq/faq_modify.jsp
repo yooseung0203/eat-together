@@ -34,7 +34,7 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
 	rel="stylesheet">
-
+<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
 <!-- google font end-->
 
 
@@ -48,53 +48,57 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/faq-css.css">
 
 <script>
-	$(document).ready(function(){
-	 var ipt=$("#category_val").val();
-	 console.log(ipt);
-	 
-	 if(ipt=="1"){
-		 $("#category1").prop("checked",true);
-		 $("#category1").prop("checked",false);
-	 }else{
-		 $("#category2").prop("checked",true);
-		 $("#category2").prop("checked",false);
-	 }
-	
+	$(document).ready(function() {
+		var ipt = $("#category_val").val();
+		console.log(ipt);
+
+		if (ipt == "mem") {
+			$("#category1").prop("checked", true);
+			$("#category2").prop("checked", false);
+		} else {
+			$("#category2").prop("checked", true);
+			$("#category1").prop("checked", false);
+		}
+		
+
 	});
 
 	$(function() {
 		$("#toBackBtn").on("click", function() {
-			location.href = "list";
+			location.href = "/admin/toAdmin_faq";
 		});
 
-		$("#form").on("submit", function() {
-			$("#contents").val($('#summernote').summernote('code'));
-			console.log($("#contents").val());
-			if ($("#title").val() == "" || $("#contents").val() == "") {
-				alert("글쓰기 내용을 입력해주세요!");
-				return false;
-			}
-			
-			var isCheckCategory = $('input:radio[name=category]').is(':checked');
-			if (!isCheckCategory){
-				alert("카테고리를 선택해주세요.");
-				return false;
-			}
-			var title_RegEx = /[a-zA-Z0-9]{5,}$/;
-			var title = $("#title").val();
-			var contents = $("#contents").val();
-			if (!write_RegEx.test(title)) {
-				alert("제목은 5글자 이상 입력해주세요.");
-				return false;
-			}
-			/* 
-			 if (!write_RegEx.test(contents)) {
-			 alert("내용은 5글자 이상 입력해주세요.");
-			 return false;
-			 }
-			 */
-		});
-		 $('#summernote').summernote('code', '${contents.contents}');
+		$("#form").on(
+				"submit",
+				function() {
+					$("#contents").val($('#summernote').summernote('code'));
+					console.log($("#contents").val());
+					if ($("#title").val() == "" || $("#contents").val() == "") {
+						alert("글쓰기 내용을 입력해주세요!");
+						return false;
+					}
+
+					var isCheckCategory = $('input:radio[name=category]').is(
+							':checked');
+					if (!isCheckCategory) {
+						alert("카테고리를 선택해주세요.");
+						return false;
+					}
+					var title_RegEx = /[a-zA-Z0-9]{5,}$/;
+					var title = $("#title").val();
+					var contents = $("#contents").val();
+					if (!write_RegEx.test(title)) {
+						alert("제목은 5글자 이상 입력해주세요.");
+						return false;
+					}
+					/* 
+					 if (!write_RegEx.test(contents)) {
+					 alert("내용은 5글자 이상 입력해주세요.");
+					 return false;
+					 }
+					 */
+				});
+		$('#summernote').summernote('code', '${contents.contents}');
 		$('#summernote').summernote({
 			minHeight : 500, // 최소 높이
 			maxHeight : null, // 최대 높이
@@ -131,11 +135,7 @@
 </script>
 </head>
 <body>
-	<!-- ******************* -->
-	<!-- header  -->
-	<jsp:include page="/WEB-INF/views/include/header.jsp" />
-	<!-- hedaer  -->
-	<!-- ******************* -->
+
 
 	<c:if test="${sessionScope.loginInfo.id ne 'administrator'}">
 		<div class="mt-5 pt-5">
@@ -146,60 +146,68 @@
 		</div>
 	</c:if>
 	<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-12 mt-3 border-bottom border-dark">
-					<h2 class="notice-title">FAQ 수정하기</h2>
-				</div>
-			</div>
-			<div class="row">
+		<div class="container-fluid mx-0 px-0">
+			<div class="row mx-0">
 
-				<div class="col-sm-12">
-					<form id="form" action="/faq/writeProc" method="post">
-						<div class="row my-2">
-							<div class="col-sm-2">카테고리</div>
-							<div class="col-sm-10">
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="category"
-										value="mem" id="category1"> <label
-										class="form-check-label" for="category1">회원/정보관련</label>
+				<div class="col-2 mx-0 px-0"><jsp:include
+						page="/WEB-INF/views/include/admin_sidebar.jsp" /></div>
+				<div class="col-10 px-5">
+					<div class="row">
+						<div class="col-sm-12 mt-3 border-bottom border-dark">
+							<h3 class="admin-h2">자주하는 질문(FAQ) 수정하기</h3>
+						</div>
+					</div>
+					<div class="row">
+
+						<div class="col-sm-12">
+							<form id="form" action="/faq/writeProc" method="post">
+								<div class="row my-2">
+									<div class="col-sm-2 text-center">카테고리</div>
+									<div class="col-sm-10">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="category"
+												value="mem" id="category1"> <label
+												class="form-check-label" for="category1">회원/정보관련</label>
+										</div>
+
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="category"
+												value="how" id="category2"> <label
+												class="form-check-label" for="category2">사이트이용관련</label>
+										</div>
+										<input type="hidden" value="${contents.category}"
+											id="category_val">
+
+
+									</div>
 								</div>
-
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="radio" name="category"
-										value="how" id="category2"> <label
-										class="form-check-label" for="category2">사이트이용관련</label>
+								<div class="row my-2">
+									<div class="col-2 text-center">제목</div>
+									<div class="col-8">
+										<input type="text" class="form-control" name="title"
+											id="title" value="${contents.title}">
+									</div>
 								</div>
-								<input type="hidden" value="${contents.category}" id="category_val">
+								<div class="row my-2">
+									<div class="col-2 text-center">내용</div>
+									<div class="col-10">
+										<div id="summernote"></div>
+										<textarea id="contents" name="contents" style="display: none;"></textarea>
+									</div>
+								</div>
+								<div class="row mb-5">
+									<div class="col-2">
+										<button type="button" id="toBackBtn" class="btn btn-light">목록으로</button>
+									</div>
+									<div class="col-10 text-center">
+										<button type="submit" id="submit" class="btn btn-warning">수정하기</button>
+									</div>
+								</div>
+							</form>
+						</div>
 
-							
-							</div>
-						</div>
-						<div class="row my-2">
-							<div class="col-2 text-center">제목</div>
-							<div class="col-8">
-								<input type="text" class="form-control" name="title" id="title"
-									value=${contents.title}>
-							</div>
-						</div>
-						<div class="row my-2">
-							<div class="col-2 text-center">내용</div>
-							<div class="col-10">
-								<div id="summernote"></div>
-								<textarea id="contents" name="contents" style="display: none;"></textarea>
-							</div>
-						</div>
-						<div class="row mb-5">
-							<div class="col-2">
-								<button type="button" id="toBackBtn" class="btn btn-light">목록으로</button>
-							</div>
-							<div class="col-10 text-center">
-								<button type="submit" id="submit" class="btn btn-primary">작성하기</button>
-							</div>
-						</div>
-					</form>
+					</div>
 				</div>
-
 
 			</div>
 
@@ -208,13 +216,6 @@
 	</c:if>
 
 
-
-	<!-- ******************* -->
-	<!-- footer  -->
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
-
-	<!-- footer  -->
-	<!-- ******************* -->
 
 </body>
 </html>

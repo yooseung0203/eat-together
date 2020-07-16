@@ -49,7 +49,7 @@
 	<div class="jumbotron jumbotron-fluid">
 		<div class="container withdraw_text">
 			<h1 class="display-4" class="withdraw_text">${loginInfo.id}
-				님이 참여한 모임 00개로<br>수많은 새로운 맛집 친구를 만났습니다.
+				님이 참여한 모임으로<br>수많은 새로운 맛집 친구를 만났습니다.
 			</h1>
 			<br>
 			<p class="lead withdraw_text">
@@ -57,39 +57,113 @@
 			</p>
 		</div>
 	</div>
-	<form action="/member/withdrawProc" method="post" class="withdraw_text">
-		<div class="withdraw_text">
-			<label for="pw" class="withdraw_text">비밀번호</label> <input
-				type="password" class="form-control" id="pw" name="pw">
-		</div>
-		<div class="withdraw_text">
-			<label for="pw" class="withdraw_text">비밀번호 확인</label> <input
-				type="password" class="form-control" id="pwCorrection">
-			<div id="pw_text" style="display: none;"></div>
-		</div>
-		<button type=submit class="btn btn-light withdraw_text" id="withdraw">탈퇴하기</button>
-		<button type="button" class="btn btn-warning withdraw_text" id="back">되돌아가기</button>
-	</form>
+	<br>
+	<div class="contents_container withdraw_text">
+		<form action="/member/withdrawProc" id=withdrawProc method="post">
+			<fieldset class="withdraw_text">
+				<legend>회원탈퇴</legend>
+				<div class="withdraw_text">
+					<label for="account_email" class="withdraw_text">이메일</label> <input
+						type="text" class="form-control" id="account_email"
+						name="account_email" placeholder="ex)eat-together@naver.com">
+					<input type=button id=mail value="인증하기" class="btn btn-warning">
+					<button type="button" class="btn btn-dark withdraw_text" id="back">되돌아가기</button>
+					<br>
+					<br>
+					<div id=mail_div style="display: none;">
+						인증번호 : <input type=text id=mail_text>
+						<button type=button id=mail_accept class="btn btn-light">인증</button>
+					</div>
+					<div id=withdraw_result style="display: none;">
+						<button type=button class="btn btn-light withdraw_text"
+							id="withdrawBtn">탈퇴하기</button>
+					</div>
+				</div>
+
+			</fieldset>
+
+		</form>
+	</div>
 
 	<script>
-		$("#withdraw").on("click", function() {
-			if ($("#pw").val() == "") {
-				alert("비밀번호를 먼저 입력해주세요.");
-				return false;
-			} else if ($("#pwCorrection").val() == "") {
-				alert("비밀번호를 한번 더 입력해주세요.");
-				return false;
-			} else if ($("#pw").val() != $("#pwCorrection").val()) {
-				alert("비밀번호가 일치하지 않습니다.");
-				return false;
+	window.onload = function() {
+
+		var code;
+		//메일 인증 
+		//by 지은, 이메일 인증 ajax의 중복호출을 방지하기 위해서 전송상태를 표시한다_20200716
+		$("#mail").on("click", function() {
+			if ($("#account_email").val() == "") {
+				alert("이메일을 입력해주십시오.");
+				$("#account_email").focus();
 			} else {
-				alert("탈퇴가 완료되었습니다.\n#See_you_again!");
-				return true;
+				$.ajax({
+					url : "/mail/mailSending",
+					type : "post",
+					data : {
+						account_email : $("#account_email").val()
+					}
+				}).done(function(resp) {
+					code = resp;
+					console.log(code);
+					if (code != "") {
+						alert("인증메일이 발송되었습니다.");
+						$("#mail_div").css("display", "block");
+
+					} else {
+						alert("이미 사용중인 이메일입니다.");
+						$("#mail_text").val("");
+						$("#mail_text").focus();
+					}
+
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					serrorFunction();
+				});
 			}
 		})
-		$("#back").on("click", function(){
+
+		$("#mail_accept").on("click", function() {
+			if ($("#mail_text").val() == code) {
+				$("#mail_text").css("color", "blue");
+				$("#mail_text").val("인증에 성공하였습니다.");
+				$("#mail_text").attr("readonly", true);
+			} else if ($("#mail_text").val == "") {
+				alert("인증문자열을 입력해주세요.");
+				$("#mail_text").focus();
+			} else if ($("#mail_text") != code) {
+				alert("인증문자열이 일치하지 않습니다.");
+				$("#mail_text").val("");
+				$("#mail_text").focus();
+
+			}
+		})
+		//account_email regex
+		$("#account_email")
+				.focusout(
+						function() {
+							if ($("#account_email").val() != "") {
+								var account_email = $("#account_email").val();
+								var account_emailregex = /[a-zA-Z0-9]*@[a-zA-Z0-9]*[.]{1}[a-zA-Z]{2,3}|([.]{1}[a-zA-Z]{2,3})$/;
+								if (!account_emailregex.test(account_email)) {
+									$("#account_email").val("");
+									alert("유효한 이메일을 입력해주세요.");
+									$("#account_email").focus();
+								}
+							}
+						})
+		$("#back").on("click", function() {
 			location.replace("/member/mypage_myinfo");
 		})
+
+		$("#withdrawBtn").on("click", function() {
+			var result = confirm("정말로 탈퇴하시겠습니까?");
+			if (result) {
+				alert("그동안 감사했습니다.\nLet's eat together again!");
+				$("#withdrawProc").submit();
+			} else {
+				return false;
+			}
+		})
+	}
 	</script>
 
 
@@ -100,6 +174,5 @@
 	</div>
 	<!-- footer  -->
 	<!-- ******************* -->
-
 </body>
 </html>

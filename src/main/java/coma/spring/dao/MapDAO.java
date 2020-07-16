@@ -59,7 +59,8 @@ public class MapDAO {
 		return list;
 	}
 	// 태훈 순위 맛집 찾기
-	public List<MapDTO> selectTopStore(Map<String, String> param){	
-		return mybatis.selectList("Map.topStore", param);
+	public List<MapDTO> selectTopStore(){	
+		return mybatis.selectList("Map.topStore");
 	}
+	
 }

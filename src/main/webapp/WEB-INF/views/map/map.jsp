@@ -5,9 +5,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>지도 생성하기</title>
+<title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?sadasdaadsasdsadsdasasdasdd'></script>
+<script src='/resources/js/map.js?gghherrsa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -15,7 +15,7 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e156322dd35cfd9dc276f1365621ae9a&libraries=services"></script>
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e156322dd35cfd9dc276f1365621ae9a&libraries=services,clusterer"></script>
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.13.1/css/all.css"
 	integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q"
@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?asddasddadsasdccassadsdadd">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaabbbbbba">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -38,11 +38,9 @@
 <body>
 	<!-- 로그인 인포 가져오기 -->
 	<c:if test="${not empty sessionScope.loginInfo}">
+		<div style="display:none;" id="loginInfo_nickname">${sessionScope.loginInfo.nickname}</div>
 		<div style="display:none;" id="loginInfo_id">${sessionScope.loginInfo.id}</div>
 	</c:if>
-	<!-- 상세정보 버튼을 누른 핀 좌표 -->
-	<div style="display: none;" id="selectedLat"></div>
-	<div style="display: none;" id="selectedLng"></div>
 	<!-- 사용자가 보고 있는 중심 좌표 -->
 	<div style="display: none;" id="centerLat"></div>
 	<div style="display: none;" id="centerLng"></div>
@@ -52,6 +50,9 @@
 	<div class="container-fluid all">
 		<div id="header"><jsp:include
 				page="/WEB-INF/views/include/header.jsp" /></div>
+		<div id="map_approach_info" style="display:none;">
+			<jsp:include page="/WEB-INF/views/include/map_approach_info.jsp" />
+		</div>
 		<c:if test="${empty sessionScope.loginInfo}">
 			<div class="loginPlease">
 				<p class="loginMsg">현재 진행중인 모임 ${partyAllCount}개<br>
@@ -64,13 +65,16 @@
 			<img src="/resources/img/Progress_Loading.gif"/>
 		</div>
 		<div id="sideBar">
+			<div class="navi_btn"><i class="fas fa-chevron-left"></i></div>
+			<div class="current_position_btn text-center"><i class="fas fa-crosshairs "></i></div>
 			<div class="search_area">
 				<div class="category_search_btns mx-auto">
+					<button type="button" id="backMap"><i class="fas fa-map-marked-alt"></i></button>
 					<div class="search_btn" id="foodBtn">
-						<img src="/resources/img/fork.png" style="height: 20px;">
+						<i class="fas fa-utensils"></i>
 					</div>
 					<div class="search_btn" id="cafeBtn">
-						<img src="/resources/img/food.png" style="height: 20px;">
+						<i class="fas fa-coffee"></i>
 					</div>
 				</div>
 				<div class="searchbar mx-auto">
@@ -82,10 +86,17 @@
 				</div>
 			</div>
 			<div class="side">
-				<div class="search_result"></div>
+				<div class="search_result">
+					<c:if test="${empty mapdto}">
+						<jsp:include page="/WEB-INF/views/include/map_approach_info.jsp" />
+					</c:if>
+				</div>
 				<div class="choose_info">
 					<c:if test="${not empty mapdto}">
 						<div class="store_info mx-auto">
+							<div class="name">${mapdto.name}
+								<button type="button" id="back"><i class="fas fa-times"></i></button>
+							</div>
 							<div class="featImgWrap">
 								<div class="cropping">
 									<img src="${img}" id="mapimg">
@@ -93,7 +104,6 @@
 							</div>
 							<div class="category">${mapdto.category}</div>
 							<div class="place_id" style="display:none;">${mapdto.place_id}</div>
-							<div class="name">${mapdto.name}</div>
 							<div class="address">${mapdto.address}</div>
 							<div class="road_address">${mapdto.road_address}</div>
 							<div class="rating_avg">
@@ -183,22 +193,22 @@
 					</c:if>
 					<c:if test="${not empty mapdto}">
 						<div class="partylist">
-							<b>진행중인 모임</b>
+							<p>진행중인 모임</p>
+							<c:if test="${empty partyMap}">
+								<small>개설된 모임이 없습니다.</small>
+							</c:if>
 							<c:if test="${not empty partyMap}">
 								<c:forEach var="i" items="${partyMap}">
-									<div class="party">
-										<div class="title">${i.key.title}</div>
-										<div class="seq" style="display: none;">${i.key.seq}</div>
-										<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
-										<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
-										<c:if test="${i.key.status eq 1}">
-											<button type="button" class="btn btn-primary join"
-												data-toggle="modal" data-target="#partyModal">참가</button>										
-										</c:if>
-										<c:if test="${i.key.status eq 0}">
-											<button type="button" class="btn btn-primary endParty" disabled>종료</button>
-										</c:if>
-									</div>
+									<c:if test="${i.key.status eq 1}">
+										<div class="party">
+											<div class="title">${i.key.title}</div>
+											<div class="seq" style="display: none;">${i.key.seq}</div>
+											<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
+											<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
+												<button type="button" class="btn btn-primary join"
+													data-toggle="modal" data-target="#partyModal">참가</button>										
+										</div>
+									</c:if>
 								</c:forEach>
 							</c:if>
 							<nav aria-label="Page navigation example">
@@ -254,7 +264,7 @@
 							</form>
 							<c:forEach var="i" items="${reviewMap}" varStatus="status">
 								<div class="review">
-									<i class="fas fa-user fa-2x"></i>
+									<img src="/upload/${i.key.id}/${i.key.profile}">
 									<div class="raty">
 										<c:if test="${i.key.rating eq 1}"><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>
 										<c:if test="${i.key.rating eq 2}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>
@@ -267,9 +277,9 @@
 											<img src="/upload/files/${i.value.sysname}">
 										</c:if>
 									</div>
-									<div class="content">${i.key.content}</div>
+									<div class="content"><c:out value="${i.key.content}"></c:out></div>
 									<div class="bottom">
-										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span>신고
+										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'<c:out value="${i.key.content}"></c:out>','${i.key.id}')">신고</button>
 									</div>
 								</div>
 							</c:forEach>
@@ -281,82 +291,11 @@
 
 		</div>
 		<div id="map"></div>
-		<div class="foodInsert text-center">FD6</div>
-		<div class="cafeInsert text-center">CE7</div>
-		<div class="food text-center">
-			<i class="fas fa-hamburger"></i>
-		</div>
-		<div class="cafe text-center">
-			<i class="fas fa-coffee"></i>
-		</div>
-		<!-- <div class="map_add text-center" data-toggle="modal"
-			data-target="#exampleModal">
-			<i class="fas fa-plus"></i>
-		</div> -->
-
-		<!-- Modal -->
-		<!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-			aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLabel">일반 맛집 추가하기</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col">#</th>
-									<th scope="col">선택한 맛집 정보</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<th scope="row">도로명 주소</th>
-									<td class="road_address"></td>
-								</tr>
-								<tr>
-									<th scope="row">지번 주소</th>
-									<td class="address"></td>
-								</tr>
-								<tr>
-									<th scope="row">위도</th>
-									<td class="lat"></td>
-								</tr>
-								<tr>
-									<th scope="row">경도</th>
-									<td class="lng"></td>
-								</tr>
-								<tr>
-									<th scope="row">가게명</th>
-									<td class="name"><input type="text"
-										class="form-control form-control-sm"
-										placeholder="가게명을 입력해주세요."></td>
-								</tr>
-								<tr>
-									<th scope="row">카테고리</th>
-									<td class="category"><select
-										class="form-control form-control-sm">
-											<option value="음식점">음식점</option>
-											<option value="카페">카페</option>
-									</select></td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">등록</button>
-					</div>
-				</div>
-			</div>
-		</div> -->
-
+		<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
+			<div class="foodInsert text-center"><i class="fas fa-hamburger"></i></div>
+			<div class="cafeInsert text-center"><i class="fas fa-coffee"></i></div>
+		</c:if>
+		
 		<!-- 맛집 참가 modal -->
 		<div class="modal fade" id="partyModal" tabindex="-1" role="dialog"
 			aria-labelledby="exampleModalLabel" aria-hidden="true">

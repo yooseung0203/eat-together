@@ -56,7 +56,67 @@ public class EmailController {
 		return sb.toString();
 	}
 
-	//회원가입시 인증 메일 보내기
+
+	//회원가입 축하 이메일 발송하기
+	@RequestMapping("mailSendingGreeting")
+	public void mailSendingGreeting(String account_email) throws Exception{ 
+		String username = "eat-together";
+		String password = "aktwlqrkTekrkffo?";
+
+		String recipient = account_email;
+		String subject ="맛집갔다갈래 회원가입을 축하드립니다!";
+		String msg = "<html><head></head><body>\r\n" + 
+				"<div style=\"font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 540px; height: 600px; border-top: 4px solid {$point_color}; margin: 100px auto; padding: 30px 0; box-sizing: border-box;\">\r\n" + 
+				"	<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">\r\n" + 
+				"<img src=\"https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-square.png\" width=\"350px\"><br>\r\n" + 
+				"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\"><br>\r\n" + 
+				"		<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">맛집 동행 찾기 서비스 - <맛집갔다갈래></span><br>\r\n" + 
+				"		<span style=\"color: {$point_color};\">회원가입을 축하드립니다!</span>\r\n" + 
+				"	</h1>\r\n" + 
+				"	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">\r\n" + 
+				"		안녕하세요.<br>\r\n" + 
+				"		<맛집갔다갈래>에 신규회원이 되신 것을 진심으로 축하드립니다.<br>\r\n" + 
+				"		새로운 맛집 친구와 함께 즐거운 모임을 시작하시길 바랍니다.<br>\r\n" + 
+				"		감사합니다.\r\n" + 
+				"	</p>\r\n" + 
+				"<center>\r\n" + 
+				"<a href=\"https://eat-together.net\" target=\"blank\" class=\"myButton\">사이트에 접속하기</a>\r\n" + 
+				"</center>\r\n" + 
+				"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\">";
+
+		Properties props = new Properties();
+		props.put("mail.smtp.host", "smtp.daum.net");
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.port", "465");
+
+		Session session = Session.getDefaultInstance(props,
+				new javax.mail.Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username,password);
+			}
+		});
+
+		try {
+
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress("no-reply@eat-together.net"));
+			message.setRecipients(Message.RecipientType.TO,
+					InternetAddress.parse(account_email));
+			message.setSubject(subject);
+			message.setContent(msg, "text/html; charset=utf-8");
+			Transport.send(message);
+
+			System.out.println("회원가입 축하메일 발송 OK");
+		} catch (MessagingException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
+	//회원가입시 인증 메일 보내기, 이메일 정보 수정시 사용_20200713
 	@RequestMapping("mailSending")
 	@ResponseBody
 	public String mailSender(@RequestParam String account_email) throws Exception{ 
@@ -65,7 +125,7 @@ public class EmailController {
 		String resp;
 
 		boolean result = mservice.isEmailAvailable(account_email);
-		System.out.println("이메일 사용가능한가? :" + false);
+		System.out.println("이메일 사용가능한가? :" + result);
 		if(result==false) {
 			resp = "";
 			return resp;
@@ -75,8 +135,25 @@ public class EmailController {
 			System.out.println("랜덤문자열 : " + dice);
 
 			String recipient = account_email;
-			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
-			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
+			String subject = "맛집갔다갈래 인증 이메일입니다.";
+			String msg = "<html><head></head><body>\r\n" + 
+					"<div style=\"font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 540px; height: 600px; border-top: 4px solid {$point_color}; margin: 100px auto; padding: 30px 0; box-sizing: border-box;\">\r\n" + 
+					"	<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">\r\n" + 
+					"<img src=\"https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-square.png\" width=\"350px\"><br>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\"><br>\r\n" + 
+					"		<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">맛집 동행 찾기 서비스 - <맛집갔다갈래></span><br>\r\n" + 
+					"		<span style=\"color: {$point_color};\">사이트 이용에 필요한 인증메일</span>\r\n" + 
+					"	</h1>\r\n" + 
+					"	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">\r\n" + 
+					"		안녕하세요.<br>\r\n" + 
+					"		<맛집갔다갈래> 사이트 이용에 필요한 이메일 인증메일을 보내드립니다.<br>\r\n" + 
+					"		"+ dice +"인증문자열을 인증란에 입력해주시길 바랍니다.<br>\r\n" + 
+					"		감사합니다.\r\n" + 
+					"	</p>\r\n" + 
+					"<center>\r\n" + 
+					"<a href=\"https://eat-together.net\" target=\"blank\" class=\"myButton\">사이트에 접속하기</a>\r\n" + 
+					"</center>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\">";
 
 			Properties props = new Properties();
 			props.put("mail.smtp.host", "smtp.daum.net");
@@ -100,7 +177,7 @@ public class EmailController {
 				message.setRecipients(Message.RecipientType.TO,
 						InternetAddress.parse(account_email));
 				message.setSubject(subject);
-				message.setText(body);
+				message.setContent(msg, "text/html; charset=utf-8");
 				Transport.send(message);
 				resp = dice;
 
@@ -141,9 +218,26 @@ public class EmailController {
 			resplist.add(1, id);
 
 			String recipient = account_email;
-			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
-			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
-
+			String subject = "맛집갔다갈래 아이디찾기 이메일입니다.";
+			String msg = "<html><head></head><body>\r\n" + 
+					"<div style=\"font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 540px; height: 600px; border-top: 4px solid {$point_color}; margin: 100px auto; padding: 30px 0; box-sizing: border-box;\">\r\n" + 
+					"	<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">\r\n" + 
+					"<img src=\"https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-square.png\" width=\"350px\"><br>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\"><br>\r\n" + 
+					"		<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">맛집 동행 찾기 서비스 - <맛집갔다갈래></span><br>\r\n" + 
+					"		<span style=\"color: {$point_color};\">아이디 찾기에 필요한 인증메일</span>\r\n" + 
+					"	</h1>\r\n" + 
+					"	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">\r\n" + 
+					"		안녕하세요.<br>\r\n" + 
+					"		<맛집갔다갈래>에 아이디 찾기를 위해 필요한 이메일 인증메일을 보내드립니다.<br>\r\n" + 
+					"		"+ dice +"인증문자열을 인증란에 입력해주시길 바랍니다.<br>\r\n" + 
+					"		감사합니다.\r\n" + 
+					"	</p>\r\n" + 
+					"<center>\r\n" + 
+					"<a href=\"https://eat-together.net\" target=\"blank\" class=\"myButton\">사이트에 접속하기</a>\r\n" + 
+					"</center>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\">";
+			
 			Properties props = new Properties();
 			props.put("mail.smtp.host", "smtp.daum.net");
 			props.put("mail.smtp.socketFactory.port", "465");
@@ -166,7 +260,7 @@ public class EmailController {
 				message.setRecipients(Message.RecipientType.TO,
 						InternetAddress.parse(account_email));
 				message.setSubject(subject);
-				message.setText(body);
+				message.setContent(msg, "text/html; charset=utf-8");
 				Transport.send(message);
 
 				System.out.println("OK");
@@ -190,19 +284,19 @@ public class EmailController {
 		String input_account_email = account_email;
 		System.out.println("비밀번호 찾기용 입력한 이메일 : " + account_email);
 		System.out.println("비밀번호 찾기용 입력한 아이디 : " + inputId);
-		
+
 		MemberDTO mdto = mservice.emailCheck(input_account_email);
-		
+
 		if(mdto == null) {
 			System.out.println("입력한 이메일과 동일한 회원정보가 존재하지 않음");
 			resp = "0";
 			return resp;
-			
+
 		}else if(!(mdto.getId().contentEquals(inputId))) {
 			System.out.println("아이디와 인증된 이메일의 불일치");
 			resp = "0";
 			return resp;
-			
+
 		}else {
 			System.out.println("아이디와 인증된 이메일 일치");
 			String dice = this.getRandomString();
@@ -210,9 +304,25 @@ public class EmailController {
 			System.out.println("랜덤문자열 : " + dice);
 
 			String recipient = account_email;
-			String subject = "맛집갔다갈래 회원가입인증 이메일입니다.";
-			String body = dice + " 인증문자열를 이메일 인증란에 입력하여주시기 바랍니다.";
-
+			String subject = "맛집갔다갈래 비밀번호찾기 이메일입니다.";
+			String msg = "<html><head></head><body>\r\n" + 
+					"<div style=\"font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 540px; height: 600px; border-top: 4px solid {$point_color}; margin: 100px auto; padding: 30px 0; box-sizing: border-box;\">\r\n" + 
+					"	<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">\r\n" + 
+					"<img src=\"https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-square.png\" width=\"350px\"><br>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\"><br>\r\n" + 
+					"		<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">맛집 동행 찾기 서비스 - <맛집갔다갈래></span><br>\r\n" + 
+					"		<span style=\"color: {$point_color};\">비밀번호 찾기에 필요한 인증메일</span>\r\n" + 
+					"	</h1>\r\n" + 
+					"	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">\r\n" + 
+					"		안녕하세요.<br>\r\n" + 
+					"		<맛집갔다갈래>에 비밀번호 찾기를 위해 필요한 이메일 인증메일을 보내드립니다.<br>\r\n" + 
+					"		"+ dice +"인증문자열을 인증란에 입력해주시길 바랍니다.<br>\r\n" + 
+					"		감사합니다.\r\n" + 
+					"	</p>\r\n" + 
+					"<center>\r\n" + 
+					"<a href=\"https://eat-together.net\" target=\"blank\" class=\"myButton\">사이트에 접속하기</a>\r\n" + 
+					"</center>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\">";
 			Properties props = new Properties();
 			props.put("mail.smtp.host", "smtp.daum.net");
 			props.put("mail.smtp.socketFactory.port", "465");
@@ -235,7 +345,89 @@ public class EmailController {
 				message.setRecipients(Message.RecipientType.TO,
 						InternetAddress.parse(account_email));
 				message.setSubject(subject);
-				message.setText(body);
+				message.setContent(msg, "text/html; charset=utf-8");
+				Transport.send(message);
+
+
+				System.out.println("Email Sending OK");
+			} catch (MessagingException e) {
+				throw new RuntimeException(e);
+			}
+			System.out.println("컨트롤러에서 resp 전달: " + resp);
+			return resp;
+		}
+	}
+
+	//회원탈퇴를 위한 인증 메일 보내기
+	@RequestMapping("mailSendingForOut")
+	@ResponseBody
+	public String mailSenderForOut(@RequestParam String account_email) throws Exception{
+		String username = "eat-together";
+		String password = "aktwlqrkTekrkffo?";
+		String resp;
+
+		MemberDTO mdto1 = (MemberDTO) session.getAttribute("loginInfo");
+		String id = mdto1.getId();
+
+		String input_account_email = account_email;
+		System.out.println("비밀번호 찾기용 입력한 이메일 : " + account_email);
+
+		MemberDTO mdto2 = mservice.emailCheck(input_account_email);
+
+		if(mdto2 == null) {
+			System.out.println("해당 이메일의 회원이 존재하지 않음");
+			resp = "0";
+			return resp;
+
+		}else {
+			System.out.println("아이디와 이메일 일치");
+			String dice = this.getRandomString();
+			resp = dice;
+			System.out.println("랜덤문자열 : " + dice);
+
+			String recipient = account_email;
+			String subject = "맛집갔다갈래 회원탈퇴인증 이메일입니다.";
+			String msg = "<html><head></head><body>\r\n" + 
+					"<div style=\"font-family: 'Apple SD Gothic Neo', 'sans-serif' !important; width: 540px; height: 600px; border-top: 4px solid {$point_color}; margin: 100px auto; padding: 30px 0; box-sizing: border-box;\">\r\n" + 
+					"	<h1 style=\"margin: 0; padding: 0 5px; font-size: 28px; font-weight: 400;\">\r\n" + 
+					"<img src=\"https://eat-together.s3.ap-northeast-2.amazonaws.com/logo/eattogether-logo-square.png\" width=\"350px\"><br>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\"><br>\r\n" + 
+					"		<span style=\"font-size: 15px; margin: 0 0 10px 3px;\">맛집 동행 찾기 서비스 - <맛집갔다갈래></span><br>\r\n" + 
+					"		<span style=\"color: {$point_color};\">회원탈퇴에 필요한 인증메일</span>\r\n" + 
+					"	</h1>\r\n" + 
+					"	<p style=\"font-size: 16px; line-height: 26px; margin-top: 50px; padding: 0 5px;\">\r\n" + 
+					"		안녕하세요.<br>\r\n" + 
+					"		<맛집갔다갈래>에 회원탈퇴를 위해 필요한 이메일 인증메일을 보내드립니다.<br>\r\n" + 
+					"		"+ dice +"인증문자열을 인증란에 입력해주시길 바랍니다.<br>\r\n" + 
+					"		감사합니다.\r\n" + 
+					"	</p>\r\n" + 
+					"<center>\r\n" + 
+					"<a href=\"https://eat-together.net\" target=\"blank\" class=\"myButton\">사이트에 접속하기</a>\r\n" + 
+					"</center>\r\n" + 
+					"<hr style=\"border: 0; width:500px; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3);\">";
+			Properties props = new Properties();
+			props.put("mail.smtp.host", "smtp.daum.net");
+			props.put("mail.smtp.socketFactory.port", "465");
+			props.put("mail.smtp.socketFactory.class",
+					"javax.net.ssl.SSLSocketFactory");
+			props.put("mail.smtp.auth", "true");
+			props.put("mail.smtp.port", "465");
+
+			Session session = Session.getDefaultInstance(props,
+					new javax.mail.Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					return new PasswordAuthentication(username,password);
+				}
+			});
+
+			try {
+
+				Message message = new MimeMessage(session);
+				message.setFrom(new InternetAddress("no-reply@eat-together.net"));
+				message.setRecipients(Message.RecipientType.TO,
+						InternetAddress.parse(account_email));
+				message.setSubject(subject);
+				message.setContent(msg, "text/html; charset=utf-8");
 				Transport.send(message);
 
 

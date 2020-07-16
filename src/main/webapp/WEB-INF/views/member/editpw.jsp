@@ -35,7 +35,7 @@
 	<form id="editPwForm" action="editPwProc">
 		<div class="article container">
 			<div class="editpw_text">
-			<input type=hidden id="id" name="id" value="${loginInfo.id}">
+				<input type=hidden id="id" name="id" value="${loginInfo.id}">
 				<label for="pw" class="editpw_text">비밀번호</label> <input
 					type="password" class="form-control" id="pw" name="pw"
 					placeholder="특수문자+숫자+영문 6~12글자">
@@ -52,73 +52,78 @@
 			onClick="window.close()">되돌아가기</button>
 	</form>
 	<script>
-	//by지은, 비밀번호 수정하기 ajax로 처리한다. 왜냐하면 id 값을 받아와야 하기 때문에_20200709
-	$("#editPwBtn").on("click", function(){
-		if ($("#pw").val() == "") {
-			alert("비밀번호를 입력해주세요.");
-			return false;
-		}else if($("#pw_text").html() != "비밀번호가 일치합니다."){
-			alert("비밀번호 확인을 해주세요.");
-			return false;
-		}else{
-			$.ajax({
-				url : "/member/editPwProc",
-				type : "post",
-				dataType : "text",
-				data : {
-					id : $("#id").val(),
-					pw: $("#pw").val()
-				}
-			}).done(function(resp) {
-				if (resp != "0") {
-					alert("비밀번호가 수정되었습니다.\n다시 로그인해주세요.");
-					window.close();
-				} else if (resp == "0") {
-					alert("수정하려는 비밀번호가 기존과 일치합니다.");
-					$("#pw").val("");
-					$("#pw").focus();
+		window.onload = function() {
+			
+			//by지은, 비밀번호 수정하기 ajax로 처리한다. 왜냐하면 id 값을 받아와야 하기 때문에_20200709
+			$("#editPwBtn").on("click", function() {
+				if ($("#pw").val() == "") {
+					alert("비밀번호를 입력해주세요.");
+					return false;
+				} else if ($("#pw_text").html() != "비밀번호가 일치합니다.") {
+					alert("비밀번호 확인을 해주세요.");
+					return false;
+				} else {
+					$.ajax({
+						url : "/member/editPwProc",
+						type : "post",
+						dataType : "text",
+						data : {
+							id : $("#id").val(),
+							pw : $("#pw").val()
+						}
+					}).done(function(resp) {
+						if (resp != "0") {
+							alert("비밀번호가 수정되었습니다.\n다시 로그인해주세요.");
+							window.close();
+						} else if (resp == "0") {
+							alert("수정하려는 비밀번호가 기존과 일치합니다.");
+							$("#pw").val("");
+							$("#pw").focus();
+						}
+
+					})
 				}
 
 			})
+
+			//pw regex
+			$("#pw")
+					.focusout(
+							function() {
+								var pw = $("#pw").val();
+								var pwregex = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{6,12}$/;
+								if ($("#pw").val() != "") {
+									if (!pwregex.test(pw)) {
+										alert("비밀번호 조건을 확인하세요.");
+										$("#pw").val("");
+									}
+								}
+							})
+
+			//pw 재확인
+			$("#pwCorrection").focusin(function() {
+				if ($("#pw").val() == "") {
+					alert("비밀번호를 먼저 입력해주세요.");
+					$("#pw").focus();
+				} else {
+					$("#pwCorrection").focusout(function() {
+						if ($("#pwCorrection").val() != "") {
+							if ($("#pw").val() != $("#pwCorrection").val()) {
+								$("#pwCorrection").val("");
+								alert("비밀번호가 일치하지 않습니다.");
+								$("#pwCorrection").focus();
+							} else {
+								$("#pw_text").css("display", "block");
+								$("#pw_text").css("color", "blue");
+								$("#pw_text").html("비밀번호가 일치합니다.");
+							}
+						}
+					})
+				}
+			})
+			
 		}
 		
-	})
-
-		//pw regex
-		$("#pw")
-				.focusout(
-						function() {
-							var pw = $("#pw").val();
-							var pwregex = /(?=.*\d{1,50})(?=.*[~`!@#$%\^&*()-+=]{1,50})(?=.*[a-zA-Z]{1,50}).{6,12}$/;
-							if ($("#pw").val() != "") {
-								if (!pwregex.test(pw)) {
-									alert("비밀번호 조건을 확인하세요.");
-									$("#pw").val("");
-								}
-							}
-						})
-
-		//pw 재확인
-		$("#pwCorrection").focusin(function() {
-			if ($("#pw").val() == "") {
-				alert("비밀번호를 먼저 입력해주세요.");
-				$("#pw").focus();
-			} else {
-				$("#pwCorrection").focusout(function() {
-					if ($("#pwCorrection").val() != "") {
-						if ($("#pw").val() != $("#pwCorrection").val()) {
-							$("#pwCorrection").val("");
-							alert("비밀번호가 일치하지 않습니다.");
-							$("#pwCorrection").focus();
-						} else {
-							$("#pw_text").css("display", "block");
-							$("#pw_text").css("color", "blue");
-							$("#pw_text").html("비밀번호가 일치합니다.");
-						}
-					}
-				})
-			}
-		})
 	</script>
 </body>
 </html>

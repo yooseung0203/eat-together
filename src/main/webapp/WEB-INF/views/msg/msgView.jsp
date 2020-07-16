@@ -25,6 +25,7 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
 	rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/resources/css/msg.css">
 <!-- google font end-->
 <meta charset="UTF-8">
 
@@ -34,15 +35,18 @@
 	<div class="container">
 		<table class="table">
 			<thead>
-				<tr class="table-success">
-					<th scope="col" colspan=12>${msgView.msg_receiver}님으로쪽지가
+				<tr class="table" id="orange">
+					<th scope="col" colspan=12>${msgView.msg_receiver}님에게 쪽지가
 						도착하였습니다.</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td scope="col" colspan=12>보낸 사람 : ${msgView.msg_sender}
-						(${msgView.msg_date})</td>
+					<td scope="col" colspan=12>보낸 사람 : <c:choose>
+							<c:when test="${msgView.msg_sender=='administrator'}">관리자</c:when>
+							<c:otherwise>${msgView.msg_sender}</c:otherwise>
+						</c:choose> (${msgView.date})
+					</td>
 				</tr>
 				<tr>
 					<th scope="col" colspan=3 style="width: 20%">제목</th>
@@ -53,8 +57,10 @@
 					</td>
 				</tr>
 				<tr>
-					<td scope="col" colspan=9 rowspan=1 >
-						<div style="width: 100%; height:200px; overflow-y:auto;"><c:out value="${msgView.msg_text}"></c:out></div>
+					<td scope="col" colspan=9 rowspan=1>
+						<div style="width: 100%; height: 200px; overflow-y: auto;">
+							<c:out value="${msgView.msg_text}"></c:out>
+						</div>
 					</td>
 				</tr>
 			</tbody>
@@ -62,8 +68,9 @@
 
 		<div class="row" align="center">
 			<div class="col-12" align="center">
-				<button type="button" id="msgResponse" class="btn btn-warning">답장</button>
-               <button type="button" id="close" class="btn btn-light">닫기</button>
+				<button type="button" id="msgResponse" class="btn btn-warning"
+					onclick="location.href='msgResponse?msg_receiver=${msgView.msg_sender}'">답장</button>
+				<button type="button" id="close" class="btn btn-light">닫기</button>
 			</div>
 		</div>
 	</div>

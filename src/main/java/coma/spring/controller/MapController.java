@@ -85,7 +85,6 @@ public class MapController {
 		try{place_id = Integer.parseInt(request.getParameter("place_id"));}catch(Exception e) {}
 		String object = gson.toJson(list);
 		String jsonPath = sc.getRealPath("resources/json/mapData.json");
-		System.out.println(jsonPath);
 		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
 		JsonArray arr = gson.fromJson(object, JsonArray.class);
@@ -116,95 +115,9 @@ public class MapController {
 		if(!mapservice.insertPossible(mapdto.getPlace_url())) {
 			return "/map/insertFail";
 		}else {
-			System.out.println(mapdto.getName() + " : " + 
-					mapdto.getAddress() + " : " + 
-					mapdto.getRoad_address() + " : " +
-					mapdto.getCategory() + " : " + 
-					mapdto.getLat() + " : " + 
-					mapdto.getLng() + " : " +
-					mapdto.getRating_avg() + " : " +
-					mapdto.getPhone() + " : " + 
-					mapdto.getPlace_url() + " : " + 
-					mapdto.getPlace_id());
 			mapservice.insert(mapdto);
 			return "redirect:/map/toMap";
 		}
-	}
-
-	@ResponseBody
-	@RequestMapping(value="food",produces="application/json;charset=utf8",method=RequestMethod.GET)
-	public String getFood(String lng, String lat) throws RestClientException, URISyntaxException{
-		Gson gson = new Gson();
-		JsonObject result = new JsonObject();
-		JsonArray resultadd = new JsonArray();
-		boolean breakpoint = false;
-		loop: for(int page = 1; page < 46;page++) {
-			if(breakpoint) {break loop;}
-			RestTemplate restTemplate = new RestTemplate();
-			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-			params.add("x", lng);
-			params.add("y", lat);
-			params.add("category_group_code", "FD6");
-			params.add("radius", "20000");
-			params.add("page", "" + page);
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
-			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-			headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
-
-			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-			String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/category.json"), request, String.class);
-			System.out.println(respBody);
-			JsonObject obj = gson.fromJson(respBody, JsonObject.class);
-			JsonArray docs = obj.getAsJsonArray("documents");
-			JsonObject meta = obj.getAsJsonObject("meta");
-			JsonElement ele = meta.get("is_end");
-			for(JsonElement doc : docs) {
-				resultadd.add(doc);				
-			}
-			if(ele.getAsBoolean()) {breakpoint = true;}
-		}
-		result.add("documents", resultadd);
-		String resp = result.toString();
-		return resp;
-	}
-	@ResponseBody
-	@RequestMapping(value="cafe",produces="application/json;charset=utf8",method=RequestMethod.GET)
-	public String getCafe(String lng, String lat) throws RestClientException, URISyntaxException{
-		Gson gson = new Gson();
-		JsonObject result = new JsonObject();
-		JsonArray resultadd = new JsonArray();
-		loop: for(int page = 1; page < 46;page++) {
-			RestTemplate restTemplate = new RestTemplate();
-			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-			params.add("x", lng);
-			params.add("y", lat);
-			params.add("category_group_code", "CE7");
-			params.add("radius", "20000");
-			params.add("page", "" + page);
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
-			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
-			headers.add("Content-Type", MediaType.APPLICATION_FORM_URLENCODED_VALUE + ";charser=UTF-8");
-
-			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-			String respBody = restTemplate.postForObject(new URI(HOST + "/v2/local/search/category.json"), request, String.class);
-			System.out.println(respBody);
-			JsonObject obj = gson.fromJson(respBody, JsonObject.class);
-			JsonArray docs = obj.getAsJsonArray("documents");
-			JsonObject meta = obj.getAsJsonObject("meta");
-			JsonElement ele = meta.get("is_end");
-			for(JsonElement doc : docs) {
-				resultadd.add(doc);				
-			}
-			if(!ele.getAsBoolean()) {continue loop;}
-			else{break loop;}
-		}
-		result.add("documents", resultadd);
-		String resp = result.toString();
-		return resp;
 	}
 
 	@ResponseBody
@@ -427,7 +340,6 @@ public class MapController {
 			params.add("category_group_code", category_code);
 			params.add("radius", "20000");
 			params.add("page", "" + page);
-
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Authorization", "KakaoAK " + "e156322dd35cfd9dc276f1365621ae9a");
 			headers.add("Accept",MediaType.APPLICATION_JSON_UTF8_VALUE);
@@ -537,10 +449,10 @@ public class MapController {
 		Map<ReviewDTO,ReviewFileDTO> rmap = new LinkedHashMap<>();
 		List<ReviewDTO> rlist = rservice.selectByPseq(mapdto.getSeq());
 		for(ReviewDTO rdto : rlist) {
-			System.out.println(rdto.getSdate());
 			ReviewFileDTO rf = rservice.selectFileByPseq(rdto.getSeq());
 			rmap.put(rdto, rf);
 		}
+//		request.setAttribute("", o);
 		request.setAttribute("reviewMap", rmap);
 		// 리뷰 사진
 		if(session.getAttribute("loginInfo")==null) {
@@ -662,14 +574,15 @@ public class MapController {
 	}
 	// 예지 : 지도 페이지에서 모임글 작성 페이지 이동 : 존재하지 않는 맛집 ( #recruit 버튼 진입 )
 	@RequestMapping(value="toParty_New",method=RequestMethod.GET,produces="application/json;charset=utf8")
-	public String toPartyNew(HttpServletRequest request, String parent_name, String parent_address, String place_id, String category) {
-		Gson gson = new Gson();
+	public String toPartyNew(HttpServletRequest request, MapDTO mapdto) {
 		try {
 			MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
-			String userid= account.getId();
+			//String userid= account.getId();
+			String nickName = account.getNickname();
 			int gender = account.getGender();
 			//계정당 활성화된 모임 체크
-			int myPartyCount = pservice.getMadePartyCount(userid);
+			//int myPartyCount = pservice.getMadePartyCount(userid);
+			int myPartyCount = pservice.getMadePartyCount(nickName);
 			if(myPartyCount>4) {
 				return "/error/partyfull";
 			}
@@ -677,73 +590,20 @@ public class MapController {
 			request.setAttribute("gender", gender);
 			request.setAttribute("age", age);
 			// 장소명, 지번 주소 값 전달 
-			request.setAttribute("parent_name", parent_name);
-			request.setAttribute("parent_address", parent_address);
-			String body = null;
+			request.setAttribute("parent_name", mapdto.getName());
+			request.setAttribute("parent_address", mapdto.getAddress());
 			// 크롤링 작업
-			String imgaddr = pservice.clew(parent_name);
+			String imgaddr = pservice.clew(mapdto.getName());
 			request.setAttribute("img", imgaddr);
-			JsonArray respArr = new JsonArray();
-			if(category.contentEquals("카페")) {
-				String cafePath = sc.getRealPath("resources/json/cafe.json");
-				File cafeFile = new File(cafePath);
-				if(cafeFile.exists()) {
-					Reader reader = new FileReader(cafePath);
-					JsonObject readObj = gson.fromJson(reader, JsonObject.class);
-					JsonArray arr = (JsonArray)readObj.get("cafe_list");
-					for(JsonElement ele : arr) {
-						JsonObject obj = ele.getAsJsonObject();
-						int id = obj.get("cafe").getAsJsonObject().get("id").getAsInt();
-						if(id == Integer.parseInt(place_id)) {
-							JsonObject json = obj.get("cafe").getAsJsonObject();
-							String lat = json.get("y").getAsString();
-							String lng = json.get("x").getAsString();
-							String phone = json.get("phone").getAsString();
-							String road_address = json.get("road_address_name").getAsString();
-							String place_url = json.get("place_url").getAsString();
-							
-							request.setAttribute("place_id", place_id);
-							request.setAttribute("lat", lat.substring(1, lat.length()-1));
-							request.setAttribute("lng", lng.substring(1, lng.length()-1));
-							request.setAttribute("category", category);
-							request.setAttribute("phone", phone.substring(1, phone.length()-1));
-							request.setAttribute("road_address", road_address.substring(1, road_address.length()-1));
-							request.setAttribute("place_url", place_url.substring(1, place_url.length()-1));
-						}
-					}
-				}
-
-			}else if(category.contentEquals("음식점")) {
-				String foodPath = sc.getRealPath("resources/json/food.json");
-				File foodFile = new File(foodPath);
-				if(foodFile.exists()) {
-					Reader reader = new FileReader(foodPath);
-					JsonObject readObj = gson.fromJson(reader, JsonObject.class);
-					JsonArray arr = (JsonArray)readObj.get("food_list");
-					for(JsonElement ele : arr) {
-						JsonObject obj = ele.getAsJsonObject();
-						int id = obj.get("food").getAsJsonObject().get("id").getAsInt();
-						if(id == Integer.parseInt(place_id)) {
-							JsonObject json = obj.get("food").getAsJsonObject();
-							String lat = json.get("y").getAsString();
-							String lng = json.get("x").getAsString();
-							String phone = json.get("phone").getAsString();
-							String road_address = json.get("road_address_name").getAsString();
-							String place_url = json.get("place_url").getAsString();
-							
-							request.setAttribute("place_id", place_id);
-							request.setAttribute("lat", lat.substring(1, lat.length()-1));
-							request.setAttribute("lng", lng.substring(1, lng.length()-1));
-							request.setAttribute("category", category);
-							request.setAttribute("phone", phone.substring(1, phone.length()-1));
-							request.setAttribute("road_address", road_address.substring(1, road_address.length()-1));
-							request.setAttribute("place_url", place_url.substring(1, place_url.length()-1));
-						}
-					}
-				}
-			}
-			body = gson.toJson(respArr);
-			request.setAttribute("kakaojson", body);
+			
+			request.setAttribute("place_id", mapdto.getPlace_id());
+			request.setAttribute("lat", mapdto.getLat());
+			request.setAttribute("lng", mapdto.getLng());
+			request.setAttribute("category", mapdto.getCategory());
+			request.setAttribute("phone", mapdto.getPhone());
+			request.setAttribute("road_address", mapdto.getRoad_address());
+			request.setAttribute("place_url", mapdto.getPlace_url());
+			request.setAttribute("mdto", mapdto);
 		}catch(Exception e) {}
 		return "/party/party_new";
 	}
@@ -763,6 +623,7 @@ public class MapController {
 			request.setAttribute("gender", gender);
 			request.setAttribute("age", age);
 			// 장소명, 지번 주소 값 전달 
+			
 			request.setAttribute("parent_name", parent_name);
 			request.setAttribute("parent_address", parent_address);
 			request.setAttribute("img", img);

@@ -17,7 +17,7 @@ body{
     text-align: center;
     position: fixed;
     background-color:#ffd04f; 
-    width: 20%;
+    width: 18%;
     height: 100%;
 }
 .section-area{
@@ -32,7 +32,7 @@ body{
     width: 50%;
 }
 .menubtn{
-    height:10%;
+    height:8%;
     font-size: 2vw;
 
 }
@@ -62,4 +62,12 @@ body{
 
 .admin-h2{
 	font-family: 'NEXON Lv1 Gothic OTF Bold';
+}
+
+.admin_text{
+    	font-family: 'Noto Sans KR', sans-serif;
+}
+.admin_menubar_text{
+   	font-family: 'NEXON Lv1 Gothic OTF Bold';
+ 
 }

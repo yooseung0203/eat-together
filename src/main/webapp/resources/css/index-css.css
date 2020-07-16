@@ -10,7 +10,7 @@
 
 .navibar {
 	/*font-size: 14pt;*/
-	font-family: 'Noto Sans KR', sans-serif;
+	
 }
 
 .slide-area {
@@ -23,8 +23,15 @@
 	
 }
 
+
+.navi-menu {
+	margin-right:30px;
+}
+
 .navi-menu>a {
-	color: #212529;
+	color: #212529 !important; 
+	font-family: 'Noto Sans KR', sans-serif !important;
+	font-size:20pt !important;
 }
 
 .navi-menu>a:hover {
@@ -81,6 +88,10 @@
 .carousel-caption>h1 {
 	font-family: 'Black Han Sans', sans-serif;
 	background-color: rgba(0, 0, 0, 0.5);
+}
+
+#newMsg{
+	margin-top:5px;	
 }
 
 .index-copyright {

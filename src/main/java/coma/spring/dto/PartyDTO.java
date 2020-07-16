@@ -23,9 +23,17 @@ public class PartyDTO {
 	private String sDate;
 	private String sTime;
 	private String imgaddr;
+	private Timestamp deadline;
+	private int report;
 	
 	
 	
+	public int getReport() {
+		return report;
+	}
+	public void setReport(int report) {
+		this.report = report;
+	}
 	public String getImgaddr() {
 		return imgaddr;
 	}
@@ -141,6 +149,12 @@ public class PartyDTO {
 	
 	
 	
+	public Timestamp getDeadline() {
+		return deadline;
+	}
+	public void setDeadline(Timestamp deadline) {
+		this.deadline = deadline;
+	}
 	public String getsTime() {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 	    String date = sdf.format(meetdate);
@@ -151,7 +165,7 @@ public class PartyDTO {
 	}
 	public PartyDTO(int seq, String parent_name, String parent_address, String title, String writer, String date,
 			String time, Timestamp meetdate, int count, String gender, String age, String drinking, String content,
-			String status, int place_id, String sDate, String sTime, String imgaddr) {
+			String status, int place_id, String sDate, String sTime, String imgaddr, int report, Timestamp deadline) {
 		super();
 		this.seq = seq;
 		this.parent_name = parent_name;
@@ -171,6 +185,8 @@ public class PartyDTO {
 		this.imgaddr = imgaddr;
 		this.sDate =  new SimpleDateFormat("yyyy-MM-dd").format(meetdate);
 		this.sTime =  new SimpleDateFormat("yyyy-MM-dd").format(meetdate);
+		this.report = report;
+		this.deadline = deadline;
 	}
 	
 	public PartyDTO() {

@@ -12,7 +12,7 @@
 		#{title}, #{writer}, #{meetdate}, #{count},
 		#{gender}, #{age},
 		#{drinking}, #{content},#{status},#{place_id},
-		#{imgaddr})
+		#{imgaddr},0,#{meetdate}+5)
 	</insert>
 	<!-- by 수지 파티 참가 -->
 	<insert id="partyJoin">
@@ -78,12 +78,12 @@
 	<!-- by 태훈 모임 리스트 -->
 	<select id="selectList" resultType="coma.spring.dto.PartyDTO">
 		<!-- select * from party where status = 1 order by seq desc -->
-		select * from (select party.*, row_number() over(order by seq desc) as
+		select * from (select party.*, row_number() over(order by status desc, seq desc) as
 		rnum from party) where rnum between #{start} and #{end}
 	</select>
-	<!--by 태훈 상세 검색 -->
+	<!--by 태훈 통합 검색 -->
 	<select id="partySearch" resultType="coma.spring.dto.PartyDTO">
-		select * from party
+		select * from (select party.*, row_number() over(order by seq desc) as rnum from party
 		<trim prefixOverrides="or" prefix="where">
 			<if test="address != ''"> parent_address like '%${address}%'</if>
 			<if test="gender != null"> or gender = '${gender}'</if>
@@ -98,16 +98,11 @@
 			<if test="content != ''">or content like '%${content}%'</if>
 			<if test="both != ''">or title like '%${both}%' or content like '%${both}%'</if>
 		</trim>
-		order by seq desc
+		 )where rnum between ${start} and ${end}
 	</select>
 	<!-- by 태훈 모임 갯수 -->
 	<select id="getListCount" resultType="int">
 		select count(*) from party
-	</select>
-	<!-- by 태훈 모임 순위 순 장소 아이디 리스트 -->
-	<select id="PartyCountById" resultType="String">
-		select place_id from
-		party group by place_id order by count(*) desc
 	</select>
 	<!-- by 지은 작성자 별 모집 리스트 쿼리문 수정: 반장인 방과 아닌 방을 구분하기 위해서 채팅방에 참여중인 모든 리스트를 출력하는 것으로 수정함_20200708 -->
 	<select id="selectByWriterPage" resultType="coma.spring.dto.PartyDTO">
@@ -119,9 +114,20 @@
 	<select id="getMyPageArticleCount" resultType="int">
 		select count(*) from party where seq in (select chatSeq_parent from partylist where participant = #{value})
 	</select>
-	
 	<!--  by 수지 블랙리스트 체크 -->
 	<select id="userBlockedConfirm" resultType="int">
       select count(*) from blacklist where chatSeq_parent= #{seq} and blocked = #{name}
    </select>
+   <!-- by 태훈 모임 글 신고 -->
+   <update id="partyReport">
+   		update party set report = report+1 where seq = #{seq}
+   </update> 
+   <!--  by 수지 모임별 현재인원수 및 제한인원수 구하기 -->
+   <select id="getPartyCounts" resultType="coma.spring.dto.PartyCountDTO">
+   		select DISTINCT  p.seq, p.count as pull, (select count(*) from partylist where chatseq_parent = p.seq) as count from party p INNER join partylist l on p.seq = l.chatseq_parent where p.seq=#{value}
+   </select>
+   <!-- by 수지 모집 재시작하기 -->
+	<update id="restartRecruit">
+		update party set status = 1 where seq = #{value}
+	</update>
 </mapper>

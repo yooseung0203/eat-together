@@ -75,6 +75,9 @@
 	</fieldset>
 
 	<script>
+	window.onload = function() {
+
+	var code;
 		//by지은, 비밀번호 수정하기 ajax로 처리한다. 왜냐하면 id 값을 받아와야 하기 때문에_20200709
 		$("#editPwBtn").on("click", function(){
 			if ($("#pw").val() == "") {
@@ -172,11 +175,12 @@
 						account_email : $("#account_email").val()
 					}
 				}).done(function(resp) {
-					if (resp != "0") {
+					code = resp;
+					if (code != "0") {
 						alert("인증메일이 발송되었습니다.");
 						$("#mail_div").css("display", "block");
 						$("#mail_accept").on("click", function() {
-							if ($("#mail_text").val() == resp) {
+							if ($("#mail_text").val() == code) {
 								$("#mail_text").attr("readonly", true);
 								$("#mail_text").css("color", "blue");
 								$("#mail_text").val("인증에 성공하였습니다.");
@@ -192,7 +196,7 @@
 								$("#mail_text").focus();
 							}
 						})
-					} else if (resp == "0") {
+					} else if (code == "0") {
 						alert("아이디 또는 이메일을 잘못 입력하였습니다.");
 						$("#mail_text").val("");
 						$("#mail_text").focus();
@@ -201,6 +205,7 @@
 				})
 			}
 		})
+	}
 	</script>
 </body>
 </html>

@@ -12,36 +12,41 @@ import coma.spring.service.MsgService;
 
 @Controller
 public class HomeController {
-	
+
 	@Autowired
 	private HttpSession session;
-	
+
 	@Autowired
 	private MsgService msgservice;
-	
+
 	@RequestMapping("/")
 	public String home(){
-		
+
 		if(session.getAttribute("loginInfo")==null) {
 			return "home";
 		}else {
 			MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-			
+			if(mdto.getId().contentEquals("administrator")) {
+
+				return "home";
+			}else {
 				try {
-					int newMsg =msgservice.newmsg(mdto.getId());
+					int newMsg =msgservice.newmsg(mdto.getNickname());
 					session.setAttribute("newMsg", newMsg);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return "error";
 				}
-			return "home";
+				return "home";
+			}
+
 		}
-		
+
 	}
-	
+
 	@RequestMapping("error")
 	public String error() {
 		return "error";
 	}
-	
+
 }

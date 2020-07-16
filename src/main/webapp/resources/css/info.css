@@ -81,7 +81,8 @@
 	font-family: 'TmoneyRoundWindExtraBold';
 }
 
-.badge{
+.infobadge{
+	font-family: 'Noto Sans KR', sans-serif;
 	font-size:32pt;
 }
 

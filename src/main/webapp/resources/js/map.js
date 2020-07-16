@@ -12,6 +12,45 @@ function toStopRecruit(seq){
 	location.href= "/party/stopRecruit?seq="+seq;
 	}
 }
+function partyModify(seq){
+	location.href = "/party/partymodify?seq="+seq;
+}
+function partyDelete(seq){
+	var ask = confirm("삭제 후에는 복구할 수 없습니다.\n 정말 삭제하겠습니까?");
+	if (ask) {
+		location.href = "/party/partydelete?seq="+seq;
+	}
+}
+function reviewReport(seq,content,id){
+	console.log("신고 시작 : "+ seq);
+	var ask = confirm("허위신고일 경우 피해가 되돌아올 수 있습니다. \n정말 신고하시겠습니까?\n신고할 사용자 : "+id+"\n신고할 리뷰 내용 : "+content);
+	if(ask){
+		if($("#loginInfo_id").html() == id){
+			alert("본인이 작성한 글은 신고할 수 없습니다.");
+		}
+		else{
+			$.ajax({
+				url:"/review/report",
+				data : { seq : seq, report_id : id , content : content},
+				success : function(result) {
+					if (result == 1){ 
+						alert("신고가 정상적으로 접수되었습니다.");	
+					}else{
+						alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
+					}
+				},
+				error:function(e){
+					console.log("error");
+				}
+			});
+		}
+	}
+}
+
+$(function () {
+	  $('[data-toggle="tooltip"]').tooltip();
+})
+
 $(function(){
 		/****************** 스타일 관련 영역 ******************/
 		$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.
@@ -23,6 +62,187 @@ $(function(){
 	        }
 	    });
 		/****************** 카카오맵 영역 ******************/
+	    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+	    mapOption = { 
+	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+	        level: 3 // 지도의 확대 레벨 
+	    };
+		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
+		var currentPositionMarker = null;
+		var currentPositionOverlay = null;
+	    if (navigator.geolocation) {
+	        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+	        navigator.geolocation.getCurrentPosition(function(position) {
+	            var lat = position.coords.latitude, // 위도
+	                lon = position.coords.longitude; // 경도
+	            var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+	                message = '당신의 위치'; // 인포윈도우에 표시될 내용입니다
+	            // 마커와 인포윈도우를 표시합니다
+	            currentPositionMarker = displayMarker(locPosition, message, currentPositionOverlay);
+	            if($("#markerLat").text()!=""){
+	            	map.setCenter(new kakao.maps.LatLng($("#markerLat").text(), $("#markerLng").text()));
+	            }
+	          });
+	    } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+	        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
+	            message = 'geolocation을 사용할수 없어요..';
+	        currentPositionMarker = displayMarker(locPosition, message, currentPositionOverlay);
+            if($("#markerLat").text()!=""){
+            	map.setCenter(new kakao.maps.LatLng($("#markerLat").text(), $("#markerLng").text()));
+            }
+	    }
+	    function displayMarker(locPosition, message, currentPositionOverlay) { // SSL 인증 위치 중심 확인용 인포윈도우
+	        var marker = new kakao.maps.Marker({  
+	            map: map, 
+	            position: locPosition,
+	            zIndex: 2
+	        }); 
+	        kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {
+	        	map.setLevel(3);
+	        	map.setCenter(locPosition);
+	        });
+			currentPositionOverlay = new kakao.maps.CustomOverlay({
+	            position: locPosition,
+	            content: '<div class="custom">' +
+    	        '  <div>' +
+    	        '    <span class="here">'+message+'</span>' +
+    	        '  </div>' +
+    	        '</div>',
+    	        zIndex: 3
+	        });
+			currentPositionOverlay.setMap(map);
+	        map.setCenter(locPosition); 
+
+		    return {marker:marker, customOverlay:currentPositionOverlay};
+	    }  
+	    function deleteMarker(marker, customOverlay) {
+	    	marker.setMap(null);
+	    	customOverlay.setMap(null);
+	    } 
+		// 마커 클러스터러 : 맛집으로 등록된 마커는 이것으로 표시!
+	    var clusterer = new kakao.maps.MarkerClusterer({
+	        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+	        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+	        minLevel: 5, // 클러스터 할 최소 지도 레벨 
+	        calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+	        texts: getTexts, // texts는 ['삐약', '꼬꼬', '꼬끼오', '치멘'] 이렇게 배열로도 설정할 수 있다 
+	        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+	                width : '30px', height : '30px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '15px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '31px'
+	            },
+	            {
+	                width : '40px', height : '40px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '20px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '41px'
+	            },
+	            {
+	                width : '50px', height : '50px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '25px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '51px'
+	            },
+	            {
+	                width : '60px', height : '60px',
+	                background: 'rgba(255, 153, 0, .8)',
+	                borderRadius: '30px',
+	                color: '#fff',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '61px'
+	            }
+	        ]
+	    });
+	    
+	    // 클러스터 내부에 삽입할 문자열 생성 함수입니다 
+	    function getTexts( count ) {
+
+	      // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다 
+	      if(count < 10) {
+	        return count;        
+	      } else if(count < 30) {
+	        return count;
+	      } else if(count < 50) {
+	        return count;
+	      } else {
+	        return count;
+	      }
+	    }
+	    
+	    var notmapclusterer = new kakao.maps.MarkerClusterer({
+	        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+	        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+	        minLevel: 5, // 클러스터 할 최소 지도 레벨 
+	        calculator: [10, 30, 50], // 클러스터의 크기 구분 값, 각 사이값마다 설정된 text나 style이 적용된다
+	        texts: notmapGetTexts, // texts는 ['삐약', '꼬꼬', '꼬끼오', '치멘'] 이렇게 배열로도 설정할 수 있다 
+	        styles: [{ // calculator 각 사이 값 마다 적용될 스타일을 지정한다
+	                width : '30px', height : '30px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '15px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '31px'
+	            },
+	            {
+	                width : '40px', height : '40px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '20px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '41px'
+	            },
+	            {
+	                width : '50px', height : '50px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '25px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '51px'
+	            },
+	            {
+	                width : '60px', height : '60px',
+	                background: 'rgba(255, 255, 255, .8)',
+	                borderRadius: '30px',
+	                color: '#000',
+	                textAlign: 'center',
+	                fontWeight: 'bold',
+	                lineHeight: '61px'
+	            }
+	        ]
+	    });
+	    
+	    // 클러스터 내부에 삽입할 문자열 생성 함수입니다 
+	    function notmapGetTexts( count ) {
+	      // 한 클러스터 객체가 포함하는 마커의 개수에 따라 다른 텍스트 값을 표시합니다 
+	      if(count < 10) {
+	        return count;        
+	      } else if(count < 30) {
+	        return count;
+	      } else if(count < 50) {
+	        return count;
+	      } else {
+	        return count;
+	      }
+	    }
+		$("#centerLat").text(map.getCenter().getLat());
+	    $("#centerLng").text(map.getCenter().getLng());
+
 		// MakrerImage 객체를 생성하여 반환하는 함수입니다
 		function createMarkerImage(markerSize, offset, markerImageSrc) {
 		    var markerImage = new kakao.maps.MarkerImage(
@@ -47,7 +267,8 @@ $(function(){
 	            infowindow.close();
 	        };
 	    }
-	    function addMarker(po) {
+	    
+	    function pushMarker(po) {
 			var markerSize = new kakao.maps.Size(10, 10),
 				markerOffset = new kakao.maps.Point(0, 0);
 			var normalImageSrc = 'https://eat-together.s3.ap-northeast-2.amazonaws.com/img.png';
@@ -60,7 +281,7 @@ $(function(){
 	            position: po.latlng,
 	            image: normalImage
 	        });
-
+	        notmapclusterer.addMarker(marker);
 	        var customOverlay = new kakao.maps.CustomOverlay({
 	            position: po.latlng,
 	            content: po.content
@@ -98,30 +319,37 @@ $(function(){
 					$(".choose_info").html("");
 					$(".search_result").html("");
 					var info = $("<div class='info'></div>");
-					info.append("<div class='category_name' style='font-size:10pt;'>"+resp.result.category_group_name+"</div>");
+					info.append("<div class='category' style='font-size:10pt;'>"+resp.result.category_group_name+"</div>");
 					info.append("<div class='place_name' style='font-size:12pt;'><b>"+resp.result.place_name+"</b></div>");
 					info.append("<div class='place_id' style='display:none;'>"+resp.result.id+"</div>");
-					info.append("<div class='address_name' style='font-size:10pt;'>"+resp.result.address_name+"</div>");
+					info.append("<div class='lat' style='display:none;'>"+resp.result.y+"</div>");
+					info.append("<div class='lng' style='display:none;'>"+resp.result.x+"</div>");
+					info.append("<div class='road_address' style='display:none;'>"+resp.result.road_address_name+"</div>");
+					info.append("<div class='place_url' style='display:none;'>"+resp.result.place_url+"</div>");
+					info.append("<div class='address' style='font-size:10pt;'>"+resp.result.address_name+"</div>");
 					info.append("<div class='phone' style='font-size:10pt;'>"+resp.result.phone+"</div><br>");
 					info.append("<h style='font-size:10pt;'>아직 등록되지 않은 맛집입니다.<br>모임을 모집해 맛집으로 등록해보세요!</h>");
 					info.append("<button type='button' class='btn btn-primary' id='recruit' style='margin-top:10px;'>내가 직접 모집하기</button>")
 					$(".search_result").append(info);
 					$(".search_result").css('max-height','700px');
+					$(".navi_btn").html('<i class="fas fa-chevron-left"></i>');
+					$("#sideBar").animate({right:0},1000);
 	        	})
 	        });
 	        return marker;
 	    }
 	    $(document).on("click","#recruit",function(){
-	    	alert($(this).closest(".info").find(".place_name b").text());
-	    	alert($(this).closest(".info").find(".address_name").text());
-	    	location.href = "/map/toParty_New?parent_name="+$(this).closest(".info").find(".place_name b").text()
-	    									+"&parent_address="+$(this).closest(".info").find(".address_name").text()
-	    									+"&place_id="+$(this).closest(".info").find(".place_id").text()
-	    									+"&category="+$(this).closest(".info").find(".category_name").text();
+	    	location.href = "/map/toParty_New?name="+$(this).closest(".info").find(".place_name b").text()
+	    									+"&address="+$(this).closest(".info").find(".address").text()
+	    									+"&road_address="+$(this).closest(".info").find(".road_address").text()
+	    									+"&category="+$(this).closest(".info").find(".category").text()
+	    									+"&lat="+$(this).closest(".info").find(".lat").text()
+	    									+"&lng="+$(this).closest(".info").find(".lng").text()
+	    									+"&phone="+$(this).closest(".info").find(".phone").text()
+	    									+"&place_url="+$(this).closest(".info").find(".place_url").text()
+	    									+"&place_id="+$(this).closest(".info").find(".place_id").text();
 	    })
 	    $("#mapRecruit").on("click",function(){
-	    	alert($(this).closest(".partylist").siblings(".store_info").find(".name").text());
-	    	alert($(this).closest(".partylist").siblings(".store_info").find(".address").text());
 	    	location.href = "/map/mapToParty_New?parent_name="+$(this).closest(".partylist").siblings(".store_info").find(".name").text()
 								    						+"&parent_address="+$(this).closest(".partylist").siblings(".store_info").find(".address").text()
 								    						+"&img="+$(this).closest(".partylist").siblings(".store_info").find("img").attr("src")
@@ -131,45 +359,6 @@ $(function(){
 
 	    var kakaoCafeMarkers = [];
 	    var kakaoFoodMarkers = [];
-		/*$.get("/resources/json/cafe.json",function(data){
-		
-			console.log(data);
-			var positions = [];
-			
-			$.each(data, function(i, item) {
-				for(var a = 0;a < data.cafe_list.length; a++){
-					positions.push({
-		    	        content: '<div>'+ data.cafe_list[a].cafe.place_name +'</div>', 
-		    	        latlng: new kakao.maps.LatLng(data.cafe_list[a].cafe.y, data.cafe_list[a].cafe.x)
-					});
-				}
-			});
-		    for (var i = 0; i < positions.length; i ++) {
-			    var marker = addMarker(positions[i]);
-			    kakaoCafeMarkers.push({marker:marker});
-			}
-		});
-		
-
-  		$.get("/resources/json/food.json",function(data){
-  			console.log(data);
-			var positions = [];
-
-			$.each(data, function(i, item) {
-				for(var a = 0;a < data.food_list.length; a++){
-					positions.push({
-		    	        content: '<div>'+ data.food_list[a].food.place_name +'</div>', 
-		    	        latlng: new kakao.maps.LatLng(data.food_list[a].food.y, data.food_list[a].food.x)
-					});
-				}
-			});
-		    for (var i = 0; i < positions.length; i ++) {
-		    	var marker = addMarker(positions[i]);
-			    kakaoFoodMarkers.push({marker:marker});
-			}
-		});*/
-		
-
 		
 		function createMapTableMarker(positions, image){
 			var markers = [];
@@ -202,7 +391,8 @@ $(function(){
 		        });
                 markers.push({
 	    	        marker: marker
-	    		})
+	    		});
+	    		clusterer.addMarker(marker);
 			});
 			return markers;
 		}
@@ -214,6 +404,7 @@ $(function(){
 		var cafeTopMarkers = null;
 		var foodTopMarkers = null;
 		
+	    
 		$.get("/resources/json/mapData.json",function(data){
 			var cafePositions = [];
 			var foodPositions = [];
@@ -328,21 +519,6 @@ $(function(){
 			foodTopMarkers = createMapTableMarker(foodTopPositions, topFoodImage); // 리뷰 평균 Top 음식점
 		});
 		
-		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	    mapOption = { 
-	        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
-	        level: 3 // 지도의 확대 레벨
-	    };
-		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-		var map = new kakao.maps.Map(mapContainer, mapOption); 
-		
-		$("#centerLat").text(map.getCenter().getLat());
-	    $("#centerLng").text(map.getCenter().getLng());
-		
-	    if($("#markerLat").text()!=""){
-			map.setCenter(new kakao.maps.LatLng($("#markerLat").text(), $("#markerLng").text()));
-	    }
-	    
 		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
 		var zoomControl = new kakao.maps.ZoomControl();
 		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
@@ -362,36 +538,6 @@ $(function(){
 		// 주소-좌표 변환 객체를 생성합니다
 		var geocoder = new kakao.maps.services.Geocoder();
 
-		var marker = new kakao.maps.Marker(), // 클릭한 위치를 표시할 마커입니다
-		infowindow = new kakao.maps.InfoWindow({zindex:30}); // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
-
-		// 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-		searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-
-		// 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
-		kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
-		    searchDetailAddrFromCoords(mouseEvent.latLng, function(result, status) {
-		        if (status === kakao.maps.services.Status.OK) {
-		            var detailAddr = !!result[0].road_address ? '<div class="selectedRoad">도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
-		            detailAddr += '<div class="selectedAddress">지번 주소 : ' + result[0].address.address_name + '</div>';
-		            
-		            var content = '<div class="bAddr">' +
-		                            '<span class="title">주소정보</span>' + 
-		                            detailAddr + 
-		                        '</div>';
-
-		            // 마커를 클릭한 위치에 표시합니다 
-		            marker.setPosition(mouseEvent.latLng);
-		            marker.setMap(map);
-
-		            // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
-		            infowindow.setContent(content);
-		            infowindow.open(map, marker);
-		            $(".lat").html(mouseEvent.latLng.getLat());
-		            $(".lng").html(mouseEvent.latLng.getLng());
-		        }   
-		    });
-		});
 		// 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
 		kakao.maps.event.addListener(map, 'idle', function() {
 		    searchAddrFromCoords(map.getCenter(), displayCenterInfo);
@@ -423,141 +569,7 @@ $(function(){
 		        }
 		    }    
 		}
-		$(".map_add").on("click",function(){
-			var selectedRoad = $(".selectedRoad").text().split(" : ")[1];
-			var selectedAddress = $(".selectedAddress").text().split(" : ")[1];
-			$(".modal-body .road_address").html(selectedRoad);
-			$(".modal-body .address").html(selectedAddress);
-		})
-		
         var positions = [];
-		$(".food").on("click",function(){
-        	$.ajax({
-        		url:"/map/food",
-        		type:"get",
-        		data:{
-        			lat:$("#centerLat").text(),
-        			lng:$("#centerLng").text()},
-        		dataType:"JSON"
-        	}).done(function(resp){
-        		console.log(resp.documents.length);
-        		for(var i = 0;i < resp.documents.length;i++){
-            		//console.log(resp.documents[i].place_name);
-            		//console.log(resp.documents[i].x + " : " + resp.documents[i].y);
-            		//console.log(resp.documents[i].place_url);
-            		// 마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다 
-            		positions.push({
-            		        content: '<form action="/map/insert" method="get" id="inputForm"><div style="padding:5px;">'
-            		        			+'<div><input type=text readonly name="name" value="'+resp.documents[i].place_name+'"></div>'
-            		        			+'<div><input type=text readonly name="address" value="'+resp.documents[i].address_name+'"></div>'
-            		        			+'<div><input type=text readonly name="road_address" value="'+resp.documents[i].road_address_name+'"></div>'
-            		        			+'<div><input type=text readonly name="category" value="'+resp.documents[i].category_group_name+'"></div>'
-            		        			+'<div><input type=text readonly name="lat" value="'+resp.documents[i].y+'"></div>'
-            		        			+'<div><input type=text readonly name="lng" value="'+resp.documents[i].x+'"></div>'
-            		        			+'<div><input type=text readonly name="phone" value="'+resp.documents[i].phone+'"></div>'
-            		        			+'<div><input type=text readonly name="place_url" value="'+resp.documents[i].place_url+'"></div>'
-            		        			+'<div><input type=text readonly name="detail_category" value="'+resp.documents[i].category_name+'"></div>'
-            		        			+'<div><input type=text readonly name="place_id" value="'+resp.documents[i].id+'"></div>'
-            		        			+'<button type="submit" id="detail">맛집 등록</button></div></form>', 
-            		        latlng: new kakao.maps.LatLng(resp.documents[i].y, resp.documents[i].x),
-			    	        place_id:resp.documents[i].id,
-			    	        category:resp.documents[i].category_group_name
-            		});
-        		}
-        		
-        	    var imageSrc = 'https://i.imgur.com/rzDIRIP.png', // 마커이미지의 주소입니다    
-        	    imageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
-        	    imageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-        	    
-        		// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-        		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-        		
-        		for (var i = 0; i < positions.length; i ++) {
-        		    // 마커를 생성합니다
-        		    var marker = new kakao.maps.Marker({
-        		        map: map, // 마커를 표시할 지도
-        		        position: positions[i].latlng, // 마커의 위치
-        		        image: markerImage // 마커이미지 설정 
-        		    });
-        		    
-        		    var iwRemoveable = true;
-        		    // 마커에 표시할 인포윈도우를 생성합니다 
-        		    var infowindow = new kakao.maps.InfoWindow({
-        		        content: positions[i].content, // 인포윈도우에 표시할 내용
-        		        removable : iwRemoveable
-        		    });
-
-        		    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
-        		    // 이벤트 리스너로는 클로저를 만들어 등록합니다
-        		 	// 마커에 클릭이벤트를 등록합니다
-        		 	
-        		    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
-        		}
-        	}).fail(function(error1,error2){
-        		console.log(error1);
-        		console.log(error2);
-        	})
-		})
-		$(".cafe").on("click",function(){ // 카페
-        	$.ajax({
-        		url:"/map/cafe",
-        		type:"get",
-        		data:{
-        			lat:$("#centerLat").text(),
-        			lng:$("#centerLng").text()},
-        		dataType:"JSON"
-        	}).done(function(resp){
-        		console.log(resp.documents.length);
-        		var positions = [];
-        		for(var i = 0;i < resp.documents.length;i++){
-            		console.log(resp.documents[i].id);
-            		//console.log(resp.documents[i].place_name);
-            		//console.log(resp.documents[i].x + " : " + resp.documents[i].y);
-            		//console.log(resp.documents[i].place_url);
-            		positions.push({
-        		        content: '<form action="/map/insert" method="get" id="inputForm"><div style="padding:5px;">'
-        		        			+'<div><input type=text readonly name="name" value="'+resp.documents[i].place_name+'"></div>'
-        		        			+'<div><input type=text readonly name="address" value="'+resp.documents[i].address_name+'"></div>'
-        		        			+'<div><input type=text readonly name="road_address" value="'+resp.documents[i].road_address_name+'"></div>'
-        		        			+'<div><input type=text readonly name="category" value="'+resp.documents[i].category_group_name+'"></div>'
-        		        			+'<div><input type=text readonly name="lat" value="'+resp.documents[i].y+'"></div>'
-        		        			+'<div><input type=text readonly name="lng" value="'+resp.documents[i].x+'"></div>'
-        		        			+'<div><input type=text readonly name="phone" value="'+resp.documents[i].phone+'"></div>'
-        		        			+'<div><input type=text readonly name="place_url" value="'+resp.documents[i].place_url+'"></div>'
-        		        			+'<div><input type=text readonly name="detail_category" value="'+resp.documents[i].category_name+'"></div>'
-        		        			+'<div><input type=text readonly name="place_id" value="'+resp.documents[i].id+'"></div>'
-        		        			+'<button type="submit" id="detail">맛집 등록</button></div></form>', 
-        		        latlng: new kakao.maps.LatLng(resp.documents[i].y, resp.documents[i].x),
-		    	        place_id:resp.documents[i].id,
-		    	        category:resp.documents[i].category_group_name
-        			});
-        		}
-        		
-        	    var imageSrc = 'https://i.imgur.com/kKE28hx.png', // 마커이미지의 주소입니다    
-        	    imageSize = new kakao.maps.Size(40, 60), // 마커이미지의 크기입니다
-        	    imageOption = {offset: new kakao.maps.Point(20, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-        	    
-        		// 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
-        		var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
-        		for (var i = 0; i < positions.length; i ++) {
-        		    var marker = new kakao.maps.Marker({
-        		        map: map, 
-        		        position: positions[i].latlng,
-        		        image: markerImage
-        		    });
-        		    
-        		    var iwRemoveable = true;
-        		    var infowindow = new kakao.maps.InfoWindow({
-        		        content: positions[i].content, 
-        		        removable : iwRemoveable
-        		    });
-        		    kakao.maps.event.addListener(marker, 'click', makeOverListener(map, marker, infowindow));
-        		}
-        	}).fail(function(error1,error2){
-        		console.log(error1);
-        		console.log(error2);
-        	})
-		})
 		$(".foodInsert").on("click",function(){ // 음식점 입력
         	$.ajax({
         		url:"/map/foodInsert",
@@ -567,14 +579,13 @@ $(function(){
         			lng:$("#centerLng").text()},
         		dataType:"JSON"
         	}).done(function(resp){
-        		console.log(resp);
-        		alert("입력 완료");
-        	}).fail(function(error1,error2){
         		var iCHK = 1;
         		for(var i = 0;i<iCHK;i++)
         		{
         		document.location.reload();
         		}
+        		alert("입력 완료");
+        	}).fail(function(error1,error2){
         		console.log(error1);
         		console.log(error2);
         	})
@@ -593,7 +604,6 @@ $(function(){
         		{
         		document.location.reload();
         		}
-        		console.log(resp);
         		alert("입력 완료");
         	}).fail(function(error1,error2){
         		console.log(error1);
@@ -642,11 +652,11 @@ $(function(){
 				}else if(resp.partyParticipantCheck == true){
 					$(".modal-footer").append('<button type="button" id="toChatroom" class="btn btn-primary" onClick=\"toChatroom('+resp.pdto.seq+');\">채팅방으로 이동</button>');
 				}
-				if($("#loginInfo_id").text() == resp.pdto.writer){
+				if($("#loginInfo_nickname").text() == resp.pdto.writer){
 					if(resp.pdto.status == 1){
 						$("#partyModal .modal-footer").append('<button type="button" id="toStopRecruit" class="btn btn-light" onClick=\"toStopRecruit('+resp.pdto.seq+');\">모집종료하기</button>');
 					}
-					$("#partyModal .modal-footer").append('<button type="button" id="partyModify" class="btn btn-warning">수정</button><button type="button" id="partyDelete" class="btn btn-danger">삭제</button>');
+					$("#partyModal .modal-footer").append('<button type="button" id="partyModify" class="btn btn-warning" onClick=\"partyModify('+resp.pdto.seq+')\">수정</button><button type="button" id="partyDelete" class="btn btn-danger" onClick=\"partyDelete('+resp.pdto.seq+')\">삭제</button>');
 				}
 			})
 		})
@@ -672,20 +682,20 @@ $(function(){
 					infoOverClose(item.customOverlay);
 				});
 				/* markers 초기화 */
-				cafeMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafeTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafePartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodPartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				kakaoFoodMarkers.forEach(function(item){item.marker.setVisible(false);});
-				kakaoCafeMarkers.forEach(function(item){item.marker.setVisible(false);});
+				
+				cafeMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafeTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafePartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodPartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoFoodMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoCafeMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
 				positions= [];
 				if(markers.length != 0){
 					$.each(markers,function(i, item){
-						item.marker.setVisible(false);
+						item.marker.setMap(null);
 					});
-					//markers.forEach(function(item){item.marker.setVisible(false);});
 				}
 				
 				$(".choose_info").html("");
@@ -843,9 +853,9 @@ $(function(){
 							line.append(cafe);	
 							positions.push({
 				    	        content: '<div class="cafecustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.cafe_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.cafe_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.cafe_list[i].y, resp.cafe_list[i].x),
 				    	        place_id:resp.cafe_list[i].id,
@@ -864,9 +874,9 @@ $(function(){
 							line.append(food);	
 							positions.push({
 				    	        content: '<div class="foodcustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.food_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.food_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.food_list[i].y, resp.food_list[i].x),
 				    	        place_id:resp.food_list[i].id,
@@ -875,11 +885,21 @@ $(function(){
 						}
 					}
 					$(".search_result").append(line);
-					var lat = resp.map_list[0].lat,
-					lng = resp.map_list[0].lng;
+					var lat = map.getCenter().getLat();
+					var lng = map.getCenter().getLng();
+					if(resp.map_list.length != 0){
+						lat = resp.map_list[0].lat;
+						lng = resp.map_list[0].lng;
+					}else if(resp.cafe_list.length != 0){
+						lat = resp.cafe_list[0].y;
+						lng = resp.cafe_list[0].x;
+					}else if(resp.food_list.length != 0){
+						lat = resp.food_list[0].y;
+						lng = resp.food_list[0].x;
+					}
 					map.setCenter(new kakao.maps.LatLng(lat, lng));
 					$.each(positions,function(i, item){
-						var marker = addMarker(item);
+						var marker = pushMarker(item);
 						markers.push({marker:marker});
 					});
 					/* cafe_list, food_list 에 대한 marker 정보만 표시 */
@@ -896,18 +916,18 @@ $(function(){
 					infoOverClose(item.customOverlay);
 				});
 				/* markers 초기화 */
-				cafeMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafeTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafePartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodPartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				kakaoFoodMarkers.forEach(function(item){item.marker.setVisible(false);});
-				kakaoCafeMarkers.forEach(function(item){item.marker.setVisible(false);});
+				cafeMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafeTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafePartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodPartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoFoodMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoCafeMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
 				positions= [];
 				if(markers.length != 0){
 					$.each(markers,function(i, item){
-						item.marker.setVisible(false);
+						item.marker.setMap(null);
 					});
 				}
 				$(".choose_info").html("");
@@ -1025,9 +1045,9 @@ $(function(){
 							line.append(cafe);	
 							positions.push({
 				    	        content: '<div class="cafecustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.cafe_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.cafe_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.cafe_list[i].y, resp.cafe_list[i].x),
 				    	        place_id:resp.cafe_list[i].id,
@@ -1036,11 +1056,21 @@ $(function(){
 						}
 					}
 					$(".search_result").append(line);
-					var lat = resp.map_list[0].lat,
-					lng = resp.map_list[0].lng;
+					var lat = map.getCenter().getLat();
+					var lng = map.getCenter().getLng();
+					if(resp.map_list.length != 0){
+						lat = resp.map_list[0].lat;
+						lng = resp.map_list[0].lng;
+					}else if(resp.cafe_list.length != 0){
+						lat = resp.cafe_list[0].y;
+						lng = resp.cafe_list[0].x;
+					}else if(resp.food_list.length != 0){
+						lat = resp.food_list[0].y;
+						lng = resp.food_list[0].x;
+					}
 					map.setCenter(new kakao.maps.LatLng(lat, lng));
 					$.each(positions,function(i, item){
-						var marker = addMarker(item);
+						var marker = pushMarker(item);
 						markers.push({marker:marker});
 					});
 					/* cafe_list, food_list 에 대한 marker 정보만 표시 */
@@ -1056,20 +1086,19 @@ $(function(){
 					infoOverClose(item.customOverlay);
 				});
 				/* markers 초기화 */
-				cafeMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafeTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodTopMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				cafePartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				foodPartyMarkers.forEach(function(item) {item.marker.setVisible(false);});
-				kakaoFoodMarkers.forEach(function(item){item.marker.setVisible(false);});
-				kakaoCafeMarkers.forEach(function(item){item.marker.setVisible(false);});
+				cafeMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafeTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodTopMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				cafePartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				foodPartyMarkers.forEach(function(item) {item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoFoodMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
+				kakaoCafeMarkers.forEach(function(item){item.marker.setMap(null);clusterer.removeMarker(item.marker);});
 				positions= [];
 				if(markers.length != 0){
 					$.each(markers,function(i, item){
-						item.marker.setVisible(false);
+						item.marker.setMap(null);
 					});
-					//markers.forEach(function(item){item.marker.setVisible(false);});
 				}
 				
 				$(".choose_info").html("");
@@ -1173,9 +1202,9 @@ $(function(){
 							line.append(food);	
 							positions.push({
 				    	        content: '<div class="foodcustomoverlay">' +
-				    	        '  <div>' +
+				    	        '  <a href="'+resp.food_list[i].place_url+'" target="_blank">' +
 				    	        '    <span class="title">'+ resp.food_list[i].place_name +'</span>' +
-				    	        '  </div>' +
+				    	        '  </a>' +
 				    	        '</div>', 
 				    	        latlng: new kakao.maps.LatLng(resp.food_list[i].y, resp.food_list[i].x),
 				    	        place_id:resp.food_list[i].id,
@@ -1188,7 +1217,7 @@ $(function(){
 					lng = resp.map_list[0].lng;
 					map.setCenter(new kakao.maps.LatLng(lat, lng));
 					$.each(positions,function(i, item){
-						var marker = addMarker(item);
+						var marker = pushMarker(item);
 						markers.push({marker:marker});
 					});
 				}
@@ -1235,9 +1264,9 @@ $(function(){
 			    customOverlay = new kakao.maps.CustomOverlay({
 		            position: map.getCenter(),
 		            content: '<div class="cafecustomoverlay">' +
-	    	        '  <div>' +
+		            '  <a href="'+resp.result.cafe.place_url+'" target="_blank">' +
 	    	        '    <span class="title">'+ resp.result.cafe.place_name +'</span>' +
-	    	        '  </div>' +
+	    	        '  </a>' +
 	    	        '</div>'
 		        });
 				customOverlayArray.push({customOverlay : customOverlay});
@@ -1259,9 +1288,9 @@ $(function(){
 			    customOverlay = new kakao.maps.CustomOverlay({
 		            position: map.getCenter(),
 		            content: '<div class="foodcustomoverlay">' +
-	    	        '  <div>' +
+		            '  <a href="'+resp.result.food.place_url+'" target="_blank">' +
 	    	        '    <span class="title">'+ resp.result.food.place_name +'</span>' +
-	    	        '  </div>' +
+	    	        '  </a>' +
 	    	        '</div>'
 		        });
 				customOverlayArray.push({customOverlay : customOverlay});
@@ -1293,7 +1322,8 @@ $(function(){
 				$(".filebox i").css('color','none');
 			}
 			else {// 체크를 통과했다면 종료.
-				this.outerHTML = this.outerHTML;
+				console.log("파일 입력");
+				/*this.outerHTML = this.outerHTML;*/
 				$(".filebox i").css('color','#038cfc');
 				return;
 			}
@@ -1308,6 +1338,57 @@ $(function(){
 		$(".toSignUp").on("click",function(){
 			location.href = "/member/signup_check";
 		})
+		$("#backMap").on("click",function(){
+			location.href = "/map/toMap";
+		})
+		$("#back").on("click",function(){
+			$(".choose_info").html("");
+			$(".search_result").html($("#map_approach_info").html());
+			$(".search_result .pin_how_to").append("<button type='button' id='refresh'><i class='fas fa-undo-alt'></i></button>");
+		})
+		$(document).on("click","#refresh",function(){
+			location.reload(true);
+		})
+		var duration = 300;
+
+		$('.navi_btn').on('click', function(){
+		    if( $(this).html()=='<i class="fas fa-chevron-left"></i>')
+		    {
+		        $(this).html('<i class="fas fa-chevron-right"></i>');
+		        $("#sideBar").animate({right:300},1000);
+		    }
+		    else
+		    {
+		       $(this).html('<i class="fas fa-chevron-left"></i>');
+		        $("#sideBar").animate({right:0},1000);
+		     }
+		    
+		});
+		$(".current_position_btn").on("click",function(){
+			console.log(currentPositionMarker);
+			deleteMarker(currentPositionMarker.marker, currentPositionMarker.customOverlay);
+		    if (navigator.geolocation) {
+		        // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+		        navigator.geolocation.getCurrentPosition(function(position) {
+		            var lat = position.coords.latitude, // 위도
+		                lon = position.coords.longitude; // 경도
+		            var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+		                message = '당신의 위치'; // 인포윈도우에 표시될 내용입니다
+		            // 마커와 인포윈도우를 표시합니다
+		            currentPositionMarker = displayMarker(locPosition, message, currentPositionMarker.customOverlay);
+		          });
+		    } else { // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+		        var locPosition = new kakao.maps.LatLng(33.450701, 126.570667),    
+		            message = 'geolocation을 사용할수 없어요..';
+		        currentPositionMarker = displayMarker(locPosition, message, currentPositionMarker.customOverlay);
+		    }
+		})
+		 $("#keyword").keydown(function(key) {
+             if (key.keyCode == 13) {
+                 //엔터 클릭시
+            	 $("#search").click();
+             }
+         });
 	})
 	.ajaxStart(function(){
 		$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.

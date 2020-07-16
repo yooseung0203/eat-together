@@ -32,7 +32,7 @@ public class MemberService {
 
 	@Autowired
 	private MemberDAO mdao;
-	
+
 	@Autowired
 	private MemberFileDAO mfdao;
 
@@ -54,11 +54,11 @@ public class MemberService {
 		String encPw = this.getSha512(mdto.getPw());
 		mdto.setPw(encPw);
 		System.out.println("암호화된 비밀번호 : " + mdto.getPw());
-		
+
 		Map<String, Object> signUpParam = new HashMap<>();
 		signUpParam.put("mdto", mdto);
 		signUpParam.put("mfdto", mfdto);
-		
+
 		int result = mdao.signUp(signUpParam);
 		mfdao.uploadProc(mfdto);
 
@@ -76,7 +76,11 @@ public class MemberService {
 		MemberDTO mdto = mdao.selectMyInfo(id);
 		return mdto;
 	}
-
+	//닉네임으로 내정보 가져오기
+	public MemberDTO selectMyInfoByNick(String nickname)throws Exception{
+		MemberDTO mdto= mdao.selectMyInfoByNick(nickname);
+		return mdto;
+	}
 	//회원가입시 이메일 중복검사
 	public boolean isEmailAvailable(String account_email)throws Exception{
 		boolean result = mdao.isEmailAvailable(account_email);
@@ -87,7 +91,7 @@ public class MemberService {
 		boolean result = mdao.isIdAvailable(id);
 		return result;
 	}
-	
+
 	//회원가입시 닉네임 중복검사
 	public boolean isNickAvailable(String nickname)throws Exception{
 		boolean result = mdao.isNickAvailable(nickname);
@@ -95,17 +99,17 @@ public class MemberService {
 	}
 
 	//회원탈퇴
-	public int deleteMember(Map<String, String> param) throws Exception{
-		int result = mdao.deleteMember(param);
+	public int deleteMember(String id) throws Exception{
+		int result = mdao.deleteMember(id);
 		return result;
 	}
 	//내정보수정하기
 	public int editMyInfo(MemberDTO mdto, MemberFileDTO mfdto) throws Exception{
-		
+
 		Map<String, Object> editParam = new HashMap<>();
 		editParam.put("mdto", mdto);
 		editParam.put("mfdto", mfdto);
-		
+
 		int result = mdao.editMyInfo(editParam);
 		return result;
 	}
@@ -140,6 +144,8 @@ public class MemberService {
 			StringBuilder sb = new StringBuilder();
 			sb.append("grant_type=authorization_code");
 			sb.append("&client_id=39543f4353dc8ce2c9268fc23c6d67e4");
+			
+			//테스트는 localhost로 수행하지만, 최종발표에서는 redirect_uri=https://eat-together.net/member/kakaoLogin 수정필요_20200713
 			sb.append("&redirect_uri=http://localhost/member/kakaoLogin");
 			sb.append("&code=" + code);
 			bw.write(sb.toString());
@@ -213,20 +219,39 @@ public class MemberService {
 
 			String nickname = properties.getAsJsonObject().get("nickname").getAsString();
 
-			Random randomGenerator = new Random();
-			int randomInteger = randomGenerator.nextInt(1000);
-			
-			if(mdao.selectMyInfo(id)==null) {
-				mdto.setId(id);
-				mdto.setPw("");
-				mdto.setNickname(nickname + randomInteger);
-				mdto.setBirth("1999-12-31");
-				mdto.setAccount_email("need@eat-together.com");
-				mdto.setGender(0);
 
-				
-				int kakaoSignUpResult = mdao.signUpKakao(mdto);
-				System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+			if(mdao.selectMyInfo(id)==null) {
+				//by 지은, 닉네임 사용가능한 경우에는 카카오톡 정보를 그대로 가져온다_20200713
+				if(mdao.isNickAvailable(nickname)) {
+					mdto.setId(id);
+					mdto.setPw("");
+					mdto.setNickname(nickname);
+					mdto.setBirth("1999-12-31");
+					mdto.setAccount_email("need@eat-together.com");
+					mdto.setGender(0);
+					mdto.setMember_type("kakao");
+
+
+					int kakaoSignUpResult = mdao.signUpKakao(mdto);
+					System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+				}else {
+					//by 지은, 닉네임이 중복되는 경우에는 뒤에 증가하는 숫자를 더해주어 중복을 방지한다_20200713
+					int nickNum = 1;
+					int sum = nickNum++;
+
+					mdto.setId(id);
+					mdto.setPw("");
+					mdto.setNickname(nickname + sum);
+					mdto.setBirth("1999-12-31");
+					mdto.setAccount_email("need@eat-together.com");
+					mdto.setGender(0);
+					mdto.setMember_type("kakao");
+
+
+					int kakaoSignUpResult = mdao.signUpKakao(mdto);
+					System.out.println("카카오톡 회원가입 진행 성공1 실패0 : " + kakaoSignUpResult);
+
+				}
 			}else {
 				System.out.println("이미 회원가입된 카카오계정입니다.");
 				System.out.println(mdto.getAccount_email());
@@ -244,6 +269,33 @@ public class MemberService {
 	//카카오톡 로그아웃하기
 	public void kakaoLogout(String access_Token) {
 		String reqURL = "https://kapi.kakao.com/v1/user/logout";
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Authorization", "Bearer " + access_Token);
+
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+			String result = "";
+			String line = "";
+
+			while ((line = br.readLine()) != null) {
+				result += line;
+			}
+			System.out.println(result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	//카카오톡 회원탈퇴하기
+	public void kakaoWithdraw(String access_Token) {
+		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
 		try {
 			URL url = new URL(reqURL);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();

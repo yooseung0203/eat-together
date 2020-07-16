@@ -50,13 +50,13 @@
 <script>
 	$(function() {
 		$("#list_admin").on("click", function() {
-			location.href = "msg_list_admin";
+			location.href = "msg_list_admin?msgAcpage=1";
 		})
 		$("#list_sender").on("click", function() {
-			location.href = "msg_list_sender";
+			location.href = "msg_list_sender?msgcpage=1";
 		})
 		$("#list_receiver").on("click", function() {
-			location.href = "msg_list_receiver";
+			location.href = "msg_list_receiver?msgRcpage=1";
 		})
 		$(".msg_text").hide();
 		$(".msg_title").on("click", function() {
@@ -72,12 +72,12 @@
 	}
 	function msgWritePopUp() {
 		var name = "popup.test";
-		var option = "width=500,height=510 location=no,toolbar=no,menubar=no,top=200,left=600";
+		var option = "width=500,height=545 location=no,toolbar=no,menubar=no,top=200,left=600";
 		window.open("msgWrite", name, option);
 	}
 	function msgViewPopUp(msg_seq) {
 		var name = msg_seq;
-		var option = "width=500,height=390 location=no";
+		var option = "width=500,height=440 location=no";
 		window.open("msgViewSend?msg_seq=" + msg_seq, msg_seq, option);
 	}
 </script>
@@ -148,9 +148,9 @@
 							<td colspan=4 class="msg_title" id="msg_title"><a
 								href="javascript:msgViewPopUp(${i.msg_seq})"><c:out
 										value="${i.msg_title}" /></a></td>
-							<td colspan=2>${i.msg_date}</td>
+							<td colspan=2>${i.date}</td>
 							<td colspan=2>
-								<button type="button"
+								<button type="button" class="btn btn-outline-dark"
 									onclick="location.href='javascript:msgSenderDel(${i.msg_seq})'">삭제</button>
 
 							</td>
