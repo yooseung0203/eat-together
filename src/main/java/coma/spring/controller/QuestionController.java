@@ -22,6 +22,9 @@ public class QuestionController {
 	private QuestionService qservice;
 	
 	@Autowired
+	private MsgService msgservice;
+	
+	@Autowired
 	private HttpSession session;
 	
 	@ExceptionHandler
@@ -76,9 +79,17 @@ public class QuestionController {
 		}
 		
 	}
-	
+	//문의작성
 	@RequestMapping("question_write")
 	public String question_write(){
 		return "question/writeQuestion";
+	}
+	
+	//문의삭제
+	@RequestMapping("QuestionReceiverDel")
+	public String ReceiverDel(int msg_seq)throws Exception{
+		int result = msgservice.receiver_del(msg_seq);
+		
+		return "redirect:question_list?qcpage=1";
 	}
 }

@@ -1,5 +1,6 @@
 package coma.spring.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,7 +93,7 @@ public class ReviewService {
 		if(needPrev) {sb.append("<li class='page-item'><a class='page-link' href='sortReview?cpage="+(startNavi-1)+"' tabindex='-1' aria-disabled='true'><i class=\"fas fa-chevron-left\"></i> </a></li>");}
 		for(int i = startNavi;i <= endNavi;i++) {
 			if(cpage == i) {
-				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='sortReview?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='sortReview?cpage="+i+"'>"+i+"<span class='sr-only'>(current)</span></a></li>");
 			}else {
 				sb.append("<li class='page-item'><a class='page-link' href='sortReview?cpage="+i+"'>"+i+"</a></li>");
 			}
@@ -168,7 +169,15 @@ public class ReviewService {
 		}
 		return review;
 	}
-	
+	// 체크 박스 리뷰 삭제하기
+	public int delete(String[] checkList) {
+		List<String> list = new ArrayList<String>();
+		for(int a=0;a<checkList.length;a++) {
+			list.add(checkList[a]);
+		}
+		return rvdao.delete(list);
+
+	}
 	public String getStorename(int parent_seq) {
 		return rvdao.getStoreName(parent_seq);
 	}

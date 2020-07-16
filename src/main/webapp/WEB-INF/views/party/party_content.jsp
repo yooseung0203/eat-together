@@ -63,7 +63,7 @@
 <script>
 function send_msg(){
 	var option = "width = 500, height = 550, top = 100, left = 200, scrollbars=no"
-	var target=${con.writer};
+	var target='${con.writer}';
 	window.open("/msg/msgResponse?msg_receiver="+target,target,option);
 };
 
@@ -91,8 +91,6 @@ function partyReport(num){
 			         self.location.reload(true);
 			     }
 			     else self.name = ''; 
-			}else if(result == "self"){
-				alert("본인이 작성한 글은 신고할 수 없습니다.");
 			}else{
 				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
 			}
@@ -447,9 +445,7 @@ $(document).ready(function(){
 							<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 								이동</button>
 							 </c:if> 
-							<script>
- 							console.log(${partylife}); 
-							</script>
+							
 							<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 								<button type="button" id="toExitParty" class="btn btn-primary">모임
 									나가기</button>

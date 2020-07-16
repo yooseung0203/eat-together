@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!-- 태훈 스크립트 -->
-<script type="text/javascript" src='/resources/js/party_content_include.js?ver=5'></script>
+<script type="text/javascript" src='/resources/js/party_content_include.js?ver=6'></script>
 <!-- 태훈 스크립트 -->
 <!-- SNS Share js start -->
 <script src='/resources/js/sns_share.js'></script>
@@ -16,6 +16,7 @@
 					<input type="hidden" id="party_seq" value="${con.seq }">
 					<input type="hidden" id="party_time" value="${con.sTime }">
 					<input type="hidden" id="party_writer" value="${con.writer }">
+					<input type="hidden" id="party_title" value="${con.title }">
 					<input type="hidden" id="sns_share_title"
 						value=" /' ${con.parent_name} /' 에 같이 가자!!! - 맛집동행찾기서비스 맛집갔다갈래">
 					<c:choose>
@@ -143,7 +144,7 @@
 				</div>
 				<div class="row mb-1">
 					<div class="col-sm-3 mb-3 party-titlelabel">소개</div>
-					<div class="col-sm-9 party-contenttext-area">
+					<div class="col-sm-9 party-contenttext-area party_content">
 						<c:out value='${con.content}' />
 					</div>
 				</div>

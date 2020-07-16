@@ -12,6 +12,7 @@ import coma.spring.dao.AdminDAO;
 import coma.spring.dao.PartyDAO;
 import coma.spring.dao.ReportDAO;
 import coma.spring.dto.MemberDTO;
+import coma.spring.dto.MsgDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.statics.Configuration;
@@ -367,4 +368,40 @@ public class AdminService {
 
 		return sb.toString();
 	}
+	//받은쪽지함
+	public List<MsgDTO> selectBySender(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = adao.selectBySender(cpage,msg_receiver);
+		return dto;
+	}
+	//보낸쪽지함
+	public List<MsgDTO> selectByReceiver(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = adao.selectByReceiver(cpage,msg_receiver);
+		return dto;
+	}
+	//삭제된메일함
+	public List<MsgDTO> selectByDelete(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = adao.selectByDelete(cpage,msg_receiver);
+		return dto;
+	}
+	//관리자 받은쪽지함 네비
+	public String Sendnavi (int cpage,String msg_receiver) throws Exception{
+		String navi = adao.getSenderPageNav(cpage,msg_receiver);
+		return navi;
+	}
+	//관리자 보낸쪽지함 네비
+	public String Receivenavi (int cpage,String msg_receiver) throws Exception{
+		String navi = adao.getReceiverPageNav(cpage,msg_receiver);
+		return navi;
+	}
+	//관리자 받은쪽지함 네비
+	public String Deletenavi (int cpage,String msg_receiver) throws Exception{
+		String navi = adao.getGarbagePageNav(cpage,msg_receiver);
+		return navi;
+	}
+	//쪽지복구하기
+	public int saveMsg(int msg_seq)throws Exception{
+		int result = adao.saveMsg(msg_seq);
+		return result;
+	}
+
 }

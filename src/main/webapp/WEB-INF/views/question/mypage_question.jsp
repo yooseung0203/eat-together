@@ -50,6 +50,10 @@ function questionViewPopUp(msg_seq){
 	var option ="width=500,height=550 location=no"
 	window.open("questionView?msg_seq="+msg_seq,name,option);
 }
+function msgReceiverDel(msg_seq) {
+	location.href = "QuestionReceiverDel?msg_seq=" + msg_seq;
+	alert("삭제성공");
+}
 </script>
 <meta charset="UTF-8">
 <title>내 정보</title>
@@ -95,7 +99,8 @@ function questionViewPopUp(msg_seq){
 								 		<button type="button" class="btn btn-warning" id="answerQuestion" onclick="location.href='javascript:questionViewPopUp(${i.msg_view})'">답변완료</button>
 								 	</c:otherwise>
 								</c:choose></td>
-							<td><button>삭제</button></td>
+							<td><button type="button" class="btn btn-outline-dark"
+									onclick="location.href='javascript:msgReceiverDel(${i.msg_seq})'">삭제</button></td>
 						</tr>
 					</c:forEach>
 					<tr>

@@ -72,4 +72,8 @@ public class ReviewDAO {
 	public String getStoreName(int parent_seq) {
 		return mybatis.selectOne("Review.getStoreName", parent_seq);
 	}
+	// 체크박스 리뷰 삭제하기
+	public int delete(List<String> list) {
+		return mybatis.delete("Review.delete", list);
+	}
 }
