@@ -1,10 +1,11 @@
 package coma.spring.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import coma.spring.dao.ReportDAO;
-import coma.spring.dto.MemberReportDTO;
 import coma.spring.dto.ReportDTO;
 
 @Service
@@ -30,4 +31,14 @@ public class ReportService {
 		return repodao.repoCountDown(category , parent_seq);
 	}
 	
+	//신고 리스트
+	public List<ReportDTO> selectByCategory(int cpage,int category)throws Exception{
+		List<ReportDTO> rdto = repodao.selectByCategory(cpage,category);
+		return rdto;
+	}
+	//리스트 네비
+	public String CategoryNavi(int cpage,int category)throws Exception{
+		String navi = repodao.getSelectCategoryPageNav(cpage, category);
+		return navi;
+	}
 }
