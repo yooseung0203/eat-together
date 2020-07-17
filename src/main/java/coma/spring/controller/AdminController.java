@@ -304,7 +304,7 @@ public class AdminController {
 		}
 	}
 
-
+	
 	//관리자 페이지 1:1문의 리스트
 	@RequestMapping("AdminQuestion_list")
 	public String AdminQuestion_list(HttpServletRequest request)throws Exception{
