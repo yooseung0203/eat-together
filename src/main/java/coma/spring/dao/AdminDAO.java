@@ -271,5 +271,8 @@ public class AdminDAO {
 			public List<ReportDTO> reportList(Map<String, Integer> param){
 				return mybatis.selectList("Admin.reportList", param);
 			}
+			public ReportDTO getReportContent(int seq) {
+				return mybatis.selectOne("Admin.getReportContent",seq);
+			}
 
 }
