@@ -69,7 +69,7 @@ public class MemberDAO {
 		else return true;
 	}
 
-	//회원탈퇴
+	//회원탈퇴 파라미터 수정_20200717
 	public int deleteMember(String id, String nickname) throws Exception{
 		
 		int res1 = mybatis.delete("Member.deleteMember1", nickname);

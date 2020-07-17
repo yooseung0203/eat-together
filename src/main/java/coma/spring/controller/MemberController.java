@@ -272,7 +272,7 @@ public class MemberController {
 		}
 	}
 
-	//회원탈퇴하기
+	//회원탈퇴하기 파라미터 수정_20200717
 	@RequestMapping("withdrawProc")
 	public String withdrawProc() throws Exception{
 		//By지은, 카카오톡 로그인의 경우 회원탈퇴 시 어세스토큰 만료 필요하다_20200712
