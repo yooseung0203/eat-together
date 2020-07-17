@@ -45,7 +45,7 @@
 					<div class="party-content text-center">
 						<h3 class="tt">${partyList.title }</h3>
 						<br>
-						<h5 class="card-subtitle mb-2 text-muted">${partyList.parent_name }</h5>
+						<h5 class="card-subtitle mb-2 text-muted tt">${partyList.parent_name }</h5>
 						<p class="tt">
 							날짜 : ${partyList.sDate}<br> 지역 : ${partyList.parent_address }
 						</p>

@@ -33,4 +33,8 @@ public class MemberReportDAO {
 	public int confirmReport(int seq) {
 		return mybatis.update("MemberReport.confirmReport",seq);
 	}
+	
+	public MemberReportDTO selectyById(String id) {
+		return mybatis.selectOne("MemberReport.selecById",id);
+	}
 }

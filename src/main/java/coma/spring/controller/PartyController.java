@@ -43,7 +43,6 @@ import coma.spring.dto.MapDTO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.PartyCountDTO;
 import coma.spring.dto.PartyDTO;
-import coma.spring.dto.PartySearchListDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.service.ChatService;
 import coma.spring.service.MapService;
@@ -310,17 +309,16 @@ public class PartyController {
 	// 태훈 모임 리스트 출력
 	@RequestMapping("getPartyList")
 	public String getPartyList(HttpServletRequest request) throws Exception {
-		//int cpage=1;
-		
-//		try {
-//			 cpage = Integer.parseInt(request.getParameter("cpage"));
-//		}catch(Exception e) {
-//
-//		}
-		int cpage = Integer.parseInt(request.getParameter("cpage"));
 
-		List<PartyDTO> partyList = pservice.selectList(cpage);
+		int cpage=1;
 		
+		try {
+			 cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
+
+		}
+		
+		List<PartyDTO> partyList = pservice.selectList(cpage);
 		
 		request.setAttribute("list", partyList);
 		
@@ -330,8 +328,8 @@ public class PartyController {
 	// 태훈 모임 통합 검색
 	@RequestMapping(value="partysearch",  method = RequestMethod.POST)
 	public String partySearch(HttpServletRequest request) throws Exception {
+	
         JsonArray Jarr = JsonParser.parseString(request.getParameter("formData")).getAsJsonArray();
-       
         Map<String, Object> map = new HashMap<>();
         List<String> ageList = new ArrayList<>();
         for(int i=0; i<Jarr.size();i++) {
@@ -350,7 +348,13 @@ public class PartyController {
         System.out.println(map.get("text"));
         System.out.println(map);
 
-		int cpage = Integer.parseInt(request.getParameter("cpage"));
+        int cpage=1;
+		
+		try {
+			 cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
+
+		}
 		
 		List<PartyDTO> partyList = pservice.partySearch(map , cpage);
 
@@ -364,8 +368,10 @@ public class PartyController {
 	public String party_content_include(HttpServletRequest request) throws Exception {
 		String seq = request.getParameter("seq");
 		PartyDTO content = pservice.selectBySeq(Integer.parseInt(seq));		
-		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
+		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");		
 		String nickname = account.getNickname();
+		
+		
 		boolean partyFullCheck = pservice.isPartyfull(seq);
 		boolean partyParticipantCheck= pservice.isPartyParticipant(seq, nickname);
 	
@@ -555,11 +561,13 @@ public class PartyController {
 		System.out.println("이미지 주소 " + imgaddr);
 		return imgaddr;
 	}
-
+	// 태훈 모임 신고
 	@RequestMapping("party_report")
 	public String partyReport(HttpServletRequest request,RedirectAttributes redirectAttributes)  throws Exception {
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String id = mdto.getNickname();
+
+		
 		String report_id = request.getParameter("report_id");
 		int seq = Integer.parseInt(request.getParameter("seq"));
 		if(id.equals(report_id)) {
