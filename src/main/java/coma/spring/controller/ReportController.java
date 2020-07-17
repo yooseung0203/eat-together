@@ -66,4 +66,36 @@ public class ReportController {
 		return result;
 	}
 	
+	@RequestMapping("insertReport")
+	public String insertReport(HttpServletRequest request, RedirectAttributes redirectAttributes, ReportDTO rdto) throws Exception {
+		System.out.println("도착");
+		int result = 0;
+		Map<String, ?> map = RequestContextUtils.getInputFlashMap(request);
+		rdto = (ReportDTO)map.get("rdto");
+		System.out.println(rdto.getId());
+		System.out.println(rdto.getCategory());
+		System.out.println(rdto.getReport_id());
+		System.out.println(rdto.getParent_seq());
+		int check = reposervice.checkDupl(rdto);
+		System.out.println(check);
+		if(rdto.getCategory() == 0) { // 리뷰 신고
+			if(check == 0) {
+				result = rservice.report(rdto);
+				System.out.println("리뷰 신고 : " + result);
+			}
+		}else if(rdto.getCategory() == 1) { // 모임글 신고
+			if(check == 0) {
+				result = pservice.partyReport(rdto);
+				System.out.println("모임글 신고: "+result);
+			}
+		}else { // 회원 신고
+			result = mrservice.memberReport(rdto);
+			System.out.println("회원 신고: "+result);
+		}
+		
+		request.setAttribute("result", result);
+		return "msg/msgWriteResult";
+	}
+	
+	
 }

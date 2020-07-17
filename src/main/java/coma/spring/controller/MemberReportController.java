@@ -16,6 +16,7 @@ import coma.spring.dto.MemberReportDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.service.MemberReportService;
 import coma.spring.service.MemberService;
+import coma.spring.service.ReviewService;
 
 @Controller
 @RequestMapping("/memreport/")
@@ -29,6 +30,11 @@ public class MemberReportController {
 	
 	@Autowired
 	private MemberService mservice;
+	
+
+	@Autowired
+	private ReviewService rservice;
+	
 	
 	@RequestMapping("toReport")
 	public String toReport(HttpServletRequest request) throws Exception {
@@ -71,5 +77,20 @@ public class MemberReportController {
 		}
 		return "/memreport/memreport_new";
 		//return "/msg/msgWriteResult";
+	}
+	
+	@RequestMapping("insertReport")
+	public String insertReport(MemberReportDTO mdto , HttpServletRequest request ,RedirectAttributes redirectAttributes) throws Exception {
+		int result = mrservice.memReport(mdto);
+		
+		System.out.println("결과 :" +result);
+		if(result >0) {
+			System.out.println("result : "+result);
+			Timestamp stamp = new Timestamp(System.currentTimeMillis());
+			redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,2,mdto.getId(),mdto.getReport_id(),mdto.getTitle(),mdto.getContent(),stamp,result,0));
+			return "/msg/msgWriteResult";
+		}
+		return "error";
+		
 	}
 }
