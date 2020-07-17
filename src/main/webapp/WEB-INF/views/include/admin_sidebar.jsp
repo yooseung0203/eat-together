@@ -37,7 +37,7 @@
 	</div>
 	<div class="row menubtn">
 		<div class="col">
-			<a href="/admin/AdminQuestion_list?Aqcpage=1">1:1문의</a>
+			<a href="/admin/AdminQuestion_list?Aqcpage=1&optionQ=all">1:1문의</a>
 		</div>
 	</div>
 	<div class="row menubtn">

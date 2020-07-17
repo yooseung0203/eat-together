@@ -313,16 +313,11 @@ public class AdminController {
 		if(request.getParameter("optionQ")!=null) {
 			option = request.getParameter("optionQ");
 			session.setAttribute("optionQ", option);
-			System.out.println(option+":1");
 		}else {
 			option = session.getAttribute("optionQ");
 			session.setAttribute("optionQ", "all");
-			System.out.println(option+":2");
 		}
-		System.out.println(option+":3");
-
-		if(option.equals("all")||option==null) {
-			System.out.println("all 과 연결되었다.");
+		if(option.equals("all")||option.equals(null)) {
 			if(session.getAttribute("Aqcpage")==null) {
 				session.setAttribute("Aqcpage", 1);
 			}
@@ -345,7 +340,6 @@ public class AdminController {
 				return "error";
 			}
 		}else if(option.equals("noAnswer")){
-			System.out.println("noAnswer 접속");
 			if(session.getAttribute("ANcpage")==null) {
 				session.setAttribute("ANcpage", 1);
 			}
@@ -367,7 +361,6 @@ public class AdminController {
 				return "error";
 			}
 		}else if(option.equals("yesAnswer")){
-			System.out.println("yesAnswer접속");
 			if(session.getAttribute("AYcpage")==null) {
 				session.setAttribute("AYcpage", 1);
 			}
@@ -412,6 +405,7 @@ public class AdminController {
 			int answerSeq= qservice.getNextVal();
 			qdto.setMsg_title("[1:1답변]"+qdto.getMsg_title());
 			qdto.setMsg_seq(answerSeq);
+			System.out.println("답변 내용 : "+qdto.getMsg_text());
 			int result = qservice.QuestionAnswer(qdto);
 			if(result==1) {
 				System.out.println(qdto.getMsg_view()+"번의 게시글에 대한 답변");

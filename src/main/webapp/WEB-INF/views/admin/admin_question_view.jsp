@@ -150,7 +150,7 @@
 													</tr>
 													<tr>
 														<td scope="col" colspan=12><div
-																style="width: 100%; padding: 10px; word-break: keep-all; height: 130px; resize: none;"><c:out value="${qdto.msg_text}"></c:out></div></td>
+																style="width: 100%; padding: 10px; word-break: keep-all; height: 130px; resize: none;"><c:out value="${qadto.msg_text}"></c:out></div></td>
 													</tr>
 
 												</c:otherwise>
