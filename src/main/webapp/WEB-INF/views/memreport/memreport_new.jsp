@@ -50,14 +50,15 @@ $(function() {
 					}else{
 						alert("존재하지 않는 회원입니다.\n다시 한번 확인해주세요.");
 						$("#report_id").val("");
-						//$("#idcheck").val("확인");
 					}
 				}
 			})
 		}
 	});
 });
-
+$(function(){
+	$("#report").on()
+});
 </script>
 <style>
 	div {
@@ -89,7 +90,7 @@ $(function() {
 	</div>
 	<div>파일 첨부</div>
 	<div>
-		<input type="submit" value="신고하기">
+		<input type="submit" id="report" value="신고하기">
 		<button type="button">돌아가기</button>
 	</div>
 </form>

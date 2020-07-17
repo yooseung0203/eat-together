@@ -34,9 +34,6 @@ public class MemberReportController {
 	public String toReport(HttpServletRequest request) throws Exception {
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		request.setAttribute("nick", loginInfo.getNickname());
-		
-	
-		
 		return "/memreport/memreport_new";
 	}
 	
@@ -48,9 +45,6 @@ public class MemberReportController {
 		}
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		String reporter = loginInfo.getNickname();
-		
-	
-		
 		boolean result = true;
 		result = mservice.isNickAvailable(nickname);
 		if (!(result)) {
@@ -67,18 +61,15 @@ public class MemberReportController {
 	
 	@RequestMapping("memReport")
 	public String memReport(MemberReportDTO mdto , HttpServletRequest request ,RedirectAttributes redirectAttributes) throws Exception {
-		
-		//테스트
-	//	mdto = mrservice.selectyById("차간단");
-		
 		int result = mrservice.memReport(mdto);
 		System.out.println("결과 :" +result);
 		if(result >0) {
 			System.out.println("result : "+result);
 			Timestamp stamp = new Timestamp(System.currentTimeMillis());
-			redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,2,mdto.getId(),mdto.getReport_id(),mdto.getTitle(),mdto.getContent(),stamp,result));
+			redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,2,mdto.getId(),mdto.getReport_id(),mdto.getTitle(),mdto.getContent(),stamp,result,0));
 			return "redirect:/report/newReport/";
 		}
 		return "/memreport/memreport_new";
+		//return "/msg/msgWriteResult";
 	}
 }

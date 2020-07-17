@@ -30,10 +30,12 @@ public class MemberReportService {
 		return mrdao.selectyById(id);
 	}
 	
-	// 태훈 모임 게시글 신고
+	// 태훈 회원 신고
 	@Transactional("txManager")
 	public int memberReport(ReportDTO rdto) throws Exception{
-		rdao.newReport(rdto); // 신고 테이블 insert 문 
-		return mrdao.confirmReport(rdto.getParent_seq()); // 테이블 신고 컬럼 update 문
+		
+		return rdao.newReport(rdto); // 신고 테이블 insert 문 
 	}
+	
+	// mrdao.confirmReport(rdto.getParent_seq()); // 테이블 신고 컬럼 update 문
 }

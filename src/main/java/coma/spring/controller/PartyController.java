@@ -575,7 +575,7 @@ public class PartyController {
 			return "redirect:/party/party_content?seq="+seq;
 		}
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,report_id,request.getParameter("title"),request.getParameter("content"),stamp,seq));
+		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,1,id,report_id,request.getParameter("title"),request.getParameter("content"),stamp,seq,0));
 		
 		return "redirect:/report/newReport/";
 	}

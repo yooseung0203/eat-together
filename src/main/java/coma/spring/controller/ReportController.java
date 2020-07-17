@@ -66,7 +66,4 @@ public class ReportController {
 		return result;
 	}
 	
-//	public int reportAccept(HttpServletRequest request,int seq) {
-//		
-//	}
 }

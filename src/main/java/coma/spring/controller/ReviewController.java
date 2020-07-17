@@ -92,7 +92,7 @@ public class ReviewController {
 		MemberDTO mdto2 = mservice.selectMyInfo(request.getParameter("report_id"));
 		ReviewDTO dto = rservice.selectBySeq(seq);
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,0,id,mdto2.getNickname(),dto.getName() ,request.getParameter("content") ,stamp,seq));
+		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,0,id,mdto2.getNickname(),dto.getName() ,request.getParameter("content") ,stamp,seq,0));
 		return "redirect:/report/newReport";
 	}
 	@ResponseBody
