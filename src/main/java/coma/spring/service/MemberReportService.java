@@ -26,6 +26,10 @@ public class MemberReportService {
 		return mrdao.duplCheck(nickname , reporter);
 	}
 	
+	public MemberReportDTO selectyById(String id) {
+		return mrdao.selectyById(id);
+	}
+	
 	// 태훈 모임 게시글 신고
 	@Transactional("txManager")
 	public int memberReport(ReportDTO rdto) throws Exception{

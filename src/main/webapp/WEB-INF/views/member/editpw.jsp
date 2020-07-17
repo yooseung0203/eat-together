@@ -54,37 +54,37 @@
 	<script>
 		window.onload = function() {
 			
-			//by지은, 비밀번호 수정하기 ajax로 처리한다. 왜냐하면 id 값을 받아와야 하기 때문에_20200709
-			$("#editPwBtn").on("click", function() {
-				if ($("#pw").val() == "") {
-					alert("비밀번호를 입력해주세요.");
-					return false;
-				} else if ($("#pw_text").html() != "비밀번호가 일치합니다.") {
-					alert("비밀번호 확인을 해주세요.");
-					return false;
-				} else {
-					$.ajax({
-						url : "/member/editPwProc",
-						type : "post",
-						dataType : "text",
-						data : {
-							id : $("#id").val(),
-							pw : $("#pw").val()
-						}
-					}).done(function(resp) {
-						if (resp != "0") {
-							alert("비밀번호가 수정되었습니다.\n다시 로그인해주세요.");
-							window.close();
-						} else if (resp == "0") {
-							alert("수정하려는 비밀번호가 기존과 일치합니다.");
-							$("#pw").val("");
-							$("#pw").focus();
-						}
+			 //by지은, 비밀번호 수정하기 ajax로 처리한다. 왜냐하면 id 값을 받아와야 하기 때문에_20200709
+	         $("#editPwBtn").on("click", function() {
+	            if ($("#pw").val() == "") {
+	               alert("비밀번호를 입력해주세요.");
+	               return false;
+	            } else if ($("#pw_text").html() != "비밀번호가 일치합니다.") {
+	               alert("비밀번호 확인을 해주세요.");
+	               return false;
+	            } else {
+	               $.ajax({
+	                  url : "/member/editPwProc",
+	                  type : "post",
+	                  dataType : "text",
+	                  data : {
+	                     id : $("#id").val(),
+	                     pw : $("#pw").val()
+	                  }
+	               }).done(function(resp) {
+	                  if (resp == "") {
+	                     alert("수정하려는 비밀번호가 기존과 일치합니다.");
+	                     window.close();
 
-					})
-				}
+	                  } else{
+	                     alert("비밀번호가 수정되었습니다.\n다시 로그인해주세요.");
+	                     window.close();
+	                  }
 
-			})
+	               })
+	            }
+
+	         })
 
 			//pw regex
 			$("#pw")

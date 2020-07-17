@@ -13,4 +13,8 @@
 	<select id="duplCheck" resultType="int">
 		select count(*) from member_report where id = #{id} and report_id = #{report_id}
 	</select>
+	
+	<select id="selectById" resultType="coma.spring.dto.MemberReportDTO">
+		select * from member_report where id = #{id}
+	</select>
 </mapper>

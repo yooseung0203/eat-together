@@ -320,7 +320,7 @@ public class MemberController {
 
 		if(oriprotectedpw.contentEquals(newprotectedpw)) {
 			System.out.println("수정하려는 비밀번호가 기존과 일치하여 에러 발생");
-			return "0";
+			return "";
 		}else {
 			Map<String, String> param = new HashMap<>();
 			param.put("targetColumn1", "pw");

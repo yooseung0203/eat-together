@@ -2,8 +2,6 @@
 @font-face { font-family: 'NEXON Lv1 Gothic OTF Light'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF Light.woff') format('woff'); font-weight: normal; font-style: normal;}
 
 
-/***************  수지씨 CSS 파일 **************/
-
 .section {
 	background-color: #fcfcfc;
 }
@@ -57,7 +55,7 @@ form {
 	 
 	 
 }
- /***************  수지씨 내부 CSS  **************/
+
  
  .mb-1 {
 	padding: 3px;
@@ -82,6 +80,7 @@ form {
 	padding-top: 56.57%;
 	/* 16:9 ratio */
 	overflow: hidden;
+	background-color:#f7f7f7;
 }
 
 .featImgWrap .cropping {

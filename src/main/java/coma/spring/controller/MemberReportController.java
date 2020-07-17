@@ -32,8 +32,13 @@ public class MemberReportController {
 	
 	@RequestMapping("toReport")
 	public String toReport(HttpServletRequest request) throws Exception {
-		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
-		request.setAttribute("nick", loginInfo.getNickname());
+//		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
+//		request.setAttribute("nick", loginInfo.getNickname());
+		
+		// 테스트 코드
+		MemberDTO test = mservice.selectMyInfo("taehoon");
+		request.setAttribute("nick", test.getNickname());
+		
 		return "/memreport/memreport_new";
 	}
 	
@@ -43,8 +48,13 @@ public class MemberReportController {
 		if(nickname.equals("administrator")) {
 			return 3;
 		}
-		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
-		String reporter = loginInfo.getNickname();
+//		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
+//		String reporter = loginInfo.getNickname();
+		
+		// 테스트 코드
+		MemberDTO test = mservice.selectMyInfo("taehoon");
+		String reporter = test.getNickname();
+		
 		boolean result = true;
 		result = mservice.isNickAvailable(nickname);
 		if (!(result)) {
@@ -61,12 +71,10 @@ public class MemberReportController {
 	
 	@RequestMapping("memReport")
 	public String memReport(MemberReportDTO mdto , HttpServletRequest request ,RedirectAttributes redirectAttributes) throws Exception {
-		System.out.println("도착");
-		System.out.println(mdto.getSeq());
-		System.out.println(mdto.getId());
-		System.out.println(mdto.getReport_id());
-		System.out.println(mdto.getTitle());
-		System.out.println(mdto.getContent());
+		
+		//테스트
+		mdto = mrservice.selectyById("차간단");
+		
 		int result = mrservice.memReport(mdto);
 		System.out.println("결과 :" +result);
 		if(result >0) {
