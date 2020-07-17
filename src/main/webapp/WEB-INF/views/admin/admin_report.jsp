@@ -60,7 +60,7 @@ function toDelete(seq){
 								<table class="table border-bottom border-dark">
 									<thead class="thead-dark">
 										<tr>
-											<th scope="col" class="text-center">글번호</th>
+											<th scope="col" class="text-center">번호</th>
 											<th scope="col">신고 분류</th>
 											<th scope="col">신고자 닉네임</th>
 											<th scope="col">신고 닉네임</th>

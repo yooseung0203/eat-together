@@ -50,7 +50,6 @@ $(function() {
 					}else{
 						alert("존재하지 않는 회원입니다.\n다시 한번 확인해주세요.");
 						$("#report_id").val("");
-						//$("#idcheck").val("확인");
 					}
 				}
 			})
