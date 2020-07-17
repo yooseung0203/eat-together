@@ -10,7 +10,6 @@
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://kit.fontawesome.com/9f89dcc349.js"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
@@ -35,7 +34,7 @@
 	href="/resources/css/index-css.css">
 <!-- header,footer용 css  -->
 <!-- ******************* -->
-<link rel="stylesheet" type="text/css" href="/resources/css/faq-css.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/faq-css.css?a">
 
 <script>
 	$(function() {
@@ -66,7 +65,7 @@
 		<div class="container">
 
 			<h2>FAQ - 자주하는 질문</h2>
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-12 mt-3 mb-3">
 					<div class="row">
 						<div class="col-12 col-sm-12">
@@ -76,7 +75,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="panel-group" id="accordion" role="tablist"
 				aria-multiselectable="true">
 				<c:forEach var="i" items="${list}" varStatus="status">

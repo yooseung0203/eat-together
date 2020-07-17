@@ -48,7 +48,7 @@
 
 	<select id="isIdAvailable" resultType="int">
 		select count(*) from
-		member where id=#{value}
+		member where id=#{value} or id='unknown'
 	</select>
 
 	<!-- 닉네임 중복체크_20200710 -->
