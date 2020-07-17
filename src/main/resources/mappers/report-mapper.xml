@@ -11,6 +11,18 @@
 	<select id="getListCount"  resultType="int">
 		select count(*) from report
 	</select>
-
+	
+	<!-- 주제분류 네비카운트 -->
+	<select id="getCount" resultType="int">
+		select count(*) from report where category=#{category}
+	</select>
+	<!-- 주제분류 select문 -->
+	<select id="ListByCategory" resultType="coma.spring.dto.ReportDTO">
+		select * from(select
+		report.*,row_number() over(order by report_date desc)
+		rnum from report where
+		category=#{category}) where rnum between
+		#{start} and #{end}
+	</select>
 </mapper> 
    
