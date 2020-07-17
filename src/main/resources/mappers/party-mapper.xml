@@ -130,4 +130,12 @@
 	<update id="restartRecruit">
 		update party set status = 1 where seq = #{value}
 	</update>
+	<!-- 예지 - 모임글 관리 체크박스 삭제 -->
+	<delete id="deleteCheckList" parameterType="map">
+		delete from party where seq in
+		<foreach collection="list" item="item" index="index"
+			separator="," open="(" close=")">
+			#{item,jdbcType=VARCHAR}
+		</foreach>
+	</delete>
 </mapper>

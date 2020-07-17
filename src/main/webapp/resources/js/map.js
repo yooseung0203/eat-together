@@ -70,6 +70,7 @@ $(function(){
 		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 		var map = new kakao.maps.Map(mapContainer, mapOption); 
 		map.setMaxLevel(13);
+		map.panBy(100, 50);
 		// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
 		var currentPositionMarker = null;
 		var currentPositionOverlay = null;
