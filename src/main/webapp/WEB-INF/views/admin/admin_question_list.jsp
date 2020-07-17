@@ -44,13 +44,33 @@
 
 			<div class="col-2 mx-0 px-0"><jsp:include
 					page="/WEB-INF/views/include/admin_sidebar.jsp" /></div>
-			<div class="col-10 px-5">
+
+			<div class="col-10 px-5" >
+
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
 						<h2 class="admin-h2">1:1문의</h2>
 					</div>
 				</div>
-
+				<div class="row">
+				<div class="col-12 col-sm-12 mt-3">
+						<form action="/admin/AdminQuestion_list" method="post">
+							<div class="row form-group position-relative">
+								<div class="col-10 p-0">
+									<label for="selectByOption">조건정렬</label> <select
+										class="form-control" id="selectByOption" name=optionQ>
+										<option value="all">전체</option>
+										<option value="noAnswer">답변대기</option>
+										<option value="yesAnswer">답변완료</option>
+									</select>
+								</div>
+								<div class="col-2 p-0 b-0 position-absolute" style="bottom:0px;right:-5px;">
+									<button type="submit" class="btn btn-dark align-middle">검색</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-12  col-sm-12">
 						<div class="row">

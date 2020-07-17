@@ -56,10 +56,16 @@ public class AdminController {
 
 	@Autowired
 	private ReviewService rservice;
-	
+
 	@Autowired
 	private ReportService reposervice;
 
+	@ExceptionHandler
+	public String exceptionHandler(NullPointerException npe) {
+		npe.printStackTrace();
+		System.out.println("NullPointerException Handler : 에러가 발생하였습니다.");
+		return "member/loginview";
+	}
 
 	@RequestMapping("toAdmin")
 	public String toAdmin() {
@@ -298,30 +304,87 @@ public class AdminController {
 		}
 	}
 
-
+	
 	//관리자 페이지 1:1문의 리스트
 	@RequestMapping("AdminQuestion_list")
 	public String AdminQuestion_list(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		if(session.getAttribute("Aqcpage")==null) {
-			session.setAttribute("Aqcpage", 1);
+		Object option;
+		if(request.getParameter("optionQ")!=null) {
+			option = request.getParameter("optionQ");
+			session.setAttribute("optionQ", option);
+		}else {
+			option = session.getAttribute("optionQ");
+			session.setAttribute("optionQ", "all");
 		}
-		try {
-			session.setAttribute("Aqcpage", Integer.parseInt(request.getParameter("Aqcpage")));
-		}catch(Exception e) {}
-		String Id=mdto.getId();
-		if(Id.contentEquals("administrator")) {
-			int Aqcpage = (int)session.getAttribute("Aqcpage");
-			List<QuestionDTO> qdto = qservice.selectByAdminQ(Aqcpage);
-			String navi = qservice.AdminQuestionNavi(Aqcpage);
+		if(option.equals("all")||option.equals(null)) {
+			if(session.getAttribute("Aqcpage")==null) {
+				session.setAttribute("Aqcpage", 1);
+			}
+			try {
+				session.setAttribute("Aqcpage", Integer.parseInt(request.getParameter("Aqcpage")));
+			}catch(Exception e) {}
 
-			request.setAttribute("navi", navi);
-			request.setAttribute("list", qdto);
+			String Id=mdto.getId();
 
-			return "/admin/admin_question_list";
+			if(Id.contentEquals("administrator")) {
+				int Aqcpage = (int)session.getAttribute("Aqcpage");
+				List<QuestionDTO> qdto = qservice.selectByAdminQ(Aqcpage);
+				String navi = qservice.AdminQuestionNavi(Aqcpage);
+
+				request.setAttribute("navi", navi);
+				request.setAttribute("list", qdto);
+				session.setAttribute("optionQ", "all");
+				return "/admin/admin_question_list";
+			}else {
+				return "error";
+			}
+		}else if(option.equals("noAnswer")){
+			if(session.getAttribute("ANcpage")==null) {
+				session.setAttribute("ANcpage", 1);
+			}
+			try {
+				session.setAttribute("ANcpage", Integer.parseInt(request.getParameter("ANcpage")));
+			}catch(Exception e) {}
+			String Id=mdto.getId();
+
+			if(Id.contentEquals("administrator")) {
+				int ANcpage = (int)session.getAttribute("ANcpage");
+				List<QuestionDTO> qdto = qservice.selectByNoAnswer(ANcpage);
+				String navi = qservice.AdminNoAnswerNavi(ANcpage);
+
+				request.setAttribute("navi", navi);
+				request.setAttribute("list", qdto);
+				session.setAttribute("optionQ", "noAnswer");
+				return "/admin/admin_question_list";
+			}else {
+				return "error";
+			}
+		}else if(option.equals("yesAnswer")){
+			if(session.getAttribute("AYcpage")==null) {
+				session.setAttribute("AYcpage", 1);
+			}
+			try {
+				session.setAttribute("AYcpage", Integer.parseInt(request.getParameter("AYcpage")));
+			}catch(Exception e) {}
+			String Id=mdto.getId();
+
+			if(Id.contentEquals("administrator")) {
+				int AYcpage = (int)session.getAttribute("AYcpage");
+				List<QuestionDTO> qdto = qservice.selectByYesAnswer(AYcpage);
+				String navi = qservice.AdminYesAnswerNavi(AYcpage);
+
+				request.setAttribute("navi", navi);
+				request.setAttribute("list", qdto);
+				session.setAttribute("optionQ", "yesAnswer");
+				return "/admin/admin_question_list";
+			}else {
+				return "error";
+			}
 		}else {
 			return "error";
 		}
+
 
 	}
 	//1:1문의 답변페이지
@@ -342,6 +405,7 @@ public class AdminController {
 			int answerSeq= qservice.getNextVal();
 			qdto.setMsg_title("[1:1답변]"+qdto.getMsg_title());
 			qdto.setMsg_seq(answerSeq);
+			System.out.println("답변 내용 : "+qdto.getMsg_text());
 			int result = qservice.QuestionAnswer(qdto);
 			if(result==1) {
 				System.out.println(qdto.getMsg_view()+"번의 게시글에 대한 답변");
@@ -464,7 +528,7 @@ public class AdminController {
 		int result = msgservice.sender_del(msg_seq);
 		return "redirect:admin_msgReceive";
 	}
-	
+
 	//1:1문의  삭제
 	@RequestMapping("AdminQuestionDel")
 	public String AdminQuestionDel(int msg_seq)throws Exception{
