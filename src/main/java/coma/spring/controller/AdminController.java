@@ -562,6 +562,13 @@ public class AdminController {
 			return "/error/adminpermission";
 		}
 	}
-
+	
+	@ResponseBody
+	@RequestMapping("admin_reportContent")
+	public String getReportContent(int seq)  throws Exception {
+		ReportDTO rdto = aservice.getReportContent(seq);
+		Gson gson = new Gson();
+		return gson.toJson(rdto);
+	}
 }
 

@@ -401,5 +401,8 @@ public class AdminService {
 		int result = adao.saveMsg(msg_seq);
 		return result;
 	}
+	public ReportDTO getReportContent(int seq) throws Exception{
+		return adao.getReportContent(seq);
+	}
 
 }

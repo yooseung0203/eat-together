@@ -43,7 +43,7 @@
 						</div>
 					</div>
 					<div class="party-content text-center">
-						<h3 class="tt">${partyList.title }</h3>
+						<h3 class="tt"><c:out value="${partyList.title }"/></h3>
 						<br>
 						<h5 class="card-subtitle mb-2 text-muted tt">${partyList.parent_name }</h5>
 						<p class="tt">

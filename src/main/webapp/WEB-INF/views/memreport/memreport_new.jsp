@@ -16,24 +16,27 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- BootStrap4 End-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
 <link rel="stylesheet" type="text/css" href="/resources/css/msg.css">
 <title>Report</title>
 <script type="text/javascript">
+
 	$(function() {
-		$(".container").find("#content").keyup(function(){
+		$(".container").find("#content").keyup(function() {
 			var word = $(this).val();
 			var wordSize = word.length;
 			console.log(wordSize);
-			if(wordSize <=2000){
+			if (wordSize <= 2000) {
 				$(".current").text(wordSize);
-			}else{
-				word=word.substr(0,2000);
+			} else {
+				word = word.substr(0, 2000);
 				$(".current").text(word.length);
 				$(this).val(word);
 				alert("쪽지는 2000자 이하로 작성해주세요");
 			}
 		})
-		
+
 		$("#idcheck")
 				.on(
 						"click",
@@ -79,16 +82,11 @@
 							}
 						});
 	});
-	$(function() {
-		$("#report").on()
-	});
 </script>
 <style>
 </style>
 </head>
 <body>
-
-
 	<div class="container" align="center">
 		<form id="report" action="/memreport/insertReport" method="post">
 			<table class="table">
@@ -135,6 +133,7 @@
 				</tbody>
 			</table>
 		</form>
+
 	</div>
 </body>
 </html>

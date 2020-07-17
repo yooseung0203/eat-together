@@ -145,7 +145,7 @@
 				<div class="row mb-1">
 					<div class="col-sm-3 mb-3 party-titlelabel">소개</div>
 					<div class="col-sm-9 party-contenttext-area party_content">
-						<c:out value='${con.content}' />
+						<c:out value='${con.content}'/>
 					</div>
 				</div>
 				<div class="row mb-1">
