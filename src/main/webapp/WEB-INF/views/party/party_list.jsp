@@ -28,7 +28,10 @@
 <!-- Vendor CSS Files -->
 <link href="/resources/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
 <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-
+<link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+<link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet">
+	
 <!-- Template Main CSS File -->
 <link href="/resources/assets/css/style.css" rel="stylesheet">
 <!-- 태훈 추가 -->
@@ -162,7 +165,7 @@ function partySearch(url,formData,cpage){
 		url : url,
 		data : {"formData" : formData, "cpage":cpage},
 		success : function(partyList) {
-			$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+" 통합 검색<span></div>");
+			//$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+" 통합 검색<span></div>");
 			$("#start_list").append(partyList);
 		},
 	    error:function(e){
@@ -179,7 +182,7 @@ function getPartyList(cpage){
         data : {"cpage" : cpage},
         url : '/party/getPartyList',
         success : function(partyList) {
-        	$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+ "기본 검색 <span></div>");
+        	//$("#start_list").append("<div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\" style=\"background-color: ivory\"><span>"+cpage+ "기본 검색 <span></div>");
             $("#start_list").append(partyList);         
        },
        error:function(e){
@@ -429,19 +432,18 @@ Back to top button
 	<!-- ******************* -->
 
 	<div class="container-fluid">
-	
-		<!-- ================ Top 5 Section ================ -->
-		<!-- <div class="row aa">
-			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
-		</div> -->
 		<div class="row">
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						<div class="section-headline text-center">
-							<h2>밥 먹고 갈래?</h2>
-						</div>
-					</div>
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="section-headline text-center">
+					<h2>밥 먹고 갈래?</h2>
 				</div>
-		<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 aa top5">
+			</div>
+		</div>
+		<!-- ================ Top 5 Section ================ -->
+		<div class="row aa">
+			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
+		</div>
+		<div class="row row-cols-1 row-cols-sm-3 row-cols-lg-5 aa top5">
 			<c:forEach var="top" items="${top}" varStatus="status">
 					<div class="card partylist">
 						<div class="thumbnail-wrapper imgBox">

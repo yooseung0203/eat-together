@@ -17,6 +17,20 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <!-- BootStrap4 End-->
 
+
+	
+<!--  datetimepicekr CDN -->
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+<link rel="stylesheet"
+	href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
+
+
+
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
@@ -24,14 +38,6 @@
 <link
 	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap"
 	rel="stylesheet">
-	
-<!--  datetimepicekr CDN -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
-<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" />
-	
-
 
 <!-- google font end-->
 
@@ -43,7 +49,9 @@
 <!-- ******************* -->
 
 <link rel="stylesheet" type="text/css"
-	href="/resources/css/party-css.css?ver=1">
+	href="/resources/css/party-css.css?ver=25">
+<link rel="stylesheet" type="text/css"
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet"
 	href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 <script>
@@ -76,6 +84,7 @@
 	}
 
 	$(document).ready(function() {
+		
 		$("#party_date").val("${con.meetdate}");
 		var gender = $("#gender_val").val();
 		console.log(gender);
@@ -153,22 +162,65 @@
 	});
 
 	$(function() {
+		 $("#party_title").on("change keyup paste",function() {
+	            var len = $(this).val();
+	            if(len.length > 25){
+	                alert("글 제목은 25자 이내로 설정해주세요")
+	                $(this).val(len.substr(0,25));
+	            }
+	      });
 		
+		 $("#content").on("change keyup paste",function() {
+	            var len = $(this).val();
+	            if(len.length > 300){
+	                alert("글 제목은 300자 이내로 설정해주세요")
+	                $(this).val(len.substr(0,300));
+	            }
+	      });
 		
+	      
 		$("#party_date").on("blur", function() {
 			var d = new Date($("#party_date").val());
 			var d_format = getFormatDate(d);
 			var now = new Date();
 			var now_format = getFormatDate(now);
+			var lastday=new Date(now.getYear(), now.getMonth()+2, now.getDate());
+			var tdate = now.getFullYear();
+			
+			 if(10 > lastday.getMonth()) {
+			        tdate += "0" + lastday.getMonth();
+			      } else {
+			       tdate += "" + lastday.getMonth();
+			      }
 
+			      if(10 > lastday.getDate()) {
+			        tdate += "0" +  lastday.getDate();
+			      } else {
+			       tdate += "" +  lastday.getDate();
+			      }      
+
+			
+			
 			console.log(d_format);
 			console.log(now_format);
-
+			var now_time = now.getTime();
+			var d_time = d.getTime();
+			
+			console.log(now_time);
+			console.log(d_time);
+			
 			if (now_format > d_format) {
+				alert("과거의 날짜를 선택하셨습니다.");
+				$("#party_date").val("");
+			}else if (tdate < d_format) {
+				alert("너무 먼 날짜를 선택하셨습니다.");
+			}else if (now_time > d_time) {
 				alert("과거의 시간을 선택하셨습니다.");
 				$("#party_date").val("");
+			}else{
+
+				$("#timeDiv").text($("#party_date").val());
 			}
-			;
 		});
 
 		var birthday = "${age}";
@@ -207,11 +259,11 @@
 		var gender = "${gender}";
 		console.log(gender);
 		if (gender == 1) {
-			$('input:radio[id=gender1]').attr("disabled", false);
-			$('input:radio[id=gender2]').attr("disabled", true);
-		} else {
 			$('input:radio[id=gender1]').attr("disabled", true);
 			$('input:radio[id=gender2]').attr("disabled", false);
+		} else {
+			$('input:radio[id=gender1]').attr("disabled", false);
+			$('input:radio[id=gender2]').attr("disabled", true);
 		}
 		;
 
@@ -247,13 +299,6 @@
 				$("input:checkbox[id=age1]").attr("disabled", false);
 			}
 
-			console.log(title);
-			console.log(date);
-			console.log(time);
-			console.log(count);
-			console.log(content);
-			console.log(isCheckGender);
-			console.log(isCheckAge);
 
 			if ($.trim(parent_name) == '') {
 				alert('상호명 찾기버튼으로 모임장소를 등록해주세요');
@@ -273,11 +318,7 @@
 			}
 			;
 
-			/* if (!time) {
-				alert("모임시간을 선택해주세요");
-				return false;
-			}
-			; */
+			
 
 			if ($.trim(count) == '') {
 				alert("모임인원을 선택해주세요");
@@ -308,6 +349,29 @@
 			}
 			;
 
+			let today = new Date();
+			console.log(today);
+			console.log(date);
+			let tyear = today.getFullYear(); // 년도
+			let tmonth = today.getMonth() + 1; // 월
+			let tdate = today.getDate(); // 날짜
+			let tday = today.getDay(); // 요일
+			if (today > date) {
+				alert('선택된 날짜가 과거입니다.');
+				return false;
+			}
+
+			if (agech == "age5") {
+				$("input:checkbox[id=age5]").attr("disabled", false);
+			} else if (agech == "age4") {
+				$("input:checkbox[id=age4]").attr("disabled", false);
+			} else if (agech == "age3") {
+				$("input:checkbox[id=age3]").attr("disabled", false);
+			} else if (agech == "age2") {
+				$("input:checkbox[id=age2]").attr("disabled", false);
+			} else if (agech == "age1") {
+				$("input:checkbox[id=age1]").attr("disabled", false);
+			}
 			document.form.submit();
 
 		});
@@ -342,8 +406,8 @@
 								type="hidden" name="writer" value="${con.writer}">
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">상호명</div>
-							<div class="col-sm-3">
+							<div class="col-sm-2">상호</div>
+							<div class="col-sm-7">
 								<input type="text" class="form-control" name="parent_name"
 									id="parent_name" value="${con.parent_name}" readonly>
 							</div>
@@ -354,7 +418,7 @@
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">위치</div>
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 								<input type="text" class="form-control" name="parent_address"
 									id="parent_address" value="${con.parent_address}" readonly>
 								<input type="hidden" name="place_id" id="place_id"
@@ -363,17 +427,17 @@
 						</div>
 						<div class="row mb-1">
 							<div class="col-sm-2">제목</div>
-							<div class="col-sm-10">
+							<div class="col-sm-9">
 								<input class="form-control" type="text" name="title"
 									id="party_title" value="${con.title}">
 							</div>
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">모임날짜와 시간</div>
-							<div class="col-sm-8">
+							<div class="col-sm-2">날짜</div>
+							<div class="col-sm-1 ">
 								<div class="input-group date" id="datetimepicker1"
 									data-target-input="nearest">
-									<input type="text" id="party_date" name="date"
+									<input type="hidden" id="party_date" name="date"
 										class="form-control datetimepicker-input"
 										data-target="#datetimepicker1" />
 									<div class="input-group-append" data-target="#datetimepicker1"
@@ -391,11 +455,16 @@
 											useSeconds : false,
 											startDate : 'd',
 											format : 'YYYY-MM-DD H:mm',
-											stepping : 5
+											stepping : 5,
+											showOn : "both",
+											showButtonPanel: true
 
 										}); //datepicker end
 									});
 								</script>
+							</div>
+							<div class="col-sm-5">
+								<div id="timeDiv"></div>
 							</div>
 						</div>
 						<div class="row mb-1">
@@ -413,7 +482,7 @@
 
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">멤버구성</div>
+							<div class="col-sm-2">구성</div>
 							<div class="col-sm-10">
 								<div class="form-check form-check-inline">
 									<input type=hidden id="gender_val" value="${con.gender}">
@@ -437,7 +506,7 @@
 						</div>
 
 						<div class="row mb-1">
-							<div class="col-sm-2">연령대</div>
+							<div class="col-sm-2">연령</div>
 							<div class="col-sm-10">
 								<div class="form-check form-check-inline">
 									<input type=hidden id=age_val value="${con.age}"> <input
@@ -485,7 +554,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-12 col-sm-4" id="img-area"></div>
+					<div class="col-12 col-sm-4 mt-5 pt-5" id="img-area">
+						<img src="${img}" width="350px" id="storeimg">
+					</div>
 				</div>
 			</div>
 			<div class="container formdiv">
@@ -504,7 +575,7 @@
 
 				</div>
 
-			</div>
+			</div>	
 		</form>
 	</c:if>
 </div>

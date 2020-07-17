@@ -23,7 +23,7 @@
 <!-- header,footer용 css  -->
 <link rel="stylesheet" type="text/css"
 	href="/resources/css/index-css.css">
-<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaaaaaaa">
+<link rel="stylesheet" type="text/css" href="/resources/css/map.css?aaaabbbbbba">
 <!-- google font -->
 <link
 	href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap"
@@ -39,6 +39,7 @@
 	<!-- 로그인 인포 가져오기 -->
 	<c:if test="${not empty sessionScope.loginInfo}">
 		<div style="display:none;" id="loginInfo_nickname">${sessionScope.loginInfo.nickname}</div>
+		<div style="display:none;" id="loginInfo_id">${sessionScope.loginInfo.id}</div>
 	</c:if>
 	<!-- 사용자가 보고 있는 중심 좌표 -->
 	<div style="display: none;" id="centerLat"></div>

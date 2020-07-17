@@ -102,9 +102,8 @@
 											success : function(msg) {
 												if (msg == "uncorrect") {
 													alert("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
-													$("#id").val("");
 													$("#pw").val("");
-													$("#id").focus();
+													$("#pw").focus();
 													location
 															.replace("redirect:/member/loginview")
 												} else if (msg == "correct") {

@@ -113,7 +113,7 @@
 							<td class="edit_text"><input type=text id="account_email"
 								name="account_email" value="${mdto.account_email}"> <input
 								type=button id=mail value="인증하기"><input type=text
-								id="isEmailEdited" style="display: none;" value="0"><br>
+								id="isEmailEdited" style="display: none;" value="f"><br>
 								<div id=mail_div style="display: none;">
 									인증번호 : <input type=text id=mail_text>
 									<button type=button id=mail_accept>인증</button>
@@ -134,6 +134,7 @@
 	</div>
 	<script>
 		window.onload = function() {
+			var code;
 			//by 지운, 카카오톡 회원의 경우, 비밀번호를 수정할 필요가 없다._20200713
 			$("#pwEdit").on("click", function(){
 				if("${mdto.member_type}"=="kakao"){
@@ -162,7 +163,7 @@
 			//by 지은, form submit 전 체크하는 사항_20200708
 			$("#editBtn").on("click", function() {
 				if ($("#nickname").val() != "") {
-					if ($("#isEmailEdited").val() != "") {
+					if ($("#isEmailEdited").val() == "f") {
 						if ($("#birth").val() != "") {
 							if ($('input:radio[name=gender]').is(':checked')) {
 								$('input:radio[name=gender]:input[value=' + "${mdto.gender}" + ']').attr("disabled", false);
@@ -175,7 +176,7 @@
 							alert("생년월일을 입력해주세요.");
 						}
 					} else {
-						alert("수정한 이메일 인증을 해주세요.");
+						alert("이메일 인증을 해주세요.");
 					}
 				} else {
 					alert("닉네임을 입력해주세요");
@@ -256,6 +257,7 @@
 			$("#account_email")
 					.focusout(
 							function() {
+								$('#isEmailEdited').val('t');
 								if ($("#account_email").val() != "") {
 									var account_email = $("#account_email")
 											.val();
@@ -268,42 +270,55 @@
 								}
 							})
 
-			//이메일 중복체크
-			$("#mail").on("click", function() {
-				if ($("#account_email").val() == "") {
-					alert("이메일을 입력해주십시오.");
-					$("#account_email").focus();
-				} else {
-					$.ajax({
-						url : "/mail/mailSending",
-						type : "post",
-						data : {
-							account_email : $("#account_email").val()
-						}
-					}).done(function(resp) {
-						if (resp != "") {
-							alert("인증메일이 발송되었습니다.");
-							$("#mail_div").css("display", "block");
-							$("#mail_accept").on("click", function() {
-								if ($("#mail_text").val() == resp) {
-									$("#mail_text").attr("readonly", true);
-									$("#mail_text").css("color", "blue");
-									$("#mail_text").val("인증에 성공하였습니다.");
-									$("#isEmailEdited").val("0");
-								} else {
-									alert("인증문자열을 확인해주세요.");
-									$("#mail_text").val("");
-									$("#mail_text").focus();
-								}
-							})
-						} else {
-							alert("이메일 변동사항이 없습니다.")
-							$("#isEmailEdited").val("0");
-						}
+		//메일 인증 
+		//by 지은, 이메일 인증 ajax의 중복호출을 방지하기 위해서 전송상태를 표시한다_20200716
+		$("#mail").on("click", function() {
+			if ($("#account_email").val() == "") {
+				alert("이메일을 입력해주십시오.");
+				$("#account_email").focus();
+			} else {
+				$.ajax({
+					url : "/mail/mailSending",
+					type : "post",
+					data : {
+						account_email : $("#account_email").val()
+					}
+				}).done(function(resp) {
+					code = resp;
+					console.log(code);
+					if (code != "") {
+						alert("인증메일이 발송되었습니다.");
+						$("#mail_div").css("display", "block");
 
-					})
-				}
-			})
+					} else {
+						alert("현재 사용중인 이메일입니다.");
+						$('#isEmailEdited').val('f');
+						$("#mail_text").val("");
+						$("#mail_text").focus();
+					}
+
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					serrorFunction();
+				});
+			}
+		})
+
+		$("#mail_accept").on("click", function() {
+			if ($("#mail_text").val() == code) {
+				$("#mail_text").css("color", "blue");
+				$("#mail_text").val("인증에 성공하였습니다.");
+				$('#isEmailEdited').val('f');
+				$("#mail_text").attr("readonly", true);
+			} else if ($("#mail_text").val = "") {
+				alert("인증문자열을 입력해주세요.");
+				$("#mail_text").focus();
+			} else if ($("#mail_text") != code) {
+				alert("인증문자열이 일치하지 않습니다.");
+				$("#mail_text").val("");
+				$("#mail_text").focus();
+
+			}
+		})
 
 		}
 	</script>

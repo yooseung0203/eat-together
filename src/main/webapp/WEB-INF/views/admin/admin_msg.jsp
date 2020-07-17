@@ -50,9 +50,10 @@ $(function(){
 				<hr>
 				<div class="row">
 					<div class="col">
-						<button type="button" class="btn btn-danger">공지</button>
-						<button type="button" class="btn btn-warning">쪽지함</button>
-						<button type="button" class="btn btn-dark">삭제된 쪽지함</button>
+						<button type="button" class="btn btn-danger" onclick="location.href='toAdmin_msg'">공지</button>					
+						<button type="button" class="btn btn-warning" onclick="location.href='admin_msgSend?ascpage=1'">받은 쪽지함</button>
+						<button type="button" class="btn btn-warning" onclick="location.href='admin_msgReceive?arcpage=1'">보낸 쪽지함</button>
+						<button type="button" class="btn btn-dark" onclick="location.href='admin_msgDelete?gcpage=1'">삭제된 쪽지함</button>
 					</div>
 				</div>
 				<hr>
@@ -116,7 +117,7 @@ $(function(){
 <script>
 	$("#submit").on("click",function(){
 		if($("#msg_title").val()!=""){
-			if($("msg_text").val()!=""){
+			if($("#msg_text").val()!=""){
 				var result = prompt("전체 회원에게 보내는 쪽지입니다.한번더 확인하고 확인을 입력해주세요");
 				if(result=="확인"){
 					return true;	

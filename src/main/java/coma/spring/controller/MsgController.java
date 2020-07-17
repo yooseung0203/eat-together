@@ -194,7 +194,6 @@ public class MsgController {
 	@RequestMapping("msgReceiverDel")
 	public String ReceiverDel(int msg_seq)throws Exception{
 		int result = msgservice.receiver_del(msg_seq);
-		
 		return "redirect:msg_list_sender";
 	}
 	
@@ -203,7 +202,6 @@ public class MsgController {
 	public String SenderDel(int msg_seq)throws Exception{
 		System.out.println(msg_seq);
 		int result = msgservice.sender_del(msg_seq);
-
 		return "redirect:msg_list_receiver";
 	}
 	

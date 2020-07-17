@@ -233,13 +233,7 @@
 			var isCheckGender = $('input:radio[name=gender]').is(':checked');
 			var isCheckAge = $('input:checkbox[name=age]').is(':checked');
 
-			console.log(title);
-			console.log(date);
-			console.log(time);
-			console.log(count);
-			console.log(content);
-			console.log(isCheckGender);
-			console.log(isCheckAge);
+			
 			if ($.trim(parent_name) == '') {
 				alert('상호명 찾기버튼으로 모임장소를 등록해주세요');
 				return false;
@@ -255,12 +249,7 @@
 				return false;
 			}
 			;
-			/* 
-			 if (!time) {
-			 alert("모임시간을 선택해주세요");
-			 return false;
-			 }
-			 ; */
+			
 			if ($.trim(count) == '') {
 				alert("모임인원을 선택해주세요");
 				return false;
@@ -347,7 +336,7 @@
 							<input type="hidden" name="writer">
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">상호명</div>
+							<div class="col-sm-2">상호</div>
 							<div class="col-sm-7">
 								<input type="text" class="form-control" name="parent_name"
 									id="parent_name" value="${parent_name}" readonly>
@@ -373,7 +362,7 @@
 											value="${mdto.category}">
 										<input type="hidden" name="phone" id="phone"
 											value="${mdto.phone}">
-										<input type="hidden" name="road_address_name"
+											<input type="hidden" name="road_address_name"
 											id="road_address_name" value="${mdto.road_address}">
 										<input type="hidden" name="place_url" id="place_url"
 											value="${mdto.place_url}">
@@ -421,8 +410,8 @@
 							</div>
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">모임날짜</div>
-							<div class="col-sm-1">
+							<div class="col-sm-2">날짜</div>
+							<div class="col-sm-1 ">
 								<div class="input-group date" id="datetimepicker1"
 									data-target-input="nearest">
 									<input type="hidden" id="party_date" name="date"
@@ -468,7 +457,7 @@
 
 						</div>
 						<div class="row mb-1">
-							<div class="col-sm-2">멤버구성</div>
+							<div class="col-sm-2">구성</div>
 							<div class="col-sm-10">
 								<div class="form-check form-check-inline">
 									<input class="form-check-input" type="radio" name="gender"
@@ -491,7 +480,7 @@
 						</div>
 
 						<div class="row mb-1">
-							<div class="col-sm-2">연령대</div>
+							<div class="col-sm-2">연령</div>
 							<div class="col-sm-10">
 								<div class="form-check form-check-inline">
 									<input class="form-check-input" type="checkbox" name="age"

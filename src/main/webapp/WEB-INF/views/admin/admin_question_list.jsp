@@ -26,6 +26,10 @@
 		window.open("questionAnswer?msg_seq=" + msg_seq + "&msg_sender="
 				+ msg_sender, msg_sender, option);
 	}
+	function AdminQuestionDel(msg_seq) {
+		location.href = "AdminQuestionDel?msg_seq=" + msg_seq;
+		alert("삭제성공");
+	}
 	$(function() {
 		$(document).on("click", ".answer", function() {
 			var some = $(this).attr("id").split(":");
@@ -95,7 +99,18 @@
 																<td class="admin_text">답변완료</td>
 															</c:otherwise>
 														</c:choose>
-														<td class="myinfo_text">삭제</td>
+														
+														<c:choose>
+															<c:when test="${i.receiver_del==1}">
+															<td><button type="button" class="btn btn-outline-dark"
+															onclick="location.href='javascript:AdminQuestionDel(${i.msg_seq})'">삭제</button></td>
+															</c:when>
+															<c:otherwise>
+																<td class="myinfo_text">삭제불가</td>	
+															</c:otherwise>
+														</c:choose>
+														
+														
 													</tr>
 												</c:forEach>
 											</c:when>
