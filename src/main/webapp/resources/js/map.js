@@ -47,6 +47,7 @@ function reviewReport(seq,content,id){
 	}
 }
 
+
 $(function () {
 	  $('[data-toggle="tooltip"]').tooltip();
 })
@@ -1388,6 +1389,12 @@ $(function(){
             	 $("#search").click();
              }
          });
+		$("#editable").on("keydown", function(e) {
+		       if (e.keyCode === 13) {
+		           document.execCommand('insertHTML', false, '\n');
+		       }
+		       return e.which != 13; 
+		});
 	})
 	.ajaxStart(function(){
 		$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.

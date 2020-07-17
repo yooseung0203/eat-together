@@ -198,18 +198,18 @@ public class AdminService {
 	public String getPageNavi(int currentPage) throws Exception{
 		int recordTotalCount = pdao.getListCount(); 
 		int pageTotalCount = 0; 
-		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
+		if(recordTotalCount % Configuration.recordCountPerPage > 0) {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage + 1;			
 		}else {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage;
 		}
 		if(currentPage < 1) {
 			currentPage = 1;
 		}else if(currentPage > pageTotalCount) {
 			currentPage = pageTotalCount;
 		}
-		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
-		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
+		int startNavi = (currentPage - 1) / Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
+		int endNavi = startNavi + Configuration.navCountPerPage - 1;
 		if(endNavi > pageTotalCount) {
 			endNavi = pageTotalCount;
 		}
@@ -220,10 +220,7 @@ public class AdminService {
 		if(endNavi == pageTotalCount) {needNext = false;}
 
 		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
-		}
-		else {
-			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\"><i class=\"fas fa-chevron-left\"></i></span> </a></li>");
 		}
 		for(int i = startNavi;i <= endNavi;i++) {
 			if(currentPage == i) {
@@ -234,11 +231,9 @@ public class AdminService {
 			}	
 		}
 		if(needNext) {
-			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\"><i class=\"fas fa-chevron-right\"></i></span> </a></li>");
 		}
-		else {
-			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
-		}
+		
 
 		return sb.toString();
 	}
@@ -292,16 +287,19 @@ public class AdminService {
 
 		StringBuilder sb = new StringBuilder();
 		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"?option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-left\\\"></i></a></li>");
 		}
 
 		for(int i=startNav; i<=endNav; i++) {
 			if(cpage == i) {
-				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"?option="+option+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 			}else {
-				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"?option="+option+"'>"+i+"</a></li>");
+				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"</a></li>");
 			}
+		}
+		if(needNext) {
+			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(endNav+1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-right\\\"></i></a></li>");
 		}
 
 		return sb.toString();
@@ -356,7 +354,7 @@ public class AdminService {
 				sb.append("<li class='page-item active' aria-current=\"page\"><span class=\"page-link\">" + i +"<span class=\"sr-only\">(current)</span></span></li>");
 			}
 			else {
-				sb.append("<li class='page-item'><a class='page-link' href=\"toAdmin_repot?cpage="+i+"\">" + i + "</a></li>");
+				sb.append("<li class='page-item'><a class='page-link' href=\"toAdmin_report?cpage="+i+"\">" + i + "</a></li>");
 			}	
 		}
 		if(needNext) {

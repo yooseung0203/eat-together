@@ -50,7 +50,7 @@
 	<select id="partyByOption" resultType="coma.spring.dto.PartyDTO">
 		select * from (select
 		party.*, row_number() over(order by
-		${targetColumn} desc) rnum from
+		${targetColumn} desc, party.seq desc) rnum from
 		party) where rnum between #{start} and
 		#{end}
 	</select>

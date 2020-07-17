@@ -41,9 +41,9 @@ public class ReviewController {
 		// 아이디 세션값에서 가져오기
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		rdto.setId(mdto.getId());
+		rdto.setProfile(mdto.getSysname());
 		System.out.println(imgFile);
 		System.out.println(rdto.getId() + " : " + rdto.getContent() + " : " + rdto.getRating() + " : " + rdto.getParent_seq());
-
 		// 파일 작업
 		String realPath = session.getServletContext().getRealPath("upload/files");
 		File tempFilePath = new File(realPath);

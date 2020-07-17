@@ -76,7 +76,7 @@ public class MemberDAO {
 		int res2 = mybatis.delete("Member.deleteMember2", nickname);
 		int res3 =  mybatis.delete("Member.deleteMember3", nickname);
 		int res4 = mybatis.update("Member.renameReview", id);
-		if(res1 >0 &&res3 >0 &&res2 >0) {
+		if(res1 >0 &&res3 >0 &&res2 >0 &&res4 >0) {
 			return 1;
 		}
 		else {
