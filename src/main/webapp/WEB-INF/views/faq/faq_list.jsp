@@ -65,7 +65,7 @@
 		<div class="container">
 
 			<h2>FAQ - 자주하는 질문</h2>
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-12 mt-3 mb-3">
 					<div class="row">
 						<div class="col-12 col-sm-12">
@@ -75,7 +75,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 			<div class="panel-group" id="accordion" role="tablist"
 				aria-multiselectable="true">
 				<c:forEach var="i" items="${list}" varStatus="status">

@@ -61,6 +61,9 @@
 
 </head>
 <script>
+
+
+
 function send_msg(){
 	var option = "width = 500, height = 550, top = 100, left = 200, scrollbars=no"
 	var target="${con.writer}";
@@ -103,7 +106,11 @@ function partyReport(num){
 }
 
 $(document).ready(function(){
-	
+	   // by 지은, 카카오톡으로 로그인한 경우 accoun_email인증이 안되었기 때문에 mypage로 이동시킨다_20200717   
+	   if ("${loginInfo.account_email}" == "need@eat-together.com") {
+	      alert("이메일 인증 및 개인정보 수정 후 사이트를 이용해주시길 바랍니다.");
+	      location.replace("/member/mypage_myinfo");
+	   }
 	
 	var stime = "${con.sTime}";
 	var time = stime.substr(0,5);
