@@ -90,7 +90,7 @@
 					</tr>
 					<tr align="center">
 						<td scope="col" colspan=12><textarea placeholder="내용을 입력해주세요"
-								style="width: 100%; padding: 10px; word-break: keep-all; height: 180px;"
+								style="width: 100%; padding: 10px; word-break: keep-all; height: 180px; resize: none;"
 								name="msg_text" id="msg_text"></textarea></td>
 					</tr>
 					<tr>
