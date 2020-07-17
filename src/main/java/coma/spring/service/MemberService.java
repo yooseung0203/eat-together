@@ -98,9 +98,9 @@ public class MemberService {
 		return result;
 	}
 
-	//회원탈퇴
-	public int deleteMember(String id) throws Exception{
-		int result = mdao.deleteMember(id);
+	//회원탈퇴 파라미터 수정_20200717
+	public int deleteMember(String id, String nickname) throws Exception{
+		int result = mdao.deleteMember(id, nickname);
 		return result;
 	}
 	//내정보수정하기
