@@ -76,16 +76,9 @@ $(function(){
 				</div>
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
-						<form action="/admin/partyByOption" method="post">
-							<div class="form-group">
-								<label for="partyByOption">조건정렬</label> <select
-									class="form-control" id="partyByOption" name=option>
-									<option value="meetdate">모임일</option>
-									<option value="report">신고수</option>
-								</select><br>
-								<button type="submit" class="btn btn-dark">검색</button>
-							</div>
-						</form>
+						<button type="button" class="btn btn-warning" onclick="location.href='Category_list?cpage=1&category=0'">리뷰</button>
+						<button type="button" class="btn btn-warning" onclick="location.href='Category_list?cpage=1&category=1'">모임글</button>
+						<button type="button" class="btn btn-dark" onclick="location.href='Category_list?cpage=1&category=2'">회원</button>
 					</div>
 				</div>
 
