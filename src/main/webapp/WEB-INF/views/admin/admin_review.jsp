@@ -116,7 +116,7 @@
 									</select>
 								</div>
 								<div class="col-2 p-0 b-0 position-absolute" style="bottom:0px;right:0px;">
-									<button type="submit" class="btn btn-dark align-middle">검색</button>
+									<button type="submit" class="btn btn-dark align-middle" style="width:100%;">검색</button>
 								</div>
 							</div>
 						</form>

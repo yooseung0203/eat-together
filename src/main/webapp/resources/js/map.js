@@ -69,6 +69,8 @@ $(function(){
 	    };
 		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		map.setMaxLevel(13);
+		map.panBy(100, 50);
 		// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
 		var currentPositionMarker = null;
 		var currentPositionOverlay = null;
@@ -96,8 +98,7 @@ $(function(){
 	    function displayMarker(locPosition, message, currentPositionOverlay) { // SSL 인증 위치 중심 확인용 인포윈도우
 	        var marker = new kakao.maps.Marker({  
 	            map: map, 
-	            position: locPosition,
-	            zIndex: 2
+	            position: locPosition
 	        }); 
 	        kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {
 	        	map.setLevel(3);
@@ -109,8 +110,7 @@ $(function(){
     	        '  <div>' +
     	        '    <span class="here">'+message+'</span>' +
     	        '  </div>' +
-    	        '</div>',
-    	        zIndex: 3
+    	        '</div>'
 	        });
 			currentPositionOverlay.setMap(map);
 	        map.setCenter(locPosition); 
@@ -166,7 +166,6 @@ $(function(){
 	            }
 	        ]
 	    });
-	    
 	    // 클러스터 내부에 삽입할 문자열 생성 함수입니다 
 	    function getTexts( count ) {
 

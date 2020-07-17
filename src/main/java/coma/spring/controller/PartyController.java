@@ -576,5 +576,22 @@ public class PartyController {
 		return "redirect:/report/newReport/";
 	}
 
+	// By 예지 - 모임글 관리 페이지에서 선택한 
+	@ResponseBody
+	@RequestMapping("partyDeleteCheckList")
+	public int partyDeleteCheckList(HttpServletRequest request) throws Exception{
+		String data = request.getParameter("seqs"); 
+		String ids = data.substring(2,data.length()-2);
+		String[] checkList = ids.split("\",\"");
+
+		System.out.println("삭제 선택한 리뷰 수 : " + checkList.length);
+
+		for(int a = 0; a<checkList.length;a++) {
+			System.out.println(checkList[a]);
+		}
+		int resp = pservice.deleteCheckList(checkList);
+		System.out.println("삭제된 리뷰 수 : " + resp);
+		return resp;
+	}
 
 }
