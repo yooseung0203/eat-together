@@ -125,6 +125,7 @@
             </div>
          </div>
       </div>
+     </div>
    
    <!-- 카카오톡으로 로그인한 경우 accoun_email인증이 안되었기 때문에 mypage로 이동시킨다. -->
    <script>
