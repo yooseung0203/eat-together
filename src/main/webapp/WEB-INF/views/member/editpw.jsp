@@ -72,13 +72,13 @@
 							pw : $("#pw").val()
 						}
 					}).done(function(resp) {
-						if (resp != "0") {
+						if (resp == "") {
+							alert("수정하려는 비밀번호가 기존과 일치합니다.");
+							window.close();
+
+						} else{
 							alert("비밀번호가 수정되었습니다.\n다시 로그인해주세요.");
 							window.close();
-						} else if (resp == "0") {
-							alert("수정하려는 비밀번호가 기존과 일치합니다.");
-							$("#pw").val("");
-							$("#pw").focus();
 						}
 
 					})

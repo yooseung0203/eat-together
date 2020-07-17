@@ -1,5 +1,6 @@
 package coma.spring.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -293,6 +294,14 @@ public class PartyService {
 	public int restartRecruit(String seq) throws Exception {
 		return pdao.restartRecruit(seq);
 
+	}
+	// 예지 - 모임글 관리 체크박스 삭제
+	public int deleteCheckList(String[] checkList) throws Exception{
+		List<String> list = new ArrayList<String>();
+		for(int a=0;a<checkList.length;a++) {
+			list.add(checkList[a]);
+		}
+		return pdao.deleteCheckList(list);
 	}
 }
 

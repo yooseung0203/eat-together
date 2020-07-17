@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?gghherrsa'></script>
+<script src='/resources/js/map.js?asaasa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -264,7 +264,7 @@
 							</form>
 							<c:forEach var="i" items="${reviewMap}" varStatus="status">
 								<div class="review">
-									<img src="/upload/${i.key.id}/${i.key.profile}">
+									<img src="/upload/${i.key.id}/${i.key.profile}" onError="this.src='/resources/img/no_img.png'" alt="" style="height:30px;">
 									<div class="raty">
 										<c:if test="${i.key.rating eq 1}"><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>
 										<c:if test="${i.key.rating eq 2}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>

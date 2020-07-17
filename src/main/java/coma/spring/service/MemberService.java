@@ -98,9 +98,9 @@ public class MemberService {
 		return result;
 	}
 
-	//회원탈퇴
-	public int deleteMember(String id) throws Exception{
-		int result = mdao.deleteMember(id);
+	//회원탈퇴 파라미터 수정_20200717
+	public int deleteMember(String id, String nickname) throws Exception{
+		int result = mdao.deleteMember(id, nickname);
 		return result;
 	}
 	//내정보수정하기
@@ -120,8 +120,18 @@ public class MemberService {
 	}
 
 	//아이디 찾기용 이메일 체크하기
-	public MemberDTO emailCheck(String account_email) throws Exception{
-		MemberDTO mdto = mdao.emailCheck(account_email);
+	public MemberDTO emailCheckForFindId(String account_email) throws Exception{
+		MemberDTO mdto = mdao.emailCheckForId(account_email);
+		return mdto;
+	}
+	
+	//회원탈퇴용, 비밀번호 찾기용 이메일 체크하기
+	public MemberDTO emailCheckFor(String id, String account_email) throws Exception{
+		Map<String, String> param = new HashMap<>();
+		param.put("targetValue1", id);
+		param.put("targetValue2", account_email);
+		
+		MemberDTO mdto = mdao.emailCheck(param);
 		return mdto;
 	}
 
