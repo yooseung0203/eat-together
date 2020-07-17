@@ -120,8 +120,18 @@ public class MemberService {
 	}
 
 	//아이디 찾기용 이메일 체크하기
-	public MemberDTO emailCheck(String account_email) throws Exception{
-		MemberDTO mdto = mdao.emailCheck(account_email);
+	public MemberDTO emailCheckForFindId(String account_email) throws Exception{
+		MemberDTO mdto = mdao.emailCheckForId(account_email);
+		return mdto;
+	}
+	
+	//회원탈퇴용, 비밀번호 찾기용 이메일 체크하기
+	public MemberDTO emailCheckFor(String id, String account_email) throws Exception{
+		Map<String, String> param = new HashMap<>();
+		param.put("targetValue1", id);
+		param.put("targetValue2", account_email);
+		
+		MemberDTO mdto = mdao.emailCheck(param);
 		return mdto;
 	}
 
