@@ -24,4 +24,14 @@
 <update id="update">
       update faq set ${columnName1} = #{changeValue1}, ${columnName2} = #{changeValue2}, ${columnName3} = #{changeValue3} where ${targetColumn} = #{targetValue}
  </update>
+ 
+
+<select id="selectByOption" resultType="coma.spring.dto.FaqDTO">
+		select * from (select
+		faq.*, row_number() over(order by
+		category desc) rnum from
+		faq) where category='${targetCategory}' and rnum between #{start} and
+		#{end}
+</select>
+ 
 </mapper>

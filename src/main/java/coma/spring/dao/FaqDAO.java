@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import coma.spring.dto.FaqDTO;
+import coma.spring.dto.MemberDTO;
 import coma.spring.dto.NoticeDTO;
 import coma.spring.statics.Configuration;
 
@@ -61,5 +62,9 @@ public class FaqDAO {
 		return mybatis.update("Faq.update",param);
 	}
 	
+	//by 수지, FAQ 카테고리검색 select 문 연결_20200718
+	public List<FaqDTO> selectByOption(Map<String, Object> param){
+			return mybatis.selectList("Faq.selectByOption", param);
+	}
 	
 }
