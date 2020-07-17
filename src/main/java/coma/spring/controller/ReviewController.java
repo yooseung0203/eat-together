@@ -1,6 +1,7 @@
 package coma.spring.controller;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import coma.spring.dto.MemberDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.dto.ReviewFileDTO;
+import coma.spring.service.MemberService;
 import coma.spring.service.ReviewService;
 
 @Controller
@@ -30,15 +32,18 @@ public class ReviewController {
 
 	@Autowired
 	private ReviewService rservice;
-
+	
+	@Autowired
+	private MemberService mservice;
+	
 	@RequestMapping("write")
 	public String write(ReviewDTO rdto, String place_id, MultipartFile imgFile) throws Exception{
 		// 아이디 세션값에서 가져오기
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		rdto.setId(mdto.getId());
+		rdto.setProfile(mdto.getSysname());
 		System.out.println(imgFile);
 		System.out.println(rdto.getId() + " : " + rdto.getContent() + " : " + rdto.getRating() + " : " + rdto.getParent_seq());
-
 		// 파일 작업
 		String realPath = session.getServletContext().getRealPath("upload/files");
 		File tempFilePath = new File(realPath);
@@ -81,8 +86,13 @@ public class ReviewController {
 	@RequestMapping("report")
 	public String reviewReport(int seq, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception{
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getNickname();
-		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,0,id,request.getParameter("report_id"),null,seq));
+		// 로그인한 사용자 닉네임
+		String id= mdto.getNickname();
+		// 임시 방편으로 닉네임 받아오기 위한 코드 - 추후 아이디 가 아닌 닉네임으로 리뷰 저장으로 변경하자
+		MemberDTO mdto2 = mservice.selectMyInfo(request.getParameter("report_id"));
+		ReviewDTO dto = rservice.selectBySeq(seq);
+		Timestamp stamp = new Timestamp(System.currentTimeMillis());
+		redirectAttributes.addFlashAttribute("rdto", new ReportDTO(0,0,id,mdto2.getNickname(),dto.getName() ,request.getParameter("content") ,stamp,seq));
 		return "redirect:/report/newReport";
 	}
 	@ResponseBody

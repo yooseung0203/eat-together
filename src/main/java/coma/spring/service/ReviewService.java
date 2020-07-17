@@ -97,7 +97,6 @@ public class ReviewService {
 			}else {
 				sb.append("<li class='page-item'><a class='page-link' href='sortReview?cpage="+i+"'>"+i+"</a></li>");
 			}
-//			sb.append("<li class='page-item'><a class='page-link' href='sortReview?cpage="+i+"'>" + i + "</a></li>");
 		}
 		if(needNext) {sb.append("<li class='page-item'><a class='page-link' href='sortReview?cpage="+(endNavi+1)+"'><i class=\"fas fa-chevron-right\"></i></a></li>");}
 		return sb.toString();
@@ -176,5 +175,8 @@ public class ReviewService {
 			list.add(checkList[a]);
 		}
 		return rvdao.delete(list);
+	}
+	public String getStorename(int parent_seq) {
+		return rvdao.getStoreName(parent_seq);
 	}
 }

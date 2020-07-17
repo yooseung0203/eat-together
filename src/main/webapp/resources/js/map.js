@@ -25,23 +25,28 @@ function reviewReport(seq,content,id){
 	console.log("신고 시작 : "+ seq);
 	var ask = confirm("허위신고일 경우 피해가 되돌아올 수 있습니다. \n정말 신고하시겠습니까?\n신고할 사용자 : "+id+"\n신고할 리뷰 내용 : "+content);
 	if(ask){
-		$.ajax({
-			url:"/review/report",
-			data : { seq : seq, report_id : id},
-			success : function(result) {
-				if (result == 1){ 
-					alert("신고가 정상적으로 접수되었습니다.");	
+		if($("#loginInfo_id").html() == id){
+			alert("본인이 작성한 글은 신고할 수 없습니다.");
+		}
+		else{
+			$.ajax({
+				url:"/review/report",
+				data : { seq : seq, report_id : id , content : content},
+				success : function(result) {
+					if (result == 1){ 
+						alert("신고가 정상적으로 접수되었습니다.");	
+					}else{
+						alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
+					}
+				},
+				error:function(e){
+					console.log("error");
 				}
-				else{
-					alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
-				}
-			},
-			error:function(e){
-				console.log("error");
-			}
-		});
+			});
+		}
 	}
 }
+
 
 $(function () {
 	  $('[data-toggle="tooltip"]').tooltip();
@@ -65,6 +70,8 @@ $(function(){
 	    };
 		// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
 		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		map.setMaxLevel(13);
+		map.panBy(100, 50);
 		// HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
 		var currentPositionMarker = null;
 		var currentPositionOverlay = null;
@@ -92,8 +99,7 @@ $(function(){
 	    function displayMarker(locPosition, message, currentPositionOverlay) { // SSL 인증 위치 중심 확인용 인포윈도우
 	        var marker = new kakao.maps.Marker({  
 	            map: map, 
-	            position: locPosition,
-	            zIndex: 2
+	            position: locPosition
 	        }); 
 	        kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {
 	        	map.setLevel(3);
@@ -105,8 +111,7 @@ $(function(){
     	        '  <div>' +
     	        '    <span class="here">'+message+'</span>' +
     	        '  </div>' +
-    	        '</div>',
-    	        zIndex: 3
+    	        '</div>'
 	        });
 			currentPositionOverlay.setMap(map);
 	        map.setCenter(locPosition); 
@@ -162,7 +167,6 @@ $(function(){
 	            }
 	        ]
 	    });
-	    
 	    // 클러스터 내부에 삽입할 문자열 생성 함수입니다 
 	    function getTexts( count ) {
 
@@ -1385,6 +1389,12 @@ $(function(){
             	 $("#search").click();
              }
          });
+		$("#editable").on("keydown", function(e) {
+		       if (e.keyCode === 13) {
+		           document.execCommand('insertHTML', false, '\n');
+		       }
+		       return e.which != 13; 
+		});
 	})
 	.ajaxStart(function(){
 		$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.

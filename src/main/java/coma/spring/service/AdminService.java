@@ -10,9 +10,11 @@ import org.springframework.stereotype.Service;
 
 import coma.spring.dao.AdminDAO;
 import coma.spring.dao.PartyDAO;
+import coma.spring.dao.ReportDAO;
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.MsgDTO;
 import coma.spring.dto.PartyDTO;
+import coma.spring.dto.ReportDTO;
 import coma.spring.statics.Configuration;
 import coma.spring.statics.PartyConfiguration;
 
@@ -23,6 +25,9 @@ public class AdminService {
 
 	@Autowired
 	private PartyDAO pdao;
+	
+	@Autowired
+	private ReportDAO rdao;
 
 	//by 지은, 체크박스 회원 삭제하기
 	public int memberOut(String[] checkList) {
@@ -193,18 +198,18 @@ public class AdminService {
 	public String getPageNavi(int currentPage) throws Exception{
 		int recordTotalCount = pdao.getListCount(); 
 		int pageTotalCount = 0; 
-		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
+		if(recordTotalCount % Configuration.recordCountPerPage > 0) {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage + 1;			
 		}else {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage;
 		}
 		if(currentPage < 1) {
 			currentPage = 1;
 		}else if(currentPage > pageTotalCount) {
 			currentPage = pageTotalCount;
 		}
-		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
-		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
+		int startNavi = (currentPage - 1) / Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
+		int endNavi = startNavi + Configuration.navCountPerPage - 1;
 		if(endNavi > pageTotalCount) {
 			endNavi = pageTotalCount;
 		}
@@ -215,10 +220,7 @@ public class AdminService {
 		if(endNavi == pageTotalCount) {needNext = false;}
 
 		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
-		}
-		else {
-			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\"><i class=\"fas fa-chevron-left\"></i></span> </a></li>");
 		}
 		for(int i = startNavi;i <= endNavi;i++) {
 			if(currentPage == i) {
@@ -229,11 +231,9 @@ public class AdminService {
 			}	
 		}
 		if(needNext) {
-			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_party?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\"><i class=\"fas fa-chevron-right\"></i></span> </a></li>");
 		}
-		else {
-			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
-		}
+		
 
 		return sb.toString();
 	}
@@ -287,20 +287,85 @@ public class AdminService {
 
 		StringBuilder sb = new StringBuilder();
 		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"?option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-left\\\"></i></a></li>");
 		}
 
 		for(int i=startNav; i<=endNav; i++) {
 			if(cpage == i) {
-				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"?option="+option+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 			}else {
-				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"?option="+option+"'>"+i+"</a></li>");
+				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"</a></li>");
 			}
+		}
+		if(needNext) {
+			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(endNav+1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-right\\\"></i></a></li>");
 		}
 
 		return sb.toString();
-	}	
+	}
+	
+	// 태훈 신고 리스트 출력
+	public List<ReportDTO> reportList(int cpage){
+		System.out.println("신고 서비스 : "+cpage);
+		int start = cpage * Configuration.recordCountPerPage-(Configuration.recordCountPerPage-1);
+		int end = start + (Configuration.recordCountPerPage-1);
+
+		Map<String, Integer> param = new HashMap<>();
+		param.put("start", start);
+		param.put("end", end);
+
+		return adao.reportList(param);
+	}
+
+	// 태훈  신고 리스트 네비_20200712
+	public String getReportNavi(int currentPage) throws Exception{
+		int recordTotalCount =rdao.getListCount(); 
+		int pageTotalCount = 0; 
+		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
+			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
+		}else {
+			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
+		}
+		if(currentPage < 1) {
+			currentPage = 1;
+		}else if(currentPage > pageTotalCount) {
+			currentPage = pageTotalCount;
+		}
+		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
+		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
+		if(endNavi > pageTotalCount) {
+			endNavi = pageTotalCount;
+		}
+		boolean needPrev = true; // <
+		boolean needNext = true; // >
+		StringBuilder sb = new StringBuilder();
+		if(startNavi == 1) {needPrev = false;}
+		if(endNavi == pageTotalCount) {needNext = false;}
+
+		if(needPrev) {
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_report?cpage="+(startNavi-1)+" aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
+		}
+		else {
+			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Previous\"> <span aria-hidden=\"true\">&laquo;</span> </a></li>");
+		}
+		for(int i = startNavi;i <= endNavi;i++) {
+			if(currentPage == i) {
+				sb.append("<li class='page-item active' aria-current=\"page\"><span class=\"page-link\">" + i +"<span class=\"sr-only\">(current)</span></span></li>");
+			}
+			else {
+				sb.append("<li class='page-item'><a class='page-link' href=\"toAdmin_report?cpage="+i+"\">" + i + "</a></li>");
+			}	
+		}
+		if(needNext) {
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_report?cpage="+(endNavi-1)+" aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+		}
+		else {
+			sb.append("<li class='page-item disabled'><a class='page-link' aria-label=\"Next\"> <span aria-hidden=\"true\">&raquo;</span> </a></li>");
+		}
+
+		return sb.toString();
+	}
 	//받은쪽지함
 	public List<MsgDTO> selectBySender(int cpage,String msg_receiver) throws Exception{
 		List<MsgDTO> dto = adao.selectBySender(cpage,msg_receiver);
@@ -336,5 +401,5 @@ public class AdminService {
 		int result = adao.saveMsg(msg_seq);
 		return result;
 	}
-	
+
 }

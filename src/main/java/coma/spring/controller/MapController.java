@@ -62,18 +62,6 @@ public class MapController {
 	@Autowired
 	private HttpSession session;
 
-	@ResponseBody
-	@RequestMapping("cafeJson")
-	public String getCafeJson() throws Exception {
-		Gson gson = new Gson();
-		String jsonPath = sc.getRealPath("resources/json/KakaoCafe.json");
-		Reader reader = new FileReader(jsonPath);
-		JsonObject readObj = gson.fromJson(reader, JsonObject.class);
-		String respBody = gson.toJson(readObj);
-		System.out.println(respBody);
-		return respBody;
-	}
-
 	@RequestMapping("toMap")
 	public String map(HttpServletRequest request, HttpServletResponse response) throws Exception{
 		// 등록된 맛집 뿌려주기
@@ -85,6 +73,7 @@ public class MapController {
 		try{place_id = Integer.parseInt(request.getParameter("place_id"));}catch(Exception e) {}
 		String object = gson.toJson(list);
 		String jsonPath = sc.getRealPath("resources/json/mapData.json");
+		System.out.println(jsonPath);
 		File file = new File(jsonPath);
 		FileWriter fw = new FileWriter(file, false);
 		JsonArray arr = gson.fromJson(object, JsonArray.class);
@@ -109,22 +98,9 @@ public class MapController {
 		}
 		return "/map/map";
 	}
-	@RequestMapping("insert")
-	public String insert(MapDTO mapdto, String detail_category) throws Exception {
-		// 판단
-		if(!mapservice.insertPossible(mapdto.getPlace_url())) {
-			return "/map/insertFail";
-		}else {
-			mapservice.insert(mapdto);
-			return "redirect:/map/toMap";
-		}
-	}
-
 	@ResponseBody
 	@RequestMapping(value="search",produces="application/json;charset=utf8",method=RequestMethod.GET)
 	public String searchByKeyword(String keyword, HttpServletRequest req) throws Exception{
-		// 검색 기능 ? keyword 로 Json 파일에서 검색 ! -> map 테이블에 있는 내용이 최상단
-		// 카페 정보
 		String cafePath = sc.getRealPath("resources/json/cafe.json");
 		Gson gson = new Gson();
 		JsonArray cafeArr = new JsonArray();
@@ -201,7 +177,7 @@ public class MapController {
 
 	@ResponseBody
 	@RequestMapping(value="searchCafeBtn",produces="application/json;charset=utf8",method=RequestMethod.GET)
-	public String searchByCafe(String category, HttpServletRequest req) throws Exception{
+	public String searchByCafe(HttpServletRequest req) throws Exception{
 		String cafePath = sc.getRealPath("resources/json/cafe.json");
 		Gson gson = new Gson();
 		JsonArray cafeArr = new JsonArray();
@@ -448,13 +424,12 @@ public class MapController {
 		}
 		Map<ReviewDTO,ReviewFileDTO> rmap = new LinkedHashMap<>();
 		List<ReviewDTO> rlist = rservice.selectByPseq(mapdto.getSeq());
+		System.out.println("리뷰 리스트 : " + rlist);
 		for(ReviewDTO rdto : rlist) {
 			ReviewFileDTO rf = rservice.selectFileByPseq(rdto.getSeq());
 			rmap.put(rdto, rf);
 		}
-//		request.setAttribute("", o);
 		request.setAttribute("reviewMap", rmap);
-		// 리뷰 사진
 		if(session.getAttribute("loginInfo")==null) {
 			request.setAttribute("partyAllCount", pservice.selectAllCount());
 		}

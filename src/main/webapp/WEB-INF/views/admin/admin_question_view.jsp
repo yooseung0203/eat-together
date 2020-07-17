@@ -46,9 +46,9 @@
 	<div class="container-fluid mx-0 px-0">
 		<div class="row mx-0">
 
-			<div class="col-3 mx-0 px-0"><jsp:include
+			<div class="col-2 mx-0 px-0"><jsp:include
 					page="/WEB-INF/views/include/admin_sidebar.jsp" /></div>
-			<div class="col-9">
+			<div class="col-10 px-5">
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
 						<h2 class="admin-h2">1:1문의</h2>
@@ -68,22 +68,22 @@
 										</thead>
 										<tbody>
 											<tr align="center">
-												<th scope="col">제목</th>
-												<th scope="col">${qdto.msg_title}</th>
+												<th scope="col" colspan=6>제목</th>
+												<th scope="col" colspan=6><c:out value="${qdto.msg_title}"></c:out></th>
 											</tr>
 
 											<tr align="center">
-												<th scope="col">작성자</th>
-												<th scope="col">${qdto.msg_sender}</th>
+												<th scope="col" colspan=6>작성자</th>
+												<th scope="col" colspan=6>${qdto.msg_sender}</th>
 											</tr>
 
 											<tr align="center">
-												<th scope="col">작성 날짜</th>
-												<th scope="col">${qdto.date}</th>
+												<th scope="col" colspan=6>작성 날짜</th>
+												<th scope="col" colspan=6>${qdto.date}</th>
 											</tr>
 											<tr>
 												<td scope="col" colspan=12><div
-														style="width: 100%; padding: 10px; word-break: keep-all; height: 140px; resize: none;">${qdto.msg_text}</div></td>
+														style="width: 100%; padding: 10px; word-break: keep-all; height: 140px; resize: none;"><c:out value="${qdto.msg_text}"></c:out></div></td>
 											</tr>
 
 
@@ -136,7 +136,7 @@
 													</thead>
 													<tr align="center">
 														<th scope="col">제목</th>
-														<th scope="col">${qadto.msg_title}</th>
+														<th scope="col"><c:out value="${qadto.msg_title}"></c:out></th>
 													</tr>
 
 													<tr align="center">
@@ -150,7 +150,7 @@
 													</tr>
 													<tr>
 														<td scope="col" colspan=12><div
-																style="width: 100%; padding: 10px; word-break: keep-all; height: 130px; resize: none;">${qadto.msg_text}</div></td>
+																style="width: 100%; padding: 10px; word-break: keep-all; height: 130px; resize: none;"><c:out value="${qdto.msg_text}"></c:out></div></td>
 													</tr>
 
 												</c:otherwise>

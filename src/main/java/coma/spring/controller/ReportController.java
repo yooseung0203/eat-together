@@ -3,7 +3,6 @@ package coma.spring.controller;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import coma.spring.dto.MemberDTO;
 import coma.spring.dto.ReportDTO;
+import coma.spring.service.MemberReportService;
 import coma.spring.service.PartyService;
 import coma.spring.service.ReportService;
 import coma.spring.service.ReviewService;
@@ -21,9 +20,6 @@ import coma.spring.service.ReviewService;
 @Controller
 @RequestMapping("/report/")
 public class ReportController {
-	
-	@Autowired
-	private HttpSession session;
 	
 	@Autowired
 	private PartyService pservice;
@@ -34,12 +30,10 @@ public class ReportController {
 	@Autowired
 	private ReportService reposervice;
 	
-	@RequestMapping("toReport")
-	public String toReport(HttpServletRequest request) {
-		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
-		request.setAttribute("nick", loginInfo.getNickname());
-		return "/report/report_new";
-	}
+	@Autowired
+	private MemberReportService mrservice;
+	
+	
 	@ResponseBody
 	@RequestMapping("newReport")
 	public int newReport(HttpServletRequest request, RedirectAttributes redirectAttributes, ReportDTO rdto) throws Exception {
@@ -60,13 +54,19 @@ public class ReportController {
 			}
 		}else if(rdto.getCategory() == 1) { // 모임글 신고
 			if(check == 0) {
-				reposervice.newReport(rdto);
 				result = pservice.partyReport(rdto);
-				System.out.println(result);
+				System.out.println("모임글 신고: "+result);
 			}
+		}else { // 회원 신고
+			result = mrservice.memberReport(rdto);
+			System.out.println("회원 신고: "+result);
 		}
 		
 		request.setAttribute("result", result);
 		return result;
 	}
+	
+//	public int reportAccept(HttpServletRequest request,int seq) {
+//		
+//	}
 }

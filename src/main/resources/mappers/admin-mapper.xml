@@ -50,9 +50,15 @@
 	<select id="partyByOption" resultType="coma.spring.dto.PartyDTO">
 		select * from (select
 		party.*, row_number() over(order by
-		${targetColumn} desc) rnum from
+		${targetColumn} desc, party.seq desc) rnum from
 		party) where rnum between #{start} and
 		#{end}
+	</select>
+	
+	<!-- by 태훈, 신고 리스트 출력 -->
+	<select id="reportList" resultType="coma.spring.dto.ReportDTO">
+		select * from (select report.* , row_number() over(order by seq desc)
+		rnum from report) where rnum between #{start} and #{end}
 	</select>
 
 	<!-- 여기는 네비 카운트 -->

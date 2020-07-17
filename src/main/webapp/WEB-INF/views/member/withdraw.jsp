@@ -68,14 +68,14 @@
 						name="account_email" placeholder="ex)eat-together@naver.com">
 					<input type=button id=mail value="인증하기" class="btn btn-warning">
 					<button type="button" class="btn btn-dark withdraw_text" id="back">되돌아가기</button>
-					<br><br>
+					<br> <br>
 					<div id=mail_div style="display: none;">
 						인증번호 : <input type=text id=mail_text>
 						<button type=button id=mail_accept class="btn btn-light">인증</button>
 					</div>
-					<div id=withdraw_result style="display: none;">
+					<div id=withdraw_result style="display: none;"><br>
 						<button type=button class="btn btn-light withdraw_text"
-							id="withdrawBtn">탈퇴하기</button>
+							id="withdrawBtn">탈퇴하기</button><br>
 					</div>
 				</div>
 
@@ -85,80 +85,93 @@
 	</div>
 
 	<script>
-		//메일 인증_resp값이 text이므로 dataType을 text로 수정해야 제대로 작동함_20200709
+	window.onload = function() {
+		// by 지은, 카카오톡으로 로그인한 경우 accoun_email인증이 안되었기 때문에 mypage로 이동시킨다_20200717	
+		if ("${loginInfo.account_email}" == "need@eat-together.com") {
+			alert("이메일 인증 및 개인정보 수정 후 사이트를 이용해주시길 바랍니다.");
+			location.replace("/member/mypage_myinfo");
+		}
+
+		var code;
+		//메일 인증 
+		//by 지은, 이메일 인증 ajax의 중복호출을 방지하기 위해서 전송상태를 표시한다_20200716
 		$("#mail").on("click", function() {
 			if ($("#account_email").val() == "") {
-				alert("이메일을 모두 입력해주십시오.");
+				alert("이메일을 입력해주십시오.");
 				$("#account_email").focus();
-			} else if($("#account_email").val()=="need@eat-together.com"){
-				alert("이메일 인증을 하지 않은 회원입니다.\n내정보 수정 - 이메일 인증을 진행해주세요.");
-			}else {
+			} else {
 				$.ajax({
 					url : "/mail/mailSendingForOut",
 					type : "post",
-					dataType : "text",
 					data : {
 						account_email : $("#account_email").val()
 					}
 				}).done(function(resp) {
-					if (resp != "0") {
+					code = resp;
+					console.log(code);
+					if (code != "") {
 						alert("인증메일이 발송되었습니다.");
 						$("#mail_div").css("display", "block");
-						$("#mail_accept").on("click", function() {
-							if ($("#mail_text").val() == resp) {
-								$("#mail_text").attr("readonly", true);
-								$("#mail_text").css("color", "blue");
-								$("#mail_text").val("인증에 성공하였습니다.");
 
-								$("#withdraw_result").css("display", "block");
-							} else if ($("#mail_text").val() == "") {
-								alert("인증 문자열을 입력해주세요.");
-								$("#mail_text").val("");
-								$("#mail_text").focus();
-							} else {
-								alert("인증 문자열이 일치하지 않습니다.");
-								$("#mail_text").val("");
-								$("#mail_text").focus();
-							}
-						})
-					} else if (resp == "0") {
-						alert("아이디 또는 이메일을 잘못 입력하였습니다.");
+					}else {
+						
+						alert("이메일 정보가 일치하지 않습니다");
 						$("#mail_text").val("");
 						$("#mail_text").focus();
 					}
 
-				})
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					serrorFunction();
+				});
 			}
 		})
-			//account_email regex
-			$("#account_email")
-					.focusout(
-							function() {
-								if ($("#account_email").val() != "") {
-									var account_email = $("#account_email")
-											.val();
-									var account_emailregex = /[a-zA-Z0-9]*@[a-zA-Z0-9]*[.]{1}[a-zA-Z]{2,3}|([.]{1}[a-zA-Z]{2,3})$/;
-									if (!account_emailregex.test(account_email)) {
-										$("#account_email").val("");
-										alert("유효한 이메일을 입력해주세요.");
-										$("#account_email").focus();
-									}
-								}
-							})
-			$("#back").on("click", function() {
-				location.replace("/member/mypage_myinfo");
-			})
 
-			$("#withdrawBtn").on("click", function(){
-				var result = confirm("정말로 탈퇴하시겠습니까?");
-				if(result){
-					alert("그동안 감사했습니다.\nLet's eat together again!");
-					$("#withdrawProc").submit();
-				}else{
-					return false;
-				}
-			})
-		</script>
+		$("#mail_accept").on("click", function() {
+			if ($("#mail_text").val() == code) {
+				$("#mail_text").css("color", "blue");
+				$("#mail_text").val("인증에 성공하였습니다.");
+				$("#mail_text").attr("readonly", true);
+				
+				$("#withdraw_result").css("display", "block");
+			} else if ($("#mail_text").val == "") {
+				alert("인증문자열을 입력해주세요.");
+				$("#mail_text").focus();
+			} else if ($("#mail_text") != code) {
+				alert("인증문자열이 일치하지 않습니다.");
+				$("#mail_text").val("");
+				$("#mail_text").focus();
+
+			}
+		})
+		//account_email regex
+		$("#account_email")
+				.focusout(
+						function() {
+							if ($("#account_email").val() != "") {
+								var account_email = $("#account_email").val();
+								var account_emailregex = /[a-zA-Z0-9]*@[a-zA-Z0-9]*[.]{1}[a-zA-Z]{2,3}|([.]{1}[a-zA-Z]{2,3})$/;
+								if (!account_emailregex.test(account_email)) {
+									$("#account_email").val("");
+									alert("유효한 이메일을 입력해주세요.");
+									$("#account_email").focus();
+								}
+							}
+						})
+		$("#back").on("click", function() {
+			location.replace("/member/mypage_myinfo");
+		})
+
+		$("#withdrawBtn").on("click", function() {
+			var result = confirm("정말로 탈퇴하시겠습니까?");
+			if (result) {
+				alert("그동안 감사했습니다.\nLet's eat together again!");
+				$("#withdrawProc").submit();
+			} else {
+				return false;
+			}
+		})
+	}
+	</script>
 
 
 	<!-- ******************* -->
