@@ -83,7 +83,7 @@
 					<tr align="center">
 						<th scope="col" colspan=4>제목</th>
 						<td scope="col" colspan=8><input type="text" name="msg_title"
-							id="msg_title" style="width: 100%;"></td>
+							id="msg_title" style="width: 100%;" maxlength="34" placeholder="최대 16자"></td>
 					</tr>
 					<tr align="center">
 						<th scope="col" colspan=12>내용</th>
