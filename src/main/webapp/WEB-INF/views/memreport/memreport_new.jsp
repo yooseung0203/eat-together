@@ -56,7 +56,9 @@ $(function() {
 		}
 	});
 });
-
+$(function(){
+	$("#report").on()
+});
 </script>
 <style>
 	div {
@@ -88,7 +90,7 @@ $(function() {
 	</div>
 	<div>파일 첨부</div>
 	<div>
-		<input type="submit" value="신고하기">
+		<input type="submit" id="report" value="신고하기">
 		<button type="button">돌아가기</button>
 	</div>
 </form>
