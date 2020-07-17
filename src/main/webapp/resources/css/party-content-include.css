@@ -58,6 +58,24 @@ form {
 	 
 }
  /***************  수지씨 내부 CSS  **************/
+ 
+ .mb-1 {
+	padding: 3px;
+}
+
+.mb-1>div:nth-child(1) {
+	background-color: #f9a11b50;
+	border-radius: 5px;
+	text-align: center;
+	padding: 1px
+}
+
+.mb-1>div:nth-child(2) {
+	margin: 0px;
+	padding: 5px;
+	padding-left: 20px
+}
+ 
 .featImgWrap {
 	height: 250px;
 	position: relative;
