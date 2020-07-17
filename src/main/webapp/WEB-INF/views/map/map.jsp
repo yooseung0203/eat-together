@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asasa'></script>
+<script src='/resources/js/map.js?asaasa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
