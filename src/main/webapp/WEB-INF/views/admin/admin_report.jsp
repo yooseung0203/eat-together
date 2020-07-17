@@ -19,9 +19,9 @@
 <script>
 
 function toDelete(seq){
-	var ask = confirm("정말 삭제하시겠습니까?");
+	var ask = confirm("회원은 신고가 접수 됩니다.");
 	if(ask){
-		location.href="/party/partydeleteByAdmin?seq="+seq;
+		location.href="/report/reportAccept?seq="+seq;
 	}
 };
 
@@ -104,6 +104,16 @@ function toDelete(seq){
 								</nav>
 							</div>
 							<div class="col-2"></div>
+
+							<div class="modal fade" id="mymodal" role="dialog">
+								<div class="modal-dialog modal-xl">
+									<!-- Modal content-->
+									<div class="modal-content" id="aaa">
+									
+									</div>
+								</div>
+							</div>
+							
 						</div>
 					</div>
 				</div>

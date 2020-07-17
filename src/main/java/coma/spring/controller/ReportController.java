@@ -65,4 +65,8 @@ public class ReportController {
 		request.setAttribute("result", result);
 		return result;
 	}
+	
+//	public int reportAccept(HttpServletRequest request,int seq) {
+//		
+//	}
 }
