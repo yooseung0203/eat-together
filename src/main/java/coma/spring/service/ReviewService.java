@@ -176,5 +176,9 @@ public class ReviewService {
 			list.add(checkList[a]);
 		}
 		return rvdao.delete(list);
+
+	}
+	public String getStorename(int parent_seq) {
+		return rvdao.getStoreName(parent_seq);
 	}
 }

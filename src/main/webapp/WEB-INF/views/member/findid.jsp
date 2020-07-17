@@ -50,6 +50,7 @@
 	</fieldset>
 
 	<script>
+	window.onload = function() {
 		//account_email regex
 		$("#account_email")
 				.focusout(
@@ -79,11 +80,12 @@
 						account_email : $("#account_email").val()
 					}
 				}).done(function(resplist) {
+					code=resplist[0];
 					if (resplist!=null) {
 						alert("인증메일이 발송되었습니다.");
 						$("#mail_div").css("display", "block");
 						$("#mail_accept").on("click", function() {
-							if ($("#mail_text").val() == resplist[0]) {
+							if ($("#mail_text").val() == code) {
 								$("#mail_text").attr("readonly", true);
 								$("#mail_text").css("color", "blue");
 								$("#mail_text").val("인증에 성공하였습니다.");
@@ -100,7 +102,7 @@
 								$("#mail_text").focus();
 							}
 						})
-					} else {
+					}else {
 						alert("이메일을 잘못 입력하였습니다.");
 						$("#mail_text").val("");
 						$("#mail_text").focus();
@@ -109,7 +111,7 @@
 				})
 			}
 		})
-
+	}
 	</script>
 </body>
 </html>

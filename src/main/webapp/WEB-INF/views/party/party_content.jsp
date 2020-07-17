@@ -74,14 +74,14 @@ function toChatroom(num){
 
 function partyReport(num){
 	console.log("신고 시작 : "+ num);
-	var writer = $(".party_writer").html();
-	//var report_id = writer.substring(6,writer.length);
 	var report_id = "${con.writer}";
+	var title = "${con.title}";
+	var content = "${con.content}";
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
-		url:"/party/party_report", 
+		url:"/party/party_report",
 		//data : { seq : num, report_id : report_id},
-		data : { seq : num, report_id : report_id},
+		data : { seq : num, report_id : report_id , title : title , content : content},
 		success : function(result) {
 			if (result == 1){ 
 				alert("신고가 정상적으로 접수되었습니다.");	
@@ -91,13 +91,10 @@ function partyReport(num){
 			         self.location.reload(true);
 			     }
 			     else self.name = ''; 
-			}
-			else{
+			}else{
 				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
 			}
-			
-			
-			
+	
 		},
 		error:function(e){
 			console.log("error");
@@ -297,7 +294,7 @@ $(document).ready(function(){
 					</h2>
 					<c:if test="${con.report == 0 }">
 						<div class="row  pt-1 mt-2">
-							<div class="col-sm-4 alert alert-success">
+							<div class="col-sm-12 alert alert-success">
 								<h6 class="">
 									<strong>정상모임</strong> : 신고건수 ${con.report} 건
 								</h6>
@@ -434,7 +431,7 @@ $(document).ready(function(){
 			</div>
 			<div class="row mb-1 mt-2 mb-3"></div>
 			<div class="row mb-2">
-				<div class="col-12">
+				<div class="col-12 text-center">
 					<c:choose>
 						<c:when
 							test="${(partyFullCheck eq false && con.status eq 1 ) && partyParticipantCheck eq false}">
@@ -450,7 +447,7 @@ $(document).ready(function(){
 							 </c:if> 
 							
 							<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
-								<button type="button" id="toExitParty" class="btn btn-primary">모임
+								<button type="button" id="toExitParty" class="btn btn-danger">모임
 									나가기</button>
 							</c:if>
 							<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
@@ -474,7 +471,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 			<div class="row mb-3">
-				<div class="col-12 mb-5">
+				<div class="col-12 mb-5 text-right">
 					<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
 						<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 						<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>

@@ -130,7 +130,9 @@
 
 		<!-- 회원가입 권유 -->
 		<div class="row">
-			<div class="col-sm-12">회원가입 권유</div>
+			<div class="col-sm-12">
+				회원가입 권유 
+			</div>	
 		</div>
 	</div>
 	
