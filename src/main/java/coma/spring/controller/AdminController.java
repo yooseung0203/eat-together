@@ -564,7 +564,7 @@ public class AdminController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("admin_reportContent")
+	@RequestMapping(value="admin_reportContent" ,produces="application/json;charset=utf8")
 	public String getReportContent(int seq)  throws Exception {
 		ReportDTO rdto = aservice.getReportContent(seq);
 		Gson gson = new Gson();

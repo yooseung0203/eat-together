@@ -11,15 +11,23 @@ import coma.spring.dto.ReportDTO;
 public class ReportService {
 	
 	@Autowired
-	private ReportDAO rdao;
+	private ReportDAO repodao;
 	
 	// 태훈 신고 테이블 추가
 	public int newReport(ReportDTO rdto) throws Exception {
-		return rdao.newReport(rdto);
+		return repodao.newReport(rdto);
 	}
 	// 태훈 신고 중복 검사
 	public int checkDupl(ReportDTO rdto) throws Exception {
-		return rdao.checkDupl(rdto);
+		return repodao.checkDupl(rdto);
+	}
+	
+	public int refuseReport(int seq) throws Exception {
+		return repodao.refuseReport(seq);
+	}
+	
+	public int repoCountDown(int category , int parent_seq) throws Exception {
+		return repodao.repoCountDown(category , parent_seq);
 	}
 	
 }

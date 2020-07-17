@@ -11,6 +11,15 @@
 	<select id="getListCount"  resultType="int">
 		select count(*) from report
 	</select>
-
+	
+	<update id="refuseReport">
+		update table report set status = 1 where seq = #{seq}
+	</update>
+	
+	<update id="repoCountDown">
+		update table
+		from ${table}
+		set report = report-1 where seq = #{seq}
+	</update>
 </mapper> 
    

@@ -67,11 +67,15 @@ public class ReportController {
 	}
 	
 
-	
-	@RequestMapping("accept")
-	public int accept(HttpServletRequest request) {
-
-		return 0;
+	@ResponseBody
+	@RequestMapping("reportRefuse")
+	public int accept(HttpServletRequest request) throws Exception {
+		int result=0;
+		int repoResult = reposervice.refuseReport(Integer.parseInt(request.getParameter("seq")));
+		if(repoResult == 1) {
+			result = reposervice.repoCountDown(Integer.parseInt(request.getParameter("category")), Integer.parseInt(request.getParameter("parent_seq")));
+		}
+		return result;
 	}
 	
 	@RequestMapping("refuse")

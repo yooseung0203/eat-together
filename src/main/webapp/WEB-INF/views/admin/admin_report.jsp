@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<% request.setCharacterEncoding("utf-8"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +31,7 @@ $(function(){
 		console.log($(this).siblings(".seq").val());
 		$.ajax({
 			url:"/admin/admin_reportContent",
-			dataType:'Json',
+			dataType:"JSON",
 			data:{seq:$(this).siblings(".seq").val()}
 		}).done(function(resp){
 			console.log(resp);
@@ -41,13 +42,24 @@ $(function(){
 			$(".modal-body #report_date").html(resp.report_date);
 			$(".modal-body #content").html(resp.content);
 			$(".modal-body #status").html(resp.status);
+			$(".modal-body #parent_seq").html(resp.parent_seq);
+			$("#mymodal").modal();
 		})
 	});
 	
 	$("#refuse").on("click",function(){
 		var check = confirm("회원의 신고를 반려 처리합니다. /n처리하시겠습니까?");
-		if(check){
+		if(check){			
+			//var seq = $(".modal-title").html().substring(1);
+			var seq = $(".seq").val();
+			console.log(seq);
+			$.ajax({
+				url:"/report/reportRefuse",
 				
+				data:{seq:seq , parent_seq : parent_seq , category : category}
+			}).done(function(){
+				alert("Aa");
+			});
 		}
 	});
 	
@@ -135,7 +147,6 @@ $(function(){
 															접수 온료
 														</c:otherwise>
 													</c:choose>
-													<input type="hidden" class="seq" value="${i.seq }">
 												</td>
 												<td>
 													<button type="button"  class="btn btn-secondary reportView" data-toggle="modal" data-target="#staticBackdrop">
@@ -176,6 +187,14 @@ $(function(){
 										<div class="modal-body">
 											<table>
 												<tbody>
+													<tr>
+														<th scope="row">신고 대상 글번호</th>
+														<td id="parent_seq"></td>
+													</tr>
+													<tr>
+														<th scope="row">신고일</th>
+														<td id="report_date"></td>
+													</tr>
 													<tr>
 														<th scope="row">신고 대상 아이디</th>
 														<td id="report_id"></td>
