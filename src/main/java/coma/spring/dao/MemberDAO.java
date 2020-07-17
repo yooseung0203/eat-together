@@ -2,6 +2,7 @@ package coma.spring.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -98,6 +99,10 @@ public class MemberDAO {
 	//회원탈퇴 및 비밀번호 찾기를 위한 이메일 체크
 	public MemberDTO emailCheck(Map<String, String> param) throws Exception{
 		return mybatis.selectOne("Member.emailCheck", param);
+	}
+
+	public int memberAddReportCount(List<String> list) {
+		return mybatis.update("Member.memberAddReportCount",list);
 	}
 	
 }

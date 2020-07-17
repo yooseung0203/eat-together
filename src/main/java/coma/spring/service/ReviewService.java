@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import coma.spring.dao.MapDAO;
+import coma.spring.dao.MemberDAO;
 import coma.spring.dao.ReportDAO;
 import coma.spring.dao.ReviewDAO;
 import coma.spring.dao.ReviewFileDAO;
@@ -30,6 +31,8 @@ public class ReviewService {
 	private MapDAO mapdao;
 	@Autowired
 	private ReviewFileDAO rfdao;
+	@Autowired
+	private MemberDAO mdao;
 	@Transactional("txManager")
 	public void write(ReviewDTO rdto) throws Exception{
 		rvdao.insert(rdto);

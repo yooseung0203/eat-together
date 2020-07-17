@@ -279,7 +279,16 @@
 									</div>
 									<div class="content"><c:out value="${i.key.content}"></c:out></div>
 									<div class="bottom">
-										${i.key.id}<span class="bg_bar"></span>${i.key.sdate}<span class="bg_bar"></span><button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'<c:out value="${i.key.content}"></c:out>','${i.key.id}')">신고</button>
+										${i.key.id}<span class="bg_bar"></span>
+										${i.key.sdate}
+										<c:choose>
+											<c:when test="${i.key.id eq 'unknown'}">
+											</c:when>
+											<c:otherwise>
+												<span class="bg_bar"></span>
+												<button type="button" class="btn btn-primary report" onClick="reviewReport(${i.key.seq},'<c:out value="${i.key.content}"></c:out>','${i.key.id}')">신고</button>
+											</c:otherwise>
+										</c:choose>
 									</div>
 								</div>
 							</c:forEach>

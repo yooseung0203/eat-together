@@ -99,14 +99,10 @@ public class ReviewController {
 	@RequestMapping("reviewDeleteProc") // 체크한 리뷰 삭제시키기
 	public int reviewDeleteProc(HttpServletRequest request)throws Exception{
 		String data = request.getParameter("seqs"); 
-		String ids = data.substring(2,data.length()-2);
-		String[] checkList = ids.split("\",\"");
+		String seqs = data.substring(2,data.length()-2);
+		String[] checkList = seqs.split("\",\"");
 
 		System.out.println("삭제 선택한 리뷰 수 : " + checkList.length);
-
-		for(int a = 0; a<checkList.length;a++) {
-			System.out.println(checkList[a]);
-		}
 		int resp = rservice.delete(checkList);
 		System.out.println("삭제된 리뷰 수 : " + resp);
 		return resp;
