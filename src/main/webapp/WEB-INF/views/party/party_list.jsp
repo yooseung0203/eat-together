@@ -378,10 +378,7 @@ $(function() {
 	background-color:#ffd04f;
 	padding:15px;
 }
-#lineline{
-	margin-top:3rem;
-	margin-bottom:0rem;
-}
+
 
 #Progress_Loading{
 	position:fixed;
@@ -423,9 +420,15 @@ $(function() {
 /*   height: 박스의 height와 같아야 한다. */
   transform: translate(-50%, -50%);
 }
-.topBtn {
-	
+.topBtn{
+	background-color:#ff923c;
+	border-color:#ff923c;
 }
+.topBtn:hover{
+	background-color:#ff9d4f;
+	border-color:#ff9d4f;
+}
+
 </style>
 </head>
 <body>
@@ -462,7 +465,7 @@ $(function() {
 									${top.address }
 								</c:when>
 									<c:otherwise>
-										<c:out value="${review[top.seq].content }" />\
+										<c:out value="${review[top.seq].content }" />
 									<br>
 									- by ${review[top.seq].id }	
 								</c:otherwise>

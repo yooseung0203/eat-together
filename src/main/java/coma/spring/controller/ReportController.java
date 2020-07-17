@@ -66,4 +66,17 @@ public class ReportController {
 		return result;
 	}
 	
+	
+	@RequestMapping("accept")
+	public int accept(HttpServletRequest request) {
+
+		return 0;
+	}
+	
+	@RequestMapping("refuse")
+	public int refuse(ReportDTO rdto, HttpServletRequest request) {
+		
+		return 0;
+	}
+	
 }

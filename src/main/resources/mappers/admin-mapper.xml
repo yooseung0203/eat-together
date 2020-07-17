@@ -121,4 +121,8 @@
 	<update id="saveMsg">
 		update msg set receiver_del=0,sender_del=0 where msg_seq=#{value}
 	</update>
+	<!-- 태훈 신고 내용 보기 -->
+	<select id="getReportContent" resultType="coma.spring.dto.ReportDTO">
+		select * from report where seq = #{seq}
+	</select>
 </mapper>

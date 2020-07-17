@@ -16,8 +16,20 @@
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- BootStrap4 End-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
 <title>Report</title>
 <script type="text/javascript">
+var option ={
+		url:"/memreport/memReport",
+		type:"post",
+		success:function(result){
+			alert("신고가 정상적으로 처리되었습니다.");
+			window.close();
+		},
+		error:function(result){
+			alert("에러 발생. 관리자에게 문의하십시요.");
+		}
+}
 $(function() {
 	$("#idcheck").on("click", function() {
 		var nickname = $("#report_id").val();
@@ -56,8 +68,14 @@ $(function() {
 		}
 	});
 });
+
 $(function(){
-	$("#report").on()
+	$(document).on('submit','#reportForm',function(e){
+		e.preventDefault();
+		$(this).ajaxSubmit(option);		
+		console("ajax 성공");
+		return false;
+	});
 });
 </script>
 <style>
@@ -67,7 +85,7 @@ $(function(){
 </style>
 </head>
 <body>
-<form id="report" action="/memreport/memReport">
+<form id="reportForm">
 	<div>신고 페이지</div>
 	<div >
 		신고자 닉네임 : ${nick }

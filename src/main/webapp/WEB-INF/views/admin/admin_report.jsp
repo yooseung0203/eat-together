@@ -25,6 +25,42 @@ function toAccept(seq){
 	}
 };
 
+$(function(){
+	$(".reportView").on("click",function(){
+		console.log($(this).siblings(".seq").val());
+		$.ajax({
+			url:"/admin/admin_reportContent",
+			dataType:'Json',
+			data:{seq:$(this).siblings(".seq").val()}
+		}).done(function(resp){
+			console.log(resp);
+			$(".modal-title").html("#" + resp.seq);
+			$(".modal-body #report_id").html(resp.report_id);
+			$(".modal-body #id").html(resp.id);
+			$(".modal-body #category").html(resp.category);
+			$(".modal-body #report_date").html(resp.report_date);
+			$(".modal-body #content").html(resp.content);
+			$(".modal-body #status").html(resp.status);
+		})
+	});
+	
+	$("#refuse").on("click",function(){
+		var check = confirm("회원의 신고를 반려 처리합니다. /n처리하시겠습니까?");
+		if(check){
+				
+		}
+	});
+	
+	$("#accept").on("click",function(){
+		var check = confirm("회원의 신고를 승인합니다. /n처리하시겠습니까?");
+		if(check){
+			$.ajax({
+			});	
+		}
+	})
+});
+
+
 </script>
 </head>
 <body>
@@ -72,7 +108,10 @@ function toAccept(seq){
 									<tbody>
 										<c:forEach var="i" items="${list}" varStatus="status">
 											<tr>
-												<th scope="row" class="text-center">${status.index}</th>
+												<th scope="row" class="text-center">
+													${status.index}													
+												</th>
+												
 												<c:choose>
 													<c:when test="${i.category eq 0}">
 														<td>리뷰 신고</td>
@@ -96,10 +135,13 @@ function toAccept(seq){
 															접수 온료
 														</c:otherwise>
 													</c:choose>
+													<input type="hidden" class="seq" value="${i.seq }">
 												</td>
 												<td>
-													<button type="button" id="accept" class="btn btn-danger">접수</button>
-													<button type="button" id="refuse" class="btn btn-warning">반려</button>
+													<button type="button"  class="btn btn-secondary reportView" data-toggle="modal" data-target="#staticBackdrop">
+  														상세 내용
+													</button>
+													<input type="hidden" class="seq" value="${i.seq }">
 												</td>
 											</tr>
 										</c:forEach>
@@ -114,17 +156,64 @@ function toAccept(seq){
 									<ul class="pagination justify-content-center">${navi}</ul>
 								</nav>
 							</div>
-							<div class="col-2"></div>
-
-							<div class="modal fade" id="mymodal" role="dialog">
-								<div class="modal-dialog modal-xl">
-									<!-- Modal content-->
-									<div class="modal-content" id="aaa">
-									
+							<div class="modal fade" id="mymodal"
+								data-backdrop="static" data-keyboard="false" tabindex="-1"
+								role="dialog" aria-labelledby="staticBackdropLabel"
+								aria-hidden="true">
+								<div class="modal-dialog modal-dialog-centered">
+									<div class="modal-content">
+										<!-- header -->
+										<div class="modal-header">
+											<h5 class="modal-title" id="staticBackdropLabel">
+												
+											</h5>
+											<button type="button" class="close" data-dismiss="modal"
+												aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</div>
+										<!-- body -->
+										<div class="modal-body">
+											<table>
+												<tbody>
+													<tr>
+														<th scope="row">신고 대상 아이디</th>
+														<td id="report_id"></td>
+													</tr>
+													<tr>
+														<th scope="row">신고자 아이디</th>
+														<td id="id"></td>
+													</tr>
+													<tr>
+														<th scope="row">신고 유형</th>
+														<td id="category"></td>
+													</tr>
+													<tr>
+														<th scope="row">제목  / 상호</th>
+														<td id="write_date"></td>
+													</tr>
+													<tr>
+														<th scope="row">신고 내용</th>
+														<td id="content"></td>
+													</tr>
+													<tr>
+														<th scope="row">처리 상태</th>
+														<td id="status"></td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+										<!-- footer -->
+										<div class="modal-footer">
+											<button type="button" class="btn btn-secondary"
+												data-dismiss="modal">닫기</button>
+											<button type="button" id="accept" class="btn btn-danger">접수</button>
+											<button type="button" id="refuse" class="btn btn-warning">반려</button>
+										</div>
 									</div>
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 				</div>
