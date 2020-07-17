@@ -92,9 +92,11 @@ console.log(imgHeight);
 /******************* 변수 ************************/
  
 /************************* 첫  페이지 로딩 ******************************/
-window.onload = $(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+window.onload = $(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.	
 	getPartyList(cpage);
+	test();
 	cpage++;
+	
 });
 /*********************** End 첫  페이지 로딩 ****************************/
 
@@ -108,13 +110,10 @@ function getDocHeight() {
     );
 }
 
-function test() {
-    window.onbeforeunload = function (e) {
-    	cpage = 1;
-    	$(window).scrollTop(0);
-    };
+function test(){
+	$(window).scrollTop(0);
 }
-
+	 
 $(function() {	
 	$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
 		console.log(getDocHeight());
@@ -204,7 +203,7 @@ $(function(){
 		
 	    e.preventDefault(); // avoid to execute the actual submit of the form.
 	    
-		$("#start_list").empty();
+		$("#start_list").empty();	
 	    test();
 		partySearch(url,formData,cpage);
 	});	
