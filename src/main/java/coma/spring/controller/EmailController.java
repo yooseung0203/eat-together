@@ -175,7 +175,7 @@ public class EmailController {
 				Message message = new MimeMessage(session);
 				message.setFrom(new InternetAddress("no-reply@eat-together.net"));
 				message.setRecipients(Message.RecipientType.TO,
-						InternetAddress.parse(account_email));
+						InternetAddress.parse(recipient));
 				message.setSubject(subject);
 				message.setContent(msg, "text/html; charset=utf-8");
 				Transport.send(message);
