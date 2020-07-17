@@ -18,8 +18,8 @@
 <title>Admin-신고관리</title>
 <script>
 
-function toDelete(seq){
-	var ask = confirm("회원은 신고가 접수 됩니다.");
+function toAccept(seq){
+	var ask = confirm("회원의 신고가 접수 됩니다.");
 	if(ask){
 		location.href="/report/reportAccept?seq="+seq;
 	}
@@ -65,6 +65,7 @@ function toDelete(seq){
 											<th scope="col">신고자 닉네임</th>
 											<th scope="col">신고 닉네임</th>
 											<th scope="col">신고일</th>
+											<th scope="col">접수 상태</th>
 											<th scope="col">접수</th>
 										</tr>
 									</thead>
@@ -87,8 +88,18 @@ function toDelete(seq){
 												<td>${i.report_id}</td>
 												<td>${i.sdate}</td>
 												<td>
-													<button type="button" id="toDelete${i.seq}"
-														onclick="toDelete(${i.seq})" class="btn btn-danger">접수</button>
+													<c:choose>
+														<c:when test="${i.status == 0}">
+															미접수
+														</c:when>
+														<c:otherwise>
+															접수 온료
+														</c:otherwise>
+													</c:choose>
+												</td>
+												<td>
+													<button type="button" id="accept" class="btn btn-danger">접수</button>
+													<button type="button" id="refuse" class="btn btn-warning">반려</button>
 												</td>
 											</tr>
 										</c:forEach>
