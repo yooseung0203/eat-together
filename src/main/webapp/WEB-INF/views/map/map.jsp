@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asaasa'></script>
+<script src='/resources/js/map.js?asaasaa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -232,7 +232,7 @@
 											<div class="writer">
 												<b>${sessionScope.loginInfo.id}</b>님
 											</div>
-											<div contenteditable="true" class="input_content"></div>
+											<div contenteditable="true" class="input_content" id="editable"></div>
 											<input type="text" name="content" style="display: none;"
 												id="review_content">
 											<div class="filebox">
