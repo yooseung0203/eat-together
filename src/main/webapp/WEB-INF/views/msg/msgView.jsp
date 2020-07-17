@@ -78,6 +78,9 @@
 		$("#close").on("click", function() {
 			window.close();
 		})
+		$("#msgResponse").on("click",function(){
+			window.resizeTo(500,620);
+		})
 	</script>
 </body>
 </html>

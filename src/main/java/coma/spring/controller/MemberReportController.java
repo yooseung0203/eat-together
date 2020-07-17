@@ -34,7 +34,6 @@ public class MemberReportController {
 	public String toReport(HttpServletRequest request) throws Exception {
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		request.setAttribute("nick", loginInfo.getNickname());
-
 		return "/memreport/memreport_new";
 	}
 	
@@ -46,7 +45,6 @@ public class MemberReportController {
 		}
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		String reporter = loginInfo.getNickname();
-
 		boolean result = true;
 		result = mservice.isNickAvailable(nickname);
 		if (!(result)) {
@@ -63,7 +61,6 @@ public class MemberReportController {
 	
 	@RequestMapping("memReport")
 	public String memReport(MemberReportDTO mdto , HttpServletRequest request ,RedirectAttributes redirectAttributes) throws Exception {
-			
 		int result = mrservice.memReport(mdto);
 		System.out.println("결과 :" +result);
 		if(result >0) {

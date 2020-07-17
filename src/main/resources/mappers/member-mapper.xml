@@ -48,7 +48,7 @@
 
 	<select id="isIdAvailable" resultType="int">
 		select count(*) from
-		member where id=#{value}
+		member where id=#{value} or id='unknown'
 	</select>
 
 	<!-- 닉네임 중복체크_20200710 -->
@@ -79,10 +79,21 @@
 		resultType="coma.spring.dto.MemberDTO">
 		select * from member where account_email=#{value}
 	</select>
-
-	<select id="deleteMember" resultType="int">
+<!-- 회원탈퇴 시 테이블마다 데이터를 지우는 매퍼 생성_20200717 -->
+	<delete id="deleteMember1">
 		delete from member where
-		id=#{value}
-	</select>
+		nickname=#{value}
+	</delete>
+	<delete id="deleteMember2">
+		delete from party where writer=#{value}
+	</delete>
+	<delete id="deleteMember3">
+		delete from partylist where participant=#{value}
+	</delete>
+	<update id="renameReview">
+		update review set id='unknown'
+		where id =#{value}
+	</update>
+	
 
 </mapper>

@@ -17,6 +17,8 @@
 <link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
 <title>Admin-모임글관리</title>
 <style>
+	#toOut{background-color:#fcbb42;border:1px solid #ffa500;}
+	#toOut:hover{background-color:#ffa500;}
 	.page-item{margin-left:2px;margin-right:2px;}
     .page-link{
     	line-height:1 !important;
@@ -143,7 +145,7 @@ $(function(){
 									<tbody>
 										<c:forEach var="i" items="${list}" varStatus="status">
 											<tr>
-												<th scope="row" class="text-center">${status.index}</th>
+												<th scope="row" class="text-center">${i.seq}</th>
 
 												<td  style="max-width: 150px;" class="text-truncate"><a href="/admin/admin_party_content?seq=${i.seq}" style="max-width: 150px;">${i.title}</a>
 

@@ -78,13 +78,13 @@
 						<th scope="col" colspan=4>닉네임</th>
 						<td scope="col" colspan=8><input type="text"
 							name="msg_receiver" id="msg_receiver" style="width: 70%;">
-							<input type="button" id="idcheck" value="확인" style="width: 13%;">
-							<input type="button" value="검색" style="width: 13%;"></td>
+							<input type="button" id="idcheck" value="확인" style="width: 26%;">
+						</td>
 					</tr>
 					<tr align="center">
 						<th scope="col" colspan=4>제목</th>
 						<td scope="col" colspan=8><input type="text" name="msg_title"
-							id="msg_title" style="width: 100%;"></td>
+							id="msg_title" style="width: 100%;" maxlength="32"></td>
 					</tr>
 					<tr align="center">
 						<th scope="col" colspan=12>내용</th>
@@ -120,7 +120,7 @@
 
 			if (result == '확인됨') {
 				if ($("#msg_title").val() != "") {
-					if ($("msg_text").val() != "") {
+					if ($("#msg_text").val().length >= 1) {
 						return true;
 					} else {
 						alert("내용을 입력하세요");

@@ -98,9 +98,9 @@ public class MemberService {
 		return result;
 	}
 
-	//회원탈퇴
-	public int deleteMember(String id) throws Exception{
-		int result = mdao.deleteMember(id);
+	//회원탈퇴 파라미터 수정_20200717
+	public int deleteMember(String id, String nickname) throws Exception{
+		int result = mdao.deleteMember(id, nickname);
 		return result;
 	}
 	//내정보수정하기
@@ -156,7 +156,7 @@ public class MemberService {
 			sb.append("&client_id=39543f4353dc8ce2c9268fc23c6d67e4");
 			
 			//테스트는 localhost로 수행하지만, 최종발표에서는 redirect_uri=https://eat-together.net/member/kakaoLogin 수정필요_20200713
-			sb.append("&redirect_uri=http://localhost/member/kakaoLogin");
+			sb.append("&redirect_uri=https://eat-together.net/member/kakaoLogin");
 			sb.append("&code=" + code);
 			bw.write(sb.toString());
 			bw.flush();
