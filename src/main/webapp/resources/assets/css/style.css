@@ -81,7 +81,7 @@ main {
   text-align: left;
   overflow-x: hidden;
   line-height: 22px;
-  width:92%;
+  width:60%;
   margin:auto;
 }
 
@@ -229,11 +229,6 @@ ul {
 }
 
 
-/*--------------------------------------------------------------
-# Responsive
---------------------------------------------------------------*/
-
-  /* Tablet desktop :768px. */
   .party-content.text-center > h4 {
     font-size: 20px;
   }

@@ -310,17 +310,15 @@ public class PartyController {
 	@RequestMapping("getPartyList")
 	public String getPartyList(HttpServletRequest request) throws Exception {
 
-		//int cpage=1;
+		int cpage=1;
 		
-//		try {
-//			 cpage = Integer.parseInt(request.getParameter("cpage"));
-//		}catch(Exception e) {
-//
-//		}
-		int cpage = Integer.parseInt(request.getParameter("cpage"));
+		try {
+			 cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
 
-		List<PartyDTO> partyList = pservice.selectList(cpage);
+		}
 		
+		List<PartyDTO> partyList = pservice.selectList(cpage);
 		
 		request.setAttribute("list", partyList);
 		
@@ -350,7 +348,13 @@ public class PartyController {
         System.out.println(map.get("text"));
         System.out.println(map);
 
-		int cpage = Integer.parseInt(request.getParameter("cpage"));
+        int cpage=1;
+		
+		try {
+			 cpage = Integer.parseInt(request.getParameter("cpage"));
+		}catch(Exception e) {
+
+		}
 		
 		List<PartyDTO> partyList = pservice.partySearch(map , cpage);
 

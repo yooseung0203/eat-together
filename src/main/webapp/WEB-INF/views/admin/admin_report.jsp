@@ -35,7 +35,7 @@ function toDelete(seq){
 			<div class="col-10 px-5">
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
-						<h2 class="admin-h2">신고 관리</h2>
+						<h2 class="admin-h2">회원 신고 관리</h2>
 					</div>
 				</div>
 				<div class="row">
