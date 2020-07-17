@@ -33,7 +33,7 @@
 	rel="stylesheet">
 	
 <!-- Template Main CSS File -->
-<link href="/resources/assets/css/style.css" rel="stylesheet">
+<link href="/resources/assets/css/style.css?ver=1" rel="stylesheet">
 <!-- 태훈 추가 -->
 
 <!-- BootStrap4 -->
@@ -73,7 +73,7 @@
 	href="/resources/css/party-css.css">
 
 <!-- 태훈 css -->
-<link rel="stylesheet" type="text/css" href="/resources/css/party-content-include.css?ver=5">
+<link rel="stylesheet" type="text/css" href="/resources/css/party-content-include.css?ver=7">
 <!-- 태훈 css -->
 
 <title>모임 리스트</title>
@@ -92,9 +92,11 @@ console.log(imgHeight);
 /******************* 변수 ************************/
  
 /************************* 첫  페이지 로딩 ******************************/
-window.onload = $(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.
+window.onload = $(function() { //페이지가 로드되면 데이터를 가져오고 page를 증가시킨다.	
 	getPartyList(cpage);
+	test();
 	cpage++;
+	
 });
 /*********************** End 첫  페이지 로딩 ****************************/
 
@@ -108,13 +110,10 @@ function getDocHeight() {
     );
 }
 
-function test() {
-    window.onbeforeunload = function (e) {
-    	cpage = 1;
-    	$(window).scrollTop(0);
-    };
+function test(){
+	$(window).scrollTop(0);
 }
-
+	 
 $(function() {	
 	$(window).scroll(function() { //스크롤이 최하단 으로 내려가면 리스트를 조회하고 page를 증가시킨다.
 		console.log(getDocHeight());
@@ -204,7 +203,8 @@ $(function(){
 		
 	    e.preventDefault(); // avoid to execute the actual submit of the form.
 	    
-		$("#start_list").empty();
+		$("#start_list").empty();	
+	    test();
 		partySearch(url,formData,cpage);
 	});	
 });
@@ -217,7 +217,7 @@ $(function() {
 		console.log("버튼 기능 시작");
 		if ("${loginInfo.id}" == "") {
 			alert("로그인 후 이용해주세요");
-			//location.replace('/member/loginview');
+			location.replace('/member/loginview');
 		} else {
 			var select_seq = $(this).parent().siblings().children(".party_seq").val();
 			$("#aaa").empty();
@@ -303,57 +303,59 @@ $(function() {
 /**************************** 인기 맛집  모집하러기 *********************************/
  $(function(){
 	 $(".topBtn").on("click", function() {
+		 if ("${loginInfo.id}" == "") {
+				alert("로그인 후 이용해주세요");
+				location.replace('/member/loginview');
+		}else{
 			location.href = "/map/mapToParty_New?parent_name="
-								+ $(this).siblings(".store_name").html()
-								+ "&parent_address="
-								+ $(this).siblings(".store_address").val()
-								+ "&img=" + $(this).parent().siblings().find("img").attr("src")
-								+ "&place_id="
-								+ $(this).siblings(".store_place_id").val()
-								+ "&category="
-								+ $(this).siblings(".store_category").val();
-		});	 
+				+ $(this).siblings(".store_name").html()
+				+ "&parent_address="
+				+ $(this).siblings(".store_address").val()
+				+ "&img=" + $(this).parent().siblings().find("img").attr("src")
+				+ "&place_id="
+				+ $(this).siblings(".store_place_id").val()
+				+ "&category="
+				+ $(this).siblings(".store_category").val();
+		}
+	});	 
  });
 /************************** End 인기 맛집  모집하러기 ********************************/
  
-/***************** by 예지 페이지 로딩 스피너 **************/ 
+/***************** by 페이지 로딩 스피너 **************/ 
 $(function(){
 	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.	
 });
-/***************** End예지 페이지 로딩 스피너 **************/
-
+/***************** End 페이지 로딩 스피너 **************/
+/*
 $(function(){
 	$('.top5 .partylist>img').each(function (index, item) { 
 		// 인덱스는 말 그대로 인덱스 // item 은 해당 선택자인 객체를 나타냅니다. 
 		$(this ).css('height', $(this).height());  
 	});	
 });
-
-/*--------------------------
-Back to top button
----------------------------- */
-
-	$(function() {
-		$(window).scroll(function() {
-			if ($(this).scrollTop() > 100) {
-				$('.back-to-top').fadeIn('slow');
-			} else {
-				$('.back-to-top').fadeOut('slow');
-			}
-		});
-
-		$('.back-to-top').click(function() {
-			$('html, body').animate({
-				scrollTop : 0
-			}, 1500, 'easeInOutExpo');
-			return false;
-		});
+*/
+/***************** 상단 돌아가기 버튼 **************/
+$(function() {
+	$(window).scroll(function() {
+		if ($(this).scrollTop() > 100) {
+			$('.back-to-top').fadeIn('slow');
+		} else {
+			$('.back-to-top').fadeOut('slow');
+		}
 	});
+	$('.back-to-top').click(function() {
+		$('html, body').animate({
+			scrollTop : 0
+		}, 1500, 'easeInOutExpo');
+		return false;
+	});
+});
+/***************** 상단 돌아가기 버튼 **************/
 </script>
 <style>
 
 .aa {
-	width: 80%;
+	width: 60%;
 	margin: auto;
 }
 
@@ -373,7 +375,7 @@ Back to top button
 }
 
 .searchpart{
-	background-color:#cfcfcf;
+	background-color:#ffd04f;
 	padding:15px;
 }
 #lineline{
@@ -421,6 +423,9 @@ Back to top button
 /*   height: 박스의 height와 같아야 한다. */
   transform: translate(-50%, -50%);
 }
+.topBtn {
+	
+}
 </style>
 </head>
 <body>
@@ -432,13 +437,7 @@ Back to top button
 	<!-- ******************* -->
 
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12 col-sm-12 col-xs-12">
-				<div class="section-headline text-center">
-					<h2>밥 먹고 갈래?</h2>
-				</div>
-			</div>
-		</div>
+		
 		<!-- ================ Top 5 Section ================ -->
 		<div class="row aa">
 			<span class="col-12 listtitle">인기 맛집 Top 5!</span>
@@ -527,7 +526,7 @@ Back to top button
 		</div>
 	</div>
 	<!-- ============ End Party List Search Section ============ -->
-	<hr id="lineline" width="95%" color="black">
+	<!-- <hr id="lineline" width="95%" color="black"> -->
 	<!-- =========== Loding Spinner Section ============= -->
 	<div id = "Progress_Loading"><!-- 로딩바 -->
 		<img src="/resources/img/Progress_Loading.gif"/>
@@ -537,6 +536,15 @@ Back to top button
 	<!-- ======= Party List Section ======= -->
 	<main id="main">
 		<div class="area-padding">
+		
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+				<div class="section-headline text-center">
+					<h2>밥 먹고 갈래?</h2>
+				</div>
+			</div>
+		</div>
+		
 			<div class="container-fluid">
 				
 				<div class="row" id="start_list">
