@@ -46,6 +46,7 @@
 	<!-- ******************* -->
 	<div id=container class="col-md-12 login-container">
 		<h1 class="login_text">로그인</h1>
+		<input type=hidden id="loginCheck" value="${loginInfo.id}">
 		<form action="/member/login" method=post>
 			<div class="login_text">
 				<label for="id" class="login_text">아이디</label> <input type="text"
@@ -79,51 +80,61 @@
 	</div>
 
 	<script>
-		$("#loginBtn")
-				.on(
-						"click",
-						function() {
-							if ($("#id").val() == "") {
-								alert("아이디를 입력해주세요.");
-								return false;
-							} else if ($("#pw").val() == "") {
-								alert("비밀번호를 입력해주세요.");
-								return false;
-							} else {
-								//by 지은. 비밀번호 오류 시 유효성 검사하기_20200706
-								$
-										.ajax({
-											url : "/member/isPwCorrect",
-											type : 'POST',
-											data : {
-												id : $("#id").val(),
-												pw : $('#pw').val()
-											},
-											success : function(msg) {
-												if (msg == "uncorrect") {
-													alert("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
-													$("#pw").val("");
-													$("#pw").focus();
-													location
-															.replace("redirect:/member/loginview")
-												} else if (msg == "correct") {
-													alert("로그인 성공하였습니다.");
-													return true;
-												}
-											},
-											error : function(jqXHR, textStatus,
-													errorThrown) {
-												console.log("arjax error : "
-														+ textStatus + "\n"
-														+ errorThrown);
-												console
-														.warn(jqxhr.responseText);
-												return false;
+		window.onload = function() {
 
-											}
-										});
-							}
-						})
+			$("#loginBtn")
+					.on(
+							"click",
+							function() {
+								if ($("#id").val() == "") {
+									alert("아이디를 입력해주세요.");
+									return false;
+								} else if ($("#pw").val() == "") {
+									alert("비밀번호를 입력해주세요.");
+									return false;
+								} else {
+									//by 지은. 비밀번호 오류 시 유효성 검사하기_20200706
+									$
+											.ajax({
+												url : "/member/isPwCorrect",
+												type : 'POST',
+												data : {
+													id : $("#id").val(),
+													pw : $('#pw').val()
+												},
+												success : function(msg) {
+													if (msg == "uncorrect") {
+														alert("아이디 또는 비밀번호를 잘못 입력하셨습니다.");
+														$("#pw").val("");
+														$("#pw").focus();
+														location
+																.replace("redirect:/member/loginview")
+													} else if (msg == "correct") {
+														alert("로그인 성공하였습니다.");
+														return true;
+													}
+												},
+												error : function(jqXHR,
+														textStatus, errorThrown) {
+													console
+															.log("arjax error : "
+																	+ textStatus
+																	+ "\n"
+																	+ errorThrown);
+													console
+															.warn(jqxhr.responseText);
+													return false;
+
+												}
+											});
+								}
+							})
+
+			if ($("#loginCheck").val() != "") {
+				console.log("로그인되어있음");
+				location.replace("/");
+			}
+		}
 	</script>
 
 
