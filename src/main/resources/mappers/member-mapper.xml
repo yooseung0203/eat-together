@@ -80,9 +80,20 @@
 		select * from member where account_email=#{value}
 	</select>
 
-	<select id="deleteMember" resultType="int">
+	<delete id="deleteMember1">
 		delete from member where
-		id=#{value}
-	</select>
+		nickname=#{value}
+	</delete>
+	<delete id="deleteMember2">
+		delete from party where writer=#{value}
+	</delete>
+	<delete id="deleteMember3">
+		delete from partylist where participant=#{value}
+	</delete>
+	<update id="renameReview">
+		update review set id='unknown'
+		where id =#{value}
+	</update>
+	
 
 </mapper>
