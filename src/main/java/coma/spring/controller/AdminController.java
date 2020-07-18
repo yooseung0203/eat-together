@@ -563,7 +563,7 @@ public class AdminController {
 			return "/error/adminpermission";
 		}
 	}
-	
+	// 신고 상세 내용 불러오기
 	@ResponseBody
 	@RequestMapping(value="admin_reportContent" ,produces="application/json;charset=utf8")
 	public String getReportContent(int seq)  throws Exception {
@@ -571,7 +571,7 @@ public class AdminController {
 		Gson gson = new Gson();
 		return gson.toJson(rdto);
 	}
-	
+	// 신고 카테고리 리스트
 	@RequestMapping("Category_list")
 	public String Category_list(HttpServletRequest request)throws Exception{
 		

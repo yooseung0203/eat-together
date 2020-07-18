@@ -23,12 +23,20 @@ public class ReportService {
 		return repodao.checkDupl(rdto);
 	}
 	
-	public int refuseReport(int seq) throws Exception {
-		return repodao.refuseReport(seq);
+	public int checkReport(int seq) throws Exception {
+		return repodao.checkReport(seq);
 	}
 	
 	public int repoCountDown(int category , int parent_seq) throws Exception {
 		return repodao.repoCountDown(category , parent_seq);
+	}
+	
+	public int acceptReport(String report_id) throws Exception{
+		return repodao.acceptReport(report_id);
+	}
+	
+	public int deleteContent(int category , int parent_seq) throws Exception{
+		return repodao.deleteContent(category , parent_seq);
 	}
 	
 	//신고 리스트

@@ -29,8 +29,12 @@ public class ReportDAO {
 		return mybatis.selectOne("Report.getListCount");
 	}
 	
-	public int refuseReport(int seq) {
-		return mybatis.update("Report.refuseReport");
+	public int checkReport(int seq) {
+		return mybatis.update("Report.checkReport",seq);
+	}
+	
+	public int acceptReport(String report_id) {
+		return mybatis.update("Report.acceptReport",report_id);
 	}
 	
 	public int repoCountDown(int category , int parent_seq) {
@@ -39,12 +43,36 @@ public class ReportDAO {
 		if(category == 0) {
 			table = "review";
 		}
-		else {
+		else if(category == 1){
 			table = "party";
+		}else {
+			param.put("table" , "member_report");
+			param.put("seq", parent_seq);
+			return mybatis.delete("Report.deleteContent",param);
 		}
 		param.put("table" , table);
 		param.put("seq", parent_seq);
+		System.out.println("table"+ table);
+		System.out.println("seq"+parent_seq);
 		return mybatis.update("Report.repoCountDown",param);
+	}
+	
+	public int deleteContent(int category , int parent_seq) {
+		Map<String , Object> param = new HashMap<>();
+		String table =null;
+		if(category == 0) {
+			table = "review";
+		}
+		else if(category == 1){
+			table = "party";
+		}else {
+			table = "member_report";
+		}
+		param.put("table" , table);
+		param.put("seq", parent_seq);
+		System.out.println("table"+ table);
+		System.out.println("seq"+parent_seq);
+		return mybatis.delete("Report.deleteContent",param);
 	}
 	
 

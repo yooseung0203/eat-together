@@ -19,16 +19,11 @@
 <title>Admin-신고관리</title>
 <script>
 
-function toAccept(seq){
-	var ask = confirm("회원의 신고가 접수 됩니다.");
-	if(ask){
-		location.href="/report/reportAccept?seq="+seq;
-	}
-};
-
 $(function(){
 	$(".reportView").on("click",function(){
 		console.log($(this).siblings(".seq").val());
+		$("#refuse").css("display", "none");
+		$("#accept").css("display", "none");
 		$.ajax({
 			url:"/admin/admin_reportContent",
 			dataType:"JSON",
@@ -40,33 +35,53 @@ $(function(){
 			$(".modal-body #id").html(resp.id);
 			$(".modal-body #category").html(resp.category);
 			$(".modal-body #report_date").html(resp.report_date);
+			$(".modal-body #title").html(resp.title);
 			$(".modal-body #content").html(resp.content);
 			$(".modal-body #status").html(resp.status);
 			$(".modal-body #parent_seq").html(resp.parent_seq);
+			if($(".modal-body #status").html() == 0){
+				$("#refuse").css("display", "block");
+				$("#accept").css("display", "block");
+			}
 			$("#mymodal").modal();
 		})
 	});
 	
 	$("#refuse").on("click",function(){
-		var check = confirm("회원의 신고를 반려 처리합니다. /n처리하시겠습니까?");
+		var check = confirm("회원의 신고를 반려 처리합니다. \n처리하시겠습니까?");
 		if(check){			
-			//var seq = $(".modal-title").html().substring(1);
-			var seq = $(".seq").val();
+			var seq = $(".modal-title").html().substring(1);
+			var parent_seq = $("#parent_seq").html();
+			var category = $("#category").html();
 			console.log(seq);
 			$.ajax({
-				url:"/report/reportRefuse",
-				
-				data:{seq:seq , parent_seq : parent_seq , category : category}
-			}).done(function(){
-				alert("Aa");
+				url:"/report/reportRefuse",	
+				data:{seq : seq , parent_seq : parent_seq , category : category}
+			}).done(function(resp){
+				if(resp==1){
+					alert("정상적으로 처리 되었습니다.");
+					location.reload();
+				}
 			});
 		}
 	});
 	
 	$("#accept").on("click",function(){
-		var check = confirm("회원의 신고를 승인합니다. /n처리하시겠습니까?");
+		var check = confirm("회원의 신고를 승인합니다.\n처리하시겠습니까?");
 		if(check){
+			var seq = $(".modal-title").html().substring(1);
+			var parent_seq = $("#parent_seq").html();
+			var category = $("#category").html();
+			var report_id = $("#report_id").html();
+			console.log(seq);
 			$.ajax({
+				url:"/report/reportAccept",	
+				data:{seq : seq , parent_seq : parent_seq , category : category , report_id : report_id}
+			}).done(function(resp){
+				if(resp==1){
+					alert("정상적으로 처리 되었습니다.");
+					location.reload();
+				}
 			});	
 		}
 	})
@@ -74,6 +89,11 @@ $(function(){
 
 
 </script>
+<style>
+#refuse , #accept {
+	display:none;
+}
+</style>
 </head>
 <body>
 	<div class="container-fluid mx-0 px-0">
@@ -91,6 +111,7 @@ $(function(){
 						<button type="button" class="btn btn-warning" onclick="location.href='Category_list?cpage=1&category=0'">리뷰</button>
 						<button type="button" class="btn btn-warning" onclick="location.href='Category_list?cpage=1&category=1'">모임글</button>
 						<button type="button" class="btn btn-dark" onclick="location.href='Category_list?cpage=1&category=2'">회원</button>
+						<button type="button" class="btn btn-dark" onclick="location.href='toAdmin_report'">전체</button>
 					</div>
 				</div>
 
@@ -137,7 +158,7 @@ $(function(){
 															미접수
 														</c:when>
 														<c:otherwise>
-															접수 온료
+															접수 완료
 														</c:otherwise>
 													</c:choose>
 												</td>
@@ -157,7 +178,9 @@ $(function(){
 							<div class="col-2"></div>
 							<div class="col-8">
 								<nav aria-label="Page navigation example">
-									<ul class="pagination justify-content-center">${navi}</ul>
+									<ul class="pagination justify-content-center">
+										${navi}
+									</ul>
 								</nav>
 							</div>
 							<div class="modal fade" id="mymodal"
@@ -202,7 +225,7 @@ $(function(){
 													</tr>
 													<tr>
 														<th scope="row">제목  / 상호</th>
-														<td id="write_date"></td>
+														<td id="title"></td>
 													</tr>
 													<tr>
 														<th scope="row">신고 내용</th>
