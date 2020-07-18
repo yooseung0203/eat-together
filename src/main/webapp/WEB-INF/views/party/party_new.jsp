@@ -85,6 +85,13 @@
 		return year + '' + month + '' + day; //'-' 추가하여 yyyy-mm-dd 형태 생성 가능
 	}
 	$(function() {
+		$("#toLogin").on("click",function(){
+			location.href = "/member/loginview";
+		});
+		$("#toSignUp").on("click",function(){
+			location.href = "/member/signup_check";
+		});
+		
 		$("#party_title").on("change keyup paste", function() {
 			var len = $(this).val();
 			if (len.length > 25) {
@@ -321,8 +328,10 @@
 	<!-- ******************* -->
 	<div class="container-fluid section">
 		<c:if test="${empty sessionScope.loginInfo }">
-			<div class="loginError">
-				<h3 class="text-center my-5">로그인 후 이용해주세요.</h3>
+			<div class="loginError text-center">
+				<h3 class="text-center my-5 pt-5">로그인 후 이용해주세요.</h3>
+				<button type="button" class="btn btn-warning" id= "toLogin">로그인</button>
+				<button type="button" class="btn btn-warning" id= "toSignUp">회원가입</button>
 			</div>
 		</c:if>
 		<c:if test="${!empty sessionScope.loginInfo }">

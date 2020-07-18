@@ -99,7 +99,6 @@
 							<div class="col-6">${navi}</div>
 							<div class="col-4">
 								<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
-									<button class="btn btn-primary admin_text" id="toWriteBtn">글쓰기</button>
 									<button class="btn btn-danger admin_text" id="toOut">탈퇴</button>
 									<label><input type="checkbox" id="checkAll"
 										class="checkAll"> <span class="label label-primary admin_text">전체선택</span>
