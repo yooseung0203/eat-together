@@ -160,7 +160,7 @@ public class MsgController {
 		//아이디가 있는 아이디인지 체크
 		System.out.println(check);
 		if(check) {
-			return "/chat/error";
+			return "msg/msgWriteFail";
 		}else {
 		request.setAttribute("msg_receiver", msg_receiver);
 		return "msg/msgWriteResponse";
