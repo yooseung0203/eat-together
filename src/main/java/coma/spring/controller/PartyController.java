@@ -436,7 +436,7 @@ public class PartyController {
 		int block=pservice.userBlockedConfirm(nickname, Integer.parseInt(seq));
 		
 		if(block>0) {
-			return "/error/BlockJoin";
+			return "error/BlockJoin";
 		}
 
 		System.out.println(seq);
@@ -449,7 +449,7 @@ public class PartyController {
 		if(!partyFullCheck && !partyParticipantCheck) {
 			pservice.partyJoin(seq, nickname);
 		}else {
-			return "/error/partyJoin";
+			return "error/partyJoin";
 		}
 		
 		//모임참여 후 참가인원수 확인
