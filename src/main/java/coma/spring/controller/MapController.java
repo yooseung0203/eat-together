@@ -7,7 +7,10 @@ import java.io.FileWriter;
 import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -400,13 +403,27 @@ public class MapController {
 		request.setAttribute("partyCount", pcount);
 		MemberDTO account = (MemberDTO) session.getAttribute("loginInfo");
 		String nickname = account.getNickname();
-		Map<PartyDTO, Map<String, Boolean>> pMap = new LinkedHashMap<>();
+		Map<PartyDTO, Map<String, Object>> pMap = new LinkedHashMap<>();
 		for(PartyDTO pdto : plist) {
-			Map<String, Boolean> pCheckInfoMap = new LinkedHashMap<>();
+			Map<String, Object> pCheckInfoMap = new LinkedHashMap<>();
 			boolean partyFullCheck = pservice.isPartyfull(String.valueOf(pdto.getSeq()));
 			boolean partyParticipantCheck= pservice.isPartyParticipant(String.valueOf(pdto.getSeq()), nickname);
 			pCheckInfoMap.put("partyFullCheck", partyFullCheck);
 			pCheckInfoMap.put("partyParticipantCheck", partyParticipantCheck);
+			SimpleDateFormat formatter = new SimpleDateFormat ("yyyy-MM-dd hh:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			String today = null;
+			today = formatter.format(cal.getTime());
+			Timestamp ts = Timestamp.valueOf(today);
+			Timestamp deadln = pdto.getDeadline();
+			String partylife = "";
+			if(ts.compareTo(deadln)>0) {
+				partylife="dead";
+			}else {
+				partylife="alive";
+			}
+			pCheckInfoMap.put("partylife", partylife);
+			System.out.println(pCheckInfoMap.get("partylife"));
 			pMap.put(pdto, pCheckInfoMap);
 		}
 		request.setAttribute("partyMap", pMap);
@@ -479,7 +496,7 @@ public class MapController {
 
 	@ResponseBody
 	@RequestMapping(value="getPartyInfo",produces="application/json;charset=utf8")
-	public String getPartyInfo(int seq, boolean partyFullCheck, boolean partyParticipantCheck) throws Exception{
+	public String getPartyInfo(int seq, boolean partyFullCheck, boolean partyParticipantCheck, String partylife) throws Exception{
 		Gson gson = new Gson();
 		JsonObject respObj = new JsonObject();
 		PartyDTO pdto = pservice.selectBySeq(seq);
@@ -489,6 +506,7 @@ public class MapController {
 		respObj.add("pdto", gson.fromJson(jsondto, JsonElement.class));
 		respObj.add("partyFullCheck", gson.fromJson(String.valueOf(partyFullCheck),JsonElement.class));
 		respObj.add("partyParticipantCheck", gson.fromJson(String.valueOf(partyParticipantCheck),JsonElement.class));
+		respObj.add("partylife", gson.fromJson(partylife, JsonElement.class));
 		//pMap.put(gson.toJson(pdto), gson.toJson(pCheckInfoMap));
 		return gson.toJson(respObj);
 	}

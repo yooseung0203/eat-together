@@ -152,17 +152,17 @@
 											<c:when test="${not empty rlist}">
 												<form action="/review/reviewDeleteProc" id="reviewDeleteProc" method="post">
 												<c:forEach var="i" items="${rlist}">
-													<tr class="viewDetailReview" data-toggle="modal" data-target="#exampleModal">
-														<td class="admin_text seq">${i.seq}</td>
-														<td class="admin_text">${i.name}</td>
-														<td class="admin_text">${i.id}</td>
-														<td class="admin_text">
+													<tr class="viewDetailReview">
+														<td class="admin_text seq" data-toggle="modal" data-target="#exampleModal">${i.seq}</td>
+														<td class="admin_text" data-toggle="modal" data-target="#exampleModal">${i.name}</td>
+														<td class="admin_text id" data-toggle="modal" data-target="#exampleModal">${i.id}</td>
+														<td class="admin_text" data-toggle="modal" data-target="#exampleModal">
 															<div  style="max-width:100px;max-height:100px;white-space: nowrap;overflow: hidden; text-overflow: ellipsis;">
 															  ${i.content}
 															</div>
 														</td>
-														<td class="admin_text">${i.sdate}</td>
-														<td class="admin_text">${i.report}</td>
+														<td class="admin_text" data-toggle="modal" data-target="#exampleModal">${i.sdate}</td>
+														<td class="admin_text" data-toggle="modal" data-target="#exampleModal">${i.report}</td>
 														<td class="admin_text text-center"><input type="checkbox" name="checkbox[]" value="${i.seq}" class="checkboxes"></td>
 													</tr>
 												</c:forEach>

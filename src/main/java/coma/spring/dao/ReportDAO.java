@@ -8,8 +8,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import coma.spring.dto.MemberReportDTO;
-import coma.spring.dto.QuestionDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.statics.Configuration;
 
@@ -30,6 +28,53 @@ public class ReportDAO {
 	public int getListCount() {
 		return mybatis.selectOne("Report.getListCount");
 	}
+	
+	public int checkReport(int seq) {
+		return mybatis.update("Report.checkReport",seq);
+	}
+	
+	public int acceptReport(String report_id) {
+		return mybatis.update("Report.acceptReport",report_id);
+	}
+	
+	public int repoCountDown(int category , int parent_seq) {
+		Map<String , Object> param = new HashMap<>();
+		String table =null;
+		if(category == 0) {
+			table = "review";
+		}
+		else if(category == 1){
+			table = "party";
+		}else {
+			param.put("table" , "member_report");
+			param.put("seq", parent_seq);
+			return mybatis.delete("Report.deleteContent",param);
+		}
+		param.put("table" , table);
+		param.put("seq", parent_seq);
+		System.out.println("table"+ table);
+		System.out.println("seq"+parent_seq);
+		return mybatis.update("Report.repoCountDown",param);
+	}
+	
+	public int deleteContent(int category , int parent_seq) {
+		Map<String , Object> param = new HashMap<>();
+		String table =null;
+		if(category == 0) {
+			table = "review";
+		}
+		else if(category == 1){
+			table = "party";
+		}else {
+			table = "member_report";
+		}
+		param.put("table" , table);
+		param.put("seq", parent_seq);
+		System.out.println("table"+ table);
+		System.out.println("seq"+parent_seq);
+		return mybatis.delete("Report.deleteContent",param);
+	}
+	
 
 	public List<ReportDTO> selectByCategory(int cpage,int category)throws Exception{
 		int start = cpage*Configuration.recordMsgCountPerPage - (Configuration.recordMsgCountPerPage - 1);
@@ -43,12 +88,10 @@ public class ReportDAO {
 		return mybatis.selectList("Report.ListByCategory",param);
 	}
 	
-	//1:1문의 네비 카운트
 	public int getCount(int category) throws Exception{
 		return mybatis.selectOne("Report.getCount",category);
 	}
 
-	//회원의 1:1문의 네비
 	public String getSelectCategoryPageNav(int cpage, int category) throws Exception{
 		int recordTotalCount = this.getCount(category); // 총 회원 수
 		int pageTotalCount = 0; // 전체 페이지의 개수

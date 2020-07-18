@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import coma.spring.dao.AdminDAO;
+import coma.spring.dao.FaqDAO;
 import coma.spring.dao.PartyDAO;
 import coma.spring.dao.ReportDAO;
 import coma.spring.dto.MemberDTO;
@@ -16,7 +17,6 @@ import coma.spring.dto.MsgDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.statics.Configuration;
-import coma.spring.statics.PartyConfiguration;
 
 @Service
 public class AdminService {
@@ -28,6 +28,9 @@ public class AdminService {
 	
 	@Autowired
 	private ReportDAO rdao;
+	
+	@Autowired
+	private FaqDAO fdao;
 
 	//by 지은, 체크박스 회원 삭제하기
 	public int memberOut(String[] checkList) {
@@ -268,7 +271,6 @@ public class AdminService {
 			cpage = pageTotalCount;
 		}
 
-
 		int startNav = (cpage-1)/Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
 		int endNav = startNav + Configuration.navCountPerPage - 1;
 		if(endNav > pageTotalCount) {
@@ -285,23 +287,25 @@ public class AdminService {
 			needNext = false;
 		}
 
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("<nav aria-label='Page navigation'><ul class='pagination justify-content-center'>");
+
 		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-left\\\"></i></a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='/admin/toAdmin_report?cpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
 		}
 
 		for(int i=startNav; i<=endNav; i++) {
 			if(cpage == i) {
-				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/toAdmin_report?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 			}else {
-				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"</a></li>");
+				sb.append("<li class='page-item'><a class='page-link' href='/admin/toAdmin_report?cpage="+i+"'>"+i+"</a></li>");
 			}
 		}
-		if(needNext) {
-			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(endNav+1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-right\\\"></i></a></li>");
-		}
 
+		if(needNext) {
+			sb.append("<li class=page-item><a class=page-link href='/admin/toAdmin_report?cpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
+		}		
+		sb.append("</ul></nav>");
 		return sb.toString();
 	}
 	
@@ -321,19 +325,20 @@ public class AdminService {
 	// 태훈  신고 리스트 네비_20200712
 	public String getReportNavi(int currentPage) throws Exception{
 		int recordTotalCount =rdao.getListCount(); 
+		System.out.println("신고 토탈"+recordTotalCount);
 		int pageTotalCount = 0; 
-		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
+		if(recordTotalCount % Configuration.recordCountPerPage > 0) {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage + 1;			
 		}else {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage;
 		}
 		if(currentPage < 1) {
 			currentPage = 1;
 		}else if(currentPage > pageTotalCount) {
 			currentPage = pageTotalCount;
 		}
-		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
-		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
+		int startNavi = (currentPage - 1) / Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
+		int endNavi = startNavi + Configuration.navCountPerPage - 1;
 		if(endNavi > pageTotalCount) {
 			endNavi = pageTotalCount;
 		}
@@ -403,6 +408,66 @@ public class AdminService {
 	}
 	public ReportDTO getReportContent(int seq) throws Exception{
 		return adao.getReportContent(seq);
+	}
+	
+	//수지 faq리스트
+	public String faqgetPageNav(int currentPage) throws Exception{
+		int recordTotalCount = fdao.getArticleCount(); // 총 개시물의 개수
+		int pageTotalCount = 0; // 전체 페이지의 개수
+
+		if( recordTotalCount % Configuration.recordCountPerPage > 0) {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage +1;
+		}else {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage;
+		}
+
+		if(currentPage < 1) {
+			currentPage = 1;
+		}else if(currentPage > pageTotalCount){
+			currentPage = pageTotalCount;
+		}
+
+		int startNav = (currentPage-1)/Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
+		int endNav = startNav + Configuration.navCountPerPage - 1;
+		if(endNav > pageTotalCount) {
+			endNav = pageTotalCount;
+		}
+
+		boolean needPrev = true;
+		boolean needNext = true;
+
+		if(startNav == 1) {
+			needPrev = false;
+		}
+		if(endNav == pageTotalCount) {
+			needNext = false;
+		}
+
+		StringBuilder sb = new StringBuilder("<nav aria-label='Page navigation'><ul class='pagination justify-content-center'>");
+		
+		if(needPrev) {
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_faq?cpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
+		}
+
+		for(int i=startNav; i<=endNav; i++) {
+			if(currentPage == i) {
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='toAdmin_faq?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
+			}else {
+				sb.append("<li class='page-item'><a class='page-link' href='toAdmin_faq?cpage="+i+"'>"+i+"</a></li>");
+			}
+		}
+
+		if(needNext) {
+			sb.append("<li class=page-item><a class=page-link href='toAdmin_faq?cpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
+		}		
+		sb.append("</ul></nav>");
+		return sb.toString();
+	}
+	
+	public String faqnavi (int cpage) throws Exception{
+		String navi = this.faqgetPageNav(cpage);
+		return navi;
 	}
 
 }
