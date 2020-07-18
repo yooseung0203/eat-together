@@ -328,11 +328,12 @@
 	<!-- ******************* -->
 	<div class="container-fluid section">
 		<c:if test="${empty sessionScope.loginInfo }">
-			<div class="loginError text-center">
-				<h3 class="text-center my-5 pt-5">로그인 후 이용해주세요.</h3>
-				<button type="button" class="btn btn-warning" id= "toLogin">로그인</button>
-				<button type="button" class="btn btn-warning" id= "toSignUp">회원가입</button>
-			</div>
+			<script>
+			alert("로그인 후 이용해주세요");
+			location.href="/member/loginview";
+			
+			
+			</script>
 		</c:if>
 		<c:if test="${!empty sessionScope.loginInfo }">
 			<form id="form" name="form" method="post"
