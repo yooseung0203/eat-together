@@ -31,6 +31,7 @@ import coma.spring.service.PartyService;
 import coma.spring.service.QuestionService;
 import coma.spring.service.ReportService;
 import coma.spring.service.ReviewService;
+import coma.spring.statics.Configuration;
 
 
 @Controller
@@ -167,7 +168,7 @@ public class AdminController {
 			}
 
 			List<FaqDTO> list = fservice.selectByPage(cpage);
-			String navi = fservice.navi(cpage);
+			String navi = aservice.faqnavi(cpage);
 
 			request.setAttribute("list", list);
 			request.setAttribute("navi", navi);
@@ -177,6 +178,9 @@ public class AdminController {
 			return "/error/adminpermission";
 		}
 	}
+	
+	
+	
 
 	//수지 모임 게시물 출력하기_20200712
 	@RequestMapping("toAdmin_party")
@@ -202,8 +206,28 @@ public class AdminController {
 			return "/error/adminpermission";
 		}
 	}
+	
+	// 수지 모임 삭제
+	@RequestMapping("partydelete")
+	public String partydelete(String seq)  throws Exception {
+		pservice.delete(seq);
+		return "redirect:/admin/toAdmin_party";
+	}
+	
+	// 수지 모집종료 기능
+	@RequestMapping("stopRecruit")
+	public String stopRecruit(String seq) throws Exception {
+		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
+		String adminCheck = loginInfo.getId();
+		if(adminCheck.contentEquals("administrator")) {
+		pservice.stopRecruit(seq);
+		return "redirect:/admin/admin_party_content?seq="+seq;
+		}else {
+			return "/error/adminpermission";
+		}
+	}
 
-	//by 수지, 회원정보 옵션 검색하기
+	//by 수지, 파티 옵션 검색하기
 	@RequestMapping("partyByOption")
 	public ModelAndView partyByOption(HttpServletRequest request)throws Exception {
 		ModelAndView mav = new ModelAndView();
