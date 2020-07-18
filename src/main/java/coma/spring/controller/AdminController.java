@@ -25,6 +25,7 @@ import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.service.AdminService;
 import coma.spring.service.FaqService;
+import coma.spring.service.MemberService;
 import coma.spring.service.MsgService;
 import coma.spring.service.PartyService;
 import coma.spring.service.QuestionService;
@@ -60,6 +61,9 @@ public class AdminController {
 
 	@Autowired
 	private ReportService reportservice;
+	
+	@Autowired
+	private MemberService mservice;
 
 	@ExceptionHandler
 	public String exceptionHandler(NullPointerException npe) {
@@ -543,6 +547,7 @@ public class AdminController {
 	public String toAdmin_report(HttpServletRequest request)  throws Exception {
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		String adminCheck = loginInfo.getId();
+		
 		if(adminCheck.contentEquals("administrator")) {
 
 			int cpage=1;
@@ -567,6 +572,7 @@ public class AdminController {
 	@ResponseBody
 	@RequestMapping(value="admin_reportContent" ,produces="application/json;charset=utf8")
 	public String getReportContent(int seq)  throws Exception {
+
 		ReportDTO rdto = aservice.getReportContent(seq);
 		Gson gson = new Gson();
 		return gson.toJson(rdto);
@@ -574,7 +580,7 @@ public class AdminController {
 	// 신고 카테고리 리스트
 	@RequestMapping("Category_list")
 	public String Category_list(HttpServletRequest request)throws Exception{
-		
+
 		if(session.getAttribute("cpage")==null) {
 			session.setAttribute("cpage", 1);
 		}

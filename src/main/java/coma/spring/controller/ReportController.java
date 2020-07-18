@@ -32,7 +32,7 @@ public class ReportController {
 	
 	@Autowired
 	private MemberReportService mrservice;
-	
+
 	// 신고 접수
 	@ResponseBody
 	@RequestMapping("newReport")
@@ -70,6 +70,7 @@ public class ReportController {
 	@ResponseBody
 	@RequestMapping("reportRefuse")
 	public int reportRefuse(HttpServletRequest request) throws Exception {
+
 		int result=0;
 		System.out.println("seq : "+request.getParameter("seq"));
 		int repoResult = reposervice.checkReport(Integer.parseInt(request.getParameter("seq")));
@@ -81,9 +82,11 @@ public class ReportController {
 		System.out.println("result 2 :"+result);
 		return result;
 	}
+	// 신고 접수
 	@ResponseBody
 	@RequestMapping("reportAccept")
 	public int reportAccept(HttpServletRequest request) throws Exception {
+		
 		int resp = 0;
 		int repoResult = reposervice.checkReport(Integer.parseInt(request.getParameter("seq")));
 		if(repoResult ==1) {
