@@ -50,6 +50,7 @@ public class AdminController {
 
 	@Autowired
 	private MsgService msgservice;
+	
 
 	@Autowired
 	FaqService fservice;
@@ -58,7 +59,7 @@ public class AdminController {
 	private ReviewService rservice;
 
 	@Autowired
-	private ReportService reposervice;
+	private ReportService reportservice;
 
 	@ExceptionHandler
 	public String exceptionHandler(NullPointerException npe) {
@@ -562,13 +563,44 @@ public class AdminController {
 			return "/error/adminpermission";
 		}
 	}
-	
+	// 신고 상세 내용 불러오기
 	@ResponseBody
-	@RequestMapping("admin_reportContent")
+	@RequestMapping(value="admin_reportContent" ,produces="application/json;charset=utf8")
 	public String getReportContent(int seq)  throws Exception {
 		ReportDTO rdto = aservice.getReportContent(seq);
 		Gson gson = new Gson();
 		return gson.toJson(rdto);
 	}
+	// 신고 카테고리 리스트
+	@RequestMapping("Category_list")
+	public String Category_list(HttpServletRequest request)throws Exception{
+		
+		if(session.getAttribute("cpage")==null) {
+			session.setAttribute("cpage", 1);
+		}
+		try { 
+			session.setAttribute("cpage", Integer.parseInt(request.getParameter("cpage")));
+		} catch (Exception e) {}
+		
+		
+		if(session.getAttribute("category")==null) {
+			session.setAttribute("category", 1);
+		}
+		try { 
+			session.setAttribute("category", Integer.parseInt(request.getParameter("category")));
+		} catch (Exception e) {}
+		
+		int cpage=(int)session.getAttribute("cpage");
+		int category=(int)session.getAttribute("category");
+		
+		List<ReportDTO> rdto = reportservice.selectByCategory(cpage, category);
+		String navi = reportservice.CategoryNavi(cpage, category);
+
+		request.setAttribute("navi", navi);
+		request.setAttribute("list", rdto);
+		return "/admin/admin_report";
+	}
+	
+	
 }
 
