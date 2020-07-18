@@ -2,7 +2,7 @@
 
 
    <!-- footer --> 
-        <div class="container-fluid ">
+        <div class="container-fluid fotbtn">
             <div class="row">
                 <div class="col-sm-12 footer pt-4">
                     <p class="footer-menu">

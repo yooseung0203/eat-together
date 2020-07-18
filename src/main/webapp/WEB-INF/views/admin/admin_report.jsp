@@ -33,11 +33,29 @@ $(function(){
 			$(".modal-title").html("#" + resp.seq);
 			$(".modal-body #report_id").html(resp.report_id);
 			$(".modal-body #id").html(resp.id);
-			$(".modal-body #category").html(resp.category);
+			if(resp.category == 0){
+				$(".modal-body #category").html("리뷰 신고 (code:0)");	
+			}else if(resp.category == 1){
+				$(".modal-body #category").html("모임 모집 글 신고 (code:1)");
+			}
+			else{
+				$(".modal-body #category").html("회원 신고 (code:2)");
+			}
+			
+			
 			$(".modal-body #report_date").html(resp.report_date);
 			$(".modal-body #title").html(resp.title);
-			$(".modal-body #content").html(resp.content);
-			$(".modal-body #status").html(resp.status);
+			$(".modal-body #content").html(resp.content);	
+			if(resp.status == 0){
+				$(".modal-body #status").html("접수 대기");
+			}
+			else if(resp.status == 1){
+				$(".modal-body #status").html("접수 완료");
+			}
+			else{
+				$(".modal-body #status").html("다른 사람의 신고로 처리 된 신고");
+			}
+			$(".modal-body #status").html();
 			$(".modal-body #parent_seq").html(resp.parent_seq);
 			if($(".modal-body #status").html() == 0){
 				$("#refuse").css("display", "block");
@@ -48,7 +66,7 @@ $(function(){
 	});
 	
 	$("#refuse").on("click",function(){
-		var check = confirm("회원의 신고를 반려 처리합니다. \n처리하시겠습니까?");
+		var check = confirm("회원의 신고를 반려 처리합니다.\n처리하시겠습니까?");
 		if(check){			
 			var seq = $(".modal-title").html().substring(1);
 			var parent_seq = $("#parent_seq").html();
@@ -67,7 +85,7 @@ $(function(){
 	});
 	
 	$("#accept").on("click",function(){
-		var check = confirm("회원의 신고를 승인합니다.\n처리하시겠습니까?");
+		var check = confirm("회원의 신고를 승인합니다. 리뷰 혹은 모임 글의 경우 자동 삭제 처리 됩니다.\n처리하시겠습니까?");
 		if(check){
 			var seq = $(".modal-title").html().substring(1);
 			var parent_seq = $("#parent_seq").html();
@@ -92,6 +110,12 @@ $(function(){
 <style>
 #refuse , #accept {
 	display:none;
+}
+th , td{
+	padding-bottom:15px;
+}
+.title{
+	width:50%;
 }
 </style>
 </head>
@@ -155,7 +179,7 @@ $(function(){
 												<td>
 													<c:choose>
 														<c:when test="${i.status == 0}">
-															미접수
+															접수 대기
 														</c:when>
 														<c:otherwise>
 															접수 완료
@@ -187,7 +211,7 @@ $(function(){
 								data-backdrop="static" data-keyboard="false" tabindex="-1"
 								role="dialog" aria-labelledby="staticBackdropLabel"
 								aria-hidden="true">
-								<div class="modal-dialog modal-dialog-centered">
+								<div class="modal-dialog modal-dialog-centered modal-lg" >
 									<div class="modal-content">
 										<!-- header -->
 										<div class="modal-header">
@@ -204,35 +228,35 @@ $(function(){
 											<table>
 												<tbody>
 													<tr>
-														<th scope="row">신고 대상 글번호</th>
+														<th scope="row" class="title">신고 대상 글번호</th>
 														<td id="parent_seq"></td>
 													</tr>
 													<tr>
-														<th scope="row">신고일</th>
+														<th scope="row" class="title">신고일</th>
 														<td id="report_date"></td>
 													</tr>
 													<tr>
-														<th scope="row">신고 대상 아이디</th>
+														<th scope="row" class="title">신고 대상 아이디</th>
 														<td id="report_id"></td>
 													</tr>
 													<tr>
-														<th scope="row">신고자 아이디</th>
+														<th scope="row" class="title">신고자 아이디</th>
 														<td id="id"></td>
 													</tr>
 													<tr>
-														<th scope="row">신고 유형</th>
+														<th scope="row" class="title">신고 유형</th>
 														<td id="category"></td>
 													</tr>
 													<tr>
-														<th scope="row">제목  / 상호</th>
+														<th scope="row" class="title">제목  / 상호</th>
 														<td id="title"></td>
 													</tr>
 													<tr>
-														<th scope="row">신고 내용</th>
+														<th scope="row" class="title">신고 내용</th>
 														<td id="content"></td>
 													</tr>
 													<tr>
-														<th scope="row">처리 상태</th>
+														<th scope="row" class="title">처리 상태</th>
 														<td id="status"></td>
 													</tr>
 												</tbody>
