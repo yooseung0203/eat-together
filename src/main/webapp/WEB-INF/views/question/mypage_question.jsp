@@ -79,7 +79,7 @@ function msgReceiverDel(msg_seq) {
 					<tr>
 						<th scope="col">제목</th>
 						<th scope="col">날짜</th>
-						<th scope="col">답변여부</th>
+						<th scope="col" style="text-align:center;">답변여부</th>
 						<th scope="col">삭제</th>
 					</tr>
 					<c:if test="${empty list}">
@@ -91,7 +91,7 @@ function msgReceiverDel(msg_seq) {
 						<tr>
 							<td><a href="javascript:questionViewPopUp(${i.msg_seq})" style="color:black">${i.msg_title}</a></td>
 							<td>${i.date}</td>
-							<td><c:choose>
+							<td align="center"><c:choose>
 									<c:when test="${i.msg_view==0||i.msg_view==1}">
 										답변중	 	
 								 	</c:when>

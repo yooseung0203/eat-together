@@ -107,6 +107,12 @@ public class MsgController {
 		String msg_receiver = mdto.getNickname();
 		System.out.println(msg_receiver+"의 보낸 쪽지함");
 		
+
+		int newMsg=msgservice.newmsg(msg_receiver);
+		int newMsgByAdmin=msgservice.newMsgByAdmin(msg_receiver);
+		int newMsgByNick=msgservice.newMsgByNick(msg_receiver);
+		
+		
 		if(session.getAttribute("msgRcpage")==null) {
 			session.setAttribute("msgRcpage", 1);
 		}
@@ -118,7 +124,10 @@ public class MsgController {
 		
 		List<MsgDTO> dto = msgservice.selectByReceiver(msgRcpage,msg_receiver);
 		String navi =msgservice.Receivenavi(msgRcpage, msg_receiver);
-		
+
+		session.setAttribute("newMsg", newMsg);
+		request.setAttribute("newMsgByAdmin", newMsgByAdmin);
+		request.setAttribute("newMsgByNick", newMsgByNick);
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", dto);
 		return "msg/mypage_receivemsg";

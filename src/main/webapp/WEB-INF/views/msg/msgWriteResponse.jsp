@@ -28,13 +28,13 @@
 			var word = $(this).val();
 			var wordSize = word.length;
 			console.log(wordSize);
-			if (wordSize <= 2000) {
+			if (wordSize <= 1000) {
 				$(".current").text(wordSize);
 			} else {
-				word = word.substr(0, 2000);
+				word = word.substr(0, 1000);
 				$(".current").text(word.length);
 				$(this).val(word);
-				alert("쪽지는 2000자 이하로 작성해주세요");
+				alert("쪽지는 1000자 이하로 작성해주세요");
 			}
 		})
 
@@ -82,8 +82,8 @@
 					<tr align="center">
 						<th scope="col" colspan=4>제목</th>
 						<td scope="col" colspan=8><input type="text" name="msg_title"
-							id="msg_title" style="width: 100%;" maxlength="34"
-							placeholder="최대 16자"></td>
+							id="msg_title" style="width: 100%;" maxlength="15"
+							placeholder="최대 15자"></td>
 					</tr>
 					<tr align="center">
 						<th scope="col" colspan=12>내용</th>
@@ -95,7 +95,7 @@
 					</tr>
 					<tr>
 						<td scope="col" colspan=12 id="wordcheck" align="right"><span
-							class="current">0</span>/2000자</td>
+							class="current">0</span>/1000자</td>
 					</tr>
 					<tr align="center">
 						<td scope="col" colspan=12>
