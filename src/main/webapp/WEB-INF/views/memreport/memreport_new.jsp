@@ -28,10 +28,13 @@ var option ={
 			console.log("result : "+result);
 			if(result ==1){
 				alert("신고가 정상적으로 처리되었습니다.");
-				window.location.href="/msg/msgWriteResult";
+				window.close();
+			}
+			else{
+				alert("에러 발생. 관리자에게 문의하십시요.");
+				window.close();
 			}
 			
-			//window.close();
 		},
 		error:function(result){
 			alert("에러 발생. 관리자에게 문의하십시요.");
