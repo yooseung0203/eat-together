@@ -6,10 +6,10 @@ function toChatroom(num){
 function partyJoin(seq){
 	location.href="/party/partyJoin?seq="+seq;
 }
-function toStopRecruit(seq){
+function toStopRecruit(seq, writer){
 	var ask = confirm("모집종료 후에는 되돌릴 수 없습니다. \n 정말 모집을 종료하시겠습니까?");
 	if (ask) {
-	location.href= "/party/stopRecruit?seq="+seq;
+	location.href= "/party/stopRecruit?seq="+seq+"&writer="+writer;
 	}
 }
 function partyModify(seq){
@@ -20,6 +20,39 @@ function partyDelete(seq){
 	if (ask) {
 		location.href = "/party/partydelete?seq="+seq;
 	}
+}
+function toExitParty(seq){
+	var ask = confirm("정말 모임을 나가시겠습니까?");
+	if (ask) {
+		location.href= "/party/toExitParty?seq="+seq;
+	}
+}
+function toRestartRecruit(seq, writer){
+	var ask = confirm("모집을 다시 시작하겠습니까?");
+	if (ask) {
+		location.href= "/party/restartRecruit?seq="+seq+"&writer="+writer;
+	}
+}
+function partyReport(num, report_id, title, content){
+	$.ajax({
+		url:"/party/party_report",
+		data : { seq : num, report_id : report_id , title : title , content : content},
+		success : function(result) {
+			if (result == 1){ 
+				alert("신고가 정상적으로 접수되었습니다.");	
+				if (self.name != 'reload') {
+			         self.name = 'reload';
+			         self.location.reload(true);
+			     }
+			     else self.name = ''; 
+			}else{
+				alert("무분별한 신고를 방지하기 위해 신고는 한번만 가능합니다.");
+			}
+		},
+		error:function(e){
+			console.log("error");
+		}
+	});	
 }
 function reviewReport(seq,content,id){
 	console.log("신고 시작 : "+ seq);
@@ -615,7 +648,8 @@ $(function(){
 				url:"/map/getPartyInfo",
 				data:{seq:$(this).parent().find(".seq").text(),
 					partyFullCheck:$(this).parent().find(".partyFullCheck").text(),
-					partyParticipantCheck:$(this).parent().find(".partyParticipantCheck").text()},
+					partyParticipantCheck:$(this).parent().find(".partyParticipantCheck").text(),
+					partylife:$(this).parent().find(".partylife").text()},
 				dataType:"JSON"
 			}).done(function(resp){
 				$("#partyModal #exampleModalLabel b").text(resp.pdto.title);
@@ -647,16 +681,28 @@ $(function(){
 				}
 				$("#partyModal .content").text(resp.pdto.content);
 				$(".modal-footer").html("");
-				if(resp.partyFullCheck == false && resp.partyParticipantCheck == false){
-					$(".modal-footer").append('<button type="button" id="toPartyJoin" class="btn btn-success" onClick=\"partyJoin('+resp.pdto.seq+');\">모임참가하기</button>');
+				if((resp.partyFullCheck == false && resp.pdto.status == 1) && resp.partyParticipantCheck == false){
+					if(($("#loginInfo_gender").text() == 1 && resp.pdto.gender == 'm')||($("#loginInfo_gender").text() == 2 && resp.pdto.gender == 'f')||resp.pdto.gender == 'a'){
+						$("#partyModal .modal-footer").append('<button type="button" id="toPartyJoin" class="btn btn-success" onClick=\"partyJoin('+resp.pdto.seq+');\">모임참가하기</button>');						
+					}
 				}else if(resp.partyParticipantCheck == true){
-					$(".modal-footer").append('<button type="button" id="toChatroom" class="btn btn-primary" onClick=\"toChatroom('+resp.pdto.seq+');\">채팅방으로 이동</button>');
+					if(resp.partylife == 'alive'){
+						$("#partyModal .modal-footer").append('<button type="button" id="toChatroom" class="btn btn-primary" onClick=\"toChatroom('+resp.pdto.seq+');\">채팅방으로 이동</button>');
+					}
+					if(resp.pdto.writer != $("#loginInfo_nickname").text()){
+						$("#partyModal .modal-footer").append('<button type="button" id="toExitParty" class="btn btn-danger" onClick=\"toExitParty('+resp.pdto.seq+');\">모임 나가기</button>');
+					}else{
+						if(resp.pdto.status == '1'){
+							$("#partyModal .modal-footer").append('<button type="button" id="toStopRecruit" class="btn btn-dark" onClick=\"toStopRecruit('+resp.pdto.seq+',\''+resp.pdto.writer+'\');\">모집 종료하기</button>');	
+						}else if(resp.pdto.status == '0'){
+							$("#partyModal .modal-footer").append('<button type="button" id="torestartRecruit" class="btn btn-success" onClick=\"toRestartRecruit('+resp.pdto.seq+',\''+resp.pdto.writer+'\');\">모집 재시작</button>');
+						}
+					}
 				}
 				if($("#loginInfo_nickname").text() == resp.pdto.writer){
-					if(resp.pdto.status == 1){
-						$("#partyModal .modal-footer").append('<button type="button" id="toStopRecruit" class="btn btn-light" onClick=\"toStopRecruit('+resp.pdto.seq+');\">모집종료하기</button>');
-					}
-					$("#partyModal .modal-footer").append('<button type="button" id="partyModify" class="btn btn-warning" onClick=\"partyModify('+resp.pdto.seq+')\">수정</button><button type="button" id="partyDelete" class="btn btn-danger" onClick=\"partyDelete('+resp.pdto.seq+')\">삭제</button>');
+					$("#partyModal .modal-footer").append('<br><button type="button" id="partyModify" class="btn btn-warning" onClick=\"partyModify('+resp.pdto.seq+');\">수정</button><button type="button" id="partyDelete" class="btn btn-danger" onClick=\"partyDelete('+resp.pdto.seq+')\">삭제</button>');
+				}else{
+					$("#partyModal .modal-footer").append('<br><button type="button" id="partyReport" class="btn btn-info" onClick=\"partyReport('+resp.pdto.seq+',\''+resp.pdto.writer+'\',\''+resp.pdto.title+'\',\''+resp.pdto.content+'\');\">신고</button>');
 				}
 			})
 		})
