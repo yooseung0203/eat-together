@@ -539,28 +539,8 @@ public class AdminController {
 		int result = aservice.saveMsg(msg_seq);
 		return "redirect:admin_msgDelete";
 	}
-	//받은쪽지함 삭제
-	@RequestMapping("msgReceiverDel")
-	public String ReceiverDel(int msg_seq)throws Exception{
-		int result = msgservice.receiver_del(msg_seq);
-		return "redirect:admin_msgSend";
-	}
 
-	//보낸쪽지함 삭제
-	@RequestMapping("msgSenderDel")
-	public String SenderDel(int msg_seq)throws Exception{
-		System.out.println(msg_seq);
-		int result = msgservice.sender_del(msg_seq);
-		return "redirect:admin_msgReceive";
-	}
 
-	//1:1문의  삭제
-	@RequestMapping("AdminQuestionDel")
-	public String AdminQuestionDel(int msg_seq)throws Exception{
-		System.out.println(msg_seq);
-		int result = msgservice.sender_del(msg_seq);
-		return "redirect:AdminQuestion_list";
-	}
 
 	// 태훈 신고 리스트 출력하기 
 	@RequestMapping("toAdmin_report")

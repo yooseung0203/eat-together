@@ -200,18 +200,26 @@ public class MsgController {
 	}
 	
 	//받은쪽지함 삭제
+	
 	@RequestMapping("msgReceiverDel")
-	public String ReceiverDel(int msg_seq)throws Exception{
-		int result = msgservice.receiver_del(msg_seq);
-		return "redirect:msg_list_sender";
+	@ResponseBody
+	public int ReceiverDel(HttpServletRequest request)throws Exception{
+		String data = request.getParameter("msg_seqs"); 
+		String msg_seqs = data.substring(2,data.length()-2);
+		String[] checkList = msg_seqs.split("\",\"");
+		int resp = msgservice.receiver_del(checkList);
+		return resp;
 	}
 	
 	//보낸쪽지함 삭제
 	@RequestMapping("msgSenderDel")
-	public String SenderDel(int msg_seq)throws Exception{
-		System.out.println(msg_seq);
-		int result = msgservice.sender_del(msg_seq);
-		return "redirect:msg_list_receiver";
+	@ResponseBody
+	public int SenderDel(HttpServletRequest request)throws Exception{
+		String data = request.getParameter("msg_seqs"); 
+		String msg_seqs = data.substring(2,data.length()-2);
+		String[] checkList = msg_seqs.split("\",\"");
+		int resp = msgservice.sender_del(checkList);
+		return resp;
 	}
 	
 	@RequestMapping("newmsg")
