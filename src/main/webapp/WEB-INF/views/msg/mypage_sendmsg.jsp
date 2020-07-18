@@ -112,20 +112,22 @@
 					<tr>
 						<td scope="col" colspan=12 align="left">
 							<button type="button" class="btn btn-outline-danger"
-								id="list_admin">관리자
+								id="list_admin">
+								관리자
 								<c:if test="${newMsgByAdmin!=0}">
 									<span class="badge badge-danger">N</span>
 								</c:if>
-								</button>
+							</button>
 							<button type="button" class="btn btn-outline-warning"
-								id="list_sender">받은 쪽지함
+								id="list_sender">
+								받은 쪽지함
 								<c:if test="${newMsgByNick!=0}">
 									<span class="badge badge-danger">N</span>
 								</c:if>
-								</button>
+							</button>
 							<button type="button" class="btn btn-outline-warning"
 								id="list_receiver">보낸쪽지함</button>
-								<button type="button" class="btn btn-warning" id="writeMsg">쪽지보내기</button>
+							<button type="button" class="btn btn-warning" id="writeMsg">쪽지보내기</button>
 						</td>
 					</tr>
 					<tr align="center">
