@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asaasaa'></script>
+<script src='/resources/js/map.js?asaasaaa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -39,6 +39,7 @@
 	<!-- 로그인 인포 가져오기 -->
 	<c:if test="${not empty sessionScope.loginInfo}">
 		<div style="display:none;" id="loginInfo_nickname">${sessionScope.loginInfo.nickname}</div>
+		<div style="display:none;" id="loginInfo_gender">${sessionScope.loginInfo.gender}</div>
 		<div style="display:none;" id="loginInfo_id">${sessionScope.loginInfo.id}</div>
 	</c:if>
 	<!-- 사용자가 보고 있는 중심 좌표 -->
@@ -205,6 +206,7 @@
 											<div class="seq" style="display: none;">${i.key.seq}</div>
 											<div class="partyFullCheck" style="display: none;"><c:out value="${i.value.partyFullCheck}"></c:out></div>
 											<div class="partyParticipantCheck" style="display: none;"><c:out value="${i.value.partyParticipantCheck}"></c:out></div>
+											<div class="partylife" style="display:none;"><c:out value="${i.value.partylife}"></c:out></div>
 												<button type="button" class="btn btn-primary join"
 													data-toggle="modal" data-target="#partyModal">참가</button>										
 										</div>
