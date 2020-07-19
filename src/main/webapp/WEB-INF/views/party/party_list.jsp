@@ -96,7 +96,7 @@ window.onload = $(function() { //페이지가 로드되면 데이터를 가져�
 	getPartyList(cpage);
 	test();
 	cpage++;
-	
+	area();
 });
 /*********************** End 첫  페이지 로딩 ****************************/
 
@@ -206,6 +206,10 @@ $(function(){
 		$("#start_list").empty();	
 	    test();
 		partySearch(url,formData,cpage);
+		$("#idForm")[0].reset();
+		$("option", $("#sido")).remove();
+		$("option", $("#gugun")).remove();
+		area();
 	});	
 });
 /********************** End 통합 검색 ***************************/
@@ -235,7 +239,7 @@ $(function() {
 /***************** End 태훈 모임 내용 모달창 생성 **********************/
 
 /*****************************************  태훈  지역 검색 스크립트  ***********************************************/
-$(function() {
+function area () {
 	
 	/******************* 지역 리스트 ************************/
 	var area0 = [ "시/도 선택", "서울", "인천", "대전", "광주", "대구", "울산", "부산", "경기",
@@ -283,7 +287,7 @@ $(function() {
 	$.each(area0,function() {
 		$("#sido").append("<option value='"+this+"'>" + this + "</option>");
 	});
-	$("#gugun").append("<option value=''>구/군 선택</option>");
+	$("#gugun").append("<option value=''>구/군 선택</option>");	
 	// 시/도 선택시 구/군 설정
 	$("#sido").change(function() {
 		var areaindex = $('option:selected', $(this)).index();
@@ -297,7 +301,7 @@ $(function() {
 			});
 		}
 	});
-});
+};
 /*************************************** End 태훈  지역 검색 스크립트  *********************************************/
 
 /**************************** 인기 맛집  모집하러기 *********************************/
@@ -320,20 +324,14 @@ $(function() {
 	});	 
  });
 /************************** End 인기 맛집  모집하러기 ********************************/
- 
+
 /***************** by 페이지 로딩 스피너 **************/ 
 $(function(){
 	$('#Progress_Loading').hide(); //첫 시작시 로딩바를 숨겨준다.	
 });
 /***************** End 페이지 로딩 스피너 **************/
-/*
-$(function(){
-	$('.top5 .partylist>img').each(function (index, item) { 
-		// 인덱스는 말 그대로 인덱스 // item 은 해당 선택자인 객체를 나타냅니다. 
-		$(this ).css('height', $(this).height());  
-	});	
-});
-*/
+
+
 /***************** 상단 돌아가기 버튼 **************/
 $(function() {
 	$(window).scroll(function() {
@@ -350,6 +348,8 @@ $(function() {
 		return false;
 	});
 });
+
+	 
 /***************** 상단 돌아가기 버튼 **************/
 </script>
 <style>
@@ -483,6 +483,12 @@ $(function() {
 		</div>
 		<!-- ============== End Top 5 Section ============== -->
 		
+		<!-- =========== Loding Spinner Section ============= -->
+		<div id = "Progress_Loading"><!-- 로딩바 -->
+			<img src="/resources/img/Progress_Loading.gif"/>
+		</div>
+		<!-- ========== End Loding Spinner Section ========== -->
+		
 		<!-- ============== Party List Search Section ============== -->
 		<div class="row aa searchpart">
 			<form id="idForm">
@@ -529,13 +535,7 @@ $(function() {
 		</div>
 	</div>
 	<!-- ============ End Party List Search Section ============ -->
-	<!-- <hr id="lineline" width="95%" color="black"> -->
-	<!-- =========== Loding Spinner Section ============= -->
-	<div id = "Progress_Loading"><!-- 로딩바 -->
-		<img src="/resources/img/Progress_Loading.gif"/>
-	</div>
-	<!-- ========== End Loding Spinner Section ========== -->
-	
+
 	<!-- ======= Party List Section ======= -->
 	<main id="main">
 		<div class="area-padding">
