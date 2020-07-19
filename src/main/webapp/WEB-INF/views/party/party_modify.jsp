@@ -86,6 +86,9 @@
 	$(document).ready(function() {
 		
 		$("#party_date").val("${con.meetdate}");
+		var stime = "${con.sTime}";
+		var time = stime.substr(0,5);
+		$("#timeDiv").text("${con.sDate} " + time);
 		var gender = $("#gender_val").val();
 		console.log(gender);
 
