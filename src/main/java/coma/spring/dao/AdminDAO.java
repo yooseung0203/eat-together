@@ -284,9 +284,14 @@ public class AdminDAO {
 				return mybatis.selectOne("Admin.questionCount");
 			}
 			// 태훈 연령대별 회원 수
-			public List<Map<Integer,Integer>> memberCountByAge(){
+			public List<Map<String,Integer>> memberCountByAge(){
 				System.out.println(mybatis.selectList("Admin.memberCountByAge"));
 				return mybatis.selectList("Admin.memberCountByAge");
+			}
+			// 태훈 요일별 모집 수
+			public List<Map<String,Integer>> partyCountByDay(){
+				System.out.println(mybatis.selectList("Admin.partyCountByDay"));
+				return mybatis.selectList("Admin.partyCountByDay");
 			}
 			
 

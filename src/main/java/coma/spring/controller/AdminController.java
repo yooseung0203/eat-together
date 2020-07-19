@@ -27,13 +27,11 @@ import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.service.AdminService;
 import coma.spring.service.FaqService;
-import coma.spring.service.MemberService;
 import coma.spring.service.MsgService;
 import coma.spring.service.PartyService;
 import coma.spring.service.QuestionService;
 import coma.spring.service.ReportService;
 import coma.spring.service.ReviewService;
-import coma.spring.statics.Configuration;
 
 
 @Controller
@@ -85,9 +83,14 @@ public class AdminController {
 			int questionCount = aservice.questionCount();
 			request.setAttribute("questionCount", questionCount);
 			
-			Map<Integer, Integer> age = new HashMap<>();
+			//Map<Integer, Integer> age = new HashMap<>();
+			Map<String, Integer> age = new HashMap<>();
 			age = aservice.memberCountByAge();
+			
+			//Map<String, Integer> party = new HashMap<>();
+			
 			request.setAttribute("age", age);
+			request.setAttribute("party", aservice.partyCountByDay());
 			return "/admin/admin_main";
 		}
 		else {

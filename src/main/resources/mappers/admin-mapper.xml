@@ -136,14 +136,24 @@
 	</select>
 	<!-- 태훈 연령대 별 회원 수 -->
 	<select id="memberCountByAge" resultMap="agemap">
-		select 연령 , count(*) as 수 from(select case when floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10 >= 50 then 50 else (floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10)  end as 연령 from member) o group by 연령 order by 연령 asc	
-	</select>
-	
+		<!-- select 연령 , count(*) as 수 from(select case when floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10 >= 50 then 50 else (floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10)  end as 연령 from member) o group by 연령 order by 연령 asc -->
+		select 연령 , count(*) as 수 from(select case when floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10 >= 50 then '50대' else (floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10)||'대'  end as 연령 from member) o group by 연령 order by 연령 asc
+	</select>	
+	<!-- 태훈 위 쿼리 위한 맵 -->
 	<resultMap type="hashMap" id="agemap">
-	    <result javaType="java.lang.Integer" column="연령" property="연령"></result>
+	    <!-- <result javaType="java.lang.Integer" column="연령" property="연령"></result> -->
+	    <result javaType="java.lang.String" column="연령" property="연령"></result>
 	    <result javaType="java.lang.Integer" column="수" property="수"></result>
 	</resultMap>
-	
+	<!-- 태훈 요일별 모집 개수 -->
+	<select id="partyCountByDay" resultMap="partymap">
+		select 요일 , count(*) as 수 from (select to_char(meetdate, 'd') as 요일 from party) group by 요일 order by 요일 asc
+	</select>
+	<!-- 태훈 위 쿼리 위한 맵 -->
+	<resultMap type="hashMap" id="partymap">
+	    <result javaType="java.lang.String" column="요일" property="요일"></result>
+	    <result javaType="java.lang.Integer" column="수" property="수"></result>
+	</resultMap>
 	
 
 </mapper>

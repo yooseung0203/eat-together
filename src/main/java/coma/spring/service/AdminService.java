@@ -477,21 +477,41 @@ public class AdminService {
 	public int	questionCount() throws Exception {
 		return adao.questionCount();
 	}
-	public Map<Integer, Integer> memberCountByAge() throws Exception {
-		Map<Integer, Integer> age = new HashMap<>();
-		List<Map<Integer,Integer>> ageList = adao.memberCountByAge();
+	// 태훈 연령별 회원 수
+	public Map<String, Integer> memberCountByAge() throws Exception {
+		//Map<Integer, Integer> age = new HashMap<>();
+		Map<String, Integer> age = new HashMap<>();
+		//List<Map<Integer,Integer>> ageList = adao.memberCountByAge();
+		List<Map<String,Integer>> ageList = adao.memberCountByAge();
 		for (int i=0; i<ageList.size();i++) {
-			age.put(ageList.get(i).get("연령"), ageList.get(i).get("수"));
+			age.put(String.valueOf(ageList.get(i).get("연령")), ageList.get(i).get("수"));
 			System.out.println(age);
 		}
 		for (int i=1; i<6; i++) {
-			if(!(age.containsKey(i*10))) {
-				age.put((i*10),0);
+			if(!(age.containsKey((i*10)+"대"))) {
+				age.put((i*10)+"대",0);
 			}
 			System.out.println(age);
 		}
 		
 		return age;
+	}
+	// 태훈 요일별 모집 수
+	public Map<String, Integer> partyCountByDay() throws Exception {
+		Map<String, Integer> party = new HashMap<>();
+		List<Map<String,Integer>> partyList = adao.partyCountByDay();
+		for (int i=0; i<partyList.size();i++) {
+			party.put(String.valueOf(partyList.get(i).get("요일")), partyList.get(i).get("수"));
+			System.out.println(party);
+		}
+		for (int i=1; i<8; i++) {
+			if(!(party.containsKey(String.valueOf(i)))) {
+				party.put(String.valueOf(i),0);
+			}
+			System.out.println(party);
+		}
+
+		return party;
 	}
 
 }
