@@ -469,5 +469,29 @@ public class AdminService {
 		String navi = this.faqgetPageNav(cpage);
 		return navi;
 	}
+	// 태훈 미 접수 신고 수 가져오기
+	public int reportCount() throws Exception {
+		return adao.reportCount();
+	}
+	// 태훈 미 답변 문의 수 가져오기
+	public int	questionCount() throws Exception {
+		return adao.questionCount();
+	}
+	public Map<Integer, Integer> memberCountByAge() throws Exception {
+		Map<Integer, Integer> age = new HashMap<>();
+		List<Map<Integer,Integer>> ageList = adao.memberCountByAge();
+		for (int i=0; i<ageList.size();i++) {
+			age.put(ageList.get(i).get("연령"), ageList.get(i).get("수"));
+			System.out.println(age);
+		}
+		for (int i=1; i<6; i++) {
+			if(!(age.containsKey(i*10))) {
+				age.put((i*10),0);
+			}
+			System.out.println(age);
+		}
+		
+		return age;
+	}
 
 }

@@ -1,7 +1,9 @@
 package coma.spring.controller;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -63,8 +65,6 @@ public class AdminController {
 	@Autowired
 	private ReportService reportservice;
 	
-	@Autowired
-	private MemberService mservice;
 
 	@ExceptionHandler
 	public String exceptionHandler(NullPointerException npe) {
@@ -74,10 +74,20 @@ public class AdminController {
 	}
 
 	@RequestMapping("toAdmin")
-	public String toAdmin() {
+	public String toAdmin(HttpServletRequest request) throws Exception {
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		String adminCheck = loginInfo.getId();
 		if(adminCheck.contentEquals("administrator")) {
+			
+			int reportCount = aservice.reportCount();
+			request.setAttribute("reportCount", reportCount);
+			
+			int questionCount = aservice.questionCount();
+			request.setAttribute("questionCount", questionCount);
+			
+			Map<Integer, Integer> age = new HashMap<>();
+			age = aservice.memberCountByAge();
+			request.setAttribute("age", age);
 			return "/admin/admin_main";
 		}
 		else {

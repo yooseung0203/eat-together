@@ -125,4 +125,25 @@
 	<select id="getReportContent" resultType="coma.spring.dto.ReportDTO">
 		select * from report where seq = #{seq}
 	</select>
+	<!-- 태훈 미 접수 신고 갯수 -->
+	<select id="reportCount" resultType="int">
+		select count(*) from report where status = 0
+	</select>
+	<!-- 태훈 미 답변 문의 갯수 -->
+	<select id="questionCount" resultType="int">
+		select count (*) from msg
+		where msg_title like '%[1:1문의]%' and msg_sender != 'administrator' and sender_del=0 and msg_view &lt; 2
+	</select>
+	<!-- 태훈 연령대 별 회원 수 -->
+	<select id="memberCountByAge" resultMap="agemap">
+		select 연령 , count(*) as 수 from(select case when floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10 >= 50 then 50 else (floor((to_char(sysdate, 'YYYY') -SUBSTR(birth,1,4)) / 10) * 10)  end as 연령 from member) o group by 연령 order by 연령 asc	
+	</select>
+	
+	<resultMap type="hashMap" id="agemap">
+	    <result javaType="java.lang.Integer" column="연령" property="연령"></result>
+	    <result javaType="java.lang.Integer" column="수" property="수"></result>
+	</resultMap>
+	
+	
+
 </mapper>

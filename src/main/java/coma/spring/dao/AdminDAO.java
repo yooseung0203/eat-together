@@ -271,8 +271,23 @@ public class AdminDAO {
 			public List<ReportDTO> reportList(Map<String, Integer> param){
 				return mybatis.selectList("Admin.reportList", param);
 			}
+			// 태훈 신고 내용 가져오기
 			public ReportDTO getReportContent(int seq) {
 				return mybatis.selectOne("Admin.getReportContent",seq);
 			}
+			// 태훈 미 접수 신고 갯수 
+			public int reportCount() {
+				return mybatis.selectOne("Admin.reportCount");
+			}
+			// 태훈 미 답변 문의 갯수 
+			public int questionCount() {
+				return mybatis.selectOne("Admin.questionCount");
+			}
+			// 태훈 연령대별 회원 수
+			public List<Map<Integer,Integer>> memberCountByAge(){
+				System.out.println(mybatis.selectList("Admin.memberCountByAge"));
+				return mybatis.selectList("Admin.memberCountByAge");
+			}
+			
 
 }
