@@ -125,6 +125,10 @@
 	<select id="getReportContent" resultType="coma.spring.dto.ReportDTO">
 		select * from report where seq = #{seq}
 	</select>
+	<!-- 태훈 등록 맛집 갯수 -->
+	<select id="mapCount" resultType="int">
+		select count(*) from map
+	</select>
 	<!-- 태훈 미 접수 신고 갯수 -->
 	<select id="reportCount" resultType="int">
 		select count(*) from report where status = 0

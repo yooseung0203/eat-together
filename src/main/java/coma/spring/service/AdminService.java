@@ -469,6 +469,11 @@ public class AdminService {
 		String navi = this.faqgetPageNav(cpage);
 		return navi;
 	}
+	// 태훈 등록 맛집 갯수
+	public int mapCount() throws Exception{
+		return adao.mapCount();
+	}
+	
 	// 태훈 미 접수 신고 수 가져오기
 	public int reportCount() throws Exception {
 		return adao.reportCount();

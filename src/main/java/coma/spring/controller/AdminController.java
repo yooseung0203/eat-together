@@ -27,6 +27,7 @@ import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.service.AdminService;
 import coma.spring.service.FaqService;
+import coma.spring.service.MapService;
 import coma.spring.service.MsgService;
 import coma.spring.service.PartyService;
 import coma.spring.service.QuestionService;
@@ -46,10 +47,10 @@ public class AdminController {
 
 	@Autowired
 	private PartyService pservice;
-
+	
 	@Autowired
 	private QuestionService qservice;
-
+	
 	@Autowired
 	private MsgService msgservice;
 	
@@ -76,6 +77,12 @@ public class AdminController {
 		MemberDTO loginInfo = (MemberDTO)session.getAttribute("loginInfo");
 		String adminCheck = loginInfo.getId();
 		if(adminCheck.contentEquals("administrator")) {
+			
+			int totalMember = aservice.getAllMemberCount();
+			request.setAttribute("member", totalMember);
+			
+			int totalMap = aservice.mapCount();
+			request.setAttribute("map", totalMap);
 			
 			int reportCount = aservice.reportCount();
 			request.setAttribute("reportCount", reportCount);

@@ -266,7 +266,10 @@ public class AdminDAO {
 				sb.append("</ul></nav>");
 				return sb.toString();
 			}
-			
+			// 태훈 등록 맛집 갯수
+			public int mapCount() {
+				return mybatis.selectOne("Admin.mapCount");
+			}
 			// by 태훈 신고 리스트 출력하기
 			public List<ReportDTO> reportList(Map<String, Integer> param){
 				return mybatis.selectList("Admin.reportList", param);

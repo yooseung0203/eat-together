@@ -10,13 +10,25 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/resources/css/admin.css?ver=2">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.2/Chart.js"></script>      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.2/Chart.js"></script>
+        <link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"rel="stylesheet">      
         <title>Admin-main</title>
 </head>
 <style>
+
+div{
+	border:1px solid black;
+}
 #ageChart , #partyChart{
 	background-color:white;
 	border:1px solid #f2f2f2;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.fa{
+	color:#d4d4d4;
+}
+.apap{
+	margin-top:3%;
 }
 </style>
 <body>
@@ -27,32 +39,82 @@
 			</div>
 			<div class="col-10 px-5">
 				<div class="row">
-					<div class="col-12 col-sm-12 mt-3">
-
-							<div class="row">
-								<div class="col-sm-4">
-									<div class="card">
-										<div class="card-body">접수 대기 중 신고 : ${reportCount }</div>
+					<div class="col-xl-3 col-md-6 mb-4 apap">
+						<div class="card border-left-primary shadow h-100 py-2">
+							<div class="card-body">
+								<div class="row no-gutters align-items-center">
+									<div class="col mr-2">
+										<div
+											class="text-xs font-weight-bold text-primary text-uppercase mb-1">총 회원수</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800">${member }</div>
 									</div>
-								</div>
-								<div class="col-sm-4">
-									<div class="card">
-										<div class="card-body">답변 대기 중 문의 : ${questionCount }</div>
+									<div class="col-auto">
+										<i class="fa fa-user-circle fa-3x text-gray-300"></i>
 									</div>
 								</div>
 							</div>
-
+						</div>
 					</div>
+					<div class="col-xl-3 col-md-6 mb-4 apap">
+						<div class="card border-left-success shadow h-100 py-2">
+							<div class="card-body">
+								<div class="row no-gutters align-items-center">
+									<div class="col mr-2">
+										<div
+											class="text-xs font-weight-bold text-success text-uppercase mb-1">총 모임 수</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+									</div>
+									<div class="col-auto">
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6 mb-4 apap">
+						<div class="card border-left-info shadow h-100 py-2">
+							<div class="card-body">
+								<div class="row no-gutters align-items-center">
+									<div class="col mr-2">
+										<div
+											class="text-xs font-weight-bold text-info text-uppercase mb-1">총 맛집 수</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800">${map}</div>
+									</div>
+									<div class="col-auto">
+										<i class="fa fa-cutlery fa-3x text-gray-300"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-3 col-md-6 mb-4 apap">
+						<div class="card border-left-warning shadow h-100 py-2">
+							<div class="card-body">
+								<div class="row no-gutters align-items-center">
+									<div class="col mr-2">
+										<div
+											class="text-xs font-weight-bold text-warning text-uppercase mb-1">총 회원수</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+									</div>
+									<div class="col-auto">
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>	
 				</div>
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
-						<div class="col-6">
-						 	<canvas id="ageChart"></canvas>
-						 	
+						<div class="row">
+							<div class="col-7">
+								<canvas id="partyChart"></canvas>
+							</div>
+							<div class="col-5">
+						 		<canvas id="ageChart"></canvas>
+							</div>
 						</div>
-						<div class="col-6">
-							<canvas id="partyChart"></canvas>
-						</div>
+						
 					</div>
 				</div>
 				<div class="row">
@@ -109,7 +171,7 @@
 			data : {		
 				labels : ["일욜일","월요일","화요일","수요일","목요일","금요일","토요일"],
 				datasets : [ {	
-					//label : '요일별  모집 수',
+					label : '요일 별 생성 되었던 모임 현황',
 					data : [${party["1"]}, ${party["2"]}, ${party["3"]}, ${party["4"]},${party["5"]},${party["6"]},${party["7"]}],
 					backgroundColor: [
 							'rgba(255, 99, 132, 0.2)',

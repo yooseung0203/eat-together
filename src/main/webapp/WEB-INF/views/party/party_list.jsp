@@ -29,8 +29,7 @@
 <link href="/resources/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
 <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
 <link href="/resources/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-<link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"
-	rel="stylesheet">
+<link href="/resources/assets/vendor/font-awesome/css/font-awesome.min.css"rel="stylesheet">
 	
 <!-- Template Main CSS File -->
 <link href="/resources/assets/css/style.css?ver=1" rel="stylesheet">
