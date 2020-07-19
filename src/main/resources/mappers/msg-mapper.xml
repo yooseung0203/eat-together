@@ -38,7 +38,7 @@
 		msg.*, row_number() over(order by msg_date desc)
 		rnum from msg where
 		msg_receiver =#{msg_receiver} and msg_sender = 'administrator' and
-		receiver_del=0 and msg_title not like '%[1:1문의]%') where rnum between
+		receiver_del=0 and msg_title not like '%[1:1%') where rnum between
 		#{start} and #{end}
 	</select>
 	<!-- 보낸쪽지함 -->
