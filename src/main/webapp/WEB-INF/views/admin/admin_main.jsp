@@ -16,14 +16,12 @@
 </head>
 <style>
 
-div{
-	border:1px solid black;
-}
 #ageChart , #partyChart{
 	background-color:white;
 	border:1px solid #f2f2f2;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+
 .fa{
 	color:#d4d4d4;
 }
@@ -39,7 +37,7 @@ div{
 			</div>
 			<div class="col-10 px-5">
 				<div class="row">
-					<div class="col-xl-3 col-md-6 mb-4 apap">
+					<div class="col-xl-3 col-md-3 mb-4 apap">
 						<div class="card border-left-primary shadow h-100 py-2">
 							<div class="card-body">
 								<div class="row no-gutters align-items-center">
@@ -55,23 +53,23 @@ div{
 							</div>
 						</div>
 					</div>
-					<div class="col-xl-3 col-md-6 mb-4 apap">
+					<div class="col-xl-3 col-md-3 mb-4 apap">
 						<div class="card border-left-success shadow h-100 py-2">
 							<div class="card-body">
 								<div class="row no-gutters align-items-center">
 									<div class="col mr-2">
 										<div
 											class="text-xs font-weight-bold text-success text-uppercase mb-1">총 모임 수</div>
-										<div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+										<div class="h5 mb-0 font-weight-bold text-gray-800">${totalparty }</div>
 									</div>
 									<div class="col-auto">
-										
+										<i class="fa fa-comments fa-3x text-gray-300"></i>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="col-xl-3 col-md-6 mb-4 apap">
+					<div class="col-xl-3 col-md-3 mb-4 apap">
 						<div class="card border-left-info shadow h-100 py-2">
 							<div class="card-body">
 								<div class="row no-gutters align-items-center">
@@ -87,14 +85,14 @@ div{
 							</div>
 						</div>
 					</div>
-					<div class="col-xl-3 col-md-6 mb-4 apap">
+					<div class="col-xl-3 col-md-3 mb-4 apap">
 						<div class="card border-left-warning shadow h-100 py-2">
 							<div class="card-body">
 								<div class="row no-gutters align-items-center">
 									<div class="col mr-2">
 										<div
-											class="text-xs font-weight-bold text-warning text-uppercase mb-1">총 회원수</div>
-										<div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+											class="text-xs font-weight-bold text-warning text-uppercase mb-1">미 처리 현황</div>
+										<div class="h6 mb-0 font-weight-bold text-gray-800">문의 : ${questionCount} / 신고 : ${reportCount }</div>
 									</div>
 									<div class="col-auto">
 										
@@ -107,18 +105,17 @@ div{
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
 						<div class="row">
-							<div class="col-7">
+							<div class="col-6">
 								<canvas id="partyChart"></canvas>
 							</div>
-							<div class="col-5">
-						 		<canvas id="ageChart"></canvas>
+							<div class="col-6">
+								<canvas id="ageChart"></canvas>
 							</div>
 						</div>
-						
 					</div>
-				</div>
+				</div>	
 				<div class="row">
-					<div class="col-12  col-sm-12">
+					<div class="col-12 col-sm-12 mt-3">
 					</div>
 				</div>
 			</div>
@@ -156,7 +153,7 @@ div{
 	    	options: {
 	    		cutoutPercentage: 70, //도넛두께 : 값이 클수록 얇아짐 
 	    		legend: {position:'bottom', padding:5, labels: {pointStyle:'circle', usePointStyle:true}},
-	    		maintainAspectRatio: true, 
+	    		maintainAspectRatio: true,
 	    		title:{
 	    			display:true,
 	    			text:"연령대별 회원 수"

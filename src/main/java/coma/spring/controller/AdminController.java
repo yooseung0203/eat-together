@@ -27,7 +27,6 @@ import coma.spring.dto.ReportDTO;
 import coma.spring.dto.ReviewDTO;
 import coma.spring.service.AdminService;
 import coma.spring.service.FaqService;
-import coma.spring.service.MapService;
 import coma.spring.service.MsgService;
 import coma.spring.service.PartyService;
 import coma.spring.service.QuestionService;
@@ -80,6 +79,9 @@ public class AdminController {
 			
 			int totalMember = aservice.getAllMemberCount();
 			request.setAttribute("member", totalMember);
+			
+			int totalParty = pservice.selectAllCount();
+			request.setAttribute("totalparty", totalParty);
 			
 			int totalMap = aservice.mapCount();
 			request.setAttribute("map", totalMap);
