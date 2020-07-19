@@ -6,7 +6,7 @@
 		select count(*) from msg
 		where msg_receiver = #{msg_receiver} and msg_sender='administrator'
 		and
-		receiver_del=0 and msg_title not like '%[1:1문의]%'
+		receiver_del=0 and msg_title not like '%[1:1%'
 	</select>
 	<select id="getSenderCount" resultType="int">
 		select count(*) from msg
