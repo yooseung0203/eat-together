@@ -290,12 +290,12 @@ public class AdminService {
 		StringBuilder sb = new StringBuilder("<nav aria-label='Page navigation'><ul class='pagination justify-content-center'>");
 
 		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='/admin/toAdmin_report?cpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
 		}
 
 		for(int i=startNav; i<=endNav; i++) {
 			if(cpage == i) {
-				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/toAdmin_report?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 			}else {
 				sb.append("<li class='page-item'><a class='page-link' href='/admin/toAdmin_report?cpage="+i+"'>"+i+"</a></li>");
@@ -303,7 +303,7 @@ public class AdminService {
 		}
 
 		if(needNext) {
-			sb.append("<li class=page-item><a class=page-link href='/admin/toAdmin_report?cpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
+			sb.append("<li class=page-item><a class=page-link href='/admin/partyByOption?cpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
 		}		
 		sb.append("</ul></nav>");
 		return sb.toString();
