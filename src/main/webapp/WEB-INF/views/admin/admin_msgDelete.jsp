@@ -38,11 +38,12 @@ function saveMsg(msg_seq) {
 				</div>
 				<hr>
 				<div class="row">
-					<div class="col">
+					<div class="col" colspan=10>
 						<button type="button" class="btn btn-danger" onclick="location.href='toAdmin_msg'">공지</button>					
 						<button type="button" class="btn btn-warning" onclick="location.href='admin_msgSend?ascpage=1'">받은 쪽지함</button>
 						<button type="button" class="btn btn-warning" onclick="location.href='admin_msgReceive?arcpage=1'">보낸 쪽지함</button>
-						<button type="button" class="btn btn-dark" onclick="location.href='admin_msgDelete?gcpage=1'">삭제된 쪽지함</button>
+						<button type="button" class="btn btn-dark" onclick="location.href='admin_SendDel?sdcpage=1'">삭제된 쪽지함</button>
+						<button type="button" class="btn btn-dark" onclick="location.href='admin_msgDelete?gcpage=1'">휴지통</button>
 					</div>
 				</div>
 				<hr>
@@ -91,7 +92,7 @@ function saveMsg(msg_seq) {
 													</td>
 												</tr>
 											</c:forEach>
-
+											<tr><td scope="col" colspan=12 align="right"><button type="button" class="btn btn-dark" onclick="location.href='admin_EmptyDeleteMsg'">비우기</button></td></tr>
 											<tr>
 												<td scope="col" colspan=12 align="center">${navi}</td>
 											</tr>

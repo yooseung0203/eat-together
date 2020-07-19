@@ -469,5 +469,36 @@ public class AdminService {
 		String navi = this.faqgetPageNav(cpage);
 		return navi;
 	}
-
+	//삭제된 받은 쪽지함
+	public List<MsgDTO> selectBySendDel(int cpage) throws Exception{
+		List<MsgDTO> dto = adao.selectBySendDel(cpage);
+		return dto;
+	}
+	//관리자 삭제된 받은  쪽지함 네비
+	public String SendDelnavi (int cpage) throws Exception{
+		String navi = adao.getSendDelPageNav(cpage);
+		return navi;
+	}
+	//관리자 삭제된 받은 쪽지 검색 네비
+	public List<MsgDTO> selectByDelSearch(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = adao.selectByDelSearch(cpage,msg_receiver);
+		return dto;
+	}
+	//관리자 삭제된 받은  쪽지함 검색 네비
+	public String SearchDelnavi (int cpage,String msg_receiver) throws Exception{
+		String navi = adao.getDelSearchPageNav(cpage,msg_receiver);
+		return navi;
+	}
+	//관리자 삭제된 페이지 쪽지 살리기
+	public int saveMsgSend(String[] checkList)throws Exception{
+		List<String> list = new ArrayList<String>();
+		for(int a=0;a<checkList.length;a++) {
+			list.add(checkList[a]);
+		}
+		return adao.saveMsgSend(list);
+	}
+	//관리자 페이지 휴지통 비우기
+	public int msgDelete()throws Exception{
+		return adao.msgDelete();
+	}
 }

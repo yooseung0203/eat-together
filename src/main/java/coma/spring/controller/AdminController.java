@@ -475,7 +475,6 @@ public class AdminController {
 	public String msglist_sender(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getNickname();
-		System.out.println(msg_receiver+"의 받은 쪽지함");
 
 		if(session.getAttribute("ascpage")==null) {
 			session.setAttribute("ascpage", 1);
@@ -495,7 +494,6 @@ public class AdminController {
 	public String msglist_receiver(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getNickname();
-		System.out.println(msg_receiver+"의 보낸 쪽지함");
 
 		if(session.getAttribute("arcpage")==null) {
 			session.setAttribute("arcpage", 1);
@@ -518,7 +516,6 @@ public class AdminController {
 	public String msglist_delete(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 		String msg_receiver = mdto.getNickname();
-		System.out.println(msg_receiver+"의 보낸 쪽지함");
 
 		if(session.getAttribute("gcpage")==null) {
 			session.setAttribute("gcpage", 1);
@@ -543,7 +540,17 @@ public class AdminController {
 		int result = aservice.saveMsg(msg_seq);
 		return "redirect:admin_msgDelete";
 	}
-
+	
+	@RequestMapping("saveMsgSend")
+	@ResponseBody
+	public int saveMsgSend(HttpServletRequest request)throws Exception{
+		String data = request.getParameter("msg_seqs"); 
+		String msg_seqs = data.substring(2,data.length()-2);
+		String[] checkList = msg_seqs.split("\",\"");
+		int resp = aservice.saveMsgSend(checkList);
+		return resp;
+	}
+	
 
 
 	// 태훈 신고 리스트 출력하기 
@@ -610,7 +617,75 @@ public class AdminController {
 		request.setAttribute("list", rdto);
 		return "/admin/admin_report";
 	}
-	
+	//삭제된  메세지함
+	@RequestMapping("admin_SendDel")
+	public String admin_SendDel(HttpServletRequest request)throws Exception{
+		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
+		String admincheck = mdto.getNickname();
+		if(admincheck.contentEquals("administrator")) {
+			if(session.getAttribute("sdcpage")==null) {
+				session.setAttribute("sdcpage", 1);
+			}
+			try { 
+				session.setAttribute("sdcpage", Integer.parseInt(request.getParameter("sdcpage")));
+			} catch (Exception e) {}
+
+			int sdcpage=(int)session.getAttribute("sdcpage");
+
+			List<MsgDTO> dto = aservice.selectBySendDel(sdcpage);
+			String navi =aservice.SendDelnavi(sdcpage);
+
+			request.setAttribute("navi", navi);
+			request.setAttribute("list", dto);
+			return "/admin/admin_SendDel";
+		}else {
+			return "error";
+		}
+	}
+	//삭제된  메세지함
+		@RequestMapping("admin_DeleteSearch")
+		public String admin_DeleteSearch(HttpServletRequest request,String msg_receiver)throws Exception{
+			MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
+			String admincheck = mdto.getNickname();
+			if(admincheck.contentEquals("administrator")) {
+				if(session.getAttribute("dscpage")==null) {
+					session.setAttribute("dscpage", 1);
+				}
+				try { 
+					session.setAttribute("dscpage", Integer.parseInt(request.getParameter("dscpage")));
+				} catch (Exception e) {}
+				
+				if(session.getAttribute("msg_receiver")==null) {
+					session.setAttribute("msg_receiver", msg_receiver);
+				}
+				try { 
+					session.setAttribute("msg_receiver", (String)request.getParameter("msg_receiver"));
+				} catch (Exception e) {}
+				
+				int dscpage=(int)session.getAttribute("dscpage");
+				String msg_receiver2 = (String) session.getAttribute("msg_receiver");
+				System.out.println(msg_receiver2);
+				List<MsgDTO> dto = aservice.selectByDelSearch(dscpage,msg_receiver2);
+				String navi =aservice.SearchDelnavi(dscpage,msg_receiver2);
+				session.setAttribute("msg_receiver", msg_receiver2);
+				request.setAttribute("list", dto);
+				return "/admin/admin_SendDel";
+			}else {
+				return "error";
+			}
+		}
+	@RequestMapping("admin_EmptyDeleteMsg")
+	public String msgDelete(HttpServletRequest request)throws Exception{
+		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
+		String admincheck = mdto.getNickname();
+		if(admincheck.contentEquals("administrator")) {
+			int result = aservice.msgDelete();
+			System.out.println("삭제된 메세지 :"+result);
+			return "redirect:admin_msgDelete";
+		}else {
+			return "error";
+		}
+	}
 	
 }
 
