@@ -47,7 +47,6 @@ function saveMsg(msg_seq) {
 					</div>
 				</div>
 				<hr>
-				<form action="msgNotice" method="post">
 					<div class="row">
 						<div class="col-12  col-sm-12">
 							<div class="row">
@@ -92,7 +91,7 @@ function saveMsg(msg_seq) {
 													</td>
 												</tr>
 											</c:forEach>
-											<tr><td scope="col" colspan=12 align="right"><button type="button" class="btn btn-dark" onclick="location.href='admin_EmptyDeleteMsg'">비우기</button></td></tr>
+											<tr><td scope="col" colspan=12 align="right"><button type="button" id="empty" class="btn btn-dark" onclick="location.href='admin_EmptyDeleteMsg'">비우기</button></td></tr>
 											<tr>
 												<td scope="col" colspan=12 align="center">${navi}</td>
 											</tr>
@@ -103,11 +102,19 @@ function saveMsg(msg_seq) {
 
 						</div>
 					</div>
-				</form>
 			</div>
 
 		</div>
-
+<script>
+	$("#empty").on("click",function(){
+		var flag=confirm("휴지통을 비우시겠습니까?");
+		if(flag){
+			true;
+		}else{
+			false;
+		}
+	})
+</script>
 	</div>
 </body>
 </html>

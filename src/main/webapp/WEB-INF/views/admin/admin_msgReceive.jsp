@@ -97,7 +97,7 @@ $(function(){
 					</div>
 				</div>
 				<hr>
-				<form action="msgNotice" method="post">
+				
 					<div class="row">
 						<div class="col-12  col-sm-12">
 							<div class="row">
@@ -174,7 +174,7 @@ $(function(){
 
 						</div>
 					</div>
-				</form>
+			
 			</div>
 
 		</div>
