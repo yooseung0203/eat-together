@@ -40,22 +40,22 @@ public class ReviewController {
 	public String write(ReviewDTO rdto, String place_id, MultipartFile imgFile) throws Exception{
 		// 아이디 세션값에서 가져오기
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		rdto.setId(mdto.getId());
-		rdto.setProfile(mdto.getSysname());
-		System.out.println(imgFile);
-		System.out.println(rdto.getId() + " : " + rdto.getContent() + " : " + rdto.getRating() + " : " + rdto.getParent_seq());
+		String realPath = null;
+		try {
+			rdto.setId(mdto.getId());
+			rdto.setProfile(mdto.getSysname());
+			realPath = session.getServletContext().getRealPath("upload/files");
+		}catch(Exception e) {
+			return "error/loginPlease";
+		}
 		// 파일 작업
-		String realPath = session.getServletContext().getRealPath("upload/files");
 		File tempFilePath = new File(realPath);
 		if(!tempFilePath.exists()) {tempFilePath.mkdirs();}
 		UUID uuid = UUID.randomUUID();
 		if(imgFile.isEmpty()) { // 이미지 파일을 첨부하지 않은 경우
-			System.out.println("첨부 파일이 비어있습니다.");
 			rservice.write(rdto);
 		}else { // 파일을 첨부한 경우
 			ReviewFileDTO rfdto = new ReviewFileDTO();
-			System.out.println(realPath);
-			System.out.println("이미지 파일 이름 :" + imgFile.getOriginalFilename());
 			rfdto.setOriname(imgFile.getOriginalFilename());
 			rfdto.setSysname(uuid+"_"+imgFile.getOriginalFilename());
 			File targetLoc = new File(realPath + "/" + rfdto.getSysname());
@@ -73,10 +73,10 @@ public class ReviewController {
 		mav.setViewName("member/mypage_reviewlist");
 
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
-		String id = mdto.getId();
+		String id = null;
+		try{id = mdto.getId();}catch(Exception e) {mav.setViewName("error/loginPlease");}
 		
 		List<ReviewDTO> reviewList = rservice.selectById(id);
-		System.out.println("내 리뷰 개수 : " + reviewList.size());
 		mav.addObject("reviewList", reviewList);
 		
 		return mav;
@@ -84,10 +84,11 @@ public class ReviewController {
 	
 	// 예지 : 리뷰 신고 기능
 	@RequestMapping("report")
-	public String reviewReport(int seq, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception{
+	public String reviewReport(int seq, String report_id, String content, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception{
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		// 로그인한 사용자 닉네임
-		String id= mdto.getNickname();
+		String id = null;
+		try{id= mdto.getNickname();}catch(Exception e) {return "redirect:/error/loginPlease";}
 		// 임시 방편으로 닉네임 받아오기 위한 코드 - 추후 아이디 가 아닌 닉네임으로 리뷰 저장으로 변경하자
 		MemberDTO mdto2 = mservice.selectMyInfo(request.getParameter("report_id"));
 		ReviewDTO dto = rservice.selectBySeq(seq);
@@ -102,9 +103,7 @@ public class ReviewController {
 		String seqs = data.substring(2,data.length()-2);
 		String[] checkList = seqs.split("\",\"");
 
-		System.out.println("삭제 선택한 리뷰 수 : " + checkList.length);
 		int resp = rservice.delete(checkList);
-		System.out.println("삭제된 리뷰 수 : " + resp);
 		return resp;
 	}
 
