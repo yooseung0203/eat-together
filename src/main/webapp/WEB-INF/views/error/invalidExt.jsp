@@ -14,4 +14,4 @@
 		location.href = "/map/" + $("#url").text();
 	</script>
 </body>
-</html>
+</html> 
