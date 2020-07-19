@@ -38,6 +38,7 @@ public class ReportController {
 	@Autowired
 	private HttpSession session;
 	
+
 	// 신고 접수
 	@ResponseBody
 	@RequestMapping("newReport")
@@ -74,6 +75,7 @@ public class ReportController {
 	@ResponseBody
 	@RequestMapping("reportRefuse")
 	public int reportRefuse(HttpServletRequest request) throws Exception {
+
 		int result=0;
 		System.out.println("seq : "+request.getParameter("seq"));
 		int repoResult = reposervice.checkReport(Integer.parseInt(request.getParameter("seq")));
@@ -85,17 +87,25 @@ public class ReportController {
 		System.out.println("result 2 :"+result);
 		return result;
 	}
+	// 신고 접수
 	@ResponseBody
 	@RequestMapping("reportAccept")
 	public int reportAccept(HttpServletRequest request) throws Exception {
+		int seq = Integer.parseInt(request.getParameter("seq"));
+		int parent_seq = Integer.parseInt(request.getParameter("parent_seq"));
+		int category = Integer.parseInt(request.getParameter("category"));
 		int resp = 0;
-		int repoResult = reposervice.checkReport(Integer.parseInt(request.getParameter("seq")));
+		int repoResult = reposervice.checkReport(seq);
 		if(repoResult ==1) {
-			System.out.println("report id : "+request.getParameter("report_id"));
-			int result=reposervice.acceptReport(request.getParameter("report_id"));
-			if(result == 1) {
-				resp = reposervice.deleteContent(Integer.parseInt(request.getParameter("category")), Integer.parseInt(request.getParameter("parent_seq")));
+			int result1 = reposervice.checkOtherRepo(seq , category , parent_seq);
+			if(result1 == 1) {
+				System.out.println("report id : "+request.getParameter("report_id"));
+				int result=reposervice.acceptReport(request.getParameter("report_id"));
+				if(result == 1) {
+					resp = reposervice.deleteContent(category, parent_seq);
+				}
 			}
+			
 		}
 		return resp;
 	}

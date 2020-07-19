@@ -22,9 +22,13 @@ public class ReportService {
 	public int checkDupl(ReportDTO rdto) throws Exception {
 		return repodao.checkDupl(rdto);
 	}
-	
+	// 태훈 신고글 접수 상태로
 	public int checkReport(int seq) throws Exception {
 		return repodao.checkReport(seq);
+	}
+	// 태훈 신고 된 다른 신고글 상태 변경
+	public int checkOtherRepo(int seq , int category, int parent_seq) throws Exception {
+		return repodao.checkOtherRepo(seq , category, parent_seq);
 	}
 	
 	public int repoCountDown(int category , int parent_seq) throws Exception {

@@ -131,10 +131,10 @@
 		    }
 			var word = $(this).text();
 			var wordSize = word.length;
-			if(wordSize >2000){
-				word=word.substr(0,2000);
+			if(wordSize >1000){
+				word=word.substr(0,1000);
 				$(this).val(word);
-				alert("메세지는 2000자 이하로 작성해주세요");
+				alert("메세지는 1000자 이하로 작성해주세요");
 			}
 			if (key.keyCode == 13) {
 				var text = $(".input-area").text();

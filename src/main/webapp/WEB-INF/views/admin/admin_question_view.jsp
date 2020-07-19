@@ -31,13 +31,13 @@
 			var word = $(this).val();
 			var wordSize = word.length;
 			console.log(wordSize);
-			if(wordSize <=2000){
+			if(wordSize <=1000){
 				$(".current").text(wordSize);
 			}else{
-				word=word.substr(0,2000);
+				word=word.substr(0,1000);
 				$(".current").text(word.length);
 				$(this).val(word);
-				alert("답변은 2000자 이하로 작성해주세요");
+				alert("답변은 1000자 이하로 작성해주세요");
 			}
 		})
 	})
@@ -83,7 +83,7 @@
 											</tr>
 											<tr>
 												<td scope="col" colspan=12><div
-														style="width: 100%; padding: 10px; word-break: keep-all; height: 140px; resize: none;"><c:out value="${qdto.msg_text}"></c:out></div></td>
+														style="width: 100%; padding: 10px; word-break: break-all; resize: none; overflow-y:auto;  height: 150px;"><c:out value="${qdto.msg_text}"></c:out></div></td>
 											</tr>
 
 
@@ -98,7 +98,7 @@
 														<th scope="col" colspan=4>제목<input type="hidden"
 															name="msg_view" id="msg_view" value="${qdto.msg_seq}"></th>
 														<th scope="col" colspan=8>[1:1답변]<input type="text"
-															id="msg_title" name="msg_title" style="width: 80%;"></th>
+															id="msg_title" name="msg_title" style="width: 80%;" maxlength="15"></th>
 													</tr>
 
 													<tr align="center">
@@ -119,7 +119,7 @@
 													<tr>
 
 														<td scope="col" colspan=12 id="wordcheck" align="right"><span
-															class="current">0</span>/2000자</td>
+															class="current">0</span>/1000자</td>
 													</tr>
 													<tr align="center">
 														<td scope="col" colspan=12>
@@ -150,7 +150,7 @@
 													</tr>
 													<tr>
 														<td scope="col" colspan=12><div
-																style="width: 100%; padding: 10px; word-break: keep-all; height: 130px; resize: none;"><c:out value="${qadto.msg_text}"></c:out></div></td>
+																style="width: 100%; padding: 10px; word-break: break-all; resize: none; overflow-y:auto;  height: 150px;"><c:out value="${qadto.msg_text}"></c:out></div></td>
 													</tr>
 
 												</c:otherwise>
