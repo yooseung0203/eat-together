@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +38,7 @@ public class ReviewController {
 	private MemberService mservice;
 	
 	@RequestMapping("write")
-	public String write(ReviewDTO rdto, String place_id, MultipartFile imgFile) throws Exception{
+	public String write(ReviewDTO rdto, String place_id, MultipartFile imgFile, HttpServletRequest request) throws Exception{
 		// 아이디 세션값에서 가져오기
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String realPath = null;
@@ -60,6 +61,24 @@ public class ReviewController {
 			rfdto.setSysname(uuid+"_"+imgFile.getOriginalFilename());
 			File targetLoc = new File(realPath + "/" + rfdto.getSysname());
 			imgFile.transferTo(targetLoc);
+			String ext = rfdto.getOriname().substring(rfdto.getOriname().lastIndexOf(".") + 1,rfdto.getOriname().length());
+			
+			String mimeType = new Tika().detect(targetLoc);
+			final String[] EXTENSION = { "image/gif", "image/jpeg", "image/png", "image/bmp" };
+			String previousURL = request.getHeader("Referer");
+			String hrefURL = previousURL.substring(previousURL.lastIndexOf("/selectMarkerInfo?place_id=")+1,previousURL.length());
+            int len = EXTENSION.length;
+            boolean possibleExt = false;
+            for (int i = 0; i < len; i++) {
+                if (mimeType.equals(EXTENSION[i])) {
+                	possibleExt = true;
+                	break;
+                }
+            }
+            if(!possibleExt) {
+            	request.setAttribute("previousURL", hrefURL);
+            	return "error/invalidExt";
+            }
 			rservice.write(rdto,rfdto);
 		}
 		return "redirect:/map/selectMarkerInfo?place_id="+place_id;
