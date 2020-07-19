@@ -33,6 +33,10 @@ public class FaqDAO {
 		return mybatis.selectOne("Faq.getArticleCount");
 
 	}
+	
+	public int getOptionArticleCount(String option) throws Exception{
+		return mybatis.selectOne("Faq.getOptionArticleCount", option);
+	}
 
 	public int insert(FaqDTO dto) {
 		return mybatis.insert("Faq.insert",dto);

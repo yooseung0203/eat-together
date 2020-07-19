@@ -94,10 +94,23 @@ $(function(){
 	
 $(function(){
 	$(document).on('submit','#reportForm',function(e){
-		e.preventDefault();
-		$(this).ajaxSubmit(option);		
-		console.log("ajax 성공");
-		return false;
+		if($("#report_id").val() == ""){
+			alert("신고자 아이디 중복검사를 해주세요.");
+			return false;
+		}
+		else if($("#title").val() == ""){
+			alert("제목을 입력해 주세요.");
+			return false;
+		}else if($("#content").val() == ""){
+			alert("내용을 입력해 주세요.");
+			return false;
+		}else{
+			e.preventDefault();
+			$(this).ajaxSubmit(option);		
+			console.log("ajax 성공");
+			return false;
+		}
+
 	});
 	
 	$("#close").on("click",function(){

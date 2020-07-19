@@ -33,6 +33,15 @@ public class ReportDAO {
 		return mybatis.update("Report.checkReport",seq);
 	}
 	
+	public int checkOtherRepo(int seq , int category, int parent_seq) {
+		Map<String , Integer> param = new HashMap<>();
+		
+		param.put("seq", seq);
+		param.put("category", category);
+		param.put("parent_seq", parent_seq);
+		return mybatis.update("Report.checkOtherRepo", param);
+	}
+	
 	public int acceptReport(String report_id) {
 		return mybatis.update("Report.acceptReport",report_id);
 	}

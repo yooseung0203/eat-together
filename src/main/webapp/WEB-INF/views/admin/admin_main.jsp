@@ -13,6 +13,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.2/Chart.js"></script>      
         <title>Admin-main</title>
 </head>
+<style>
+.home{
+	width:80%;
+	left:10%;
+}
+</style>
 <body>
 	<jsp:include page="/WEB-INF/views/include/admin_sidebar.jsp" />
 </body>
