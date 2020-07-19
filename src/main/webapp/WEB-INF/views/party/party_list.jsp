@@ -144,7 +144,8 @@ $(function() {
 });
 /********************* End 스크롤 페이지 로딩 **************************/
  
-/*********************** ajax 로딩 이미지 ****************************/ 
+/*********************** ajax 로딩 이미지 ****************************/
+
 $(function(){
 	$(document).ajaxStart(function(){
 		$('#Progress_Loading').show(); //ajax실행시 로딩바를 보여준다.
@@ -153,6 +154,7 @@ $(function(){
 		$('#Progress_Loading').hide(); //ajax종료시 로딩바를 숨겨준다.
 	});	
 })
+
 /********************* End ajax 로딩 이미지 **************************/
 
 /********************* 기본 페이지 로딩 ajax **************************/
@@ -381,9 +383,9 @@ $(function() {
 
 #Progress_Loading{
 	position:fixed;
-	height:100vh;
+	height:10vh;
 	width:100vw;
-    background-color: rgba( 255, 255, 255, 0.5 );
+   /* background-color: rgba( 255, 255, 255, 0.5 );*/
 	z-index:100;
 }
 
@@ -483,7 +485,7 @@ $(function() {
 		<!-- ============== End Top 5 Section ============== -->
 		
 		<!-- =========== Loding Spinner Section ============= -->
-		<div id = "Progress_Loading"><!-- 로딩바 -->
+		<div id="Progress_Loading"><!-- 로딩바 -->
 			<img src="/resources/img/Progress_Loading.gif"/>
 		</div>
 		<!-- ========== End Loding Spinner Section ========== -->
