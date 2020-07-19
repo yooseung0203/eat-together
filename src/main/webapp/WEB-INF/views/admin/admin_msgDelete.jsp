@@ -91,7 +91,7 @@ function saveMsg(msg_seq) {
 													</td>
 												</tr>
 											</c:forEach>
-											<tr><td scope="col" colspan=12 align="right"><button type="button" id="empty" class="btn btn-dark" onclick="location.href='admin_EmptyDeleteMsg'">비우기</button></td></tr>
+											<tr><td scope="col" colspan=12 align="right"><button type="button" id="empty" class="btn btn-dark" >비우기</button></td></tr>
 											<tr>
 												<td scope="col" colspan=12 align="center">${navi}</td>
 											</tr>
@@ -107,11 +107,11 @@ function saveMsg(msg_seq) {
 		</div>
 <script>
 	$("#empty").on("click",function(){
-		var flag=confirm("휴지통을 비우시겠습니까?");
-		if(flag){
-			true;
-		}else{
-			false;
+		var result =confirm("휴지통을 비우시겠습니까?");
+		console.log(result);
+		if(result){
+			location.href="admin_EmptyDeleteMsg";
+			return true;
 		}
 	})
 </script>
