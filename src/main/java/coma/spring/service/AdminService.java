@@ -298,7 +298,7 @@ public class AdminService {
 				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 			}else {
-				sb.append("<li class='page-item'><a class='page-link' href='/admin/toAdmin_report?cpage="+i+"'>"+i+"</a></li>");
+				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"'>"+i+"</a></li>");
 			}
 		}
 
