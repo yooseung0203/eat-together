@@ -210,6 +210,7 @@ body {
 
 										<div class="row">
 											<div class="col-md-12">
+												<span class="badge badge-light mr-2">#서버관리자</span> 
 												<span class="badge badge-light mr-2">#서버마스터가_되고싶은</span> <span
 													class="badge badge-light mr-2">#야매개발자</span> <span
 													class="badge badge-light mr-2">#이게_왜_여기서_작동하지</span>
@@ -682,6 +683,7 @@ body {
 
 										<div class="row">
 											<div class="col-md-12">
+												<span class="badge badge-light mr-2">#깃관리자</span>
 												<span class="badge badge-light mr-2">#깃_마스터가_되어보자</span> <span
 													class="badge badge-light mr-2">#프론트는_디자이너에게</span> <span
 													class="badge badge-light mr-2">#오류_없는_개발자</span> <span

@@ -277,7 +277,7 @@ $(document).ready(function(){
 								<span class="badge badge-success">멤버 모집중</span>
 
 								<c:if
-									test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false }">
+									test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false && ((sessionScope.loginInfo.gender eq 1 &&  con.gender eq 'm') || (sessionScope.loginInfo.gender eq 2 && con.gender eq'f') || con.gender eq 'a')}">
 									<div class="row  pt-1 mt-2">
 										<div class="col-sm-12 alert alert-success">
 											<h6 class="">참여가능한 모임입니다.</h6>
