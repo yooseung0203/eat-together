@@ -102,14 +102,18 @@ public class FaqController {
 			ModelAndView mav = new ModelAndView();
 			mav.setViewName("/faq/faq_list");
 			Object option;
+			String category="";
 
 			if(request.getParameter("option")!=null) {
 				option = request.getParameter("option");
 				session.setAttribute("option", option);
+				category =  request.getParameter("option");
+				session.setAttribute("category", category);
 			}else {
 				option = session.getAttribute("option");
+				category = (String) session.getAttribute("category");
 			}
-
+				
 			int cpage=1;
 			try {
 				cpage = Integer.parseInt(request.getParameter("cpage"));
@@ -119,7 +123,7 @@ public class FaqController {
 			
 			
 			List<FaqDTO> list = fservice.selectByOption(cpage, option);
-			String navi = fservice.getSelectFaqPageNav(cpage, option);
+			String navi = fservice.getSelectFaqPageNav(cpage, option, category);
 
 			mav.addObject("list", list);
 			mav.addObject("navi", navi);
