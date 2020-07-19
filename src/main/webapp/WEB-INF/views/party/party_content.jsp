@@ -83,7 +83,6 @@ function partyReport(num){
 	console.log("신고 시작 : "+ num);
 	var report_id = "${con.writer}";
 	var title = "${con.title}";
-	
 	var content = $(".party_content").html();
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
@@ -435,7 +434,7 @@ $(document).ready(function(){
 
 					<div class="featImgWrap">
 						<div class="cropping">
-							<img src="${con.imgaddr}" id="img">
+							<img src="${con.imgaddr}" width="350px" id="storeimg">
 						</div>
 					</div>
 				</div>
