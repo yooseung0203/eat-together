@@ -278,7 +278,7 @@ $(document).ready(function(){
 								<c:if
 									test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false }">
 									<div class="row  pt-1 mt-2">
-										<div class="col-sm-4 alert alert-success">
+										<div class="col-sm-12 alert alert-success">
 											<h6 class="">참여가능한 모임입니다.</h6>
 											<span class="party-info">현재 <strong>${party.count}명</strong>
 												참여중 / 총 모집인원 <strong>${con.count}명</strong>
@@ -292,7 +292,7 @@ $(document).ready(function(){
 								<c:if
 									test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false  }">
 									<div class="row mt-2 ">
-										<div class="col-sm-4 alert alert-danger">
+										<div class="col-sm-12 alert alert-danger">
 											<h6 class="">모집이 종료되어 참여할 수 없습니다.</h6>
 											<span class="party-info">(참여 : <strong>${party.count}</strong>
 												/ 모집 : <strong>${party.pull}</strong>)
