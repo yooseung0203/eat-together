@@ -87,7 +87,7 @@ function partyReport(num){
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
 		url:"/party/party_report",
-		//data : { seq : num, report_id : report_id},
+		
 		data : { seq : num, report_id : report_id , title : title , content : content},
 		success : function(result) {
 			if (result == 1){ 
@@ -401,7 +401,7 @@ $(document).ready(function(){
 					</div>
 					<div class="row mb-1">
 						<div class="col-sm-3 mb-3 party-titlelabel">소개</div>
-						<div class="col-sm-9 party-contenttext-area">
+						<div class="col-sm-9 party-contenttext-area party_content">
 							<c:out value='${con.content}' />
 						</div>
 					</div>
