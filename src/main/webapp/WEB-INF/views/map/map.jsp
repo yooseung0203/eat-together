@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>맛집지도</title>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src='/resources/js/map.js?asaasaaa'></script>
+<script src='/resources/js/map.js?asaaaasaaaaa'></script>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 <script
@@ -36,12 +36,6 @@
 	rel="stylesheet">
 </head>
 <body>
-	<!-- 로그인 인포 가져오기 -->
-	<c:if test="${not empty sessionScope.loginInfo}">
-		<div style="display:none;" id="loginInfo_nickname">${sessionScope.loginInfo.nickname}</div>
-		<div style="display:none;" id="loginInfo_gender">${sessionScope.loginInfo.gender}</div>
-		<div style="display:none;" id="loginInfo_id">${sessionScope.loginInfo.id}</div>
-	</c:if>
 	<!-- 사용자가 보고 있는 중심 좌표 -->
 	<div style="display: none;" id="centerLat"></div>
 	<div style="display: none;" id="centerLng"></div>
@@ -266,7 +260,7 @@
 							</form>
 							<c:forEach var="i" items="${reviewMap}" varStatus="status">
 								<div class="review">
-									<img src="/upload/${i.key.id}/${i.key.profile}" onError="this.src='/resources/img/no_img.png'" alt="" style="height:30px;">
+									<img src="/upload/${i.key.id}/${i.key.profile}" onError="this.src='/resources/img/no_img.png'" alt="" style="height:30px;width:30px;">
 									<div class="raty">
 										<c:if test="${i.key.rating eq 1}"><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>
 										<c:if test="${i.key.rating eq 2}"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i></c:if>

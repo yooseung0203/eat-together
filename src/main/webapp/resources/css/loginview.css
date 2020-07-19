@@ -38,9 +38,13 @@
     float: left;
 } 
 
-#kakaoLoginBtn{
-    width: 100px;
-    height: 30px;
+#SignupBtn{
+    text-align: center;
+    margin: auto;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-top: 10px;
+    margin-left: 10px;
+    float: left;
 }
 
  #kakaoLoginBtn> img{
@@ -51,4 +55,5 @@
 #BtnBox{
     margin: auto;
     text-align: center;
+    line-height: 50px;
 }
