@@ -75,7 +75,7 @@
 		msg
 		where msg_sender = #{msg_receiver} and
 		sender_del = 0 and msg_title
-		not like '%[1:1문의]%'
+		not like '%[1:1답변]%'
 	</select>
 	<!-- 관리자 휴지통 -->
 	<select id="getGarbageCount" resultType="int">

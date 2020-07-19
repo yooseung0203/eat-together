@@ -117,8 +117,8 @@ public class FaqService {
 	
 		
 		//by 수지, FAQ 조건검색정렬을 위한 네비바 생성_20200718
-		public String getSelectFaqPageNav(int cpage, Object option) throws Exception{
-			int recordTotalCount = fdao.getArticleCount(); // 총 회원 수
+		public String getSelectFaqPageNav(int cpage, Object option, String category) throws Exception{
+			int recordTotalCount = fdao.getOptionArticleCount(category); // 총 faq수
 			int pageTotalCount = 0; // 전체 페이지의 개수
 
 			if( recordTotalCount % Configuration.recordCountPerPage > 0) {

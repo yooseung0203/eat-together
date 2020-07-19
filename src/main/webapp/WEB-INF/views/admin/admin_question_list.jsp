@@ -36,6 +36,51 @@
 			console.log(some);
 			AnswerPopUp(some[0], some[1]);
 		})
+		
+		$("#checkAll").click(function() {
+			if ($("#checkAll").is(":checked")) {
+				$(".checkboxes").prop("checked", true);
+			} else {
+				$(".checkboxes").prop("checked", false);
+			}
+		});
+		$(".checkboxes").click(function() {
+			var checklength = $("input:checkbox[name='checkbox[]']").length;
+			console.log(checklength);
+			console
+					.log($("input:checkbox[name='checkbox[]']:checked").length);
+
+			if ($("input:checkbox[name='checkbox[]']:checked").length == checklength) {
+				$("#checkAll").prop("checked", true);
+			} else {
+				$("#checkAll").prop("checked", false);
+			}
+		});
+		$("#toOut").on("click", function() {
+			var result = confirm("정말로 쪽지를 삭제시키겠습니까?");
+			if (result) {
+				var arr = [];
+				$(".checkboxes:checked").each(function(i) {
+					arr.push($(this).val());
+				})
+				$.ajax({
+					url : "/msg/msgSenderDel",
+					type : "post",
+					data : {
+						msg_seqs : JSON.stringify(arr)
+					}
+				}).done(function(resp) {
+					console.log(resp);
+					if(resp>0){
+					alert("선택한 쪽지가 삭제 처리 되었습니다.");
+					$(this).closest("tr").remove();
+						location.reload();
+					}else{
+						alert("쪽지 삭제에 실패하였습니다.");
+					}
+				})
+			}
+		})
 	})
 </script>
 <body>
@@ -45,7 +90,7 @@
 			<div class="col-2 mx-0 px-0"><jsp:include
 					page="/WEB-INF/views/include/admin_sidebar.jsp" /></div>
 
-			<div class="col-10 px-5" >
+			<div class="col-10 px-5">
 
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
@@ -53,7 +98,7 @@
 					</div>
 				</div>
 				<div class="row">
-				<div class="col-12 col-sm-12 mt-3">
+					<div class="col-12 col-sm-12 mt-3">
 						<form action="/admin/AdminQuestion_list" method="post">
 							<div class="row form-group position-relative">
 								<div class="col-10 p-0">
@@ -64,7 +109,8 @@
 										<option value="yesAnswer">답변완료</option>
 									</select>
 								</div>
-								<div class="col-2 p-0 b-0 position-absolute" style="bottom:0px;right:-5px;">
+								<div class="col-2 p-0 b-0 position-absolute"
+									style="bottom: 0px; right: -5px;">
 									<button type="submit" class="btn btn-dark align-middle">검색</button>
 								</div>
 							</div>
@@ -83,7 +129,10 @@
 											<th scope="col">제목</th>
 											<th scope="col">날짜</th>
 											<th scope="col">답변여부</th>
-											<th scope="col">삭제</th>
+											<th scope="col"><label><input type="checkbox"
+													id="checkAll" class="checkAll"><span
+													class="label label-primary admin_text"></span> </label>
+												<button class="btn-sm btn-danger admin_text" id="toOut">삭제</button></th>
 										</tr>
 									</thead>
 									<tbody>
@@ -98,18 +147,15 @@
 													<tr>
 														<td class="admin_text">${i.msg_seq}</td>
 														<td class="admin_text">${i.msg_sender}</td>
-														<td class="admin_text">
-														<c:choose>
-															<c:when test="${i.msg_view==0||i.msg_view==1}">
-															<a href="questionViewAdmin?msg_seq=${i.msg_seq}">${i.msg_title}</a>
-															</c:when>
-															<c:otherwise>
-															<a href="questionViewAdmin?msg_seq=${i.msg_seq}" style="color:black;">${i.msg_title}</a>
-															</c:otherwise>
-														</c:choose>
-														
-														
-														</td>
+														<td class="admin_text"><c:choose>
+																<c:when test="${i.msg_view==0||i.msg_view==1}">
+																	<a href="questionViewAdmin?msg_seq=${i.msg_seq}">${i.msg_title}</a>
+																</c:when>
+																<c:otherwise>
+																	<a href="questionViewAdmin?msg_seq=${i.msg_seq}"
+																		style="color: black;">${i.msg_title}</a>
+																</c:otherwise>
+															</c:choose></td>
 														<td class="admin_text">${i.date}</td>
 														<c:choose>
 															<c:when test="${i.msg_view==0||i.msg_view==1}">
@@ -119,18 +165,18 @@
 																<td class="admin_text">답변완료</td>
 															</c:otherwise>
 														</c:choose>
-														
+
 														<c:choose>
 															<c:when test="${i.receiver_del==1}">
-															<td><button type="button" class="btn btn-outline-dark"
-															onclick="location.href='javascript:AdminQuestionDel(${i.msg_seq})'">삭제</button></td>
+																<td>삭제  <input type="checkbox" name="checkbox[]"
+																	value="${i.msg_seq}" class="checkboxes"></td>
 															</c:when>
 															<c:otherwise>
-																<td class="myinfo_text">삭제불가</td>	
+																<td class="myinfo_text">삭제불가</td>
 															</c:otherwise>
 														</c:choose>
-														
-														
+
+
 													</tr>
 												</c:forEach>
 											</c:when>
