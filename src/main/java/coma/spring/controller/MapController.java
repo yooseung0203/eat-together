@@ -304,6 +304,7 @@ public class MapController {
 		Reader reader = new FileReader(jsonPath);
 		JsonObject readObj = gson.fromJson(reader, JsonObject.class);
 		// 페이지별 값 가져오기
+		JsonArray inputArr = new JsonArray();
 		loop: for(int page = 1; page < 46;page++) {
 			// 페이지마다 카테고리별 검색 진행 
 			RestTemplate restTemplate = new RestTemplate();
@@ -363,6 +364,7 @@ public class MapController {
 						JsonObject insert_obj = new JsonObject();
 						insert_obj.add(category_name, place_info);
 						readArr.add(insert_obj); // 기존 배열에 추가
+						inputArr.add(place_info);
 					}
 				}
 				// 마지막 페이지인지 판단
@@ -378,7 +380,8 @@ public class MapController {
 				else{break loop;}
 			}
 		}
-		return respBody;
+		String inputResult = gson.toJson(inputArr);
+		return inputResult;
 	}
 
 	@RequestMapping(value="selectMarkerInfo",method=RequestMethod.GET)
@@ -387,6 +390,7 @@ public class MapController {
 		try {cpage = Integer.parseInt(request.getParameter("cpage"));}catch(Exception e) {}
 		int id = Integer.parseInt(place_id);
 		MapDTO mapdto = mapservice.selectOne(id);
+//		mapservice.updateRatingAvg(mapdto.getSeq());
 		// 진행중인 모임이 있다면 모임도 같이 보내준다.
 		int pcount = mapservice.selectPartyOn(id);
 		List<PartyDTO> plist = pservice.selectByPageNo(cpage, id);
