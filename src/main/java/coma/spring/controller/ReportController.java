@@ -48,24 +48,16 @@ public class ReportController {
 		rdto = (ReportDTO)map.get("rdto");
 		int check = reposervice.checkDupl(rdto);
 		
-		// 로그인 세션 받아오기
-		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-		String nickname = null;
-		try {nickname = mdto.getNickname();}catch(Exception e) {}
-		if(nickname == rdto.getId()) { // 로그인 세션에서 경우 
-			result = 2;
-		}else {
-			if(rdto.getCategory() == 0) { // 리뷰 신고
-				if(check == 0) {
-					result = rservice.report(rdto);
-				}
-			}else if(rdto.getCategory() == 1) { // 모임글 신고
-				if(check == 0) {
-					result = pservice.partyReport(rdto);
-				}
-			}else { // 회원 신고
-				result = mrservice.memberReport(rdto);
+		if(rdto.getCategory() == 0) { // 리뷰 신고
+			if(check == 0) {
+				result = rservice.report(rdto);
 			}
+		}else if(rdto.getCategory() == 1) { // 모임글 신고
+			if(check == 0) {
+				result = pservice.partyReport(rdto);
+			}
+		}else { // 회원 신고
+			result = mrservice.memberReport(rdto);
 		}
 		request.setAttribute("result", result);
 		return result;
