@@ -396,20 +396,20 @@ public class AdminDAO {
 				StringBuilder sb = new StringBuilder("<nav aria-label='Page navigation'><ul class='pagination justify-content-center'>");
 				
 				if(needPrev) {
-					sb.append("<li class='page-item'><a class='page-link' href='admin_DeleteSearch?dscpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
+					sb.append("<li class='page-item'><a class='page-link' href='admin_DeleteSearch?dscpage="+(startNav-1)+"&msg_receiver="+msg_receiver+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
 				}
 
 				for(int i=startNav; i<=endNav; i++) {
 					if(currentPage == i) {
-						sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='admin_DeleteSearch?dscpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+						sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='admin_DeleteSearch?dscpage="+i+"&msg_receiver="+msg_receiver+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 						//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 					}else {
-						sb.append("<li class='page-item'><a class='page-link' href='admin_DeleteSearch?dscpage="+i+"'>"+i+"</a></li>");
+						sb.append("<li class='page-item'><a class='page-link' href='admin_DeleteSearch?dscpage="+i+"&msg_receiver="+msg_receiver+"'>"+i+"</a></li>");
 					}
 				}
 
 				if(needNext) {
-					sb.append("<li class=page-item><a class=page-link href='admin_DeleteSearch?dscpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
+					sb.append("<li class=page-item><a class=page-link href='admin_DeleteSearch?dscpage="+(endNav+1)+"&msg_receiver="+msg_receiver+"' id='nextPage'>다음</a></li> ");
 				}		
 				sb.append("</ul></nav>");
 				return sb.toString();
