@@ -59,16 +59,6 @@ public class ReportController {
 		}else { // 회원 신고
 			result = mrservice.memberReport(rdto);
 		}
-		/*
-		// 로그인 세션 받아오기
-		MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
-		String nickname = null;
-		try {nickname = mdto.getNickname();}catch(Exception e) {}
-		if(nickname == rdto.getId()) { // 로그인 세션에서 경우 
-			result = 2;
-		}else {
-			
-		}*/
 		request.setAttribute("result", result);
 		return result;
 	}
