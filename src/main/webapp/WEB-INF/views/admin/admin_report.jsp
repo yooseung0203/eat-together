@@ -90,6 +90,7 @@ $(function(){
 			var parent_seq = $("#parent_seq").html();
 			var category = $("#category").html().substr(-2,1);
 			var report_id = $("#report_id").html();
+
 			console.log(seq);
 			$.ajax({
 				url:"/report/reportAccept",	
