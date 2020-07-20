@@ -97,8 +97,10 @@ public class ReportController {
 		int resp = 0;
 		int repoResult = reposervice.checkReport(seq);
 		if(repoResult ==1) {
-			int result1 = reposervice.checkOtherRepo(seq , category , parent_seq);
-			if(result1 == 1) {
+			if(category != 2) {
+				repoResult = reposervice.checkOtherRepo(seq , category , parent_seq);
+			}
+			if(repoResult == 1) {
 				System.out.println("report id : "+request.getParameter("report_id"));
 				int result=reposervice.acceptReport(request.getParameter("report_id"));
 				if(result == 1) {
