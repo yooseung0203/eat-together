@@ -12,13 +12,14 @@ public class ReportDTO {
 	private String content;
 	private Timestamp report_date;
 	private int parent_seq;
+	private int status;
 	private String sdate;
 	
 	public ReportDTO() {
 		super();
 	}
 	
-	public ReportDTO(int seq, int category, String id, String report_id, String title, String content, Timestamp report_date, int parent_seq) {
+	public ReportDTO(int seq, int category, String id, String report_id, String title, String content, Timestamp report_date, int parent_seq, int status) {
 		super();
 		this.seq = seq;
 		this.category = category;
@@ -28,6 +29,7 @@ public class ReportDTO {
 		this.content = content;
 		this.report_date = report_date;
 		this.parent_seq = parent_seq;
+		this.status = status;
 		this.sdate=new SimpleDateFormat("yyyy-MM-dd-HH:mm").format(report_date);
 	}
 	
@@ -80,6 +82,13 @@ public class ReportDTO {
 	}
 	public void setParent_seq(int parent_seq) {
 		this.parent_seq = parent_seq;
+	}
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	public String getSdate() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");

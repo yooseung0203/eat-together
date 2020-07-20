@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import coma.spring.dao.AdminDAO;
+import coma.spring.dao.FaqDAO;
 import coma.spring.dao.PartyDAO;
 import coma.spring.dao.ReportDAO;
 import coma.spring.dto.MemberDTO;
@@ -16,7 +17,6 @@ import coma.spring.dto.MsgDTO;
 import coma.spring.dto.PartyDTO;
 import coma.spring.dto.ReportDTO;
 import coma.spring.statics.Configuration;
-import coma.spring.statics.PartyConfiguration;
 
 @Service
 public class AdminService {
@@ -28,6 +28,9 @@ public class AdminService {
 	
 	@Autowired
 	private ReportDAO rdao;
+	
+	@Autowired
+	private FaqDAO fdao;
 
 	//by 지은, 체크박스 회원 삭제하기
 	public int memberOut(String[] checkList) {
@@ -268,7 +271,6 @@ public class AdminService {
 			cpage = pageTotalCount;
 		}
 
-
 		int startNav = (cpage-1)/Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
 		int endNav = startNav + Configuration.navCountPerPage - 1;
 		if(endNav > pageTotalCount) {
@@ -285,23 +287,25 @@ public class AdminService {
 			needNext = false;
 		}
 
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("<nav aria-label='Page navigation'><ul class='pagination justify-content-center'>");
+
 		if(needPrev) {
-			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-left\\\"></i></a></li>");
+			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
 		}
 
 		for(int i=startNav; i<=endNav; i++) {
 			if(cpage == i) {
-				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='/admin/partyByOption?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
 				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
 			}else {
-				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"&option="+option+"'>"+i+"</a></li>");
+				sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+i+"'>"+i+"</a></li>");
 			}
 		}
-		if(needNext) {
-			sb.append("<li class='page-item'><a class='page-link' href='/admin/partyByOption?cpage="+(endNav+1)+"&option="+option+"' id='prevPage' tabindex='-1' aria-disabled='true'><i class=\\\"fas fa-chevron-right\\\"></i></a></li>");
-		}
 
+		if(needNext) {
+			sb.append("<li class=page-item><a class=page-link href='/admin/partyByOption?cpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
+		}		
+		sb.append("</ul></nav>");
 		return sb.toString();
 	}
 	
@@ -321,19 +325,20 @@ public class AdminService {
 	// 태훈  신고 리스트 네비_20200712
 	public String getReportNavi(int currentPage) throws Exception{
 		int recordTotalCount =rdao.getListCount(); 
+		System.out.println("신고 토탈"+recordTotalCount);
 		int pageTotalCount = 0; 
-		if(recordTotalCount % PartyConfiguration.SEARCH_COUNT_PER_PAGE > 0) {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE + 1;			
+		if(recordTotalCount % Configuration.recordCountPerPage > 0) {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage + 1;			
 		}else {
-			pageTotalCount = recordTotalCount / PartyConfiguration.SEARCH_COUNT_PER_PAGE;
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage;
 		}
 		if(currentPage < 1) {
 			currentPage = 1;
 		}else if(currentPage > pageTotalCount) {
 			currentPage = pageTotalCount;
 		}
-		int startNavi = (currentPage - 1) / PartyConfiguration.NAVI_COUNT_PER_PAGE * PartyConfiguration.NAVI_COUNT_PER_PAGE + 1;
-		int endNavi = startNavi + PartyConfiguration.NAVI_COUNT_PER_PAGE - 1;
+		int startNavi = (currentPage - 1) / Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
+		int endNavi = startNavi + Configuration.navCountPerPage - 1;
 		if(endNavi > pageTotalCount) {
 			endNavi = pageTotalCount;
 		}
@@ -400,6 +405,152 @@ public class AdminService {
 	public int saveMsg(int msg_seq)throws Exception{
 		int result = adao.saveMsg(msg_seq);
 		return result;
+	}
+	public ReportDTO getReportContent(int seq) throws Exception{
+		return adao.getReportContent(seq);
+	}
+	
+	//수지 faq리스트
+	public String faqgetPageNav(int currentPage) throws Exception{
+		int recordTotalCount = fdao.getArticleCount(); // 총 개시물의 개수
+		int pageTotalCount = 0; // 전체 페이지의 개수
+
+		if( recordTotalCount % Configuration.recordCountPerPage > 0) {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage +1;
+		}else {
+			pageTotalCount = recordTotalCount / Configuration.recordCountPerPage;
+		}
+
+		if(currentPage < 1) {
+			currentPage = 1;
+		}else if(currentPage > pageTotalCount){
+			currentPage = pageTotalCount;
+		}
+
+		int startNav = (currentPage-1)/Configuration.navCountPerPage * Configuration.navCountPerPage + 1;
+		int endNav = startNav + Configuration.navCountPerPage - 1;
+		if(endNav > pageTotalCount) {
+			endNav = pageTotalCount;
+		}
+
+		boolean needPrev = true;
+		boolean needNext = true;
+
+		if(startNav == 1) {
+			needPrev = false;
+		}
+		if(endNav == pageTotalCount) {
+			needNext = false;
+		}
+
+		StringBuilder sb = new StringBuilder("<nav aria-label='Page navigation'><ul class='pagination justify-content-center'>");
+		
+		if(needPrev) {
+			sb.append("<li class='page-item'><a class='page-link' href='toAdmin_faq?cpage="+(startNav-1)+"' id='prevPage' tabindex='-1' aria-disabled='true'>Previous</a></li>");
+		}
+
+		for(int i=startNav; i<=endNav; i++) {
+			if(currentPage == i) {
+				sb.append("<li class='page-item active' aria-current='page'><a class='page-link' href='toAdmin_faq?cpage="+i+"'>"+i+"<span class=sr-only>(current)</span></a></li>");
+				//sb.append("<li class='page-item active' aria-current='page'>"+i+"<span class='sr-only'>(current)</span></li>");
+			}else {
+				sb.append("<li class='page-item'><a class='page-link' href='toAdmin_faq?cpage="+i+"'>"+i+"</a></li>");
+			}
+		}
+
+		if(needNext) {
+			sb.append("<li class=page-item><a class=page-link href='toAdmin_faq?cpage="+(endNav+1)+"' id='nextPage'>다음</a></li> ");
+		}		
+		sb.append("</ul></nav>");
+		return sb.toString();
+	}
+	
+	public String faqnavi (int cpage) throws Exception{
+		String navi = this.faqgetPageNav(cpage);
+		return navi;
+	}
+
+	//삭제된 받은 쪽지함
+	public List<MsgDTO> selectBySendDel(int cpage) throws Exception{
+		List<MsgDTO> dto = adao.selectBySendDel(cpage);
+		return dto;
+	}
+	//관리자 삭제된 받은  쪽지함 네비
+	public String SendDelnavi (int cpage) throws Exception{
+		String navi = adao.getSendDelPageNav(cpage);
+		return navi;
+	}
+	//관리자 삭제된 받은 쪽지 검색 네비
+	public List<MsgDTO> selectByDelSearch(int cpage,String msg_receiver) throws Exception{
+		List<MsgDTO> dto = adao.selectByDelSearch(cpage,msg_receiver);
+		return dto;
+	}
+	//관리자 삭제된 받은  쪽지함 검색 네비
+	public String SearchDelnavi (int cpage,String msg_receiver) throws Exception{
+		String navi = adao.getDelSearchPageNav(cpage,msg_receiver);
+		return navi;
+	}
+	//관리자 삭제된 페이지 쪽지 살리기
+	public int saveMsgSend(String[] checkList)throws Exception{
+		List<String> list = new ArrayList<String>();
+		for(int a=0;a<checkList.length;a++) {
+			list.add(checkList[a]);
+		}
+		return adao.saveMsgSend(list);
+	}
+	//관리자 페이지 휴지통 비우기
+	public int msgDelete()throws Exception{
+		return adao.msgDelete();
+	}
+
+	// 태훈 등록 맛집 갯수
+	public int mapCount() throws Exception{
+		return adao.mapCount();
+	}
+	
+	// 태훈 미 접수 신고 수 가져오기
+	public int reportCount() throws Exception {
+		return adao.reportCount();
+	}
+	// 태훈 미 답변 문의 수 가져오기
+	public int	questionCount() throws Exception {
+		return adao.questionCount();
+	}
+	// 태훈 연령별 회원 수
+	public Map<String, Integer> memberCountByAge() throws Exception {
+		//Map<Integer, Integer> age = new HashMap<>();
+		Map<String, Integer> age = new HashMap<>();
+		//List<Map<Integer,Integer>> ageList = adao.memberCountByAge();
+		List<Map<String,Integer>> ageList = adao.memberCountByAge();
+		for (int i=0; i<ageList.size();i++) {
+			age.put(String.valueOf(ageList.get(i).get("연령")), ageList.get(i).get("수"));
+			System.out.println(age);
+		}
+		for (int i=1; i<6; i++) {
+			if(!(age.containsKey((i*10)+"대"))) {
+				age.put((i*10)+"대",0);
+			}
+			System.out.println(age);
+		}
+		
+		return age;
+	}
+	// 태훈 요일별 모집 수
+	public Map<String, Integer> partyCountByDay() throws Exception {
+		Map<String, Integer> party = new HashMap<>();
+		List<Map<String,Integer>> partyList = adao.partyCountByDay();
+		for (int i=0; i<partyList.size();i++) {
+			party.put(String.valueOf(partyList.get(i).get("요일")), partyList.get(i).get("수"));
+			System.out.println(party);
+		}
+		for (int i=1; i<8; i++) {
+			if(!(party.containsKey(String.valueOf(i)))) {
+				party.put(String.valueOf(i),0);
+			}
+			System.out.println(party);
+		}
+
+		return party;
 	}
 
 }

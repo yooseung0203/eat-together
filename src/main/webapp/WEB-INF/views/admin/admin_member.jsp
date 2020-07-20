@@ -14,20 +14,34 @@
 	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
 <title>Admin-회원관리</title>
 <!-- admine용 css  -->
-<link rel="stylesheet" type="text/css" href="/resources/css/admin.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/admin.css?ver=1">
 <!-- ******************* -->
-
+<style>
+	#toOut{background-color:#fcbb42;border:1px solid #ffa500;}
+	#toOut:hover{background-color:#ffa500;}
+	.page-item{margin-left:2px;margin-right:2px;}
+    .page-link{
+    	line-height:1 !important;
+    	border-radius:20px !important;
+    	border:0px;
+    	color:#ff9900;
+    }
+    .page-item.active .page-link {
+	    background-color: #ffa500;
+	}
+    .page-item:hover .page-link{color:black;}
+    .sr-only{background-color:#ffa500;}
+</style>
 </head>
 <body>
 	<div class="container-fluid mx-0 px-0 admin_text">
 		<div class="row mx-0">
 
-			<div class="col-3 mx-0 px-0"><jsp:include
+			<div class="col-2 mx-0 px-0"><jsp:include
 					page="/WEB-INF/views/include/admin_sidebar.jsp" /></div>
-			<div class="col-9">
+			<div class="col-10 px-5">
 				<div class="row">
 					<div class="col-12 col-sm-12 mt-3">
 						<h2 class="admin-h2">회원관리</h2>
@@ -99,7 +113,6 @@
 							<div class="col-6">${navi}</div>
 							<div class="col-4">
 								<c:if test="${sessionScope.loginInfo.id eq 'administrator'}">
-									<button class="btn btn-primary admin_text" id="toWriteBtn">글쓰기</button>
 									<button class="btn btn-danger admin_text" id="toOut">탈퇴</button>
 									<label><input type="checkbox" id="checkAll"
 										class="checkAll"> <span class="label label-primary admin_text">전체선택</span>

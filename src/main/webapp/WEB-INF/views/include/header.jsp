@@ -86,7 +86,7 @@
 					<div class="col-sm-2 text-right">
 						<span class="main-login "> ${loginInfo.id}님, 환영합니다. <br>
 							<a href="/member/logoutProc" id="logout">로그아웃</a> /
-							<a href="#" id="toReport" onclick="window.open('/memreport/toReport', 'Report','width=600, height=800, location=no'); return false">신고하기</a>
+							<a href="#" id="toReport" onclick="window.open('/memreport/toReport', 'Report','width=500, height=600, location=no'); return false">신고하기</a>
 						</span>
 					</div>
 				</c:otherwise>
@@ -111,7 +111,6 @@
 			location.replace('/member/mypage_myinfo');
 		}
 	})
-
 
 	$("#newMsg").on("click", function() {
 		location.href = "/msg/msg_list_sender?msgcpage=1";

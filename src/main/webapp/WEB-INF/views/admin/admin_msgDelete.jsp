@@ -38,15 +38,15 @@ function saveMsg(msg_seq) {
 				</div>
 				<hr>
 				<div class="row">
-					<div class="col">
+					<div class="col" colspan=10>
 						<button type="button" class="btn btn-danger" onclick="location.href='toAdmin_msg'">공지</button>					
 						<button type="button" class="btn btn-warning" onclick="location.href='admin_msgSend?ascpage=1'">받은 쪽지함</button>
 						<button type="button" class="btn btn-warning" onclick="location.href='admin_msgReceive?arcpage=1'">보낸 쪽지함</button>
-						<button type="button" class="btn btn-dark" onclick="location.href='admin_msgDelete?gcpage=1'">삭제된 쪽지함</button>
+						<button type="button" class="btn btn-dark" onclick="location.href='admin_SendDel?sdcpage=1'">삭제된 쪽지함</button>
+						<button type="button" class="btn btn-dark" onclick="location.href='admin_msgDelete?gcpage=1'">휴지통</button>
 					</div>
 				</div>
 				<hr>
-				<form action="msgNotice" method="post">
 					<div class="row">
 						<div class="col-12  col-sm-12">
 							<div class="row">
@@ -63,8 +63,9 @@ function saveMsg(msg_seq) {
 										<tbody>
 											<tr align="center">
 												<th scope="col" colspan=2>#</th>
+												<th scope="col" colspan=2>보낸사람</th>
 												<th scope="col" colspan=2>받는사람</th>
-												<th scope="col" colspan=4>제목</th>
+												<th scope="col" colspan=2>제목</th>
 												<th scope="col" colspan=2>날짜</th>
 												<th scope="col" colspan=2>삭제</th>
 											</tr>
@@ -77,13 +78,12 @@ function saveMsg(msg_seq) {
 											<c:forEach var="i" items="${list}" varStatus="status">
 												<tr align="center">
 													<td colspan=2>${i.msg_seq}</td>
-
-
+													<td colspan=2>${i.msg_sender}</td>
 													<td colspan=2><c:choose>
 															<c:when test="${i.msg_receiver eq 'administrator'}">관리자</c:when>
 															<c:otherwise>${i.msg_receiver}</c:otherwise>
 														</c:choose></td>
-													<td colspan=4 class="msg_title" id="msg_title"><c:out value="${i.msg_title}" /></td>
+													<td colspan=2 class="msg_title" id="msg_title"><c:out value="${i.msg_title}" /></td>
 													<td colspan=2>${i.date}</td>
 													<td colspan=2>
 														<button type="button" class="btn btn-outline-dark"
@@ -91,7 +91,7 @@ function saveMsg(msg_seq) {
 													</td>
 												</tr>
 											</c:forEach>
-
+											<tr><td scope="col" colspan=12 align="right"><button type="button" id="empty" class="btn btn-dark" >비우기</button></td></tr>
 											<tr>
 												<td scope="col" colspan=12 align="center">${navi}</td>
 											</tr>
@@ -102,11 +102,19 @@ function saveMsg(msg_seq) {
 
 						</div>
 					</div>
-				</form>
 			</div>
 
 		</div>
-
+<script>
+	$("#empty").on("click",function(){
+		var result =confirm("휴지통을 비우시겠습니까?");
+		console.log(result);
+		if(result){
+			location.href="admin_EmptyDeleteMsg";
+			return true;
+		}
+	})
+</script>
 	</div>
 </body>
 </html>

@@ -23,7 +23,7 @@
 	<c:otherwise>
 		<!-- start column -->
 		<c:forEach var="partyList" items="${list}">
-			<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 adb">
+			<div class="col-lg-4 col-md-4 col-sm-12 adb">
 				<div class="party-list">
 					<div class="party-img">
 					<a href="#" onclick="return false;" style="cursor:default">
@@ -43,7 +43,7 @@
 						</div>
 					</div>
 					<div class="party-content text-center">
-						<h3 class="tt">${partyList.title }</h3>
+						<h3 class="tt"><c:out value="${partyList.title }"/></h3>
 						<br>
 						<h5 class="card-subtitle mb-2 text-muted tt">${partyList.parent_name }</h5>
 						<p class="tt">

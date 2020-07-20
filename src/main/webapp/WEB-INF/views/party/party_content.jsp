@@ -61,6 +61,7 @@
 
 </head>
 <script>
+
 // by 지은, 카카오톡으로 로그인한 경우 accoun_email인증이 안되었기 때문에 mypage로 이동시킨다_20200717	
 if ("${loginInfo.account_email}" == "need@eat-together.com") {
 	alert("이메일 인증 및 개인정보 수정 후 사이트를 이용해주시길 바랍니다.");
@@ -69,7 +70,7 @@ if ("${loginInfo.account_email}" == "need@eat-together.com") {
 
 function send_msg(){
 	var option = "width = 500, height = 550, top = 100, left = 200, scrollbars=no"
-	var target='${con.writer}';
+	var target="${con.writer}";
 	window.open("/msg/msgResponse?msg_receiver="+target,target,option);
 };
 
@@ -82,11 +83,11 @@ function partyReport(num){
 	console.log("신고 시작 : "+ num);
 	var report_id = "${con.writer}";
 	var title = "${con.title}";
-	var content = "${con.content}";
+	var content = $(".party_content").html();
 	console.log("신고 시작 : "+ report_id);
 	$.ajax({
 		url:"/party/party_report",
-		//data : { seq : num, report_id : report_id},
+		
 		data : { seq : num, report_id : report_id , title : title , content : content},
 		success : function(result) {
 			if (result == 1){ 
@@ -109,7 +110,11 @@ function partyReport(num){
 }
 
 $(document).ready(function(){
-	
+	   // by 지은, 카카오톡으로 로그인한 경우 accoun_email인증이 안되었기 때문에 mypage로 이동시킨다_20200717   
+	   if ("${loginInfo.account_email}" == "need@eat-together.com") {
+	      alert("이메일 인증 및 개인정보 수정 후 사이트를 이용해주시길 바랍니다.");
+	      location.replace("/member/mypage_myinfo");
+	   }
 	
 	var stime = "${con.sTime}";
 	var time = stime.substr(0,5);
@@ -271,9 +276,9 @@ $(document).ready(function(){
 								<span class="badge badge-success">멤버 모집중</span>
 
 								<c:if
-									test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false }">
+									test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false && ((sessionScope.loginInfo.gender eq 1 &&  con.gender eq 'm') || (sessionScope.loginInfo.gender eq 2 && con.gender eq'f') || con.gender eq 'a')}">
 									<div class="row  pt-1 mt-2">
-										<div class="col-sm-4 alert alert-success">
+										<div class="col-sm-12 alert alert-success">
 											<h6 class="">참여가능한 모임입니다.</h6>
 											<span class="party-info">현재 <strong>${party.count}명</strong>
 												참여중 / 총 모집인원 <strong>${con.count}명</strong>
@@ -287,7 +292,7 @@ $(document).ready(function(){
 								<c:if
 									test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false  }">
 									<div class="row mt-2 ">
-										<div class="col-sm-4 alert alert-danger">
+										<div class="col-sm-12 alert alert-danger">
 											<h6 class="">모집이 종료되어 참여할 수 없습니다.</h6>
 											<span class="party-info">(참여 : <strong>${party.count}</strong>
 												/ 모집 : <strong>${party.pull}</strong>)
@@ -300,7 +305,7 @@ $(document).ready(function(){
 					</h2>
 					<c:if test="${con.report == 0 }">
 						<div class="row  pt-1 mt-2">
-							<div class="col-sm-4 alert alert-success">
+							<div class="col-sm-12 alert alert-success">
 								<h6 class="">
 									<strong>정상모임</strong> : 신고건수 ${con.report} 건
 								</h6>
@@ -396,7 +401,7 @@ $(document).ready(function(){
 					</div>
 					<div class="row mb-1">
 						<div class="col-sm-3 mb-3 party-titlelabel">소개</div>
-						<div class="col-sm-9 party-contenttext-area">
+						<div class="col-sm-9 party-contenttext-area party_content">
 							<c:out value='${con.content}' />
 						</div>
 					</div>
@@ -429,7 +434,7 @@ $(document).ready(function(){
 
 					<div class="featImgWrap">
 						<div class="cropping">
-							<img src="${con.imgaddr}" id="img">
+							<img src="${con.imgaddr}" width="350px" id="storeimg">
 						</div>
 					</div>
 				</div>
@@ -437,7 +442,7 @@ $(document).ready(function(){
 			</div>
 			<div class="row mb-1 mt-2 mb-3"></div>
 			<div class="row mb-2">
-				<div class="col-12">
+				<div class="col-12 text-center">
 					<c:choose>
 						<c:when
 							test="${(partyFullCheck eq false && con.status eq 1 ) && partyParticipantCheck eq false}">
@@ -453,7 +458,7 @@ $(document).ready(function(){
 							 </c:if> 
 							
 							<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
-								<button type="button" id="toExitParty" class="btn btn-primary">모임
+								<button type="button" id="toExitParty" class="btn btn-danger">모임
 									나가기</button>
 							</c:if>
 							<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
@@ -477,7 +482,7 @@ $(document).ready(function(){
 				</div>
 			</div>
 			<div class="row mb-3">
-				<div class="col-12 mb-5">
+				<div class="col-12 mb-5 text-right">
 					<c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
 						<button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
 						<button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>

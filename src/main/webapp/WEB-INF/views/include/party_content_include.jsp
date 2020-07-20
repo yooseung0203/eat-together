@@ -24,9 +24,9 @@
 							<span class="badge badge-success">멤버 모집중</span>
 
 							<c:if
-								test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false }">
+								test="${con.writer ne sessionScope.loginInfo.id && partyParticipantCheck eq false && ((sessionScope.loginInfo.gender eq 1 &&  con.gender eq 'm') || (sessionScope.loginInfo.gender eq 2 && con.gender eq'f') || con.gender eq 'a')}">
 								<div class="row  pt-1 mt-2">
-									<div class="col-sm-4 alert alert-success">
+									<div class="col-12 alert alert-success">
 										<h6 class="">참여가능한 모임입니다.</h6>
 										<span class="party-info">현재 <strong>${party.count}명</strong>
 											참여중 / 총 모집인원 <strong>${con.count}명</strong>
@@ -40,7 +40,7 @@
 							<c:if
 								test="${con.writer ne sessionScope.loginInfo.nickname && partyParticipantCheck eq false  }">
 								<div class="row mt-2 ">
-									<div class="col-sm-4 alert alert-danger">
+									<div class="col-12 alert alert-danger">
 										<h6 class="">모집이 종료되어 참여할 수 없습니다.</h6>
 										<span class="party-info">(참여 : <strong>${party.count}</strong>
 											/ 모집 : <strong>${party.pull}</strong>)
@@ -53,7 +53,7 @@
 				</h2>
 				<c:if test="${con.report == 0 }">
 					<div class="row  pt-1 mt-2">
-						<div class="col-sm-4 alert alert-success">
+						<div class="col-12 alert alert-success">
 							<h6 class="">
 								<strong>정상모임</strong> : 신고건수 ${con.report} 건
 							</h6>
@@ -62,7 +62,7 @@
 				</c:if>
 				<c:if test="${con.report > 0 && con.report < 5 }">
 					<div class="row  pt-1 mt-2">
-						<div class="col-sm-4 alert alert-warning">
+						<div class="col-12 alert alert-warning">
 							<h6 class="">
 								<strong>요주의모임</strong> : 신고건수 ${con.report} 건
 							</h6>
@@ -71,7 +71,7 @@
 				</c:if>
 				<c:if test="${con.report >= 5}">
 					<div class="row  pt-1 mt-2">
-						<div class="col-sm-4 alert alert-danger">
+						<div class="col-12 alert alert-danger">
 							<h6 class="">
 								<strong>위험모임</strong> : 신고건수 ${con.report} 건
 							</h6>
@@ -145,7 +145,7 @@
 				<div class="row mb-1">
 					<div class="col-sm-3 mb-3 party-titlelabel">소개</div>
 					<div class="col-sm-9 party-contenttext-area party_content">
-						<c:out value='${con.content}' />
+						<c:out value='${con.content}'/>
 					</div>
 				</div>
 				<div class="row mb-1">
@@ -181,7 +181,7 @@
 		</div>
 		<div class="row mb-1 mt-2 mb-3"></div>
 		<div class="row mb-2">
-			<div class="col-12">
+			<div class="col-12" align="center">
 				<c:choose>
 					<c:when
 						test="${(partyFullCheck eq false && con.status eq 1 ) && partyParticipantCheck eq false}">
@@ -195,9 +195,6 @@
 							<button type="button" id="toChatroom" class="btn btn-primary">채팅방으로
 								이동</button>
 						</c:if>
-						<script>
- 							console.log(${partylife}); 
-							</script>
 						<c:if test="${con.writer ne sessionScope.loginInfo.nickname }">
 							<button type="button" id="toExitParty" class="btn btn-primary">모임
 								나가기</button>
@@ -221,7 +218,7 @@
 			</div>
 		</div>
 		<div class="row mb-3">
-         <div class="col-12 mb-5">
+         <div class="col-12 mb-5" align="right">
             <c:if test="${con.writer eq sessionScope.loginInfo.nickname }">
                <button type="button" id="partyModify" class="btn btn-warning">수정하기</button>
                <button type="button" id="partyDelete" class="btn btn-danger">삭제하기</button>

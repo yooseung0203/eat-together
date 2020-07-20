@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import coma.spring.dto.MemberDTO;
 import coma.spring.dto.QuestionDTO;
@@ -38,6 +39,7 @@ public class QuestionController {
 	public String question_list(HttpServletRequest request)throws Exception{
 		MemberDTO mdto = (MemberDTO) session.getAttribute("loginInfo");
 		String msg_receiver=mdto.getId();
+		int newMsg=msgservice.newmsg(mdto.getNickname());
 		System.out.println(msg_receiver+"의 1:1문의");
 		if(session.getAttribute("qcpage")==null) {
 			session.setAttribute("qcpage", 1);
@@ -50,7 +52,7 @@ public class QuestionController {
 		String navi = qservice.QuestionNavi(qcpage, msg_receiver);
 		request.setAttribute("navi", navi);
 		request.setAttribute("list", qdto);
-		
+		session.setAttribute("newMsg", newMsg);
 		return "question/mypage_question";
 	}
 	//문의 보기
@@ -87,9 +89,12 @@ public class QuestionController {
 	
 	//문의삭제
 	@RequestMapping("QuestionReceiverDel")
-	public String ReceiverDel(int msg_seq)throws Exception{
-		int result = msgservice.receiver_del(msg_seq);
-		
-		return "redirect:question_list?qcpage=1";
+	@ResponseBody
+	public int ReceiverDel(HttpServletRequest request)throws Exception{
+		String data = request.getParameter("msg_seqs"); 
+		String msg_seqs = data.substring(2,data.length()-2);
+		String[] checkList = msg_seqs.split("\",\"");
+		int resp = msgservice.receiver_del(checkList);
+		return resp;
 	}
 }
