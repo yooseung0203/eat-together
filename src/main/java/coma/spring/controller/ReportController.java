@@ -73,6 +73,10 @@ public class ReportController {
 		int repoResult = reposervice.checkReport(Integer.parseInt(request.getParameter("seq")));
 		System.out.println("repoResult :"+repoResult);
 		if(repoResult == 1) {
+			int checkReal = reposervice.checkReal(Integer.parseInt(request.getParameter("category")), Integer.parseInt(request.getParameter("parent_seq")));
+			if(checkReal < 1) {
+				return 3;
+			}
 			result = reposervice.repoCountDown(Integer.parseInt(request.getParameter("category")), Integer.parseInt(request.getParameter("parent_seq")));
 			System.out.println("result1 : "+result);
 		}
@@ -89,8 +93,14 @@ public class ReportController {
 		int resp = 0;
 		int repoResult = reposervice.checkReport(seq);
 		if(repoResult ==1) {
-			int result1 = reposervice.checkOtherRepo(seq , category , parent_seq);
-			if(result1 == 1) {
+			int checkReal = reposervice.checkReal(Integer.parseInt(request.getParameter("category")), Integer.parseInt(request.getParameter("parent_seq")));
+			if(checkReal < 1) {
+				return 3;
+			}
+			if(category != 2) {
+				repoResult = reposervice.checkOtherRepo(seq , category , parent_seq);
+			}
+			if(repoResult == 1) {
 				System.out.println("report id : "+request.getParameter("report_id"));
 				int result=reposervice.acceptReport(request.getParameter("report_id"));
 				if(result == 1) {
