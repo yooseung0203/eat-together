@@ -666,7 +666,7 @@ public class AdminController {
 	}
 	//삭제된  메세지함
 		@RequestMapping("admin_DeleteSearch")
-		public String admin_DeleteSearch(HttpServletRequest request,String msg_receiver)throws Exception{
+		public String admin_DeleteSearch(HttpServletRequest request)throws Exception{
 			MemberDTO mdto = (MemberDTO)session.getAttribute("loginInfo");
 			String admincheck = mdto.getNickname();
 			if(admincheck.contentEquals("administrator")) {
@@ -678,19 +678,20 @@ public class AdminController {
 				} catch (Exception e) {}
 				
 				if(session.getAttribute("msg_receiver")==null) {
-					session.setAttribute("msg_receiver", msg_receiver);
+					session.setAttribute("msg_receiver","");
 				}
 				try { 
-					session.setAttribute("msg_receiver", (String)request.getParameter("msg_receiver"));
+					session.setAttribute("msg_receiver", request.getParameter("msg_receiver"));
 				} catch (Exception e) {}
 				
 				int dscpage=(int)session.getAttribute("dscpage");
-				String msg_receiver2 = (String) session.getAttribute("msg_receiver");
-				System.out.println(msg_receiver2);
-				List<MsgDTO> dto = aservice.selectByDelSearch(dscpage,msg_receiver2);
-				String navi =aservice.SearchDelnavi(dscpage,msg_receiver2);
-				session.setAttribute("msg_receiver", msg_receiver2);
+				String msg_receiver = (String) session.getAttribute("msg_receiver");
+				System.out.println(msg_receiver);
+				List<MsgDTO> dto = aservice.selectByDelSearch(dscpage,msg_receiver);
+				String navi =aservice.SearchDelnavi(dscpage,msg_receiver);
+				session.setAttribute("msg_receiver", msg_receiver);
 				request.setAttribute("list", dto);
+				request.setAttribute("navi", navi);
 				return "/admin/admin_SendDel";
 			}else {
 				return "error";
