@@ -66,7 +66,7 @@ $(function(){
 		if(check){			
 			var seq = $(".modal-title").html().substring(1);
 			var parent_seq = $("#parent_seq").html();
-			var category = $("#category").html();
+			var category = $("#category").html().substr(-2,1);
 			console.log(seq);
 			$.ajax({
 				url:"/report/reportRefuse",	
@@ -86,7 +86,7 @@ $(function(){
 			var seq = $(".modal-title").html().substring(1);
 			var parent_seq = $("#parent_seq").html();
 			var category = $("#category").html();
-			var report_id = $("#report_id").html();
+			var report_id = $("#report_id").html().substr(-2,1);
 			console.log(seq);
 			$.ajax({
 				url:"/report/reportAccept",	
