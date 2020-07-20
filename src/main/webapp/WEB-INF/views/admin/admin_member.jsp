@@ -129,7 +129,7 @@
 
 	</div>
 	<script>
-		//by 지은, 성별의 int 값을 jsp에서 남여로 출력하는 과정_20200708
+		//by 지은, 성별의 int 값을 jsp에서 남여로 출력하는 과정_202007020
 		var gender = $(".gender").html();
 		if (gender == 1) {
 			$(".gender").html("남");
